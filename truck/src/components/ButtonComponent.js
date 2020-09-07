@@ -42,7 +42,7 @@ export default class ButtonComponent extends Component {
                 <Menu.Item key="setting:5">Type - 1</Menu.Item>
               </Menu.ItemGroup>
             </SubMenu>
-            <Menu.Item key="1">About Us</Menu.Item>
+            <Menu.Item key="1">Charts</Menu.Item>
             <Menu.Item key="2" className="menu-item-last">
               Contact
             </Menu.Item>
