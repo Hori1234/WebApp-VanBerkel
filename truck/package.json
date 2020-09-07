@@ -32,5 +32,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.tue.nl/sroubtso/sep-2021_q1-group-2.git"
+  },
+  "keywords": [
+    "sgn"
+  ],
+  "author": "Horea Breazu",
+  "license": "MIT"
 }
