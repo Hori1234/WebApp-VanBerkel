@@ -43,5 +43,6 @@
     "sgn"
   ],
   "author": "Horea Breazu",
-  "license": "MIT"
+  "license": "MIT",
+  "proxy": "http://localhost:5000"
 }
