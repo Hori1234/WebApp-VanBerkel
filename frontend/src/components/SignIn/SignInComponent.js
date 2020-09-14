@@ -7,6 +7,7 @@ import {
     Input, 
     Button, 
     Checkbox,
+    Typography, Space,
     Divider,
 } from 'antd';
 import 'antd/dist/antd.css';
@@ -18,8 +19,18 @@ import {
 } from '@ant-design/icons';
 
 
+const { Text, Link, Title  } = Typography;
+
 export default class SignInComponent extends Component {
+    
+    
+    constructor(props) {
+        super(props)
+        
+    };
+
     render() {
+        
         const layout = {
             labelCol: {
                 span: 8,
@@ -44,30 +55,38 @@ export default class SignInComponent extends Component {
         };
 
         return (
-            <Layout style={{ margin: 30, height: '70vh', display: "flex", width: '40%'}}>
-                <Layout style={{alignItems: "center"}}>
+            <Layout style={{ margin: 30, height: '95vh', display: "flex", }}>
+                <Layout style={{alignItems: "center", marginTop: 15}}>
                     <Avatar
-                        style={{ marginTop: 10 }}
+                        style={{ marginTop: 100 }}
                         shape="square"
                         size={64}
                         icon={<UserOutlined />} />
-                    <Divider>Welcome</Divider>
-                    <h1> Sign In</h1>
+                    <Divider style={{marginTop: 10}}>Welcome</Divider>
                 </Layout> 
-
-                <Layout style={{alignItems: "center",  width: '100%'}}>
+                
+                <Layout style={{alignItems: "center" ,display: "flex", marginTop: -70, marginBottom: -120}}>
+                        <Title style ={{marginLeft: -280}} level={5.2}>Sign In</Title>
+                        <Title style ={{marginLeft: -190}} level={5}>Fil the form in order to login</Title>
+                </Layout>
+                
+                <Layout style={{alignItems: "center" ,display: "flex", marginTop: -50 }}>
+                    
+                   
                     <Form
                         {...layout}
                         name="basic"
                         initialValues={{ remember: true }}
                         onFinish={onFinish}
                         onFinishFailed={onFinishFailed}
+                        
                     >
                         <Form.Item
                             
                             label="Username"
                             name="username"
                             rules={[{ required: true, message: 'Please input your username!' }]}
+                            style={{width:'100%', marginRight: 180,marginLeft: -50}}
                         >
                             <Input />
                         </Form.Item>
@@ -76,17 +95,23 @@ export default class SignInComponent extends Component {
                             label="Password"
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
+                            style={{width:'100%', marginRight: 180,marginLeft: -50}}
                         >
                             <Input.Password />
                         </Form.Item>
 
-                        <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+                        <Form.Item {...tailLayout} name="remember" valuePropName="checked"
+                            style={{width:'100%', marginRight: 180,marginLeft: -50}}
+                        > 
                             <Checkbox>Remember me</Checkbox>
                         </Form.Item>
 
                         <Form.Item {...tailLayout}>
-                            <Button type="primary" htmlType="submit">
-                                Submit
+                            <Button type="primary" htmlType="submit" 
+                                style={{marginLeft: 10, marginTop: 60, width: '60%'}}
+                                onClick={this.props.changeState}
+                            >
+                                Login
                             </Button>
                         </Form.Item>
                     </Form>
