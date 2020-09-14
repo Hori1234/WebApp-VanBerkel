@@ -12,9 +12,9 @@ import {
     NotificationOutlined 
 } from '@ant-design/icons';
 
-import ButtonComponent from "../ButtonComponent"
 import SignInComponent from "../SignIn/SignInComponent"
 import TestComponent from "./TestComponent"
+import UploadButton from "../UploadButton/UploadButton"
 
 import "../Css/NavigationLayout.css"
 const { SubMenu } = Menu;
@@ -134,9 +134,7 @@ export default class NavigationLayout extends Component {
                                         height: '100%',
                                         alignItems: "center"
                                     }}>
-                                    {this.state.isMenuItemClickedState == "login" && <SignInComponent/> }
-
-                                    {this.state.isMenuItemClickedState == "usracc" && <ButtonComponent />}
+                                    {this.state.isMenuItemClickedState == "upp" && <UploadButton/> }
                                     
                                 </Layout>
                             
