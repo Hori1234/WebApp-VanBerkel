@@ -10,6 +10,10 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(40), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
 
+    def __init__(self, username: str, password: str):
+        self.username = username
+        self.set_password(password)
+
     def set_password(self, password: str):
         """
         Hashes and stores the password using bcrypt.
