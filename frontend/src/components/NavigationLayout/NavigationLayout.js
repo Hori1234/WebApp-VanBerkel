@@ -15,6 +15,7 @@ import {
 import ButtonComponent from "../ButtonComponent"
 import SignInComponent from "../SignIn/SignInComponent"
 import TestComponent from "./TestComponent"
+import Home from "../Home/Home"
 
 import "../Css/NavigationLayout.css"
 const { SubMenu } = Menu;
@@ -124,7 +125,7 @@ export default class NavigationLayout extends Component {
                                     padding: 24,
                                     marginTop: 25,
                                     minHeight: 280,
-                                    width: '50%'
+                                    width: '100%'
                                 }}
                                 >
                                 <Layout 
@@ -135,7 +136,7 @@ export default class NavigationLayout extends Component {
                                         alignItems: "center"
                                     }}>
                                     {this.state.isMenuItemClickedState == "login" && <SignInComponent/> }
-
+                                    {this.state.isMenuItemClickedState == "dv" && <Home/> }
                                     {this.state.isMenuItemClickedState == "usracc" && <ButtonComponent />}
                                     
                                 </Layout>
