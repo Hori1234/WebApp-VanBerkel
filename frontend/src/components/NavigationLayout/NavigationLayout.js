@@ -138,6 +138,7 @@ export default class NavigationLayout extends Component {
                                     {this.state.isMenuItemClickedState == "login" && <SignInComponent/> }
                                     {this.state.isMenuItemClickedState == "dv" && <Home/> }
                                     {this.state.isMenuItemClickedState == "usracc" && <ButtonComponent />}
+                                    {this.state.isMenuItemClickedState == "upp" && <ButtonComponent/> }
                                     
                                 </Layout>
                             
