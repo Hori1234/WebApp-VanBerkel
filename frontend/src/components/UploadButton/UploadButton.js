@@ -24,54 +24,57 @@ export default class UploadButton extends Component {
         };
         return (
             <Layout>
-
-            <Card style={{height:"50%", marginButtom: 20 }}> 
-
-            </Card>
-            <Row gutter={16}>
-                <Col span={12}>
-                    <Card title="Upload Order List" bordered={false}>
-                        <Row gutter={[16, 24]} >
-                            <Col className="gutter-row">
-                                <Dragger {...props}>
-                                    <p className="ant-upload-drag-icon">
-                                        <InboxOutlined />
-                                    </p>
-                                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                                    <p className="ant-upload-hint">
-                                        Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                                        band files
-                                </p>
-                                </Dragger>
-                            </Col>
-                            <Col className="gutter-row">
-                                <Button type="primary">Comfirm Upload</Button>
-                            </Col>
-                        </Row>
+                <Layout style={{display: "flex",marginBottom: 20, height:"40vh" }}>
+                    <Card style={{height:"100%", }}> 
+            	        
                     </Card>
-                </Col>
-                <Col span={12}>
-                    <Card title="Upload Truck Availibility" bordered={false}>
-                        <Row gutter={[16, 24]} >
-                            <Col className="gutter-row">
-                                <Dragger {...props}>
-                                    <p className="ant-upload-drag-icon">
-                                        <InboxOutlined />
+                </Layout>
+            <Layout>
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <Card title="Upload Order List" bordered={false}>
+                            <Row gutter={[16, 24]} >
+                                <Col className="gutter-row">
+                                    <Dragger {...props}>
+                                        <p className="ant-upload-drag-icon">
+                                            <InboxOutlined />
+                                        </p>
+                                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                                        <p className="ant-upload-hint">
+                                            Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                                            band files
                                     </p>
-                                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                                    <p className="ant-upload-hint">
-                                        Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                                        band files
-                                </p>
-                                </Dragger>
-                            </Col>
-                            <Col className="gutter-row">
-                                <Button type="primary">Comfirm Upload</Button>
-                            </Col>
-                        </Row>
-                    </Card>
-                </Col>
-            </Row>
+                                    </Dragger>
+                                </Col>
+                                <Col className="gutter-row">
+                                    <Button type="primary">Comfirm Upload</Button>
+                                </Col>
+                            </Row>
+                        </Card>
+                    </Col>
+                    <Col span={12}>
+                        <Card title="Upload Truck Availibility" bordered={false}>
+                            <Row gutter={[16, 24]} >
+                                <Col className="gutter-row">
+                                    <Dragger {...props}>
+                                        <p className="ant-upload-drag-icon">
+                                            <InboxOutlined />
+                                        </p>
+                                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                                        <p className="ant-upload-hint">
+                                            Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                                            band files
+                                    </p>
+                                    </Dragger>
+                                </Col>
+                                <Col className="gutter-row">
+                                    <Button type="primary">Comfirm Upload</Button>
+                                </Col>
+                            </Row>
+                        </Card>
+                    </Col>
+                </Row>
+            </Layout>
             </Layout>
         )
     }

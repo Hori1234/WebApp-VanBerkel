@@ -4,7 +4,7 @@ import {
     Layout, 
     Menu, 
     Avatar,
-    Divider , } from 'antd';
+    Divider , Upload } from 'antd';
 import { 
     UserOutlined, 
     LaptopOutlined,
@@ -14,7 +14,7 @@ import {
 
 import TestComponent from "./TestComponent"
 import Home from "../Home/Home"
-
+import UploadButton from "../UploadButton/UploadButton"
 import "../Css/NavigationLayout.css"
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
@@ -133,10 +133,9 @@ export default class NavigationLayout extends Component {
                                         height: '100%',
                                         alignItems: "center"
                                     }}>
-                                    {this.state.isMenuItemClickedState == "login" && <SignInComponent/> }
-                                    {this.state.isMenuItemClickedState == "dv" && <Home/> }
-                                    {this.state.isMenuItemClickedState == "usracc" && <ButtonComponent />}
-                                    {this.state.isMenuItemClickedState == "upp" && <ButtonComponent/> }
+                                    {this.state.isMenuItemClickedState == "upp" && <UploadButton/> }
+                                    {this.state.isMenuItemClickedState == false && <Home/> }
+                                
                                     
                                 </Layout>
                             
