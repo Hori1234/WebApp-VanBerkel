@@ -12,7 +12,9 @@ def roles_required(*roles):
     In case the user is not logged in or does not have one of the roles required, the function will return
     the :attr:`LoginManager.unauthorized` callback.
 
-    Adapted from login_required from Flask-Login
+    Also documents the need for authentication to the API documentation.
+
+    Adapted from login_required from Flask-Login.
 
     :param roles: the roles that are allowed to access the view function
     :type roles: list of strings
@@ -36,6 +38,11 @@ def roles_required(*roles):
             # in case the user is logged in and has the right role, return
             # the view function
             return func(*args, **kwargs)
+
+        # document authentication to the API documentation
+        decorated_view._apidoc.setdefault('response', {}) \
+            .setdefault('security', []) \
+            .append({'cookieAuth': []})
 
         return decorated_view
 
