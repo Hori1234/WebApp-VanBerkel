@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
-import { Upload, message, Row, Col, Card, Button, Layout } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
+import { Upload, message, Row, Col, Card, Button, Layout, Typography, Divider, Image } from 'antd';
+import { InboxOutlined,FileExcelOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
+
+
 const { Dragger } = Upload;
+const {Text, Title} = Typography;
+
 
 export default class UploadButton extends Component {
     render() {
@@ -26,7 +30,33 @@ export default class UploadButton extends Component {
             <Layout>
                 <Layout style={{display: "flex",marginBottom: 20, height:"40vh" }}>
                     <Card style={{height:"100%", }}> 
-            	        
+                        <Layout style={{flexDirection: "row", backgroundColor: "white", marginBottom: 35}}>
+                            <Image style={{marginRight: 20}}
+                                    preview={false}
+                                    width={100}
+                                    src={require("../Images/upload-file.svg")}
+                            />
+                            <Layout style={{flexDirection: "column",backgroundColor: "white"}}>
+                                <Text style={{fontWeight: "bold", fontSize: "18"}}>Upload Documents</Text>
+                                <Text style={{fontSize: " 14"}}>Upload the documents for the creation of the plannings</Text>
+                            </Layout> 
+                        </Layout>
+                        <Divider/>
+                        <Layout style={{flexDirection: "row", backgroundColor: "white", marginBottom: 35}}>
+                            <FileExcelOutlined style={{fontSize: "100px", marginRight: 20}}/>
+                            <Layout style={{flexDirection: "column",backgroundColor: "white"}}>
+                                <Text style={{fontWeight: "bold", fontSize: "18"}}>Upload Documents</Text>
+                                <Text style={{fontSize: " 14"}}>Upload the documents for the creation of the plannings</Text>
+                            </Layout> 
+                        </Layout>
+                        <Divider/>
+                        <Layout style={{flexDirection: "row", backgroundColor: "white"}}>
+                            <FileExcelOutlined style={{fontSize: "100px", marginRight: 20}}/>
+                            <Layout style={{flexDirection: "column",backgroundColor: "white"}}>
+                                <Text style={{fontWeight: "bold", fontSize: "18"}}>Upload Documents</Text>
+                                <Text style={{fontSize: " 14"}}>Upload the documents for the creation of the plannings</Text>
+                            </Layout> 
+                        </Layout>
                     </Card>
                 </Layout>
             <Layout>

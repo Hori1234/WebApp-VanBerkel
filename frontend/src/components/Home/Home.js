@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Upload, message, Layout, Image, Typography, Button } from 'antd';
+import { Upload, message, Layout, Image, Typography, Button, Divider } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 const {Text} = Typography;
@@ -54,8 +54,11 @@ export default class Home extends Component {
                         <Button type="primary">Go</Button>
                         </Layout>
                     </Layout>
+                    
                 </Layout>
-
+                <Layout style={{height: "50vh"}}>
+                <Divider type="vertical" style={{height: "50vh"}}></Divider>
+                </Layout>
                 <Layout style={{justifyContent: "space-around", marginBottom: 50, display: "flex", alignItems: "flex-start"}}>
                     <Layout style={{flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%"}}>
                         <Image style={{marginRight: 20}}
