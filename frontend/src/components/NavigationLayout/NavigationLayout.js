@@ -13,7 +13,7 @@ import {
 } from '@ant-design/icons';
 
 import TestComponent from "./TestComponent"
-import UploadButton from "../UploadButton/UploadButton"
+import Home from "../Home/Home"
 
 import "../Css/NavigationLayout.css"
 const { SubMenu } = Menu;
@@ -133,7 +133,10 @@ export default class NavigationLayout extends Component {
                                         height: '100%',
                                         alignItems: "center"
                                     }}>
-                                    {this.state.isMenuItemClickedState == "upp" && <UploadButton/> }
+                                    {this.state.isMenuItemClickedState == "login" && <SignInComponent/> }
+                                    {this.state.isMenuItemClickedState == "dv" && <Home/> }
+                                    {this.state.isMenuItemClickedState == "usracc" && <ButtonComponent />}
+                                    {this.state.isMenuItemClickedState == "upp" && <ButtonComponent/> }
                                     
                                 </Layout>
                             
