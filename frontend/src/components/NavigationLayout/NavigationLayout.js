@@ -131,7 +131,8 @@ export default class NavigationLayout extends Component {
                                         padding: 24,
                                         width: '100%',
                                         height: '100%',
-                                        alignItems: "center"
+                                        alignItems: "center",
+                                        backgroundColor: "white"
                                     }}>
                                     {this.state.isMenuItemClickedState == "upp" && <UploadButton/> }
                                     {this.state.isMenuItemClickedState == false && <Home/> }

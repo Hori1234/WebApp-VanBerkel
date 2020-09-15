@@ -27,8 +27,8 @@ export default class UploadButton extends Component {
             },
         };
         return (
-            <Layout>
-                <Layout style={{display: "flex",marginBottom: 20, height:"40vh" }}>
+            <Layout style={{backgroundColor: "white"}}>
+                <Layout style={{display: "flex",marginBottom: 20, height:"40vh",backgroundColor: "white" }}>
                     <Card style={{height:"100%", }}> 
                         <Layout style={{flexDirection: "row", backgroundColor: "white", marginBottom: 35}}>
                             <Image style={{marginRight: 20}}
@@ -45,21 +45,22 @@ export default class UploadButton extends Component {
                         <Layout style={{flexDirection: "row", backgroundColor: "white", marginBottom: 35}}>
                             <FileExcelOutlined style={{fontSize: "100px", marginRight: 20}}/>
                             <Layout style={{flexDirection: "column",backgroundColor: "white"}}>
-                                <Text style={{fontWeight: "bold", fontSize: "18"}}>Upload Documents</Text>
-                                <Text style={{fontSize: " 14"}}>Upload the documents for the creation of the plannings</Text>
+                                <Text style={{fontWeight: "bold", fontSize: "18"}}>Upload Order List</Text>
+                                <Text style={{fontSize: " 14"}}>Upload the Excel file that contains the list of all </Text>
+                                <Text style={{fontSize: " 14"}}>the orders that will be placed this month</Text>
                             </Layout> 
                         </Layout>
                         <Divider/>
                         <Layout style={{flexDirection: "row", backgroundColor: "white"}}>
                             <FileExcelOutlined style={{fontSize: "100px", marginRight: 20}}/>
                             <Layout style={{flexDirection: "column",backgroundColor: "white"}}>
-                                <Text style={{fontWeight: "bold", fontSize: "18"}}>Upload Documents</Text>
+                                <Text style={{fontWeight: "bold", fontSize: "18"}}>Upload Truck Availibility List</Text>
                                 <Text style={{fontSize: " 14"}}>Upload the documents for the creation of the plannings</Text>
                             </Layout> 
                         </Layout>
                     </Card>
                 </Layout>
-            <Layout>
+            <Layout style={{backgroundColor: "white"}}>
                 <Row gutter={16}>
                     <Col span={12}>
                         <Card title="Upload Order List" bordered={false}>
