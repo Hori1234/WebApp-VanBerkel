@@ -1,15 +1,15 @@
 from backend.app import db
 from flask_login import UserMixin
-from flask_user import roles_required
 from hashlib import sha256
 from base64 import b64encode
 import bcrypt
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(20), nullable=False)
+    role = db.Column(db.String(20), nullable=False, default='view-only')
 
     def __init__(self, username: str, password: str, role: str):
         self.username = username
@@ -34,7 +34,14 @@ class User(UserMixin, db.Model):
         """
         return bcrypt.checkpw(b64encode(sha256(password.encode()).digest()), self.password)
 
-    #@route('/admin/mainpage')
-    #@roles_required('Admin')
-    #def admin_mainpage(self):
-        # render the admin mainpage
+    @property
+    def is_view_only(self):
+        return self.role == 'view-only'
+
+    @property
+    def is_planner(self):
+        return self.role == 'planner'
+
+    @property
+    def is_administrator(self):
+        return self.role == 'administrator'
