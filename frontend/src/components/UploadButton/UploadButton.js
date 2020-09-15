@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Upload, message, Row, Col, Card, Button } from 'antd';
+import { Upload, message, Row, Col, Card, Button, Layout } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 const { Dragger } = Upload;
@@ -23,6 +23,11 @@ export default class UploadButton extends Component {
             },
         };
         return (
+            <Layout>
+
+            <Card style={{height:"50%", marginButtom: 20 }}> 
+
+            </Card>
             <Row gutter={16}>
                 <Col span={12}>
                     <Card title="Upload Order List" bordered={false}>
@@ -67,6 +72,7 @@ export default class UploadButton extends Component {
                     </Card>
                 </Col>
             </Row>
+            </Layout>
         )
     }
 }
