@@ -12,8 +12,6 @@ import {
     NotificationOutlined 
 } from '@ant-design/icons';
 
-import ButtonComponent from "../ButtonComponent"
-import SignInComponent from "../SignIn/SignInComponent"
 import TestComponent from "./TestComponent"
 import Home from "../Home/Home"
 
