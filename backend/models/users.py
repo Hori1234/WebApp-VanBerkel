@@ -1,18 +1,20 @@
 from backend.app import db
 from flask_login import UserMixin
+from flask_user import roles_required
 from hashlib import sha256
 from base64 import b64encode
 import bcrypt
-
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, username: str, password: str):
+    def __init__(self, username: str, password: str, role: str):
         self.username = username
         self.set_password(password)
+        self.role = role
 
     def set_password(self, password: str):
         """
@@ -31,3 +33,8 @@ class User(UserMixin, db.Model):
         :returns bool: whether the password was correct
         """
         return bcrypt.checkpw(b64encode(sha256(password.encode()).digest()), self.password)
+
+    #@route('/admin/mainpage')
+    #@roles_required('Admin')
+    #def admin_mainpage(self):
+        # render the admin mainpage
