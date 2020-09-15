@@ -124,7 +124,7 @@ export default class NavigationLayout extends Component {
                                     padding: 24,
                                     marginTop: 25,
                                     minHeight: 280,
-                                    width: '50%'
+                                    width: '100%'
                                 }}
                                 >
                                 <Layout 
