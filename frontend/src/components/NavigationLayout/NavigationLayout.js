@@ -124,7 +124,7 @@ export default class NavigationLayout extends Component {
                                     padding: 24,
                                     marginTop: 25,
                                     minHeight: 280,
-                                    width: '50%'
+                                    width: '100%'
                                 }}
                                 >
                                 <Layout 
@@ -134,9 +134,7 @@ export default class NavigationLayout extends Component {
                                         height: '100%',
                                         alignItems: "center"
                                     }}>
-                                    {this.state.isMenuItemClickedState == "login" && <SignInComponent/> }
-
-                                    {this.state.isMenuItemClickedState == "usracc" && <ButtonComponent />}
+                                    {this.state.isMenuItemClickedState == "upp" && <ButtonComponent/> }
                                     
                                 </Layout>
                             
