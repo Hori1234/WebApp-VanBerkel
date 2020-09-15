@@ -1,5 +1,6 @@
 from flask.views import MethodView
 from flask_login import login_user, logout_user
+from sqlalchemy import func
 from backend.extensions import roles_required
 from flask_smorest import abort
 from . import bp
@@ -30,7 +31,7 @@ class Login(MethodView):
         remember = args.pop('remember')
 
         # try find the user in the database
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter(func.lower(username) == username.lower()).first()
 
         # check if the user exists and if the provided password is correct
         if not user or not user.check_password(password):

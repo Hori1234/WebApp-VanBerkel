@@ -1,4 +1,6 @@
 from backend.app import db
+from flask import current_app
+from sqlalchemy import func
 from flask_login import UserMixin
 from hashlib import sha256
 from base64 import b64encode
@@ -7,14 +9,21 @@ import bcrypt
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(40), nullable=False, unique=True)
+    username = db.Column(db.String(40), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='view-only')
 
-    def __init__(self, username: str, password: str, role: str):
+    def __init__(self, username: str, password: str, role: str = 'view-only'):
         self.username = username
         self.set_password(password)
+        if role not in current_app.config['ROLES']:
+            raise ValueError(f'A user\'s role cannot be "{role}"')
         self.role = role
+
+    @db.validates('role')
+    def validate_role(self, key, value):
+        assert value in current_app.config['ROLES']
+        return value
 
     def set_password(self, password: str):
         """
@@ -45,3 +54,6 @@ class User(UserMixin, db.Model):
     @property
     def is_administrator(self):
         return self.role == 'administrator'
+
+
+db.Index('ix_user_username', func.lower(User.username), unique=True)

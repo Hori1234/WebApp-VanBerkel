@@ -5,6 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or "wowsupersecretenzo"
+    ROLES = ['view-only', 'planner', 'administrator']
 
     # API configuration
     API_TITLE = 'T.R.U.C.K.S. API'
