@@ -44,6 +44,26 @@ export default class NavigationLayout extends Component {
         })
         console.log(this.state.UserState);
     };
+
+    state = {
+        collapsed: false,
+    };
+
+    onCollapse = collapsed => {
+        this.setState({ collapsed });
+        const divider = document.getElementsByClassName('ant-divider')[0];
+        const userTypesButton = document.getElementById('user-types');
+
+        if (collapsed) {
+            divider.style.setProperty('display', 'none');
+            userTypesButton.style.setProperty('display', 'none');
+        }
+        else {
+            divider.style.setProperty('display', 'flex');
+            userTypesButton.style.setProperty('display', 'initial');
+        }
+
+    };
     
     render() {
         
