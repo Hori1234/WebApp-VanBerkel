@@ -18,7 +18,7 @@ import {
     NotificationOutlined
 } from '@ant-design/icons';
 
-
+const axios = require('axios');
 const { Text, Link, Title  } = Typography;
 
 export default class SignInComponent extends Component {
@@ -52,6 +52,20 @@ export default class SignInComponent extends Component {
 
         const onFinishFailed = errorInfo => {
             console.log('Failed:', errorInfo);
+        };
+
+        const authentificationPost = (uss, pass) => {
+            axios.post('/api/auth/login', {
+                firstName: "test",
+                lastName: "test",
+                remember: true
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
         };
 
         return (
@@ -112,6 +126,13 @@ export default class SignInComponent extends Component {
                                 onClick={this.props.changeState}
                             >
                                 Login
+                            </Button>
+
+                            <Button type="primary" htmlType="submit" 
+                                style={{marginLeft: 10, marginTop: 20, width: '60%'}}
+                                onClick={authentificationPost}
+                            >
+                                Login Test
                             </Button>
                         </Form.Item>
                     </Form>
