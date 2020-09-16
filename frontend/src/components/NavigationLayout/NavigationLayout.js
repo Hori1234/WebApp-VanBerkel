@@ -13,10 +13,9 @@ import {
     NotificationOutlined
 } from '@ant-design/icons';
 
-import ButtonComponent from "../ButtonComponent"
-import SignInComponent from "../SignIn/SignInComponent"
 import TestComponent from "./TestComponent"
-
+import Home from "../Home/Home"
+import UploadButton from "../UploadButton/UploadButton"
 import "../Css/NavigationLayout.css"
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
@@ -147,7 +146,7 @@ export default class NavigationLayout extends Component {
                                     padding: 24,
                                     marginTop: 25,
                                     minHeight: 280,
-                                    width: '50%'
+                                    width: '100%'
                                 }}
                             >
                                 <Layout
@@ -155,12 +154,13 @@ export default class NavigationLayout extends Component {
                                         padding: 24,
                                         width: '100%',
                                         height: '100%',
-                                        alignItems: "center"
+                                        alignItems: "center",
+                                        backgroundColor: "white"
                                     }}>
-                                    {this.state.isMenuItemClickedState == "login" && <SignInComponent />}
-
-                                    {this.state.isMenuItemClickedState == "usracc" && <ButtonComponent />}
-
+                                    {this.state.isMenuItemClickedState == "upp" && <UploadButton/> }
+                                    {this.state.isMenuItemClickedState == false && <Home/> }
+                                
+                                    
                                 </Layout>
 
                             </Content>
