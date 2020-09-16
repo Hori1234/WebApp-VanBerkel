@@ -73,7 +73,7 @@ export default class NavigationLayout extends Component {
                 
                 <Layout style={{margin: 10}}>
                     
-                    <Sider width={200} className="site-layout-background">
+                    <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} width={200} className="site-layout-background">
                         <Layout 
                             className="dividers-style" >
                             <Avatar
