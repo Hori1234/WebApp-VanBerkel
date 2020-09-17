@@ -1,8 +1,8 @@
 import pytest
 from backend.app import db as _db
-from backend.models.users import User
 from backend.app import create_app
 from backend.config import Config
+from backend.models.users import *
 
 
 class TestingConfig(Config):
@@ -10,8 +10,13 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 def app():
+    """
+    Creates a new Flask application for each test.
+
+    :returns Iterator[Flask App] _app: The Flask application for the test
+    """
     _app = create_app(TestingConfig)
     context = _app.app_context()
     context.push()
@@ -21,21 +26,33 @@ def app():
     context.pop()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 def client(app):
+    """
+    Creates a test client for each new Flask App.
+
+    This client can be used for making requests
+    to the endpoints of the Flask App.
+
+
+    :param Flask App app: The Flask application for the test
+    :returns client: testing client
+    """
     return app.test_client()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 def db(app):
+    """"
+    Creates a database for the test.
+
+    The location of the database is given in the config
+    of the Flask app
+
+    :param Flask App app: The Flask application for the test
+    :returns Iterator[`SQLAlchemy`] db: ORM for the database
+    """
     _db.create_all()
-
-    user = User(username='Midas Bergveen', password='w8woord')
-    _db.session.add(user)
-    user = User(username='Twan van Broekhoven', password='SomethingClever')
-    _db.session.add(user)
-
-    _db.session.commit()
 
     yield _db
 
