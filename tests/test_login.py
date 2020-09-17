@@ -4,7 +4,15 @@ import json
 
 def login(client, username, password):
     # tries to log in with these credentials.
-    return client.post('/api/auth/login', data=json.dumps(dict(username=username, password=password, remember=True)))
+    data = dict(
+        username=username,
+        password=password,
+        remember=True
+    )
+
+    return client.post('/api/auth/login',
+                       data=json.dumps(data),
+                       content_type='application/json')
 
 
 def logout(client):

@@ -1,7 +1,6 @@
 import pytest
-from backend.app import db as test_db
+from backend.app import db as _db
 from backend.app import create_app
-from backend.models.users import User
 from backend.config import Config
 
 
@@ -10,21 +9,27 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def app():
-    app = create_app()
-    context = app.app_context()
+    _app = create_app(TestingConfig)
+    context = _app.app_context()
     context.push()
-    return app
+
+    yield _app
+
+    context.pop()
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def client(app):
     return app.test_client()
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def db(app):
-    test_db.init_app(app)
-    test_db.create_all()
-    return test_db
+    _db.create_all()
+
+    yield _db
+
+    _db.session.close()
+    _db.drop_all()

@@ -11,7 +11,7 @@ from backend.models.users import User
 @bp.route('/login')
 class Login(MethodView):
 
-    @bp.arguments(LoginArguments, location='query')
+    @bp.arguments(LoginArguments)
     @bp.response(AccountInfo, headers={
         "Set-Cookie":
             {"schema": {"type": "string",
