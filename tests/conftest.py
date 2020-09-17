@@ -1,5 +1,6 @@
 import pytest
 from backend.app import db as _db
+from backend.models.users import User
 from backend.app import create_app
 from backend.config import Config
 
@@ -28,6 +29,13 @@ def client(app):
 @pytest.fixture(scope='session')
 def db(app):
     _db.create_all()
+
+    user = User(username='Midas Bergveen', password='w8woord')
+    _db.session.add(user)
+    user = User(username='Twan van Broekhoven', password='SomethingClever')
+    _db.session.add(user)
+
+    _db.session.commit()
 
     yield _db
 
