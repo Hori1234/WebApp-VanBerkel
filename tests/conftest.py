@@ -1,4 +1,5 @@
 import pytest
+import os
 from backend.app import db as _db
 from backend.app import create_app
 from backend.config import Config
@@ -7,10 +8,10 @@ from backend.models.users import *
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or 'sqlite://'
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def app():
     """
     Creates a new Flask application for each test.

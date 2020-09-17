@@ -6,11 +6,12 @@ from functools import wraps
 
 def roles_required(*roles):
     """
-    Decorator to deny access to a view function if the user is not logged in or does not have the roles
-    specified in `roles`.
+    Decorator to deny access to a view function if the user is not logged in
+    or does not have the roles specified in `roles`.
 
-    In case the user is not logged in or does not have one of the roles required, the function will return
-    the :attr:`LoginManager.unauthorized` callback.
+    In case the user is not logged in or does not have one of the roles
+    required, the function will return the
+    :attr:`LoginManager.unauthorized` callback.
 
     Also documents the need for authentication to the API documentation.
 
