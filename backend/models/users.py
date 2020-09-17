@@ -10,7 +10,7 @@ import bcrypt
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.LargeBinary(60), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='view-only')
 
     def __init__(self, username: str, password: str, role: str = 'view-only'):

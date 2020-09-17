@@ -24,7 +24,7 @@ def upgrade():
                               sa.String(length=40),
                               nullable=False),
                     sa.Column('password',
-                              sa.String(length=100),
+                              sa.LargeBinary(length=60),
                               nullable=False),
                     sa.PrimaryKeyConstraint('id'),
                     sa.UniqueConstraint('username')
