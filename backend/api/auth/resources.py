@@ -37,10 +37,13 @@ class Login(MethodView):
 
         # check if the user exists and if the provided password is correct
         if user is None or not user.check_password(password):
-            abort(401, message='Username and/or password are wrong')
+            abort(401, message='Username and/or password are wrong.')
 
         # sets the session (and remember me) cookie(s) on the browser
-        login_user(user, remember)
+        success = login_user(user, remember)
+
+        if not success:
+            abort(401, message='User is already logged in.')
 
         return user
 

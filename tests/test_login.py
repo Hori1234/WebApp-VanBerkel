@@ -98,17 +98,18 @@ def test_login_case_sensitive_password(client):
 
 def test_login_while_logged_in(client):
     """
-    Tests the response of logging in while already being logged in.
+    Tests the response of logging in as another user
+    while already being logged in.
 
-    Should respond with 200, as the user remains logged in.
+    Should respond with 200, as another user is logged in.
     """
     rv = login(client, 'Midas Bergveen', 'w8woord', True)
     assert rv.status_code == 200  # Midas is logged in
     assert rv.get_json()['id'] == 1
 
-    rv = login(client, 'Midas Bergveen', 'w8woord', True)
-    assert rv.status_code == 200  # Midas remains logged in
-    assert rv.get_json()['id'] == 1
+    rv = login(client, 'Twan van Broekhoven', 'SomethingClever', True)
+    assert rv.status_code == 200  # Twan remains logged in
+    assert rv.get_json()['id'] == 2
 
 
 def test_login_after_logging_out(client):
