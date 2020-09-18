@@ -40,10 +40,7 @@ class Login(MethodView):
             abort(401, message='Username and/or password are wrong.')
 
         # sets the session (and remember me) cookie(s) on the browser
-        success = login_user(user, remember)
-
-        if not success:
-            abort(401, message='User is already logged in.')
+        login_user(user, remember)
 
         return user
 
