@@ -29,18 +29,22 @@ export default class SignInComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            role: "tmp"
+            role: "tmp",
+            username:"",
+            password:"",
         }
-        
+        this.handleChangeUsername = this.handleChangeUsername.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
+        this.onFinis = this.onFinis.bind(this);
     };
 
     postCredentials = async(uss, pass) => {
             
         var responseRole="";
-        
+        console.log(uss, pass);
         await axios.post('/api/auth/login', {
-            username: "test2",
-            password: "test2",
+            username: uss,
+            password: pass,
             remember: true
         })
         .then(function (response) {
@@ -68,21 +72,43 @@ export default class SignInComponent extends Component {
     }
 
     onAuthentificate = async() => {
-        await this.postCredentials();
+        var uss = this.getUsername();
+        var pass = this.getPassword();
+        console.log(uss);
+        await this.postCredentials(uss, pass);
         console.log("check state: " + this.state.role);
         this.props.changeUser(this.state.role);
         this.props.changeState();
     };
+    getUsername = () => {
+        return this.state.username;
+    };
+    getPassword = () => {
+        return this.state.password;
+    };
+    handleChangeUsername = (event) => {
+        this.setState({
+            username: event.target.value
+        });
+        console.log(this.state.username);
+    };
+    handleChangePassword = (event) => {
+        this.setState({
+            password: event.target.value
+        });
+        console.log(this.state.password);
+    };
 
-    onFinis = value => {
-        console.log('Failed:', value);
+
+    onFinis = (event) => {
+        console.log('Ussername and Password set', this.state.username, this.state.password);
+        
     };
     onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
 
     render() {
-        
         
         const layout = {
             labelCol: {
@@ -98,10 +124,7 @@ export default class SignInComponent extends Component {
                 span: 16,
             },
         };
-
         
-
-
         return (
             <Layout style={{ margin: 30, height: '95vh', display: "flex", }}>
                 <Layout style={{alignItems: "center", marginTop: 15}}>
@@ -136,7 +159,7 @@ export default class SignInComponent extends Component {
                             rules={[{ required: true, message: 'Please input your username!' }]}
                             style={{width:'100%', marginRight: 180,marginLeft: -50}}
                         >
-                            <Input />
+                            <Input value={this.state.username} onChange={this.handleChangeUsername}/>
                         </Form.Item>
 
                         <Form.Item
@@ -145,7 +168,7 @@ export default class SignInComponent extends Component {
                             rules={[{ required: true, message: 'Please input your password!' }]}
                             style={{width:'100%', marginRight: 180,marginLeft: -50}}
                         >
-                            <Input.Password />
+                            <Input.Password value={this.state.password} onChange={this.handleChangePassword}/>
                         </Form.Item>
 
                         <Form.Item {...tailLayout} name="remember" valuePropName="checked"
