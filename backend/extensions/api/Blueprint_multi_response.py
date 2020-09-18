@@ -55,7 +55,8 @@ class Blueprint(_Blueprint):
         serialization or only for documentation.
 
         Modified from Flask-Smorest's Blueprint to include
-        https://github.com/marshmallow-code/flask-smorest/pull/163#issuecomment-683859754
+        https://github.com/marshmallow-code/
+        flask-smorest/pull/163#issuecomment-683859754
 
         See :doc:`Response <response>`.
         """
@@ -137,10 +138,14 @@ class Blueprint(_Blueprint):
             # Store doc in wrapper function
             # The deepcopy avoids modifying the wrapped function doc
             wrapper._apidoc = deepcopy(getattr(wrapper, '_apidoc', {}))
-            wrapper._apidoc['response'] = deepupdate(wrapper._apidoc.get('response', {}), doc)
+            wrapper._apidoc['response'] = deepupdate(
+                wrapper._apidoc.get('response', {}),
+                doc
+            )
 
             # Document default error response if it's not already there
-            wrapper._apidoc['response']['responses'].setdefault('default', 'DEFAULT_ERROR')
+            wrapper._apidoc['response']['responses']\
+                .setdefault('default', 'DEFAULT_ERROR')
 
             return wrapper
 
