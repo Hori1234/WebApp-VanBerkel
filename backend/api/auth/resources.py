@@ -31,13 +31,19 @@ class Login(MethodView):
         remember = args.pop('remember')
 
         # try find the user in the database
-        user = User.query.filter(func.lower(User.username) == username.lower()).first()
+        user = User.query.filter(
+            func.lower(User.username) == username.lower()
+        ).first()
 
         # check if the user exists and if the provided password is correct
         if user is None or not user.check_password(password):
-            abort(401, message='Username and/or password are wrong')
+            abort(401, message='Username and/or password are wrong.')
 
-        login_user(user, remember)  # sets the session (and remember me) cookie(s) on the browser
+        # sets the session (and remember me) cookie(s) on the browser
+        success = login_user(user, remember)
+
+        if not success:
+            abort(401, message='User is already logged in.')
 
         return user
 

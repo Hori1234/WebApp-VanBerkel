@@ -38,14 +38,6 @@ export default class NavigationLayout extends Component {
         })
     };
 
-    changeUser = (value) => {
-        this.setState({
-            ...this.state,
-            UserState: value,
-        })
-        console.log(this.state.UserState);
-    };
-
     state = {
         collapsed: false,
     };
@@ -53,21 +45,21 @@ export default class NavigationLayout extends Component {
     onCollapse = collapsed => {
         this.setState({ collapsed });
         const divider = document.getElementsByClassName('ant-divider')[0];
-        const userTypesButton = document.getElementById('user-types');
+        
 
         if (collapsed) {
             divider.style.setProperty('display', 'none');
-            userTypesButton.style.setProperty('display', 'none');
         }
         else {
             divider.style.setProperty('display', 'flex');
-            userTypesButton.style.setProperty('display', 'initial');
         }
 
     };
 
+
     render() {
 
+        
 
         return (
             <Layout style={{ height: "100vh" }}>
@@ -85,11 +77,6 @@ export default class NavigationLayout extends Component {
                                 icon={<UserOutlined />} />
 
                             <Divider>T.R.U.C.K.</Divider>
-                            <TestComponent
-                                UserVO={() => this.changeUser("View Only")}
-                                UserAdmin={() => this.changeUser("Administrator")}
-                                UserPlanner={() => this.changeUser("Planner")}
-                            />
 
                         </Layout>
                         <Menu
@@ -98,7 +85,7 @@ export default class NavigationLayout extends Component {
                             defaultOpenKeys={['sub1']}
                             style={{ height: '100%', borderRight: 0 }}
                         >
-                            {this.state.UserState == 'Administrator' &&
+                            {this.props.userRole == 'administrator' &&
                                 <SubMenu key="sub1" icon={<UserOutlined />} title="User Type: ">
                                     <Menu.Item key="1" onClick={() => this.triggerAddTripState('am')}>Account Management</Menu.Item>
                                     <Menu.Item key="2" onClick={() => this.triggerAddTripState('upp')}>Upload</Menu.Item>
@@ -109,7 +96,7 @@ export default class NavigationLayout extends Component {
                                 </SubMenu>
                             }
 
-                            {this.state.UserState == 'Planner' &&
+                            {this.props.userRole == 'planner' &&
 
                                 <SubMenu key="sub1" icon={<UserOutlined />} title="User Type: ">
                                     <Menu.Item key="2" onClick={() => this.triggerAddTripState('upp')}>Upload</Menu.Item>
@@ -120,7 +107,7 @@ export default class NavigationLayout extends Component {
                                 </SubMenu>
                             }
 
-                            {this.state.UserState == 'View Only' &&
+                            {this.props.userRole == 'view-only' &&
 
                                 <SubMenu key="sub1" icon={<UserOutlined />} title="User Type: ">
                                     <Menu.Item key="4" onClick={() => this.triggerAddTripState('vp')}>View Planning</Menu.Item>
@@ -157,6 +144,7 @@ export default class NavigationLayout extends Component {
                                         alignItems: "center",
                                         backgroundColor: "white"
                                     }}>
+                                    
                                     {this.state.isMenuItemClickedState == "upp" && <UploadButton/> }
                                     {this.state.isMenuItemClickedState == false && <Home/> }
                                 

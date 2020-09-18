@@ -18,18 +18,71 @@ import {
     NotificationOutlined
 } from '@ant-design/icons';
 
-
+const axios = require('axios');
 const { Text, Link, Title  } = Typography;
+
+
 
 export default class SignInComponent extends Component {
     
     
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {
+            role: "tmp"
+        }
         
     };
 
+    postCredentials = async(uss, pass) => {
+            
+        var responseRole="";
+        
+        await axios.post('/api/auth/login', {
+            username: "test2",
+            password: "test2",
+            remember: true
+        })
+        .then(function (response) {
+            console.log(response);
+            console.log(response.data.role);
+            //this.props.userRole = response.data.role;
+            responseRole = response.data.role;
+            console.log("===============");
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        console.log("waiting for post response");
+        //responseRole = "view only";
+        this.onChangeRole(responseRole);  
+        console.log(this.state.role);
+    };
+
+
+    onChangeRole = (value) => {
+        this.setState({
+            role: value
+        });
+    }
+
+    onAuthentificate = async() => {
+        await this.postCredentials();
+        console.log("check state: " + this.state.role);
+        this.props.changeUser(this.state.role);
+        this.props.changeState();
+    };
+
+    onFinis = value => {
+        console.log('Failed:', value);
+    };
+    onFinishFailed = errorInfo => {
+        console.log('Failed:', errorInfo);
+    };
+
     render() {
+        
         
         const layout = {
             labelCol: {
@@ -46,13 +99,8 @@ export default class SignInComponent extends Component {
             },
         };
 
-        const onFinish = values => {
-            console.log('Success:', values);
-        };
+        
 
-        const onFinishFailed = errorInfo => {
-            console.log('Failed:', errorInfo);
-        };
 
         return (
             <Layout style={{ margin: 30, height: '95vh', display: "flex", }}>
@@ -77,8 +125,8 @@ export default class SignInComponent extends Component {
                         {...layout}
                         name="basic"
                         initialValues={{ remember: true }}
-                        onFinish={onFinish}
-                        onFinishFailed={onFinishFailed}
+                        onFinish={this.onFinis}
+                        onFinishFailed={this.onFinishFailed}
                         
                     >
                         <Form.Item
@@ -109,10 +157,11 @@ export default class SignInComponent extends Component {
                         <Form.Item {...tailLayout}>
                             <Button type="primary" htmlType="submit" 
                                 style={{marginLeft: 10, marginTop: 60, width: '60%'}}
-                                onClick={this.props.changeState}
+                                onClick={this.onAuthentificate.bind(this)}
                             >
                                 Login
                             </Button>
+
                         </Form.Item>
                     </Form>
                 </Layout>

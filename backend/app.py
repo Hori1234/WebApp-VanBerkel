@@ -20,7 +20,7 @@ def create_app(config=Config):
     Initializes the Flask app and Flask plugins.
 
     :param Config config: configuration for the flask application
-    :returns Flask App app: Flask application
+    :returns Flask App: Flask application
     """
     # Initialise app and configuration
     app = Flask(__name__)

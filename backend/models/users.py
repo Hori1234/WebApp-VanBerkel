@@ -10,7 +10,7 @@ import bcrypt
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.LargeBinary(60), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='view-only')
 
     def __init__(self, username: str, password: str, role: str = 'view-only'):
@@ -28,12 +28,15 @@ class User(UserMixin, db.Model):
     def set_password(self, password: str):
         """
         Hashes and stores the password using bcrypt.
-        The password is first hashed using sha256, after which it is base64 encoded.
-        This to prevent bcrypt only using the first 72 characters.
+
+        The password is first hashed using sha256,
+        after which it is base64 encoded.
+        This is  to prevent bcrypt only using the first 72 characters.
 
         :param password: the new password of the user
         """
-        self.password = bcrypt.hashpw(b64encode(sha256(password.encode()).digest()), bcrypt.gensalt())
+        encoded = b64encode(sha256(password.encode()).digest())
+        self.password = bcrypt.hashpw(encoded, bcrypt.gensalt())
 
     def check_password(self, password: str):
         """
@@ -41,7 +44,8 @@ class User(UserMixin, db.Model):
 
         :returns bool: whether the password was correct
         """
-        return bcrypt.checkpw(b64encode(sha256(password.encode()).digest()), self.password)
+        encoded = b64encode(sha256(password.encode()).digest())
+        return bcrypt.checkpw(encoded, self.password)
 
     @property
     def is_view_only(self):
