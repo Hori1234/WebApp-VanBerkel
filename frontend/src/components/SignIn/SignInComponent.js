@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {
     Layout,
     Menu,
+    message,
     Avatar,
     Form, 
     Input, 
@@ -32,6 +33,7 @@ export default class SignInComponent extends Component {
             role: "tmp",
             username:"",
             password:"",
+            valid:false,
         }
         this.handleChangeUsername = this.handleChangeUsername.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -41,6 +43,7 @@ export default class SignInComponent extends Component {
     postCredentials = async(uss, pass) => {
             
         var responseRole="";
+        var isValidated=false;
         console.log(uss, pass);
         await axios.post('/api/auth/login', {
             username: uss,
@@ -52,22 +55,25 @@ export default class SignInComponent extends Component {
             console.log(response.data.role);
             //this.props.userRole = response.data.role;
             responseRole = response.data.role;
+            isValidated=true;
             console.log("===============");
         })
         .catch(function (error) {
             console.log(error);
+            isValidated=false;
         });
 
         console.log("waiting for post response");
         //responseRole = "view only";
-        this.onChangeRole(responseRole);  
+        this.onChangeRole(responseRole, isValidated);  
         console.log(this.state.role);
     };
 
 
-    onChangeRole = (value) => {
+    onChangeRole = (value,validated) => {
         this.setState({
-            role: value
+            role: value,
+            valid: validated
         });
     }
 
@@ -76,9 +82,14 @@ export default class SignInComponent extends Component {
         var pass = this.getPassword();
         console.log(uss);
         await this.postCredentials(uss, pass);
-        console.log("check state: " + this.state.role);
-        this.props.changeUser(this.state.role);
-        this.props.changeState();
+
+        if (this.state.valid) {
+            console.log("check state: " + this.state.role);
+            this.props.changeUser(this.state.role);
+            this.props.changeState();
+        }else{
+            message.info("accont not valid");
+        }
     };
     getUsername = () => {
         return this.state.username;
@@ -106,6 +117,7 @@ export default class SignInComponent extends Component {
     };
     onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
+        message.info("fill all the available spaces");
     };
 
     render() {
