@@ -33,7 +33,7 @@ export default class SignInComponent extends Component {
     };
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.onFinis = this.onFinis.bind(this);
+    this.onFinish = this.onFinish.bind(this);
   }
 
   postCredentials = async (uss, pass) => {
