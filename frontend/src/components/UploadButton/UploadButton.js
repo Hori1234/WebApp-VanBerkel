@@ -24,19 +24,26 @@ export default class UploadButton extends Component {
     this.state = {
       file: null,
     };
+    this.onChange = this.onChange.bind(this);
     this.onPress = this.onPress.bind(this);
     this.fileUpload = this.fileUpload.bind(this);
+    
+  }
+
+  onChange(info) {
+    this.setState({file:info.file})
   }
 
   onPress(e) {
     e.preventDefault(); // Stop form submit
+    console.log(this.state.file);
     this.fileUpload(this.state.file).then((response) => {
       console.log(response.data);
     });
   }
 
   fileUpload(file) {
-    const url = "http://example.com/file-upload";
+    const url = "";
     const formData = new FormData();
     formData.append("file", file);
     const config = {
@@ -59,7 +66,8 @@ export default class UploadButton extends Component {
         }
         if (status === "done") {
           message.success(`${info.file.name} file uploaded successfully.`);
-          this.setState({ file: info.target.files[0] });
+          
+          
         } else if (status === "error") {
           message.error(`${info.file.name} file upload failed.`);
         }
@@ -150,7 +158,7 @@ export default class UploadButton extends Component {
               <Card title="Upload Order List" bordered={false}>
                 <Row gutter={[16, 24]}>
                   <Col className="gutter-row">
-                    <Dragger {...props}>
+                    <Dragger onChange = {this.onChange}>
                       <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                       </p>
