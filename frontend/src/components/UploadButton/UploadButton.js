@@ -27,19 +27,10 @@ export default class UploadButton extends Component {
     this.onChange = this.onChange.bind(this);
     this.onPress = this.onPress.bind(this);
     this.fileUpload = this.fileUpload.bind(this);
-<<<<<<< HEAD
-    this.onChange = this.onChange.bind(this);
-  }
-
-  onChange(e) {
-    this.setState({ file: e.target.files[0] });
-=======
-    
   }
 
   onChange(info) {
-    this.setState({file:info.file})
->>>>>>> 9ea4261b150b5db6f6f7a3e13e1ce438223ba001
+    this.setState({ file: info.file });
   }
 
   onPress(e) {
@@ -74,8 +65,6 @@ export default class UploadButton extends Component {
         }
         if (status === "done") {
           message.success(`${info.file.name} file uploaded successfully.`);
-          
-          
         } else if (status === "error") {
           message.error(`${info.file.name} file upload failed.`);
         }
@@ -166,7 +155,7 @@ export default class UploadButton extends Component {
               <Card title="Upload Order List" bordered={false}>
                 <Row gutter={[16, 24]}>
                   <Col className="gutter-row">
-                    <Dragger onChange = {this.onChange}>
+                    <Dragger onChange={this.onChange}>
                       <p className="ant-upload-drag-icon">
                         <InboxOutlined />
                       </p>
