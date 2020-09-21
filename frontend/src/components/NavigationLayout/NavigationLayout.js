@@ -20,6 +20,7 @@ import "../Css/NavigationLayout.css"
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
 
+
 export default class NavigationLayout extends Component {
 
     constructor(props) {
@@ -46,6 +47,7 @@ export default class NavigationLayout extends Component {
         this.setState({ collapsed });
         const divider = document.getElementsByClassName('ant-divider')[0];
         
+
         if (collapsed) {
             divider.style.setProperty('display', 'none');
         }
@@ -146,14 +148,17 @@ export default class NavigationLayout extends Component {
                                     
                                     {this.state.isMenuItemClickedState == "upp" && <UploadButton/> }
                                     {this.state.isMenuItemClickedState == false && <Home/> }
-                                                                   
+                                
+                                    
                                 </Layout>
 
                             </Content>
                         </Layout>
                         <Footer style={{ textAlign: 'center' }}>T.R.U.C.K. ©2020 Created by SEP Group 2</Footer>
                     </Layout>
+
                 </Layout>
+
             </Layout>
         )
     }
