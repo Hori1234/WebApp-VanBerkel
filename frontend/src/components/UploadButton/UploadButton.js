@@ -26,6 +26,11 @@ export default class UploadButton extends Component {
     };
     this.onPress = this.onPress.bind(this);
     this.fileUpload = this.fileUpload.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onChange(e) {
+    this.setState({ file: e.target.files[0] });
   }
 
   onPress(e) {
@@ -59,7 +64,7 @@ export default class UploadButton extends Component {
         }
         if (status === "done") {
           message.success(`${info.file.name} file uploaded successfully.`);
-          this.setState({ file: info.target.files[0] });
+          this.setState({ file: info.file });
         } else if (status === "error") {
           message.error(`${info.file.name} file upload failed.`);
         }
