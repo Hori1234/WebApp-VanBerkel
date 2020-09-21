@@ -20,7 +20,7 @@ import { InboxOutlined, FileExcelOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import axios, { post } from "axios";
 
-export default class EditAccountComponent extends Component {
+export default class DeleteAccountsComponent extends Component {
   render() {
     return (
       <Layout
@@ -31,7 +31,7 @@ export default class EditAccountComponent extends Component {
           height: "70vh",
         }}
       >
-        <p>This is a random component paragraph</p>
+        <p>This is a random component paragraph delete</p>
       </Layout>
     );
   }

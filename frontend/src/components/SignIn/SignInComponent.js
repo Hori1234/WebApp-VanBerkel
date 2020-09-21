@@ -134,8 +134,21 @@ export default class SignInComponent extends Component {
     };
 
     return (
-      <Layout style={{ margin: 30, height: "95vh", display: "flex" }}>
-        <Layout style={{ alignItems: "center", marginTop: 15 }}>
+      <Layout
+        style={{
+          margin: 30,
+          height: "95vh",
+          display: "flex",
+          backgroundColor: "white",
+        }}
+      >
+        <Layout
+          style={{
+            alignItems: "center",
+            marginTop: 15,
+            backgroundColor: "white",
+          }}
+        >
           <Avatar
             style={{ marginTop: 100 }}
             shape="square"
@@ -151,6 +164,7 @@ export default class SignInComponent extends Component {
             display: "flex",
             marginTop: -70,
             marginBottom: -120,
+            backgroundColor: "white",
           }}
         >
           <Title style={{ marginLeft: -280 }} level={5.2}>
@@ -162,7 +176,12 @@ export default class SignInComponent extends Component {
         </Layout>
 
         <Layout
-          style={{ alignItems: "center", display: "flex", marginTop: -50 }}
+          style={{
+            alignItems: "center",
+            display: "flex",
+            marginTop: -50,
+            backgroundColor: "white",
+          }}
         >
           <Form
             {...layout}

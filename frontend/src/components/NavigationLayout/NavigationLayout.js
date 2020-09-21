@@ -65,13 +65,13 @@ export default class NavigationLayout extends Component {
               </Layout>
               <Menu
                 mode="inline"
-                defaultSelectedKeys={["0"]}
                 defaultOpenKeys={["sub1"]}
                 style={{ height: "100%", borderRight: 0 }}
               >
                 {this.props.userRole == "administrator" && (
                   <SubMenu
                     key="sub1"
+                    defaultSelectedKeys={["0"]}
                     icon={<UserOutlined />}
                     title="User Type: "
                   >
@@ -102,6 +102,7 @@ export default class NavigationLayout extends Component {
                 {this.props.userRole == "planner" && (
                   <SubMenu
                     key="sub1"
+                    defaultSelectedKeys={["1"]}
                     icon={<UserOutlined />}
                     title="User Type: "
                   >
@@ -129,6 +130,7 @@ export default class NavigationLayout extends Component {
                 {this.props.userRole == "view-only" && (
                   <SubMenu
                     key="sub1"
+                    defaultSelectedKeys={["3"]}
                     icon={<UserOutlined />}
                     title="User Type: "
                   >
