@@ -12,7 +12,12 @@ import {
 
     NotificationOutlined
 } from '@ant-design/icons';
-
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link, BrowserRouter, HashRouter
+} from "react-router-dom";
 import TestComponent from "./TestComponent"
 import Home from "../Home/Home"
 import UploadButton from "../UploadButton/UploadButton"
@@ -45,7 +50,7 @@ export default class NavigationLayout extends Component {
     onCollapse = collapsed => {
         this.setState({ collapsed });
         const divider = document.getElementsByClassName('ant-divider')[0];
-        
+
 
         if (collapsed) {
             divider.style.setProperty('display', 'none');
@@ -59,7 +64,7 @@ export default class NavigationLayout extends Component {
 
     render() {
 
-        
+
 
         return (
             <Layout style={{ height: "100vh" }}>
@@ -144,11 +149,11 @@ export default class NavigationLayout extends Component {
                                         alignItems: "center",
                                         backgroundColor: "white"
                                     }}>
-                                    
-                                    {this.state.isMenuItemClickedState == "upp" && <UploadButton/> }
-                                    {this.state.isMenuItemClickedState == false && <Home/> }
-                                
-                                    
+
+                                    {this.state.isMenuItemClickedState == "upp" && <UploadButton />}
+                                    {this.state.isMenuItemClickedState == false && <Home />}
+
+
                                 </Layout>
 
                             </Content>
