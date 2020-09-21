@@ -18,6 +18,7 @@ import {
     NotificationOutlined
 } from '@ant-design/icons';
 
+
 const axios = require('axios');
 const { Text, Link, Title  } = Typography;
 
@@ -39,8 +40,8 @@ export default class SignInComponent extends Component {
         var responseRole="";
         
         await axios.post('/api/auth/login', {
-            username: "test2",
-            password: "test2",
+            username: "asd",
+            password: "asd",
             remember: true
         })
         .then(function (response) {
