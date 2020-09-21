@@ -31,17 +31,9 @@ export default class NavigationLayout extends Component {
         super(props)
         this.state = {
             isEmptyState: true,
-            isMenuItemClickedState: false,
             UserState: false,
             collapsed: false,
         }
-    };
-
-    triggerAddTripState = (value) => {
-        this.setState({
-            ...this.state,
-            isMenuItemClickedState: value,
-        })
     };
 
     onCollapse = collapsed => {
