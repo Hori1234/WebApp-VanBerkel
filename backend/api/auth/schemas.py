@@ -26,6 +26,7 @@ class AccountInfo(ma.SQLAlchemySchema):
     """
 
     id = ma.auto_field(description="The ID of the logged in user")
+    username = ma.auto_field(description="The username of the logged in user")
     role = ma.auto_field(description="The role of the logged in user")
 
     class Meta:

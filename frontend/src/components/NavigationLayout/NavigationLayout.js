@@ -1,14 +1,11 @@
-import React, { Component, useState } from 'react'
-import 'antd/dist/antd.css';
+import React, { Component, useState } from "react";
+import "antd/dist/antd.css";
+import { Layout, Menu, Avatar, Divider } from "antd";
 import {
-    Layout,
-    Menu,
-    Avatar,
-    Divider,
-} from 'antd';
-import {
-    UserOutlined,
-    LaptopOutlined,
+  UserOutlined,
+  LaptopOutlined,
+  NotificationOutlined,
+} from "@ant-design/icons";
 
     NotificationOutlined
 } from '@ant-design/icons';

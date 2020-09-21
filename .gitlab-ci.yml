@@ -11,7 +11,7 @@ variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   POSTGRES_PASSWORD: "testingpass"
   FLASK_APP: "app.py"
-  DATABASE_URI: "postgres+psycopg2://postgres:testingpass@postgres"
+  DATABASE_URI: "postgresql+psycopg2://postgres:testingpass@postgres"
 
 
 # Pip's cache doesn't store the python packages
@@ -32,7 +32,6 @@ before_script:
   - cd backend
   - pip install -r requirements.txt
   - flask db upgrade
-  - export FLASK_APP=app.py
   - cd ..
 
 stages:
@@ -42,11 +41,11 @@ stages:
 flake8:
   stage: Linter
   script:
-    - pip install flake8
     - flake8 backend/*.py
 
 test:
   stage: Tests
   script:
-    - pip install pytest
-    - pytest tests
+    - coverage run --source=backend -m pytest tests
+    - coverage report -m
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
