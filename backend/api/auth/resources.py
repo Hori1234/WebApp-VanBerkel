@@ -1,5 +1,5 @@
 from flask.views import MethodView
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 from sqlalchemy import func
 from backend.extensions import roles_required
 from flask_smorest import abort
@@ -59,3 +59,19 @@ class Logout(MethodView):
         """
         logout_user()
         return 204
+
+
+@bp.route('/user')
+class Users(MethodView):
+
+    @roles_required("view-only", "planner", "administrator")
+    @bp.response(AccountInfo)
+    @bp.alt_response('UNAUTHORIZED', code=401)
+    def get(self):
+        """
+        Checks the currently logged in user. Returns the account if the user
+        is logged in.
+
+        Required roles: any
+        """
+        return current_user

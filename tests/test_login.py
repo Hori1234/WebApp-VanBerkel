@@ -152,3 +152,28 @@ def test_logout_not_logged_in(client):
     """
     rv = logout(client)
     assert rv.status_code == 401  # Unauthorized
+
+
+def test_get_current_user(client):
+    """
+    Tests correct use of the get user endpoint.
+    """
+    login(client, 'Midas Bergveen', 'w8woord', True)
+    rv = client.get('/api/auth/user')
+    assert rv.status_code == 200  # User is logged in
+    assert rv.get_json()['id'] == 1  # User is Midas
+
+
+def test_get_user_no_auth(client):
+    """
+    Tests the get user endpoint when no one is logged in
+    """
+    rv = client.get('/api/auth/user')
+    assert rv.status_code == 401  # no user is logged in
+
+    login(client, 'Midas Bergveen', 'w8woord', True)
+    logout(client)
+
+    rv = client.get('/api/auth/user')
+    assert rv.status_code == 401  # no user is logged in
+
