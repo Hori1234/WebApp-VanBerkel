@@ -11,6 +11,7 @@
     "gantt": "^3.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3"
   },
   "scripts": {
@@ -22,6 +23,14 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  },
+  "setupFiles": [
+    "./src/setupTests.js"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -45,5 +54,12 @@
   ],
   "author": "Horea Breazu",
   "license": "MIT",
-  "proxy": "http://localhost:5000/"
+  "proxy": "http://localhost:5000/",
+  "devDependencies": {
+    "babel-jest": "^24.9.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.4",
+    "enzyme-to-json": "^3.5.0",
+    "jest": "^24.9.0"
+  }
 }

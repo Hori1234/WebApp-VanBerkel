@@ -96,7 +96,7 @@ def test_login_case_sensitive_password(client):
     assert rv.status_code == 401  # should not be logged in
 
 
-def test_login_while_logged_in(client):
+def test_new_login_while_logged_in(client):
     """
     Tests the response of logging in as another user
     while already being logged in.
@@ -110,6 +110,21 @@ def test_login_while_logged_in(client):
     rv = login(client, 'Twan van Broekhoven', 'SomethingClever', True)
     assert rv.status_code == 200  # Twan remains logged in
     assert rv.get_json()['id'] == 2
+
+
+def test_same_login_while_logged_in(client):
+    """
+    Test the response of logging in while already logged in.
+
+    Should respond with 200, as the same user remains logged in
+    """
+    rv = login(client, 'Midas Bergveen', 'w8woord', True)
+    assert rv.status_code == 200  # Midas is logged in
+    assert rv.get_json()['id'] == 1
+
+    rv = login(client, 'Midas Bergveen', 'w8woord', True)
+    assert rv.status_code == 200  # Midas is still logged in
+    assert rv.get_json()['id'] == 1
 
 
 def test_login_after_logging_out(client):
@@ -137,3 +152,28 @@ def test_logout_not_logged_in(client):
     """
     rv = logout(client)
     assert rv.status_code == 401  # Unauthorized
+
+
+def test_get_current_user(client):
+    """
+    Tests correct use of the get user endpoint.
+    """
+    login(client, 'Midas Bergveen', 'w8woord', True)
+    rv = client.get('/api/auth/user')
+    assert rv.status_code == 200  # User is logged in
+    assert rv.get_json()['id'] == 1  # User is Midas
+
+
+def test_get_user_no_auth(client):
+    """
+    Tests the get user endpoint when no one is logged in
+    """
+    rv = client.get('/api/auth/user')
+    assert rv.status_code == 401  # no user is logged in
+
+    login(client, 'Midas Bergveen', 'w8woord', True)
+    logout(client)
+
+    rv = client.get('/api/auth/user')
+    assert rv.status_code == 401  # no user is logged in
+
