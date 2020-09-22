@@ -38,7 +38,7 @@ export default class SignInComponent extends Component {
 
   postCredentials = async (uss, pass) => {
     var responseRole = "";
-    var isValidated = false;
+    let isValidated = false;
     console.log(uss, pass);
     await axios
       .post("/api/auth/login", {
@@ -62,7 +62,7 @@ export default class SignInComponent extends Component {
     console.log("waiting for post response");
     //responseRole = "view only";
     this.onChangeRole(responseRole, isValidated);
-    console.log(this.state.role);
+    console.log(this.state.role, this.state.username);
   };
 
   onChangeRole = (value, validated) => {
@@ -73,15 +73,15 @@ export default class SignInComponent extends Component {
   };
 
   onAuthentificate = async () => {
-    var uss = this.getUsername();
-    var pass = this.getPassword();
+    const uss = this.getUsername();
+    const pass = this.getPassword();
     console.log(uss);
     await this.postCredentials(uss, pass);
 
     if (this.state.valid) {
       console.log("check state: " + this.state.role);
       this.props.changeUser(this.state.role);
-      this.props.changeState();
+      // this.props.changeState();
     } else {
       message.info("accont not valid");
     }
