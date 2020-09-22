@@ -4,7 +4,6 @@ import App from './App';
 describe('MyApp', () => {
   it('should render correctly in "debug" mode', () => {
     const component = shallow(<App debug />);
-
     expect(component).toMatchSnapshot();
   });
 });
