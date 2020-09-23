@@ -16,7 +16,7 @@ import "antd/dist/antd.css";
 import AuthContext from "../contextConfig";
 
 const { Dragger } = Upload;
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 export default class UploadButton extends Component {
   constructor(props) {

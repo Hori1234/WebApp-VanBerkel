@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   Layout,
-  Menu,
   message,
   Avatar,
   Form,
@@ -9,18 +8,15 @@ import {
   Button,
   Checkbox,
   Typography,
-  Space,
   Divider,
 } from "antd";
 import "antd/dist/antd.css";
 import {
   UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
 } from "@ant-design/icons";
 
 const axios = require("axios");
-const { Text, Link, Title } = Typography;
+const {Title } = Typography;
 
 export default class SignInComponent extends Component {
   constructor(props) {
