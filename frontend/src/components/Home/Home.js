@@ -30,7 +30,7 @@ export default class Home extends Component {
                                 <Button type="primary"><Link to="/view">Go</Link></Button>
                             </Layout>
                         </Layout>  
-                        <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", width: "100%", backgroundColor: "white" }}>
+                        <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
                             <Image style={{ marginRight: 20 }}
                                 preview={false}
                                 width={100}
@@ -44,7 +44,7 @@ export default class Home extends Component {
                                 <Button type="primary"><Link to="/data">Go</Link></Button>
                             </Layout>
                         </Layout>                      
-                        <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", width: "100%", backgroundColor: "white" }}>
+                        <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
                             <Image style={{ marginRight: 20 }}
                                 preview={false}
                                 width={100}
