@@ -23,18 +23,31 @@ class Sheets(MethodView):
         file_2 = file.pop('file_2', None)
 
         try:
-            missing_columns = None
+            missing_columns = None  # stores the missing columns of a parser
+
             for Parser in (TruckAvailabilityParser, OrderListParser):
-                parser = Parser(file_1)
+                parser = Parser(file_1)  # instantiate the parser
+
+                # Check if all required columns are in the excel sheet
                 if len(parser.check_required_columns()) != 0:
+
                     if missing_columns:
+                        # If the second parser also failed to parse
+
+                        # Find the parser with the least missing columns
                         if len(parser.check_required_columns()) \
                                 < len(missing_columns):
                             missing_columns = parser.check_required_columns()
+
+                        # If there are 5 or more missing columns, we report
+                        # that we didn't recognize the spreadsheet
                         if len(missing_columns) >= 5:
                             abort(400,
                                   message="Spreadsheet is not recognized.",
                                   status="BAD REQUEST")
+
+                        # If there are less than 5 columns missing, we report
+                        # the missing columns.
                         else:
                             abort(400,
                                   errors={i: "Column is missing."
@@ -42,20 +55,28 @@ class Sheets(MethodView):
                                   status="BAD REQUEST"
                                   )
                     else:
+                        # store the missing columns and try the next parser
                         missing_columns = parser.check_required_columns()
                         continue
+
+                # check if the unique columns contain duplicate values
                 if len(parser.check_unique_columns()) != 0:
                     abort(400,
                           errors={i: "Column contains duplicate values."
                                   for i in parser.check_unique_columns()},
                           status="BAD REQUEST"
                           )
+
+                # parse the data using a Marshmallow schema
                 data = parser.parse()
         except XLRDError:
+            # The file could not be read by the spreadsheet parser
             abort(400,
                   message="File type not supported."
                   )
         except ValidationError as e:
+            # The data in the spreadsheet does not have the right type
+            # or is missing
             return abort(
                 400,
                 errors=e.normalized_messages(),
