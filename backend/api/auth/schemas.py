@@ -22,12 +22,35 @@ class LoginArguments(ma.SQLAlchemySchema):
 
 class AccountInfo(ma.SQLAlchemySchema):
     """
-    Account response object to a successful login request
+    Account response object to a successful login request.
     """
 
-    id = ma.auto_field(description="The ID of the logged in user")
-    username = ma.auto_field(description="The username of the logged in user")
-    role = ma.auto_field(description="The role of the logged in user")
+    id = ma.auto_field(description="The ID of the user",
+                       dump_only=True)
+    username = ma.auto_field(description="The username of the user",
+                             required=True)
+    password = ma.auto_field(description="The password of the user",
+                             load_only=True,
+                             required=True)
+    role = ma.auto_field(description="The role of the user",
+                         required=True)
+
+    class Meta:
+        model = User
+        ordered = True
+
+
+class AccountChange(ma.SQLAlchemySchema):
+    """
+    Account parameters for changing an account.
+    """
+
+    username = ma.auto_field(description="The username of the user",
+                             required=False)
+    password = ma.auto_field(description="The password of the user",
+                             required=False)
+    role = ma.auto_field(description="The role of the user",
+                         required=False)
 
     class Meta:
         model = User
