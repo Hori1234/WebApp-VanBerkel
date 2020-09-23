@@ -42,7 +42,7 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def db(app):
     """"
     Creates a database for the test.

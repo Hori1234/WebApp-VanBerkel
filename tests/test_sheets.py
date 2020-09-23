@@ -33,17 +33,17 @@ def setup_db(db, client):
     db.session.rollback()
 
 
-def upload_truck_availability_sheet(client, file):
+def upload_one_sheet(client, file):
     """
-    Uploads truck availability sheet to the server.
+    Uploads a single sheet to the server.
 
     :param client: The test client to make the request with
+    :param file: The file meant to be uploaded
     :return: The response of the server
     """
     data = dict(
-        file=(open(file, 'rb'),
-              'truck_availability_test.xlsx'),
-        type='truck_availability'
+        file_1=(open(file, 'rb'),
+                'truck_availability_test.xlsx')
     )
 
     return client.post('/api/sheets/',
@@ -51,17 +51,18 @@ def upload_truck_availability_sheet(client, file):
                        data=data)
 
 
-def upload_order_sheet(client, file):
+def upload_two_sheets(client, file1, file2):
     """
-    Uploads order sheet to the server.
+    Uploads
 
     :param client: The test client to make the request with
+    :param file1: The first file meant to be uploaded
+    :param file2: The second file meant to be uploaded
     :return: The response of the server
     """
     data = dict(
-        file=(open(file, 'rb'),
-              'order_list_10rows.xlsx'),
-        type='order_list'
+        file_1=(open(file1, 'rb'), 'truck_availability_test.xlsx'),
+        file_2=(open(file2, 'rb'), 'order_list_test.xlsx')
     )
 
     return client.post('/api/sheets/',
@@ -69,16 +70,22 @@ def upload_order_sheet(client, file):
                        data=data)
 
 
-@pytest.mark.skip('Not implemented yet')
 def test_upload_success(client):
-    rv = upload_truck_availability_sheet(client,
-                                         './data/truck_availability_test.xlsx')
-    assert rv.status_code == 201
+    rv = upload_one_sheet(client,
+                          './tests/data/truck_availability_test.xlsx')
+    assert rv.status_code == 200
 
 
-@pytest.mark.skip('Not implemented yet')
 def test_upload_fail(client):
-    rv = upload_truck_availability_sheet(client,
-                                         './data/truck_availability_wrong.xlsx')
+    rv = upload_one_sheet(client,
+                          './tests/data/truck_availability_wrong.xlsx')
     assert rv.status_code == 400
     assert len(rv.get_json()['errors']) > 0
+
+
+def test_upload_two(client):
+    rv = upload_two_sheets(client,
+                           './tests/data/truck_availability_test.xlsx',
+                           './tests/data/order_list_10rows.xlsx')
+
+    assert rv.status_code == 200
