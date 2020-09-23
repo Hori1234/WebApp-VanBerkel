@@ -13,10 +13,10 @@ import {
 } from "antd";
 import { InboxOutlined, FileExcelOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import axios, { post } from "axios";
+import { post } from "axios";
 
 const { Dragger } = Upload;
-const { Text, Title } = Typography;
+const { Text} = Typography;
 
 export default class UploadButton extends Component {
   constructor(props) {

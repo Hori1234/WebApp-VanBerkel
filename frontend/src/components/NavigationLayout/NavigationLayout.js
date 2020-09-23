@@ -1,21 +1,18 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import "antd/dist/antd.css";
 import { Layout, Menu, Avatar, Divider } from "antd";
 import {
   UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
 } from "@ant-design/icons";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import TestComponent from "./TestComponent";
 import Home from "../Home/Home";
 import UploadButton from "../UploadButton/UploadButton";
 import AccountManagementLayout from "../AccountManagerLayout/AccountManagementLayout";
 import "../Css/NavigationLayout.css";
 const { SubMenu } = Menu;
-const { Header, Content, Sider, Footer } = Layout;
+const {Content, Sider, Footer } = Layout;
 
 export default class NavigationLayout extends Component {
   constructor(props) {
@@ -68,7 +65,7 @@ export default class NavigationLayout extends Component {
                 defaultOpenKeys={["sub1"]}
                 style={{ height: "100%", borderRight: 0 }}
               >
-                {this.props.userRole == "administrator" && (
+                {this.props.userRole === "administrator" && (
                   <SubMenu
                     key="sub1"
                     defaultSelectedKeys={["0"]}
@@ -99,7 +96,7 @@ export default class NavigationLayout extends Component {
                   </SubMenu>
                 )}
 
-                {this.props.userRole == "planner" && (
+                {this.props.userRole === "planner" && (
                   <SubMenu
                     key="sub1"
                     defaultSelectedKeys={["1"]}
@@ -127,7 +124,7 @@ export default class NavigationLayout extends Component {
                   </SubMenu>
                 )}
 
-                {this.props.userRole == "view-only" && (
+                {this.props.userRole === "view-only" && (
                   <SubMenu
                     key="sub1"
                     defaultSelectedKeys={["3"]}
