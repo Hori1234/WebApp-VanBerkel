@@ -141,7 +141,7 @@ export default class AccountManagementLayout extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          {this.state.CAVisible == true && (
+          {this.state.CAVisible === true && (
             <Layout style={{ width: "80vh", height: "70vh", display: "flex" }}>
               <CreateAccountsComponent />
             </Layout>
@@ -154,7 +154,7 @@ export default class AccountManagementLayout extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          {this.state.EAVisible == true && (
+          {this.state.EAVisible === true && (
             <Layout style={{ width: "80vh", height: "70vh", display: "flex" }}>
               <EditAccountComponent />
             </Layout>
