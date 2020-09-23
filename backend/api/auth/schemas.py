@@ -29,9 +29,9 @@ class AccountInfo(ma.SQLAlchemySchema):
                        dump_only=True)
     username = ma.auto_field(description="The username of the user",
                              required=True)
-    password = ma.auto_field(description="The password of the user",
-                             load_only=True,
-                             required=True)
+    password = ma.String(description="The password of the user",
+                         load_only=True,
+                         required=True)
     role = ma.auto_field(description="The role of the user",
                          required=True)
 
@@ -47,8 +47,8 @@ class AccountChange(ma.SQLAlchemySchema):
 
     username = ma.auto_field(description="The username of the user",
                              required=False)
-    password = ma.auto_field(description="The password of the user",
-                             required=False)
+    password = ma.String(description="The password of the user",
+                         required=False)
     role = ma.auto_field(description="The role of the user",
                          required=False)
 

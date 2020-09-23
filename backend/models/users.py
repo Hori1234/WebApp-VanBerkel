@@ -1,6 +1,7 @@
 from backend.app import db
 from flask import current_app
 from sqlalchemy import func
+from sqlalchemy.ext.hybrid import hybrid_property
 from flask_login import UserMixin
 from hashlib import sha256
 from base64 import b64encode
@@ -10,12 +11,14 @@ import bcrypt
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), nullable=False)
-    password = db.Column(db.LargeBinary(60), nullable=False)
+    _password = db.Column('password',
+                          db.LargeBinary(60),
+                          nullable=False)
     role = db.Column(db.String(20), nullable=False, default='view-only')
 
     def __init__(self, username: str, password: str, role: str = 'view-only'):
         self.username = username
-        self.set_password(password)
+        self.password = password
         self.role = role
 
     @db.validates('role')
@@ -26,7 +29,12 @@ class User(UserMixin, db.Model):
                              f'it cannot be "{value}"')
         return value
 
-    def set_password(self, password: str):
+    @hybrid_property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, value: str):
         """
         Hashes and stores the password using bcrypt.
 
@@ -34,19 +42,21 @@ class User(UserMixin, db.Model):
         after which it is base64 encoded.
         This is  to prevent bcrypt only using the first 72 characters.
 
-        :param password: the new password of the user
+        :param value: the new password of the user
+        :type value: str
         """
-        encoded = b64encode(sha256(password.encode()).digest())
-        self.password = bcrypt.hashpw(encoded, bcrypt.gensalt())
+        encoded = b64encode(sha256(value.encode()).digest())
+        self._password = bcrypt.hashpw(encoded, bcrypt.gensalt())
 
     def check_password(self, password: str):
         """
         Checks if the password of the user is correct.
 
-        :returns bool: whether the password was correct
+        :return: whether the password was correct
+        :rtype: bool
         """
         encoded = b64encode(sha256(password.encode()).digest())
-        return bcrypt.checkpw(encoded, self.password)
+        return bcrypt.checkpw(encoded, self._password)
 
     @property
     def is_view_only(self):
