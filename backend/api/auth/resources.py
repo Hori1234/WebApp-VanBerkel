@@ -1,10 +1,12 @@
 from flask.views import MethodView
 from flask_login import login_user, logout_user, current_user
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from backend.app import db
 from backend.extensions import roles_required
 from flask_smorest import abort
 from . import bp
-from .schemas import LoginArguments, AccountInfo
+from .schemas import LoginArguments, AccountInfo, AccountChange
 from backend.models.users import User
 
 
@@ -75,3 +77,92 @@ class Users(MethodView):
         Required roles: any
         """
         return current_user
+
+    @roles_required("administrator")
+    @bp.arguments(AccountInfo)
+    @bp.response(AccountInfo, code=201)
+    @bp.alt_response('BAD_REQUEST', code=400)
+    @bp.alt_response('UNAUTHORIZED', code=401)
+    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
+    def post(self, req):
+        """
+        Creates a new user. Returns the account of the newly created user.
+
+        Required roles: Administrator
+        """
+        try:
+            user = User(**req)
+            db.session.add(user)
+            db.session.commit()
+            return user, 201
+        except ValueError as e:
+            abort(400,
+                  message=str(e),
+                  status="BAD REQUEST"
+                  )
+        except IntegrityError:
+            abort(400,
+                  message='Username has already been taken.',
+                  status='BAD REQUEST')
+        except SQLAlchemyError:
+            abort(503,
+                  message='Something went wrong on the server.',
+                  status='SERVICE UNAVAILABLE')
+
+
+@bp.route('/user/<int:user_id>')
+class UserByID(MethodView):
+
+    @roles_required("administrator")
+    @bp.arguments(AccountChange)
+    @bp.response(AccountInfo)
+    @bp.alt_response('BAD_REQUEST', code=400)
+    @bp.alt_response('UNAUTHORIZED', code=401)
+    @bp.alt_response('NOT_FOUND', code=404)
+    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
+    def put(self, req, user_id):
+        try:
+            user = User.query.get_or_404(user_id,
+                                         description='User not found.')
+            if user == current_user and 'role' in req:
+                abort(400,
+                      message='You cannot change your own role',
+                      status='BAD REQUEST')
+            for k, v in req.items():
+                setattr(user, k, v)
+            db.session.commit()
+            return user, 200
+        except ValueError as e:
+            abort(400,
+                  message=str(e),
+                  status="BAD REQUEST"
+                  )
+        except IntegrityError:
+            abort(400,
+                  message='Username has already been taken.',
+                  status='BAD REQUEST')
+        except SQLAlchemyError:
+            abort(503,
+                  message='Something went wrong on the server.',
+                  status='SERVICE UNAVAILABLE')
+
+    @roles_required("administrator")
+    @bp.response(code=204)
+    @bp.alt_response('UNAUTHORIZED', code=401)
+    @bp.alt_response('NOT_FOUND', code=404)
+    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
+    def delete(self, user_id):
+        try:
+            user = User.query.get_or_404(user_id,
+                                         description='User not found.')
+            if user == current_user:
+                abort(400,
+                      message='You cannot delete your own account.',
+                      status='BAD REQUEST')
+            db.session.delete(user)
+            db.session.commit()
+            return "", 204
+        except SQLAlchemyError:
+            abort(503,
+                  message='Something went wrong on the server.',
+                  status='SERVICE UNAVAILABLE')

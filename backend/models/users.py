@@ -16,13 +16,14 @@ class User(UserMixin, db.Model):
     def __init__(self, username: str, password: str, role: str = 'view-only'):
         self.username = username
         self.set_password(password)
-        if role not in current_app.config['ROLES']:
-            raise ValueError(f'A user\'s role cannot be "{role}"')
         self.role = role
 
     @db.validates('role')
     def validate_role(self, key, value):
-        assert value in current_app.config['ROLES']
+        if value not in current_app.config['ROLES']:
+            raise ValueError(f'A user\'s role has to be one of '
+                             f'"administrator", "planner" or "view-only", '
+                             f'it cannot be "{value}"')
         return value
 
     def set_password(self, password: str):

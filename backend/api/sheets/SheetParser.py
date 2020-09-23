@@ -37,13 +37,13 @@ class TruckAvailabilitySchema(Schema):
     def validate_truck_type(self, val):
         """
         Validates the truck type input.
-        
-        Raises a `ValidationError` if val is not one of 'terminal', 'regional' 
+
+        Raises a `ValidationError` if val is not one of 'terminal', 'regional'
         or 'port'. This check is case insensitive.
-        
+
         :param val: the value of the column.
-        :type val: str 
-        :raises :class:`marshmallow.exceptions.ValidationError`: if 
+        :type val: str
+        :raises :class:`marshmallow.exceptions.ValidationError`: if
                 `val.lower()` is not `terminal`, `regional` or `port`.
         """""
         if val.lower() not in ['terminal', 'regional', 'port']:
@@ -55,12 +55,12 @@ class TruckAvailabilitySchema(Schema):
         """
         Validates the terminal input.
 
-        Raises a `ValidationError` if val is not one of 'KAT', 'ITV' 
+        Raises a `ValidationError` if val is not one of 'KAT', 'ITV'
         or 'OSS'. This check is case insensitive.
 
         :param val: the value of the column.
         :type val: str
-        :raises :class:`marshmallow.exceptions.ValidationError`: if 
+        :raises :class:`marshmallow.exceptions.ValidationError`: if
         `val.lower()` is not `itv`, `kat` or `oss`.
         """""
         if val.lower() not in ['itv', 'kat', 'oss']:
@@ -112,8 +112,8 @@ class OrderListSchema(Schema):
         Validates the truck type input.
 
         :param val: the value of the column
-        :type val: str 
-        :raises :class:`marshmallow.exceptions.ValidationError`: if 
+        :type val: str
+        :raises :class:`marshmallow.exceptions.ValidationError`: if
         `val.lower()` is not `terminal`, `regional` or `port`.
         """""
         if val.lower() not in ['terminal', 'regional', 'port']:
@@ -135,7 +135,7 @@ class SheetParser(ABC):
     required_columns: set
     """Set of column names in which all values are required."""
     schema: Type[Schema]
-    """:class:`marshmallow.Schema` which validates the data 
+    """:class:`marshmallow.Schema` which validates the data
     on typing and missing values."""
 
     def __init__(self, file):
@@ -213,7 +213,7 @@ class TruckAvailabilityParser(SheetParser):
     required_columns = {'Truck ID', 'Truck S No', 'Availability of truck',
                         'Truck type', 'Terminal Base', 'Truck Hierarchy',
                         'Truck Use Cost', 'Starting time', 'Date'}
-    Schema = TruckAvailabilitySchema
+    schema = TruckAvailabilitySchema
 
 
 class OrderListParser(SheetParser):
@@ -224,4 +224,4 @@ class OrderListParser(SheetParser):
     required_columns = {'Order Number', 'Latest Dep Time', 'truck type',
                         'Hierarchy', 'Delivery Deadline', 'driving time',
                         'proces time', 'service time'}
-    Schema = OrderListSchema
+    schema = OrderListSchema
