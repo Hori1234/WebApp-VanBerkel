@@ -12,7 +12,7 @@ import UploadButton from "../UploadButton/UploadButton";
 import AccountManagementLayout from "../AccountManagerLayout/AccountManagementLayout";
 import "../Css/NavigationLayout.css";
 const { SubMenu } = Menu;
-const {Content, Sider, Footer } = Layout;
+const { Content, Sider, Footer } = Layout;
 
 export default class NavigationLayout extends Component {
   constructor(props) {
@@ -73,7 +73,7 @@ export default class NavigationLayout extends Component {
                     title="User Type: "
                   >
                     <Menu.Item key="0">
-                      <Link to="/">Home</Link>
+                      <Link to="/" >Home</Link>
                     </Menu.Item>
                     <Menu.Item key="1">
                       <Link to="/account">Account Management</Link>

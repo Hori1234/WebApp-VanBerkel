@@ -27,7 +27,7 @@ export default class Home extends Component {
                                     <Text style={{ fontSize: " 14" }}>View the planning that was created for today</Text>
                                 </Layout>
                                 <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                    <Button id="button" type="primary"><Link to="/view">Go</Link></Button>
+                                    <Button id="viewButton" type="primary"><Link to="/view">Go</Link></Button>
                                 </Layout>
                             </Layout>
                             <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
@@ -41,7 +41,7 @@ export default class Home extends Component {
                                     <Text style={{ fontSize: " 14" }}>View charts of the supplied data</Text>
                                 </Layout>
                                 <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                    <Button type="primary"><Link to="/data">Go</Link></Button>
+                                    <Button id="dataButton" type="primary"><Link to="/data">Go</Link></Button>
                                 </Layout>
                             </Layout>
                             <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
@@ -55,7 +55,7 @@ export default class Home extends Component {
                                     <Text style={{ fontSize: " 14" }}>View statistical data about this and past plannings</Text>
                                 </Layout>
                                 <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                    <Button type="primary"><Link to="/montly">Go</Link></Button>
+                                    <Button id="monthlyButton" type="primary"><Link to="/montly">Go</Link></Button>
                                 </Layout>
                             </Layout>
 
@@ -76,7 +76,7 @@ export default class Home extends Component {
                                         <Text style={{ fontSize: " 14" }}>Upload the documents for the creation of the plannings</Text>
                                     </Layout>
                                     <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                        <Button type="primary"><Link to="/upload">Go</Link></Button>
+                                        <Button id="uploadButton" type="primary"><Link to="/upload">Go</Link></Button>
                                     </Layout>
                                 </Layout>
                             )}
@@ -92,7 +92,7 @@ export default class Home extends Component {
                                         <Text style={{ fontSize: " 14" }}>Manual and automatic creation of a planning</Text>
                                     </Layout>
                                     <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                        <Button type="primary"><Link to="/planning">Go</Link></Button>
+                                        <Button id="planningButton" type="primary"><Link to="/planning">Go</Link></Button>
                                     </Layout>
                                 </Layout>
                             )}
@@ -108,7 +108,7 @@ export default class Home extends Component {
                                         <Text style={{ fontSize: " 14" }}>Manage roles, usernames, and passwords for all users</Text>
                                     </Layout>
                                     <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                        <Button type="primary"><Link to="/account">Go</Link></Button>
+                                        <Button id="accountButton" type="primary"><Link to="/account">Go</Link></Button>
                                     </Layout>
                                 </Layout>
                             )}

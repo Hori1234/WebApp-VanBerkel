@@ -1,0 +1,144 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NAvigationLayout component should render the login page correctly 1`] = `
+<BrowserRouter>
+  <Layout
+    style={
+      Object {
+        "height": "100vh",
+      }
+    }
+  >
+    <Layout
+      style={
+        Object {
+          "margin": 10,
+        }
+      }
+    >
+      <Sider
+        className="site-layout-background"
+        collapsed={false}
+        collapsible={true}
+        onCollapse={[Function]}
+        width={200}
+      >
+        <Layout
+          className="dividers-style"
+        >
+          <Avatar
+            icon={<ForwardRef(UserOutlined) />}
+            shape="square"
+            size={64}
+            style={
+              Object {
+                "marginTop": 10,
+              }
+            }
+          />
+          <Divider>
+            T.R.U.C.K.
+          </Divider>
+        </Layout>
+        <Menu
+          defaultOpenKeys={
+            Array [
+              "sub1",
+            ]
+          }
+          mode="inline"
+          style={
+            Object {
+              "borderRight": 0,
+              "height": "100%",
+            }
+          }
+        />
+      </Sider>
+      <Layout
+        style={
+          Object {
+            "height": "100%",
+            "padding": "0 24px 24px",
+          }
+        }
+      >
+        <Layout
+          style={
+            Object {
+              "alignItems": "center",
+              "marginTop": 25,
+              "minHeight": 280,
+              "width": "100%",
+            }
+          }
+        >
+          <Content
+            className="site-layout-background"
+            style={
+              Object {
+                "marginTop": 25,
+                "minHeight": 280,
+                "padding": 24,
+                "width": "100%",
+              }
+            }
+          >
+            <Layout
+              style={
+                Object {
+                  "alignItems": "center",
+                  "backgroundColor": "white",
+                  "height": "100%",
+                  "padding": 24,
+                  "width": "100%",
+                }
+              }
+            >
+              <Switch>
+                <Route
+                  path="/upload"
+                >
+                  <UploadButton />
+                </Route>
+                <Route
+                  path="/account"
+                >
+                  <AccountManagementLayout />
+                </Route>
+                <Route
+                  path="/planning"
+                />
+                <Route
+                  path="/view"
+                />
+                <Route
+                  path="/data"
+                />
+                <Route
+                  path="/montly"
+                />
+                <Route
+                  exact={true}
+                  path="/"
+                >
+                  <Home />
+                </Route>
+              </Switch>
+            </Layout>
+          </Content>
+        </Layout>
+        <Footer
+          style={
+            Object {
+              "textAlign": "center",
+            }
+          }
+        >
+          T.R.U.C.K. ©2020 Created by SEP Group 2
+        </Footer>
+      </Layout>
+    </Layout>
+  </Layout>
+</BrowserRouter>
+`;
