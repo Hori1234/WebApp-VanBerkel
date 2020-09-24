@@ -90,7 +90,6 @@ exports[`SignInComponent should render the login page correctly 1`] = `
         }
       }
       name="basic"
-      onFinish={[Function]}
       onFinishFailed={[Function]}
       wrapperCol={
         Object {

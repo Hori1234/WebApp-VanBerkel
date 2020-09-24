@@ -1,0 +1,54 @@
+# This file is a template, and might need editing before it works on your project.
+# Official language image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/python/tags/
+image: python:latest
+services:
+  - postgres:latest
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  POSTGRES_PASSWORD: "testingpass"
+  FLASK_APP: "app.py"
+  DATABASE_URI: "postgresql+psycopg2://postgres:testingpass@postgres"
+
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+#
+# If you want to also cache the installed packages, you have to install
+# them in a virtualenv and cache it as well.
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+stages:
+  - Build
+  - Linter
+  - Tests
+
+build:
+  stage: Build
+  script:
+    - python -V  # Print out python version for debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - cd backend
+    - pip install -r requirements.txt
+    - flask db upgrade
+    - cd ..
+
+flake8:
+  stage: Linter
+  script:
+    - flake8 backend/*.py
+
+test:
+  stage: Tests
+  script:
+    - coverage run --source=backend -m pytest tests
+    - coverage report -m
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
