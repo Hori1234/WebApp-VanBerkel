@@ -6,6 +6,9 @@ cache:
   paths:
     - frontend/node_modules/
 
+variables:
+  CI: 'true'
+
 before_script:
   - cd frontend
 
@@ -19,6 +22,9 @@ build:
   stage: Build
   script:
     - npm install
+  artifacts:
+    paths:
+      - frontend/node_modules/
 
 # Check style of the code
 eslint:
