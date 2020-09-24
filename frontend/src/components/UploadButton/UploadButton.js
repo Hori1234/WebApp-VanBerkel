@@ -37,6 +37,18 @@ export default class UploadButton extends Component {
           message.success(`${info.file.name} file uploaded successfully.`);
         } else if (status === "error") {
           message.error(`${info.file.name} file upload failed.`);
+          if (info.file.response.code === 400) {
+            message.error(info.file.response.message);
+            const object = JSON.parse(
+              JSON.stringify(info.file.response.errors)
+            );
+            message.error(JSON.stringify(object));
+          } else {
+            if (info.file.response.code === 422) {
+              message.error(info.file.response.errors);
+            } else {
+            }
+          }
         }
       },
     };
