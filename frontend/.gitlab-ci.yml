@@ -18,7 +18,7 @@ stages:
   - Tests
 
 # Installs the packages needed for the React app
-build:
+frontend-build:
   stage: Build
   script:
     - npm install
@@ -27,14 +27,14 @@ build:
       - frontend/node_modules/
 
 # Check style of the code
-eslint:
+frontend-lint:
   stage: Linter
   needs: [build]
   script:
     - npm run lint
 
 # Run tests
-test:
+frontend-test:
   stage: Tests
   needs: [eslint]
   script:
