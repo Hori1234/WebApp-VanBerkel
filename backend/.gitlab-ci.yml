@@ -43,12 +43,16 @@ build:
 
 flake8:
   stage: Linter
+  needs: [build]
   script:
+    - source venv/bin/activate
     - flake8 backend/*.py
 
 test:
   stage: Tests
+  needs: [flake8]
   script:
+    - source venv/bin/activate
     - coverage run --source=backend -m pytest tests
     - coverage report -m
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
