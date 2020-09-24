@@ -43,6 +43,13 @@ flake8:
   script:
     - flake8 backend/*.py
 
+eslint:
+  stage: Linter
+  script:
+    - cd frontend
+    - npx eslint src
+    - cd..
+
 test:
   stage: Tests
   script:
