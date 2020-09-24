@@ -20,7 +20,7 @@ class Sheets(MethodView):
         Parses the orders and truck availability sheets files.
         """
         file_1 = file.pop('file_1')  # file_1 is required, so is always here
-        # file_2 = file.pop('file_2', None)
+        file_2 = file.pop('file_2', None)
 
         try:
             missing_columns = None  # stores the missing columns of a parser
