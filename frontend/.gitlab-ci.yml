@@ -29,14 +29,14 @@ frontend-build:
 # Check style of the code
 frontend-lint:
   stage: Linter
-  needs: [build]
+  needs: [frontend-build]
   script:
     - npm run lint
 
 # Run tests
 frontend-test:
   stage: Tests
-  needs: [eslint]
+  needs: [frontend-lint]
   script:
     - npm test -- --coverage --watchAll=false
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/

@@ -42,14 +42,14 @@ backend-build:
 
 backend-lint:
   stage: Linter
-  needs: [build]
+  needs: [backend-build]
   script:
     - source venv/bin/activate
     - flake8 backend/*.py
 
 backend-test:
   stage: Tests
-  needs: [flake8]
+  needs: [backend-lint]
   script:
     - source venv/bin/activate
     - coverage run --source=backend -m pytest tests
