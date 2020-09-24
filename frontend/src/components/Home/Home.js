@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import AuthContext from "../contextConfig.js"
+import { AuthContext } from "../contextConfig.js"
 import { Layout, Image, Typography, Button, Divider } from 'antd';
 import 'antd/dist/antd.css';
 import {
@@ -64,7 +64,7 @@ export default class Home extends Component {
                             <Divider type="vertical" style={{ height: "50vh", marginRight: 20 }}></Divider>
                         </Layout>
                         <Layout style={{ justifyContent: "space-around", marginBottom: 50, display: "flex", alignItems: "flex-start", backgroundColor: "white", marginRight: 30 }}>
-                            {(context.state.role === 'planner' || context.state.role === 'administrator') && (
+                            {(context.state.user.role === 'planner' || context.state.user.role === 'administrator') && (
                                 <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
                                     <Image style={{ marginRight: 20 }}
                                         preview={false}
@@ -80,7 +80,7 @@ export default class Home extends Component {
                                     </Layout>
                                 </Layout>
                             )}
-                            {(context.state.role === 'planner' || context.state.role === 'administrator') && (
+                            {(context.state.user.role === 'planner' || context.state.user.role === 'administrator') && (
                                 <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
                                     <Image style={{ marginRight: 20 }}
                                         preview={false}
@@ -96,7 +96,7 @@ export default class Home extends Component {
                                     </Layout>
                                 </Layout>
                             )}
-                            {context.state.role === "administrator" && (
+                            {context.state.user.role === "administrator" && (
                                 <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
                                     <Image style={{ marginRight: 20 }}
                                         preview={false}

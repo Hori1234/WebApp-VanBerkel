@@ -30,7 +30,7 @@ class Login(MethodView):
         # get arguments from the request
         username = args.pop('username')
         password = args.pop('password')
-        remember = args.pop('remember')
+        remember = args.pop('remember', False)
 
         # try find the user in the database
         user = User.query.filter(

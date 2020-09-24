@@ -1,30 +1,18 @@
 import React, { Component } from "react";
 import {
-  Upload,
-  message,
-  Row,
-  Col,
-  Card,
   Button,
   Layout,
   Form,
   Input,
-  InputNumber,
   Typography,
   Select,
   Divider,
-  Image,
-  Modal,
 } from "antd";
 
 import {
-  InboxOutlined,
-  FileExcelOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import axios, { post } from "axios";
-import Paragraph from "antd/lib/skeleton/Paragraph";
 const { Text, Title } = Typography;
 const { Option } = Select;
 
@@ -41,14 +29,15 @@ export default class CreateAccountsComponent extends Component {
       wrapperCol: { span: 16 },
     };
 
+    /* eslint no-template-curly-in-string: "off" */
     const validateMessages = {
-      required: "${label} is required!",
+      required: '${label} is required!',
       types: {
-        email: "${label} is not validate email!",
-        number: "${label} is not a validate number!",
+        email: '${label} is not validate email!',
+        number: '${label} is not a validate number!',
       },
       number: {
-        range: "${label} must be between ${min} and ${max}",
+        range: '${label} must be between ${min} and ${max}',
       },
     };
     const onGenderChange = (value) => {

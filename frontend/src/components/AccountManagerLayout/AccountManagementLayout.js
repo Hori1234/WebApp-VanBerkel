@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import {
-  Upload,
-  message,
   Row,
   Col,
   Card,
@@ -10,26 +8,21 @@ import {
   Typography,
   Statistic,
   Divider,
-  Image,
   Modal,
 } from "antd";
 import {
-  InboxOutlined,
-  FileExcelOutlined,
   UserAddOutlined,
   UserDeleteOutlined,
   UserSwitchOutlined,
   ArrowUpOutlined,
-  ArrowDownOutlined,
 } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import axios, { post } from "axios";
 
 import CreateAccountsComponent from "./CreateAccountsComponent";
 import EditAccountComponent from "./EditAccountComponent";
 import DeleteAccountsComponent from "./DeleteAccountsComponent";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 export default class AccountManagementLayout extends Component {
   constructor(props) {
@@ -60,8 +53,9 @@ export default class AccountManagementLayout extends Component {
           DAVisible: true,
         });
         console.log("ea modal shown");
-
         break;
+      default:
+        // no default
     }
     console.log("modal shown");
   };
@@ -217,7 +211,7 @@ export default class AccountManagementLayout extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          {this.state.CAVisible == true && <CreateAccountsComponent />}
+          {this.state.CAVisible && <CreateAccountsComponent />}
         </Modal>
         <Modal
           title="Basic Modal"
@@ -232,7 +226,7 @@ export default class AccountManagementLayout extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          {this.state.EAVisible == true && <EditAccountComponent />}
+          {this.state.EAVisible && <EditAccountComponent />}
         </Modal>
         <Modal
           title="Basic Modal"
@@ -247,7 +241,7 @@ export default class AccountManagementLayout extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          {this.state.DAVisible == true && <DeleteAccountsComponent />}
+          {this.state.DAVisible && <DeleteAccountsComponent />}
         </Modal>
       </Layout>
     );

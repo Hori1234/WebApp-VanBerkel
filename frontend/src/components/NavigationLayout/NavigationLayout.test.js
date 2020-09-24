@@ -1,31 +1,45 @@
-import React, { useContext } from 'react';
-import { mount, shallow, render, setProps } from 'enzyme';
-import {
-    MemoryRouter
-} from 'react-router'
-import { Route, Link, useLocation } from 'react-router-dom';
-import { Layout, Image, Typography, Button, Divider } from 'antd';
-import AuthContext from '../contextConfig';
+import React from 'react';
+import { render } from 'enzyme';
+import { AuthContext } from '../contextConfig';
 import NavigationLayout from './NavigationLayout';
 
 
+const ProvideUser = ({children}) => {
+    const user = {
+        state: {
+            user: {
+                id: 1,
+                username: 'test',
+                role: 'administrator'
+            }
+        }
+    };
+    return (
+        <AuthContext.Provider value={user}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
 
 
-describe('NAvigationLayout component', () => {
+describe('NavigationLayout component', () => {
 
 
     it('should render the login page correctly', () => {
 
-        const component = shallow(<NavigationLayout />);
+        const component = render(
+            <ProvideUser>
+                <NavigationLayout />
+            </ProvideUser>
+        );
         expect(component).toMatchSnapshot();
     });
 
     it('should have the correct view button href', () => {
-        const user = { state: { username: 'test', role: 'administrator' } };
-
-        const component = render(<AuthContext.Provider value={user} >
-            <NavigationLayout />
-        </AuthContext.Provider>
+        const component = render(
+            <ProvideUser>
+                <NavigationLayout/>
+            </ProvideUser>
         );
         const viewButton = component.find('#viewButton > a')[0];
         expect(viewButton.attribs.href).toEqual('/view');
@@ -33,11 +47,10 @@ describe('NAvigationLayout component', () => {
     });
 
     it('should have the correct dataButton href', () => {
-        const user = { state: { username: 'test', role: 'administrator' } };
-
-        const component = render(<AuthContext.Provider value={user} >
-            <NavigationLayout />
-        </AuthContext.Provider>
+        const component = render(
+            <ProvideUser>
+                <NavigationLayout/>
+            </ProvideUser>
         );
         const dataButton = component.find('#dataButton > a')[0];
         expect(dataButton.attribs.href).toEqual('/data');
@@ -45,11 +58,10 @@ describe('NAvigationLayout component', () => {
     });
 
     it('should have the correct monthlyButton href', () => {
-        const user = { state: { username: 'test', role: 'administrator' } };
-
-        const component = render(<AuthContext.Provider value={user} >
-            <NavigationLayout />
-        </AuthContext.Provider>
+        const component = render(
+            <ProvideUser>
+                <NavigationLayout/>
+            </ProvideUser>
         );
         const monthlyButton = component.find('#monthlyButton > a')[0];
         expect(monthlyButton.attribs.href).toEqual('/montly');
@@ -57,11 +69,10 @@ describe('NAvigationLayout component', () => {
     });
 
     it('should have the correct uploadButton href', () => {
-        const user = { state: { username: 'test', role: 'administrator' } };
-
-        const component = render(<AuthContext.Provider value={user} >
-            <NavigationLayout />
-        </AuthContext.Provider>
+        const component = render(
+            <ProvideUser>
+                <NavigationLayout/>
+            </ProvideUser>
         );
         const uploadButton = component.find('#uploadButton > a')[0];
         expect(uploadButton.attribs.href).toEqual('/upload');
@@ -69,11 +80,10 @@ describe('NAvigationLayout component', () => {
     });
 
     it('should have the correct planningButton href', () => {
-        const user = { state: { username: 'test', role: 'administrator' } };
-
-        const component = render(<AuthContext.Provider value={user} >
-            <NavigationLayout />
-        </AuthContext.Provider>
+        const component = render(
+            <ProvideUser>
+                <NavigationLayout/>
+            </ProvideUser>
         );
         const planningButton = component.find('#planningButton > a')[0];
         expect(planningButton.attribs.href).toEqual('/planning');
@@ -81,11 +91,10 @@ describe('NAvigationLayout component', () => {
     });
 
     it('should have the correct accountButton href', () => {
-        const user = { state: { username: 'test', role: 'administrator' } };
-
-        const component = render(<AuthContext.Provider value={user} >
-            <NavigationLayout />
-        </AuthContext.Provider>
+        const component = render(
+            <ProvideUser>
+                <NavigationLayout/>
+            </ProvideUser>
         );
         const accountButton = component.find('#accountButton > a')[0];
         expect(accountButton.attribs.href).toEqual('/account');
