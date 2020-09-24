@@ -3,7 +3,6 @@ import os
 from backend.app import db as _db
 from backend.app import create_app
 from backend.config import Config
-from backend.models.users import *
 
 
 class TestingConfig(Config):
@@ -59,3 +58,4 @@ def db(app):
 
     _db.session.close()
     _db.drop_all()
+

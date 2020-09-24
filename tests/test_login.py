@@ -12,14 +12,12 @@ def setup_db(db):
 
     :param `SQLAlchemy` db: The ORM for this test.
     """
+    db.session.begin_nested()
     user = User(username='Midas Bergveen', password='w8woord')
     db.session.add(user)
     user = User(username='Twan van Broekhoven', password='SomethingClever')
     db.session.add(user)
-
-    yield
-
-    db.session.rollback()
+    db.session.commit()
 
 
 def login(client, username: str, password: str, remember_me: bool):
@@ -119,12 +117,12 @@ def test_same_login_while_logged_in(client):
     Should respond with 200, as the same user remains logged in
     """
     rv = login(client, 'Midas Bergveen', 'w8woord', True)
-    assert rv.status_code == 200  # Midas is logged in
-    assert rv.get_json()['id'] == 1
+    assert rv.status_code == 200  # User is logged in
+    assert rv.get_json()['id'] == 1  # User is Midas
 
     rv = login(client, 'Midas Bergveen', 'w8woord', True)
-    assert rv.status_code == 200  # Midas is still logged in
-    assert rv.get_json()['id'] == 1
+    assert rv.status_code == 200  # User is still logged in
+    assert rv.get_json()['id'] == 1  # User is still Midas
 
 
 def test_login_after_logging_out(client):
@@ -132,15 +130,15 @@ def test_login_after_logging_out(client):
     Tests logging in with a different user after logging in.
     """
     rv = login(client, 'Midas Bergveen', 'w8woord', True)
-    assert rv.status_code == 200  # Midas is logged in
-    assert rv.get_json()['id'] == 1
+    assert rv.status_code == 200  # User is logged in
+    assert rv.get_json()['id'] == 1  # User is Midas
 
     rv = logout(client)
-    assert rv.status_code == 204  # Midas is logged out
+    assert rv.status_code == 204  # User is logged out
 
     rv = login(client, 'Twan van Broekhoven', 'SomethingClever', True)
-    assert rv.status_code == 200  # Twan is logged in
-    assert rv.get_json()['id'] == 2
+    assert rv.status_code == 200  # User is logged in
+    assert rv.get_json()['id'] == 2  # User is Twan
 
 
 def test_logout_not_logged_in(client):
