@@ -20,7 +20,7 @@ class Sheets(MethodView):
         Parses the orders and truck availability sheets files.
         """
         file_1 = file.pop('file_1')  # file_1 is required, so is always here
-        file_2 = file.pop('file_2', None)
+        # file_2 = file.pop('file_2', None)
 
         try:
             missing_columns = None  # stores the missing columns of a parser
@@ -44,15 +44,15 @@ class Sheets(MethodView):
                         if len(missing_columns) >= 5:
                             abort(400,
                                   message="Spreadsheet is not recognized.",
-                                  status="BAD REQUEST")
+                                  status="Bad Request")
 
                         # If there are less than 5 columns missing, we report
                         # the missing columns.
                         else:
-                            abort(400,
+                            abort(422,
                                   errors={i: "Column is missing."
                                           for i in missing_columns},
-                                  status="BAD REQUEST"
+                                  status="Unprocessable Entity"
                                   )
                     else:
                         # store the missing columns and try the next parser
@@ -61,10 +61,10 @@ class Sheets(MethodView):
 
                 # check if the unique columns contain duplicate values
                 if len(parser.check_unique_columns()) != 0:
-                    abort(400,
+                    abort(422,
                           errors={i: "Column contains duplicate values."
                                   for i in parser.check_unique_columns()},
-                          status="BAD REQUEST"
+                          status="Unprocessable Entity"
                           )
 
                 # parse the data using a Marshmallow schema
@@ -78,9 +78,9 @@ class Sheets(MethodView):
             # The data in the spreadsheet does not have the right type
             # or is missing
             return abort(
-                400,
+                422,
                 errors=e.normalized_messages(),
-                status="BAD REQUEST"
+                status="Unprocessable Entity"
             )
 
         return '', 200

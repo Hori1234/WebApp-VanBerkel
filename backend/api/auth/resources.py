@@ -100,13 +100,13 @@ class Users(MethodView):
             # Some values of the arguments are not allowed
             abort(400,
                   message=str(e),
-                  status="BAD REQUEST"
+                  status="Bad Request"
                   )
         except IntegrityError:
             # Username has already been taken. This is detected by the database
             abort(400,
                   message='Username has already been taken.',
-                  status='BAD REQUEST')
+                  status='Bad Request')
         except SQLAlchemyError:
             # The database is unavailable
             abort(503,
@@ -139,7 +139,7 @@ class UserByID(MethodView):
             if user == current_user and 'role' in req:
                 abort(400,
                       message='You cannot change your own role',
-                      status='BAD REQUEST')
+                      status='Bad Request')
 
             # For each argument in the request,
             # change the attribute of the user to the new value
@@ -152,13 +152,13 @@ class UserByID(MethodView):
             # Some values of the arguments are not allowed
             abort(400,
                   message=str(e),
-                  status="BAD REQUEST"
+                  status="Bad Request"
                   )
         except IntegrityError:
             # Username has already been taken. This is detected by the database
             abort(400,
                   message='Username has already been taken.',
-                  status='BAD REQUEST')
+                  status='Bad Request')
         except SQLAlchemyError:
             # The database is unavailable
             abort(503,
@@ -187,7 +187,7 @@ class UserByID(MethodView):
             if user == current_user:
                 abort(400,
                       message='You cannot delete your own account.',
-                      status='BAD REQUEST')
+                      status='Bad Request')
 
             # Delete the user
             db.session.delete(user)
@@ -197,7 +197,7 @@ class UserByID(MethodView):
             # The database is unavailable
             abort(503,
                   message='Something went wrong on the server.',
-                  status='SERVICE UNAVAILABLE')
+                  status='Service Unavailable')
 
 
 @bp.route('/users')
