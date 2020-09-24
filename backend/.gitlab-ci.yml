@@ -39,7 +39,6 @@ build:
     - cd backend
     - pip install -r requirements.txt
     - flask db upgrade
-    - cd ..
 
 flake8:
   stage: Linter
