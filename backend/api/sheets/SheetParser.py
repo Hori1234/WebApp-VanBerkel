@@ -1,6 +1,7 @@
-from abc import ABC
+import abc
+import re
 from typing import Type
-from marshmallow import validates, Schema, INCLUDE, EXCLUDE
+from marshmallow import validates, Schema, INCLUDE
 from marshmallow.exceptions import ValidationError
 from marshmallow.fields import String, Integer, Boolean, Float
 from pandas import read_excel, notnull
@@ -45,7 +46,7 @@ class TruckAvailabilitySchema(Schema):
         :type val: str
         :raises :class:`marshmallow.exceptions.ValidationError`: if
                 `val.lower()` is not `terminal`, `regional` or `port`.
-        """""
+        """
         if val.lower() not in ['terminal', 'regional', 'port']:
             raise ValidationError('Truck type must be one of '
                                   'terminal, regional or port.')
@@ -62,7 +63,7 @@ class TruckAvailabilitySchema(Schema):
         :type val: str
         :raises :class:`marshmallow.exceptions.ValidationError`: if
         `val.lower()` is not `itv`, `kat` or `oss`.
-        """""
+        """
         if val.lower() not in ['itv', 'kat', 'oss']:
             raise ValidationError('Terminal base must be one of '
                                   'ITV, KAT or OSS.')
@@ -80,7 +81,7 @@ class OrderListSchema(Schema):
     but will not be tested against type.
     """
     order_number = Integer(data_key='Order Number', required=True)
-    # inl_terminal = String(data_key='Inl. ter.') TODO Check if required
+    inl_terminal = String(data_key='Inl* ter*')
     latest_dep_time = Integer(data_key='Latest Dep Time', required=True)
     truck_type = String(data_key='truck type', required=True)
     hierarchy = Float(data_key='Hierarchy', required=True)
@@ -90,21 +91,24 @@ class OrderListSchema(Schema):
     service_time = Float(data_key='service time', required=True)
 
     class Meta:
-        unknown = EXCLUDE
+        unknown = INCLUDE
 
-    # @validates('inl_terminal')
-    # def validate_terminal(self, val):
-    # """
-    # Validates the terminal input.
-    #
-    # Raises a `ValidationError` if val is not one of 'KAT', 'ITV'
-    # or 'OSS'. This check is case insensitive.
-    #
-    # :param `str` val: the value of the column
-    # """""
-    #     if val.lower() not in ['itv', 'kat', 'oss']:
-    #         raise ValidationError('Terminal base must be one of '
-    #                               'ITV, KAT or OSS.')
+    @validates('inl_terminal')
+    def validate_terminal(self, val):
+        """
+        Validates the terminal input.
+    
+        Raises a `ValidationError` if val is not one of 'KAT', 'ITV'
+        or 'OSS'. This check is case insensitive.
+    
+        :param val: the value of the column
+        :type val: str
+        :raises :class:`marshmallow.exceptions.ValidationError`: if
+        `val.lower()` is not `itv`, `kat` or `oss`.
+        """
+        if val.lower() not in ['itv', 'kat', 'oss']:
+            raise ValidationError('Terminal base must be one of '
+                                  'ITV, KAT or OSS.')
 
     @validates('truck_type')
     def validate_truck_type(self, val):
@@ -115,13 +119,13 @@ class OrderListSchema(Schema):
         :type val: str
         :raises :class:`marshmallow.exceptions.ValidationError`: if
         `val.lower()` is not `terminal`, `regional` or `port`.
-        """""
+        """
         if val.lower() not in ['terminal', 'regional', 'port']:
             raise ValidationError('Truck type must be one of '
                                   'terminal, regional or port.')
 
 
-class SheetParser(ABC):
+class SheetParser(abc.ABC):
     """
     Base class for parsing spreadsheet files and validating them.
 
@@ -138,9 +142,9 @@ class SheetParser(ABC):
     """:class:`marshmallow.Schema` which validates the data
     on typing and missing values."""
 
-    def __init__(self, file):
+    def __init__(self, file, *args, **kwargs):
         """Constructor method"""
-        self.dataframe = self.get_dataframe(file)
+        self.dataframe = self.get_dataframe(file, *args, **kwargs)
 
     def check_required_columns(self):
         """
@@ -185,10 +189,10 @@ class SheetParser(ABC):
         """
         data_dict = [{k: v for k, v in row.items() if notnull(v)}
                      for row in self.dataframe.to_dict(orient='records')]
-        return self.schema(many=True).load(data_dict)
+        return self.post_parse(self.schema(many=True).load(data_dict))
 
-    @staticmethod
-    def get_dataframe(file, *args, **kwargs):
+    @classmethod
+    def get_dataframe(cls, file, *args, **kwargs):
         """
         Converts the data in `file` to a `:class:Pandas.DataFrame`.
 
@@ -202,7 +206,15 @@ class SheetParser(ABC):
         :return: A :class:`pandas.DataFrame` containing the data from `file`.
         :rtype: :class:`pandas.DataFrame`
         """
-        return read_excel(file, *args, **kwargs)
+        return cls.post_dataframe(read_excel(file, *args, **kwargs))
+
+    @staticmethod
+    def post_dataframe(dataframe):
+        return dataframe
+
+    @staticmethod
+    def post_parse(data):
+        return data
 
 
 class TruckAvailabilityParser(SheetParser):
@@ -225,3 +237,20 @@ class OrderListParser(SheetParser):
                         'Hierarchy', 'Delivery Deadline', 'driving time',
                         'proces time', 'service time'}
     schema = OrderListSchema
+
+    def __init__(self, file):
+        super().__init__(file)
+
+    @staticmethod
+    def post_dataframe(dataframe):
+        dataframe.columns = [re.sub(r'[.](\d+)', ' (\g<1>)', i)
+                             for i in dataframe.columns]
+        dataframe.columns = [re.sub(r'[.]', '*', i) for i in dataframe.columns]
+        return dataframe
+
+    @staticmethod
+    def post_parse(data):
+        for i in data:
+            for key in i.keys():
+                new_name = re.sub(r'[*]', '.', key)
+                i[new_name] = i.pop(key)

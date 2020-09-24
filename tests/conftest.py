@@ -3,7 +3,6 @@ import os
 from backend.app import db as _db
 from backend.app import create_app
 from backend.config import Config
-from backend.models.users import *
 
 
 class TestingConfig(Config):
@@ -42,7 +41,7 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture
 def db(app):
     """"
     Creates a database for the test.
@@ -59,3 +58,4 @@ def db(app):
 
     _db.session.close()
     _db.drop_all()
+

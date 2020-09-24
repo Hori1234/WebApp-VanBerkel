@@ -17,6 +17,7 @@ def setup_db(db, client):
                 password='w8woord',
                 role='planner')
     db.session.add(user)
+    db.session.commit()
 
     data = dict(
         username=user.username,
@@ -27,10 +28,6 @@ def setup_db(db, client):
     client.post('/api/auth/login',
                 data=json.dumps(data),
                 content_type='application/json')
-
-    yield
-
-    db.session.rollback()
 
 
 def upload_one_sheet(client, file):
@@ -43,26 +40,7 @@ def upload_one_sheet(client, file):
     """
     data = dict(
         file_1=(open(file, 'rb'),
-                'truck_availability_test.xlsx')
-    )
-
-    return client.post('/api/sheets/',
-                       content_type='multipart/form-data',
-                       data=data)
-
-
-def upload_two_sheets(client, file1, file2):
-    """
-    Uploads
-
-    :param client: The test client to make the request with
-    :param file1: The first file meant to be uploaded
-    :param file2: The second file meant to be uploaded
-    :return: The response of the server
-    """
-    data = dict(
-        file_1=(open(file1, 'rb'), 'truck_availability_test.xlsx'),
-        file_2=(open(file2, 'rb'), 'order_list_test.xlsx')
+                'sheet.xlsx')
     )
 
     return client.post('/api/sheets/',
@@ -86,28 +64,6 @@ def test_upload_orders_success(client):
     rv = upload_one_sheet(client,
                           './tests/data/order_sheet_test.xlsx')
     assert rv.status_code == 200
-
-
-def test_upload_two(client):
-    """
-    Test two different sheets
-    """
-    rv = upload_two_sheets(client,
-                           './tests/data/truck_availability_test.xlsx',
-                           './tests/data/order_sheet_test.xlsx')
-
-    assert rv.status_code == 200
-
-
-def test_upload_two_ta(client):
-    """
-    Test what happens when two sheets are the same type
-    """
-    rv = upload_two_sheets(client,
-                           './tests/data/truck_availability_test.xlsx',
-                           './tests/data/truck_availability_test.xlsx')
-
-    assert rv.status_code == 200  # ?
 
 
 def test_upload_ta_missing_column(client):
@@ -187,7 +143,6 @@ def test_upload_ta_data_validation_numbers(client):
     # something to assert that the column contained incorrect values
 
 
-@pytest.mark.skip('Still not working :(')
 def test_upload_order_column_missing(client):
     """
     Test a single order sheet with missing columns
@@ -199,7 +154,6 @@ def test_upload_order_column_missing(client):
     # something to assert that the column was missing
 
 
-@pytest.mark.skip('Still not working :(')
 def test_upload_order_missing_values(client):
     """
     Test a single order sheet with missing values
@@ -207,11 +161,10 @@ def test_upload_order_missing_values(client):
     rv = upload_one_sheet(client,
                           './tests/data/order_sheet_missing_values.xlsx')
 
-    assert rv.status_code == 400
+    assert rv.status_code == 422
     # something to assert that the values were missing
 
 
-@pytest.mark.skip('Still not working :(')
 def test_upload_order_duplicate_values(client):
     """
     Test a single order sheet with duplicate values
@@ -219,8 +172,9 @@ def test_upload_order_duplicate_values(client):
     rv = upload_one_sheet(client,
                           './tests/data/order_sheet_duplicate_values.xlsx')
 
+    assert rv.status_code == 422
 
-@pytest.mark.skip('Still not working :(')
+
 def test_upload_order_data_validation_terminal(client):
     """
     Test a single order sheet with incorrect terminals
@@ -228,7 +182,7 @@ def test_upload_order_data_validation_terminal(client):
     rv = upload_one_sheet(client,
                           './tests/data/order_sheet_wrong_terminals.xlsx')
 
-    assert rv.status_code == 400
+    assert rv.status_code == 422
     # something to assert that the values were wrong
 
 
@@ -276,39 +230,3 @@ def test_upload_one_but_it_is_not_right(client):
     # something to assert that it's not one of the sheets
 
 
-@pytest.mark.skip('Two uploads still not supported')
-def test_upload_double_ta_wrong(client):
-    """
-    Test two files, but the truck availability sheet is wrong
-    """
-    rv = upload_two_sheets(client,
-                           './tests/data/order_sheet_test.xlsx',
-                           './tests/data/truck_availability_missing_column.xlsx')
-
-    assert rv.status_code == 422
-    # something i guess
-
-
-@pytest.mark.skip('Two uploads still not supported')
-def test_upload_double_order_wrong(client):
-    """
-    Test two files, but the order sheet is wrong
-    """
-    rv = upload_two_sheets(client,
-                           './tests/data/order_sheet_missing_column.xlsx',
-                           './tests/data/truck_availability_test.xlsx')
-
-    assert rv.status_code == 422
-    # something i guess
-
-
-def test_upload_double_both_wrong(client):
-    """
-    Test two files, both of them wrong
-    """
-    rv = upload_two_sheets(client,
-                           './tests/data/order_sheet_missing_column.xlsx',
-                           './tests/data/truck_availability_missing_column.xlsx')
-
-    assert rv.status_code == 422
-    # something i guess
