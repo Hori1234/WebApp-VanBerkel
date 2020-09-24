@@ -14,9 +14,9 @@ export default class Logout extends Component {
         return (
             <AuthContext.Consumer>
                 {(context) => (
-                    <Layout style={{ flexDirection: "column", alignItems: "center", display: "flex", marginBottom: 1, width: "100%", backgroundColor: "white" }}>
+                    <Layout style={{ flexDirection: "column", alignItems: "center", display: "flex", marginBottom: 1, width: "100%", backgroundColor: "white", padding: 250}}>
                         <Layout style={{ flexDirection: "column", backgroundColor: "white" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: "18" }}>Logout</Text>
+                            <Text style={{ fontWeight: "bold", fontSize: "18", alignContent:"center"}}>Logout</Text>
                             <Text style={{ fontSize: " 14" }}>Are you sure you would like to logout?</Text>
                         </Layout>
                         <Layout style={{ alignItems: "center", backgroundColor: "white" }}>
