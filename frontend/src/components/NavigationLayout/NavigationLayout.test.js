@@ -21,60 +21,73 @@ describe('NAvigationLayout component', () => {
     });
 
     it('should have the correct view button href', () => {
-        const user = { state: { username: 'test', role: 'Administrator' } };
+        const user = { state: { username: 'test', role: 'administrator' } };
 
         const component = render(<AuthContext.Provider value={user} >
             <NavigationLayout />
         </AuthContext.Provider>
         );
         const viewButton = component.find('#viewButton > a')[0];
-
         expect(viewButton.attribs.href).toEqual('/view');
 
     });
 
-    it('should have the correct planningButton href', () => {
-        const user = { state: { username: 'test', role: 'Administrator' } };
+    it('should have the correct dataButton href', () => {
+        const user = { state: { username: 'test', role: 'administrator' } };
 
         const component = render(<AuthContext.Provider value={user} >
             <NavigationLayout />
         </AuthContext.Provider>
         );
-
         const dataButton = component.find('#dataButton > a')[0];
-
         expect(dataButton.attribs.href).toEqual('/data');
 
     });
 
-    it('should have the correct planningButton href', () => {
-        const user = { state: { username: 'test', role: 'Administrator' } };
+    it('should have the correct monthlyButton href', () => {
+        const user = { state: { username: 'test', role: 'administrator' } };
 
         const component = render(<AuthContext.Provider value={user} >
             <NavigationLayout />
         </AuthContext.Provider>
         );
-
         const monthlyButton = component.find('#monthlyButton > a')[0];
-
         expect(monthlyButton.attribs.href).toEqual('/montly');
 
     });
 
     it('should have the correct uploadButton href', () => {
-        const user = { state: { username: 'test', role: 'Administrator' } };
+        const user = { state: { username: 'test', role: 'administrator' } };
 
         const component = render(<AuthContext.Provider value={user} >
             <NavigationLayout />
         </AuthContext.Provider>
         );
-
         const uploadButton = component.find('#uploadButton > a')[0];
-
         expect(uploadButton.attribs.href).toEqual('/upload');
 
     });
 
+    it('should have the correct planningButton href', () => {
+        const user = { state: { username: 'test', role: 'administrator' } };
 
+        const component = render(<AuthContext.Provider value={user} >
+            <NavigationLayout />
+        </AuthContext.Provider>
+        );
+        const planningButton = component.find('#planningButton > a')[0];
+        expect(planningButton.attribs.href).toEqual('/planning');
 
+    });
+
+    it('should have the correct accountButton href', () => {
+        const user = { state: { username: 'test', role: 'administrator' } };
+
+        const component = render(<AuthContext.Provider value={user} >
+            <NavigationLayout />
+        </AuthContext.Provider>
+        );
+        const accountButton = component.find('#accountButton > a')[0];
+        expect(accountButton.attribs.href).toEqual('/account');
+    });
 });
