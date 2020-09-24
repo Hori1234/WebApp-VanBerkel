@@ -97,10 +97,10 @@ class OrderListSchema(Schema):
     def validate_terminal(self, val):
         """
         Validates the terminal input.
-    
+
         Raises a `ValidationError` if val is not one of 'KAT', 'ITV'
         or 'OSS'. This check is case insensitive.
-    
+
         :param val: the value of the column
         :type val: str
         :raises :class:`marshmallow.exceptions.ValidationError`: if
@@ -243,7 +243,7 @@ class OrderListParser(SheetParser):
 
     @staticmethod
     def post_dataframe(dataframe):
-        dataframe.columns = [re.sub(r'[.](\d+)', ' (\g<1>)', i)
+        dataframe.columns = [re.sub(r'[.](\d+)', ' (\g<1>)', i)  # noqa W605
                              for i in dataframe.columns]
         dataframe.columns = [re.sub(r'[.]', '*', i) for i in dataframe.columns]
         return dataframe
