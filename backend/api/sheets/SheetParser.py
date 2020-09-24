@@ -251,6 +251,11 @@ class OrderListParser(SheetParser):
     @staticmethod
     def post_parse(data):
         for i in data:
+            key_replacements = {}
+
             for key in i.keys():
                 new_name = re.sub(r'[*]', '.', key)
+                key_replacements[key] = new_name
+
+            for key, new_name in key_replacements.items():
                 i[new_name] = i.pop(key)
