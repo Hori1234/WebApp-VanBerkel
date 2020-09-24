@@ -11,6 +11,7 @@ import Home from "../Home/Home";
 import UploadButton from "../UploadButton/UploadButton";
 import AccountManagementLayout from "../AccountManagerLayout/AccountManagementLayout";
 import "../Css/NavigationLayout.css";
+import Logout from "../Logout/Logout";
 const { SubMenu } = Menu;
 const { Content, Sider, Footer } = Layout;
 
@@ -23,7 +24,7 @@ export default class NavigationLayout extends Component {
       collapsed: false,
     };
   }
-
+  
   onCollapse = (collapsed) => {
     this.setState({
       ...this.state,
@@ -93,6 +94,9 @@ export default class NavigationLayout extends Component {
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
                     </Menu.Item>
+                    <Menu.Item key="7">
+                      <Link to="/logout">Logout</Link>
+                    </Menu.Item>
                   </SubMenu>
                 )}
 
@@ -121,6 +125,9 @@ export default class NavigationLayout extends Component {
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
                     </Menu.Item>
+                    <Menu.Item key="7">
+                      <Link to="/logout">Logout</Link>
+                    </Menu.Item>
                   </SubMenu>
                 )}
 
@@ -142,6 +149,9 @@ export default class NavigationLayout extends Component {
                     </Menu.Item>
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
+                    </Menu.Item>
+                    <Menu.Item key="7">
+                      <Link to="/logout">Logout</Link>
                     </Menu.Item>
                   </SubMenu>
                 )}
@@ -181,6 +191,7 @@ export default class NavigationLayout extends Component {
                       <Route path="/account">
                         <AccountManagementLayout />
                       </Route>
+                      <Route path="/logout"><Logout/></Route>
                       <Route path="/planning"></Route>
                       <Route path="/view"></Route>
                       <Route path="/data"></Route>
