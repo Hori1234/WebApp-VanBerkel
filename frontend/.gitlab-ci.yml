@@ -6,6 +6,9 @@ cache:
   paths:
     - node_modules/
 
+before_script:
+  - cd frontend
+
 stages:
   - Build
   - Linter
@@ -20,12 +23,14 @@ build:
 # Check style of the code
 eslint:
   stage: Linter
+  needs: [build]
   script:
     - npx eslint src
 
 # Run tests
 test:
   stage: Tests
+  needs: [eslint]
   script:
     - npm test -- --coverage --watchAll=false
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
