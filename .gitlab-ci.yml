@@ -41,7 +41,7 @@ stages:
 flake8:
   stage: Linter
   script:
-    - flake8 backend/*.py
+    - flake8 backend
 
 test:
   stage: Tests
