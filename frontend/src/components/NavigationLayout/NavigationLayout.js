@@ -1,21 +1,18 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import "antd/dist/antd.css";
 import { Layout, Menu, Avatar, Divider } from "antd";
 import {
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
+  UserOutlined
 } from "@ant-design/icons";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import TestComponent from "./TestComponent";
 import Home from "../Home/Home";
 import UploadButton from "../UploadButton/UploadButton";
 import AccountManagementLayout from "../AccountManagerLayout/AccountManagementLayout";
 import "../Css/NavigationLayout.css";
 const { SubMenu } = Menu;
-const { Header, Content, Sider, Footer } = Layout;
+const { Content, Sider, Footer } = Layout;
 
 export default class NavigationLayout extends Component {
   constructor(props) {

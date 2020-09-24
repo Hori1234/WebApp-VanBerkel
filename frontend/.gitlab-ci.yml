@@ -4,7 +4,7 @@ image: node:latest
 # Cache node_modules for future jobs
 cache:
   paths:
-    - node_modules/
+    - frontend/node_modules/
 
 before_script:
   - cd frontend
@@ -25,7 +25,7 @@ eslint:
   stage: Linter
   needs: [build]
   script:
-    - npx eslint src
+    - npm run lint
 
 # Run tests
 test:

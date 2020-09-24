@@ -1,6 +1,6 @@
 import React from "react";
 import SignInComponent from "./SignInComponent";
-import { mount, shallow, render, setProps } from "enzyme";
+import {shallow} from "enzyme";
 
 describe("SignInComponent", () => {
   const component = shallow(<SignInComponent />);

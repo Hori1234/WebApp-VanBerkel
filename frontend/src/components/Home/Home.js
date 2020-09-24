@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import {
-  Upload,
-  message,
   Layout,
   Image,
   Typography,
   Button,
   Divider,
 } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 const { Text } = Typography;
 
 export default class Home extends Component {

@@ -1,25 +1,17 @@
 import React, { Component } from "react";
 import {
-  Upload,
-  message,
-  Row,
-  Col,
-  Card,
   Button,
   Layout,
   Typography,
-  Divider,
   Image,
   Modal,
 } from "antd";
-import { InboxOutlined, FileExcelOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import axios, { post } from "axios";
 
 import CreateAccountsComponent from "./CreateAccountsComponent";
 import EditAccountComponent from "./EditAccountComponent";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 export default class AccountManagementLayout extends Component {
   constructor(props) {
@@ -43,8 +35,8 @@ export default class AccountManagementLayout extends Component {
           EAVisible: true,
         });
         console.log("ea modal shown");
-
         break;
+      default:
     }
     console.log("modal shown");
   };
