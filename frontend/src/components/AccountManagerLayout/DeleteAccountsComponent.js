@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import {
-  Layout,
+  Layout
 } from "antd";
 
 import "antd/dist/antd.css";
 
-export default class EditAccountComponent extends Component {
+export default class DeleteAccountsComponent extends Component {
   render() {
     return (
       <Layout
@@ -16,7 +16,7 @@ export default class EditAccountComponent extends Component {
           height: "70vh",
         }}
       >
-        <p>This is a random component paragraph</p>
+        <p>This is a random component paragraph delete</p>
       </Layout>
     );
   }
