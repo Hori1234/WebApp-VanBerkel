@@ -3,7 +3,7 @@ import json
 from backend.models.users import User
 
 
-@pytest.fixture(autouse=True, scope='module')
+@pytest.fixture(autouse=True)
 def setup_db(db):
     """
     Setup the database for the current test.
@@ -12,14 +12,12 @@ def setup_db(db):
 
     :param `SQLAlchemy` db: The ORM for this test.
     """
+    db.session.begin_nested()
     user = User(username='Midas Bergveen', password='w8woord')
     db.session.add(user)
     user = User(username='Twan van Broekhoven', password='SomethingClever')
     db.session.add(user)
-
-    yield
-
-    db.session.rollback()
+    db.session.commit()
 
 
 def login(client, username: str, password: str, remember_me: bool):
