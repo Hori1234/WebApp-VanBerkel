@@ -8,18 +8,9 @@ import {
   Button,
   Layout,
   Typography,
-  List,
-  Avatar,
-  Skeleton,
-  Image,
   Modal,
 } from "antd";
-import {
-  UserAddOutlined,
-  UserDeleteOutlined,
-  UserSwitchOutlined,
-  ArrowUpOutlined,
-} from "@ant-design/icons";
+import { UserAddOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 
 import CreateAccountsComponent from "./CreateAccountsComponent";

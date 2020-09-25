@@ -1,28 +1,8 @@
 import React, { Component } from "react";
-import {
-  Layout,
-  Typography,
-  Statistic,
-  Divider,
-  List,
-  Popover,
-  Spin,
-  Avatar,
-  Button,
-  message,
-  Skeleton,
-  Image,
-  Modal,
-} from "antd";
+import { Layout, List, Popover, Spin, Avatar, Button, message } from "antd";
 
-import {
-  InboxOutlined,
-  FileExcelOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import axios, { post } from "axios";
 import reqwest from "reqwest";
 import InfiniteScroll from "react-infinite-scroller";
 import "../Css/EditAC.css";

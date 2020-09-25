@@ -1,31 +1,8 @@
 import React, { Component } from "react";
-import {
-  Upload,
-  message,
-  Row,
-  Col,
-  Card,
-  Button,
-  Layout,
-  Form,
-  Input,
-  InputNumber,
-  Typography,
-  Select,
-  Divider,
-  Image,
-  Modal,
-} from "antd";
+import { Button, Layout, Form, Input, Typography, Select, Divider } from "antd";
 
-import {
-  InboxOutlined,
-  FileExcelOutlined,
-  UserAddOutlined,
-  UserSwitchOutlined,
-} from "@ant-design/icons";
+import { UserSwitchOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import axios, { post } from "axios";
-import Paragraph from "antd/lib/skeleton/Paragraph";
 const { Text, Title } = Typography;
 const { Option } = Select;
 
