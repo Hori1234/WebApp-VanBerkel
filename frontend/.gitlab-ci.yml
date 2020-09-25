@@ -1,0 +1,42 @@
+# Get the latest node docker container
+image: node:latest
+
+# Cache node_modules for future jobs
+cache:
+  paths:
+    - frontend/node_modules/
+
+variables:
+  CI: 'true'
+
+before_script:
+  - cd frontend
+
+stages:
+  - Build
+  - Linter
+  - Tests
+
+# Installs the packages needed for the React app
+frontend-build:
+  stage: Build
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - frontend/node_modules/
+
+# Check style of the code
+frontend-lint:
+  stage: Linter
+  needs: [frontend-build]
+  script:
+    - npm run lint
+
+# Run tests
+frontend-test:
+  stage: Tests
+  needs: [frontend-lint]
+  script:
+    - npm test -- --coverage --watchAll=false
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/

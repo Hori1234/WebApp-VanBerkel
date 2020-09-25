@@ -1,103 +1,93 @@
-import React, { Component } from "react";
+import React from "react";
+import axios from "axios";
 
-const axios = require("axios");
-const AuthContext = React.createContext();
+export const AuthContext = React.createContext({
+  status: "pending",
+  error: null,
+  user: null,
+});
 
-const getUser = async () => {
-  //Temporary login check
-
-  let userInfo = { username: null, role: null, postStatus: null };
-  const tmp = await axios
-    .get("/api/auth/user")
-    .then((response) => {
-      if (response.status === 200) {
-        console.log("======================================>");
-        console.log(response);
-        return response;
-      }
-    })
-    .catch((error) => {});
-
-  if (tmp != null) {
-    userInfo.username = tmp.data.username;
-    userInfo.role = tmp.data.role;
-  }
-
-  console.log(userInfo);
-  return userInfo;
-};
-
-const getUsers = async () => {
-  //Temporary login check
-
-  let userInfo = { username: null, role: null, postStatus: null };
-  const tmp = await axios
-    .get("/api/auth/user")
-    .then((response) => {
-      if (response.status === 200) {
-        console.log("======================================>");
-        console.log(response);
-        return response;
-      }
-    })
-    .catch((error) => {});
-
-  if (tmp != null) {
-    userInfo.username = tmp.data.username;
-    userInfo.role = tmp.data.role;
-  }
-
-  console.log(userInfo);
-  return userInfo;
-};
-
-const AuthProvider = ({ children }) => {
+const AuthProvider = (props) => {
   const [state, setState] = React.useState({
     status: "pending",
-    error: "",
-    user: "",
-    role: "",
+    error: null,
+    user: null,
   });
 
-  React.useEffect(() => {
-    getUser().then((response) => {
-      setState({
-        user: response.username,
-        role: response.role,
-        status: "success",
+  React.useEffect((state) => {
+    // check if user is already logged in
+    axios
+      .get("/api/auth/user")
+      .then((res) => {
+        setState((state) => ({
+          ...state,
+          user: res.data,
+          status: "success",
+        }));
+      })
+      .catch((error) => {
+        setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
       });
-      console.log(state.user + "=============================== " + state.role);
-    });
   }, []);
 
-  const changeUser = (usrole, usr) => {
-    setState({
-      userRole: usrole,
-      user: usr,
-    });
+  const login = async (credentials) => {
+    return axios
+      .post("/api/auth/login", credentials)
+      .then((res) => {
+        setState((state) => ({
+          ...state,
+          user: res.data,
+          status: "success",
+        }));
+        return true;
+      })
+      .catch((error) => {
+        setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
   };
+
+  const logout = async () => {
+    return axios
+      .post("/api/auth/logout")
+      .then(() => {
+        setState((state) => ({
+          ...state,
+          user: null,
+          status: "logged-out",
+        }));
+        return true;
+      })
+      .catch((error) => {
+        setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+
   return (
     <AuthContext.Provider
       value={{
         state,
-        changeUser,
+        login,
+        logout,
       }}
-    >
-      {state.status === "pending" ? (
-        "Loading..."
-      ) : state.status === "error" ? (
-        <div>
-          Oh no
-          <div>
-            <pre>{state.error.message}</pre>
-          </div>
-        </div>
-      ) : (
-        children
-      )}
-    </AuthContext.Provider>
+      {...props}
+    />
   );
 };
 
-export { AuthProvider };
-export default AuthContext;
+const useAuth = () => React.useContext(AuthContext);
+
+export { AuthProvider, useAuth };

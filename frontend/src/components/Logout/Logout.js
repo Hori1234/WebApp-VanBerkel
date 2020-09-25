@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import AuthContext from "../contextConfig.js";
-import { Layout, Image, Typography, Button, Divider } from "antd";
+import { AuthProvider } from "../contextConfig";
+import { Layout, Typography, Button } from "antd";
 import "antd/dist/antd.css";
-import { Link } from "react-router-dom";
 const { Text } = Typography;
 
 export default class Logout extends Component {
   render() {
     return (
-      <AuthContext.Consumer>
+      <AuthProvider.Consumer>
         {(context) => (
           <Layout
             style={{
@@ -38,13 +37,13 @@ export default class Logout extends Component {
               </Text>
             </Layout>
             <Layout style={{ alignItems: "center", backgroundColor: "white" }}>
-              <Button type="primary" onClick={() => context.changeUser("", "")}>
+              <Button type="primary" onClick={() => context.logout}>
                 Logout
               </Button>
             </Layout>
           </Layout>
         )}
-      </AuthContext.Consumer>
+      </AuthProvider.Consumer>
     );
   }
 }

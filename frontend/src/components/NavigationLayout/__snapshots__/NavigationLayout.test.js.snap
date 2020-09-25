@@ -1,0 +1,556 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigationLayout component should render the login page correctly 1`] = `
+<section
+  class="ant-layout"
+  style="height:100vh"
+>
+  <section
+    class="ant-layout"
+    style="margin:10px"
+  >
+    <aside
+      class="ant-layout-sider ant-layout-sider-dark ant-layout-sider-has-trigger site-layout-background"
+      style="flex:0 0 200px;max-width:200px;min-width:200px;width:200px"
+    >
+      <div
+        class="ant-layout-sider-children"
+      >
+        <section
+          class="ant-layout dividers-style"
+        >
+          <span
+            class="ant-avatar ant-avatar-square ant-avatar-icon"
+            style="width:64px;height:64px;line-height:64px;font-size:32px;margin-top:10px"
+          >
+            <span
+              aria-label="user"
+              class="anticon anticon-user"
+              role="img"
+            >
+              <svg
+                aria-hidden="true"
+                class=""
+                data-icon="user"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="64 64 896 896"
+                width="1em"
+              >
+                <path
+                  d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+                />
+              </svg>
+            </span>
+          </span>
+          <div
+            class="ant-divider ant-divider-horizontal ant-divider-with-text ant-divider-with-text-center"
+            role="separator"
+          >
+            <span
+              class="ant-divider-inner-text"
+            >
+              T.R.U.C.K.
+            </span>
+          </div>
+        </section>
+        <ul
+          class="ant-menu ant-menu-light ant-menu-root ant-menu-inline"
+          role="menu"
+          style="height:100%;border-right:0"
+        >
+          <li
+            class="ant-menu-submenu ant-menu-submenu-inline ant-menu-submenu-open"
+            role="menuitem"
+          >
+            <div
+              aria-expanded="true"
+              aria-haspopup="true"
+              aria-owns="sub1$Menu"
+              class="ant-menu-submenu-title"
+              role="button"
+              style="padding-left:24px"
+            >
+              <span
+                aria-label="user"
+                class="anticon anticon-user"
+                role="img"
+              >
+                <svg
+                  aria-hidden="true"
+                  class=""
+                  data-icon="user"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="64 64 896 896"
+                  width="1em"
+                >
+                  <path
+                    d="M858.5 763.6a374 374 0 00-80.6-119.5 375.63 375.63 0 00-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 00-80.6 119.5A371.7 371.7 0 00136 901.8a8 8 0 008 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 008-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"
+                  />
+                </svg>
+              </span>
+              <span>
+                User Type: 
+              </span>
+              <i
+                class="ant-menu-submenu-arrow"
+              />
+            </div>
+            <ul
+              class="ant-menu ant-menu-sub ant-menu-inline"
+              id="sub1$Menu"
+              role="menu"
+            >
+              <li
+                class="ant-menu-item ant-menu-item-only-child"
+                role="menuitem"
+                style="padding-left:48px"
+              >
+                <a
+                  href="/"
+                >
+                  Home
+                </a>
+              </li>
+              <li
+                class="ant-menu-item ant-menu-item-only-child"
+                role="menuitem"
+                style="padding-left:48px"
+              >
+                <a
+                  href="/account"
+                >
+                  Account Management
+                </a>
+              </li>
+              <li
+                class="ant-menu-item ant-menu-item-only-child"
+                role="menuitem"
+                style="padding-left:48px"
+              >
+                <a
+                  href="/upload"
+                >
+                  Upload
+                </a>
+              </li>
+              <li
+                class="ant-menu-item ant-menu-item-only-child"
+                role="menuitem"
+                style="padding-left:48px"
+              >
+                <a
+                  href="/planning"
+                >
+                  Create Planning
+                </a>
+              </li>
+              <li
+                class="ant-menu-item ant-menu-item-only-child"
+                role="menuitem"
+                style="padding-left:48px"
+              >
+                <a
+                  href="/view"
+                >
+                  View Planning
+                </a>
+              </li>
+              <li
+                class="ant-menu-item ant-menu-item-only-child"
+                role="menuitem"
+                style="padding-left:48px"
+              >
+                <a
+                  href="/data"
+                >
+                  Data Visualization
+                </a>
+              </li>
+              <li
+                class="ant-menu-item ant-menu-item-only-child"
+                role="menuitem"
+                style="padding-left:48px"
+              >
+                <a
+                  href="/montly"
+                >
+                  Monthly Data Analytics
+                </a>
+              </li>
+              <li
+                class="ant-menu-item ant-menu-item-only-child"
+                role="menuitem"
+                style="padding-left:48px"
+              >
+                Logout
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div
+        class="ant-layout-sider-trigger"
+        style="width:200px"
+      >
+        <span
+          aria-label="left"
+          class="anticon anticon-left"
+          role="img"
+        >
+          <svg
+            aria-hidden="true"
+            class=""
+            data-icon="left"
+            fill="currentColor"
+            focusable="false"
+            height="1em"
+            viewBox="64 64 896 896"
+            width="1em"
+          >
+            <path
+              d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 000 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"
+            />
+          </svg>
+        </span>
+      </div>
+    </aside>
+    <section
+      class="ant-layout"
+      style="padding:0 24px 24px;height:100%"
+    >
+      <section
+        class="ant-layout"
+        style="margin-top:25px;min-height:280px;align-items:center;width:100%"
+      >
+        <main
+          class="ant-layout-content site-layout-background"
+          style="padding:24px;margin-top:25px;min-height:280px;width:100%"
+        >
+          <section
+            class="ant-layout"
+            style="padding:24px;width:100%;height:100%;align-items:center;background-color:white"
+          >
+            <section
+              class="ant-layout"
+              style="flex-direction:row;align-items:center;display:flex;width:100%;justify-conten:space-around;background-color:white"
+            >
+              <section
+                class="ant-layout"
+                style="align-items:flex-start;display:flex;justify-content:space-around;margin-bottom:50px;margin-right:100px;background-color:white;margin-left:30px"
+              >
+                <section
+                  class="ant-layout"
+                  style="flex-direction:row;align-items:center;display:flex;margin-bottom:50px;width:100%;background-color:white"
+                >
+                  <div
+                    class="ant-image"
+                    style="margin-right:20px;width:100px"
+                  >
+                    <img
+                      class="ant-image-img"
+                      src="[object Object]"
+                    />
+                  </div>
+                  <section
+                    class="ant-layout"
+                    style="flex-direction:column;background-color:white"
+                  >
+                    <span
+                      class="ant-typography"
+                      style="font-weight:bold;font-size:18"
+                    >
+                      View Planning
+                    </span>
+                    <span
+                      class="ant-typography"
+                      style="font-size:14"
+                    >
+                      View the planning that was created for today
+                    </span>
+                  </section>
+                  <section
+                    class="ant-layout"
+                    style="align-items:flex-end;background-color:white"
+                  >
+                    <button
+                      class="ant-btn ant-btn-primary"
+                      id="viewButton"
+                      type="button"
+                    >
+                      <a
+                        href="/view"
+                      >
+                        Go
+                      </a>
+                    </button>
+                  </section>
+                </section>
+                <section
+                  class="ant-layout"
+                  style="flex-direction:row;align-items:center;display:flex;margin-bottom:50px;width:100%;background-color:white"
+                >
+                  <div
+                    class="ant-image"
+                    style="margin-right:20px;width:100px"
+                  >
+                    <img
+                      class="ant-image-img"
+                      src="Data Visualisation.webp"
+                    />
+                  </div>
+                  <section
+                    class="ant-layout"
+                    style="flex-direction:column;background-color:white"
+                  >
+                    <span
+                      class="ant-typography"
+                      style="font-weight:bold;font-size:18"
+                    >
+                      Data Visualisation
+                    </span>
+                    <span
+                      class="ant-typography"
+                      style="font-size:14"
+                    >
+                      View charts of the supplied data
+                    </span>
+                  </section>
+                  <section
+                    class="ant-layout"
+                    style="align-items:flex-end;background-color:white"
+                  >
+                    <button
+                      class="ant-btn ant-btn-primary"
+                      id="dataButton"
+                      type="button"
+                    >
+                      <a
+                        href="/data"
+                      >
+                        Go
+                      </a>
+                    </button>
+                  </section>
+                </section>
+                <section
+                  class="ant-layout"
+                  style="flex-direction:row;align-items:center;display:flex;margin-bottom:50px;width:100%;background-color:white"
+                >
+                  <div
+                    class="ant-image"
+                    style="margin-right:20px;width:100px"
+                  >
+                    <img
+                      class="ant-image-img"
+                      src="Data Analytics.webp"
+                    />
+                  </div>
+                  <section
+                    class="ant-layout"
+                    style="flex-direction:column;background-color:white"
+                  >
+                    <span
+                      class="ant-typography"
+                      style="font-weight:bold;font-size:18"
+                    >
+                      Montly Data Analytics
+                    </span>
+                    <span
+                      class="ant-typography"
+                      style="font-size:14"
+                    >
+                      View statistical data about this and past plannings
+                    </span>
+                  </section>
+                  <section
+                    class="ant-layout"
+                    style="align-items:flex-end;background-color:white"
+                  >
+                    <button
+                      class="ant-btn ant-btn-primary"
+                      id="monthlyButton"
+                      type="button"
+                    >
+                      <a
+                        href="/montly"
+                      >
+                        Go
+                      </a>
+                    </button>
+                  </section>
+                </section>
+              </section>
+              <section
+                class="ant-layout"
+                style="height:50vh;align-items:flex-end;background-color:white"
+              >
+                <div
+                  class="ant-divider ant-divider-vertical"
+                  role="separator"
+                  style="height:50vh;margin-right:20px"
+                />
+              </section>
+              <section
+                class="ant-layout"
+                style="justify-content:space-around;margin-bottom:50px;display:flex;align-items:flex-start;background-color:white;margin-right:30px"
+              >
+                <section
+                  class="ant-layout"
+                  style="flex-direction:row;align-items:center;display:flex;margin-bottom:50px;width:100%;background-color:white"
+                >
+                  <div
+                    class="ant-image"
+                    style="margin-right:20px;width:100px"
+                  >
+                    <img
+                      class="ant-image-img"
+                      src="[object Object]"
+                    />
+                  </div>
+                  <section
+                    class="ant-layout"
+                    style="flex-direction:column;background-color:white"
+                  >
+                    <span
+                      class="ant-typography"
+                      style="font-weight:bold;font-size:18"
+                    >
+                      Upload Documents
+                    </span>
+                    <span
+                      class="ant-typography"
+                      style="font-size:14"
+                    >
+                      Upload the documents for the creation of the plannings
+                    </span>
+                  </section>
+                  <section
+                    class="ant-layout"
+                    style="align-items:flex-end;background-color:white"
+                  >
+                    <button
+                      class="ant-btn ant-btn-primary"
+                      id="uploadButton"
+                      type="button"
+                    >
+                      <a
+                        href="/upload"
+                      >
+                        Go
+                      </a>
+                    </button>
+                  </section>
+                </section>
+                <section
+                  class="ant-layout"
+                  style="flex-direction:row;align-items:center;display:flex;margin-bottom:50px;width:100%;background-color:white"
+                >
+                  <div
+                    class="ant-image"
+                    style="margin-right:20px;width:100px"
+                  >
+                    <img
+                      class="ant-image-img"
+                      src="[object Object]"
+                    />
+                  </div>
+                  <section
+                    class="ant-layout"
+                    style="flex-direction:column;background-color:white"
+                  >
+                    <span
+                      class="ant-typography"
+                      style="font-weight:bold;font-size:18"
+                    >
+                      Create Planning
+                    </span>
+                    <span
+                      class="ant-typography"
+                      style="font-size:14"
+                    >
+                      Manual and automatic creation of a planning
+                    </span>
+                  </section>
+                  <section
+                    class="ant-layout"
+                    style="align-items:flex-end;background-color:white"
+                  >
+                    <button
+                      class="ant-btn ant-btn-primary"
+                      id="planningButton"
+                      type="button"
+                    >
+                      <a
+                        href="/planning"
+                      >
+                        Go
+                      </a>
+                    </button>
+                  </section>
+                </section>
+                <section
+                  class="ant-layout"
+                  style="flex-direction:row;align-items:center;display:flex;margin-bottom:50px;width:100%;background-color:white"
+                >
+                  <div
+                    class="ant-image"
+                    style="margin-right:20px;width:100px"
+                  >
+                    <img
+                      class="ant-image-img"
+                      src="1635626-200.png"
+                    />
+                  </div>
+                  <section
+                    class="ant-layout"
+                    style="flex-direction:column;background-color:white"
+                  >
+                    <span
+                      class="ant-typography"
+                      style="font-weight:bold;font-size:18"
+                    >
+                      Account Management
+                    </span>
+                    <span
+                      class="ant-typography"
+                      style="font-size:14"
+                    >
+                      Manage roles, usernames, and passwords for all users
+                    </span>
+                  </section>
+                  <section
+                    class="ant-layout"
+                    style="align-items:flex-end;background-color:white"
+                  >
+                    <button
+                      class="ant-btn ant-btn-primary"
+                      id="accountButton"
+                      type="button"
+                    >
+                      <a
+                        href="/account"
+                      >
+                        Go
+                      </a>
+                    </button>
+                  </section>
+                </section>
+              </section>
+            </section>
+          </section>
+        </main>
+      </section>
+      <footer
+        class="ant-layout-footer"
+        style="text-align:center"
+      >
+        T.R.U.C.K. ©2020 Created by SEP Group 2
+      </footer>
+    </section>
+  </section>
+</section>
+`;

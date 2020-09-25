@@ -1,11 +1,5 @@
 import React, { Component } from "react";
 import {
-  Upload,
-  message,
-  Row,
-  Col,
-  Card,
-  Button,
   Layout,
   Typography,
   Statistic,

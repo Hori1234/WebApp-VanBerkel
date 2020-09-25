@@ -1,241 +1,175 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import { useAuth } from '../contextConfig'
 import {
   Layout,
   message,
   Avatar,
   Form,
   Input,
-  Button,
-  Checkbox,
   Typography,
   Divider,
+  Button,
+  Checkbox
 } from "antd";
 import "antd/dist/antd.css";
 import {
   UserOutlined,
 } from "@ant-design/icons";
 
-const axios = require("axios");
 const {Title } = Typography;
 
-export default class SignInComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      role: "tmp",
-      username: "",
-      password: "",
-      valid: false,
-    };
-    this.handleChangeUsername = this.handleChangeUsername.bind(this);
-    this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.onFinish = this.onFinish.bind(this);
-  }
+export default function SignInComponent () {
 
-  postCredentials = async (uss, pass) => {
-    var responseRole = "";
-    let isValidated = false;
-    console.log(uss, pass);
-    await axios
-      .post("/api/auth/login", {
-        username: uss,
-        password: pass,
-        remember: true,
-      })
-      .then(function (response) {
-        console.log(response);
-        console.log(response.data.role);
-        //this.props.userRole = response.data.role;
-        responseRole = response.data.role;
-        isValidated = true;
-        console.log("===============");
-      })
-      .catch(function (error) {
-        console.log(error);
-        isValidated = false;
-      });
+  const auth = useAuth();
 
-    console.log("waiting for post response");
-    //responseRole = "view only";
-    this.onChangeRole(responseRole, isValidated);
-    console.log(this.state.role, this.state.username);
+  const [state, setState] = useState({
+    username: "",
+    password: "",
+  });
+
+  const onAuthenticate = async () => {
+    const success = await auth.login({
+      username: state.username,
+      password: state.password}
+      );
+
+    if (!success) message.info("account not valid");
   };
 
-  onChangeRole = (value, validated) => {
-    this.setState({
-      role: value,
-      valid: validated,
+  const handleChangeUsername = (event) => {
+    setState({
+      ...state,
+      username: event.target.value
     });
   };
 
-  onAuthentificate = async () => {
-    const uss = this.getUsername();
-    const pass = this.getPassword();
-    console.log(uss);
-    await this.postCredentials(uss, pass);
-
-    if (this.state.valid) {
-      console.log("check state: " + this.state.role);
-      this.props.changeUser(this.state.role);
-      // this.props.changeState();
-    } else {
-      message.info("accont not valid");
-    }
-  };
-  getUsername = () => {
-    return this.state.username;
-  };
-  getPassword = () => {
-    return this.state.password;
-  };
-  handleChangeUsername = (event) => {
-    this.setState({
-      username: event.target.value,
+  const handleChangePassword = (event) => {
+    setState({
+      ...state,
+      password: event.target.value
     });
-    console.log(this.state.username);
-  };
-  handleChangePassword = (event) => {
-    this.setState({
-      password: event.target.value,
-    });
-    console.log(this.state.password);
   };
 
-  onFinish = (event) => {
-    console.log(
-      "Ussername and Password set",
-      this.state.username,
-      this.state.password
-    );
+  const layout = {
+        labelCol: {
+          span: 8,
+        },
+        wrapperCol: {
+          span: 16,
+        },
+      };
+
+  const tailLayout = {
+    wrapperCol: {
+      offset: 8,
+      span: 16,
+    },
   };
-  onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-    message.info("fill all the available spaces");
-  };
 
-  render() {
-    const layout = {
-      labelCol: {
-        span: 8,
-      },
-      wrapperCol: {
-        span: 16,
-      },
-    };
-    const tailLayout = {
-      wrapperCol: {
-        offset: 8,
-        span: 16,
-      },
-    };
-
-    return (
-      <Layout
-        style={{
-          margin: 30,
-          height: "95vh",
-          display: "flex",
-          backgroundColor: "white",
-        }}
-      >
-        <Layout
-          style={{
-            alignItems: "center",
-            marginTop: 15,
-            backgroundColor: "white",
-          }}
-        >
-          <Avatar
-            style={{ marginTop: 100 }}
-            shape="square"
-            size={64}
-            icon={<UserOutlined />}
-          />
-          <Divider style={{ marginTop: 10 }}>Welcome</Divider>
-        </Layout>
-
-        <Layout
-          style={{
-            alignItems: "center",
-            display: "flex",
-            marginTop: -70,
-            marginBottom: -120,
-            backgroundColor: "white",
-          }}
-        >
-          <Title style={{ marginLeft: -280 }} level={5.2}>
-            Sign In
-          </Title>
-          <Title style={{ marginLeft: -190 }} level={5}>
-            Fil the form in order to login
-          </Title>
-        </Layout>
-
-        <Layout
-          style={{
-            alignItems: "center",
-            display: "flex",
-            marginTop: -50,
-            backgroundColor: "white",
-          }}
-        >
-          <Form
-            {...layout}
-            name="basic"
-            initialValues={{ remember: true }}
-            onFinish={this.onFinis}
-            onFinishFailed={this.onFinishFailed}
+  return (
+          <Layout
+              style={{
+                margin: 30,
+                height: "95vh",
+                display: "flex",
+                backgroundColor: "white",
+              }}
           >
-            <Form.Item
-              label="Username"
-              name="username"
-              rules={[
-                { required: true, message: "Please input your username!" },
-              ]}
-              style={{ width: "100%", marginRight: 180, marginLeft: -50 }}
+            <Layout
+                style={{
+                  alignItems: "center",
+                  marginTop: 15,
+                  backgroundColor: "white",
+                }}
             >
-              <Input
-                value={this.state.username}
-                onChange={this.handleChangeUsername}
+              <Avatar
+                  style={{marginTop: 100}}
+                  shape="square"
+                  size={64}
+                  icon={<UserOutlined/>}
               />
-            </Form.Item>
+              <Divider style={{marginTop: 10}}>Welcome</Divider>
+            </Layout>
 
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                { required: true, message: "Please input your password!" },
-              ]}
-              style={{ width: "100%", marginRight: 180, marginLeft: -50 }}
+            <Layout
+                style={{
+                  alignItems: "center",
+                  display: "flex",
+                  marginTop: -70,
+                  marginBottom: -120,
+                  backgroundColor: "white",
+                }}
             >
-              <Input.Password
-                value={this.state.password}
-                onChange={this.handleChangePassword}
-              />
-            </Form.Item>
+              <Title style={{marginLeft: -280}} level={5.2}>
+                Sign In
+              </Title>
+              <Title style={{marginLeft: -190}} level={5}>
+                Fil the form in order to login
+              </Title>
+            </Layout>
 
-            <Form.Item
-              {...tailLayout}
-              name="remember"
-              valuePropName="checked"
-              style={{ width: "100%", marginRight: 180, marginLeft: -50 }}
+            <Layout
+                style={{
+                  alignItems: "center",
+                  display: "flex",
+                  marginTop: -50,
+                  backgroundColor: "white",
+                }}
             >
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-
-            <Form.Item {...tailLayout}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ marginLeft: 10, marginTop: 60, width: "60%" }}
-                onClick={this.onAuthentificate.bind(this)}
+              <Form
+                  {...layout}
+                  name="basic"
+                  initialValues={{remember: true}}
               >
-                Login
-              </Button>
-            </Form.Item>
-          </Form>
-        </Layout>
-      </Layout>
-    );
-  }
+                <Form.Item
+                    label="Username"
+                    name="username"
+                    rules={[
+                      {required: true, message: "Please input your username!"},
+                    ]}
+                    style={{width: "100%", marginRight: 180, marginLeft: -50}}
+                >
+                  <Input
+                      value={state.username}
+                      onChange={handleChangeUsername}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                      {required: true, message: "Please input your password!"},
+                    ]}
+                    style={{width: "100%", marginRight: 180, marginLeft: -50}}
+                >
+                  <Input.Password
+                      value={state.password}
+                      onChange={handleChangePassword}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                    {...tailLayout}
+                    name="remember"
+                    valuePropName="checked"
+                    style={{width: "100%", marginRight: 180, marginLeft: -50}}
+                >
+                  <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+
+                <Form.Item {...tailLayout}>
+                  <Button
+                      type="primary"
+                      htmlType="submit"
+                      style={{marginLeft: 10, marginTop: 60, width: "60%"}}
+                      onClick={onAuthenticate}
+                  >
+                    Login
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Layout>
+          </Layout>
+  );
 }
