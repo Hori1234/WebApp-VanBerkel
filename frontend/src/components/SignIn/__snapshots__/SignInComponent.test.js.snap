@@ -4,6 +4,7 @@ exports[`SignInComponent should render the login page correctly 1`] = `
 <Layout
   style={
     Object {
+      "backgroundColor": "white",
       "display": "flex",
       "height": "95vh",
       "margin": 30,
@@ -14,6 +15,7 @@ exports[`SignInComponent should render the login page correctly 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "white",
         "marginTop": 15,
       }
     }
@@ -42,6 +44,7 @@ exports[`SignInComponent should render the login page correctly 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "white",
         "display": "flex",
         "marginBottom": -120,
         "marginTop": -70,
@@ -73,6 +76,7 @@ exports[`SignInComponent should render the login page correctly 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "white",
         "display": "flex",
         "marginTop": -50,
       }
@@ -90,7 +94,6 @@ exports[`SignInComponent should render the login page correctly 1`] = `
         }
       }
       name="basic"
-      onFinishFailed={[Function]}
       wrapperCol={
         Object {
           "span": 16,

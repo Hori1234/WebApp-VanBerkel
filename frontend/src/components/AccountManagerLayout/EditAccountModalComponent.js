@@ -19,6 +19,7 @@ export default class CreateAccountsComponent extends Component {
       wrapperCol: { span: 16 },
     };
 
+    /* eslint no-template-curly-in-string: off */
     const validateMessages = {
       required: "${label} is required!",
       types: {
