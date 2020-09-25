@@ -1,29 +1,21 @@
 import React, { Component } from "react";
 import {
   Layout,
-  Typography,
-  Statistic,
-  Divider,
   List,
   Popover,
   Spin,
   Avatar,
   Button,
   message,
-  Skeleton,
-  Image,
-  Modal,
 } from "antd";
 
+import axios from 'axios';
+
 import {
-  InboxOutlined,
-  FileExcelOutlined,
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
 import "antd/dist/antd.css";
-import axios, { post } from "axios";
-import reqwest from "reqwest";
 import InfiniteScroll from "react-infinite-scroller";
 import "../Css/EditAC.css";
 
@@ -44,22 +36,15 @@ export default class EditAccountComponent extends Component {
 
   componentDidMount() {
     this.fetchData((res) => {
+      console.log(res);
       this.setState({
-        data: res.results,
+        data: res.data.results,
       });
     });
   }
 
   fetchData = (callback) => {
-    reqwest({
-      url: fakeDataUrl,
-      type: "json",
-      method: "get",
-      contentType: "application/json",
-      success: (res) => {
-        callback(res);
-      },
-    });
+    axios(fakeDataUrl).then(callback);
   };
 
   handleInfiniteOnLoad = () => {
@@ -76,7 +61,7 @@ export default class EditAccountComponent extends Component {
       return;
     }
     this.fetchData((res) => {
-      data = data.concat(res.results);
+      data = data.concat(res.data.results);
       this.setState({
         data,
         loading: false,
@@ -123,7 +108,7 @@ export default class EditAccountComponent extends Component {
                     </Button>
                     <Popover
                       content={
-                        <a
+                        <p
                           onClick={() => {
                             this.setState({
                               visible: false,
@@ -131,7 +116,7 @@ export default class EditAccountComponent extends Component {
                           }}
                         >
                           Close
-                        </a>
+                        </p>
                       }
                       title="Title"
                       trigger="click"
