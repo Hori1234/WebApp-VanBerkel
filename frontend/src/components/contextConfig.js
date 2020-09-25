@@ -27,6 +27,30 @@ const getUser = async () => {
   return userInfo;
 };
 
+const getUsers = async () => {
+  //Temporary login check
+
+  let userInfo = { username: null, role: null, postStatus: null };
+  const tmp = await axios
+    .get("/api/auth/user")
+    .then((response) => {
+      if (response.status === 200) {
+        console.log("======================================>");
+        console.log(response);
+        return response;
+      }
+    })
+    .catch((error) => {});
+
+  if (tmp != null) {
+    userInfo.username = tmp.data.username;
+    userInfo.role = tmp.data.role;
+  }
+
+  console.log(userInfo);
+  return userInfo;
+};
+
 const AuthProvider = ({ children }) => {
   const [state, setState] = React.useState({
     status: "pending",

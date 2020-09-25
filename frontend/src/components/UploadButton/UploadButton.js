@@ -39,14 +39,14 @@ export default class UploadButton extends Component {
           message.error(`${info.file.name} file upload failed.`);
           if (info.file.response.code === 400) {
             message.error(info.file.response.message);
-            const object = JSON.parse(
-              JSON.stringify(info.file.response.errors)
-            );
-            message.error(JSON.stringify(object));
           } else {
             if (info.file.response.code === 422) {
-              message.error(info.file.response.errors);
+              const object = JSON.parse(
+                JSON.stringify(info.file.response.errors)
+              );
+              message.error(JSON.stringify(object));
             } else {
+              message.error(`Bad Request.`);
             }
           }
         }
