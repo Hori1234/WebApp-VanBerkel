@@ -8,8 +8,6 @@ import {
   Button,
   Layout,
   Typography,
-  Statistic,
-  Divider,
   List,
   Avatar,
   Skeleton,
