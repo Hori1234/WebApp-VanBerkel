@@ -1,23 +1,73 @@
 import React, {Component} from "react";
-import {Layout, Button, Row, Col, Table, Select} from 'antd';
+import {Layout, Button, Row, Col, Table, Select, Menu, Checkbox, Dropdown} from 'antd';
 
 const {Option} = Select;
-const columns = [
+const data = [
     {
-        title: 'BookingNr',
-        dataIndex: 'bookingNr',
+        key: '1',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    }, {
+        key: '2',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
     },
     {
-        title: 'Address',
-        dataIndex: 'address',
-    }, {
-        title: 'Customer',
-        dataIndex: 'customer',
-    }, {
-        title: 'TruckId',
-        dataIndex: 'truckId',
-    }
+        key: '3',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+    {
+        key: '4',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+    {
+        key: '5',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+    {
+        key: '6',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+    {
+        key: '7',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+    {
+        key: '8',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+    {
+        key: '9',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+
 ];
+
 const columns2 = [
     {
         title: 'TruckId',
@@ -37,8 +87,49 @@ export default class ManualPlanning extends Component {
         this.state = {
             selectedOrdersRowKeys: [],
             selectedTrucksRowKeys: [],
+            columnFilter: [],
+            isVisible: false,
+            columns: [
+                {
+                    title: 'BookingNr',
+                    dataIndex: 'bookingNr',
+                },
+                {
+                    title: 'Address',
+                    dataIndex: 'address',
+                }, {
+                    title: 'Customer',
+                    dataIndex: 'customer',
+                }, {
+                    title: 'TruckId',
+                    dataIndex: 'truckId',
+                }
+            ],
+            startingColumns: []    
         };
     }
+    componentDidMount() {
+        this.setState({startingColumns: this.state.columns})
+    }
+
+    changeVisibility = isTrue => {
+        this.setState({isVisible: isTrue});
+    };
+
+    filterColumns = (e) => {
+        var columnFilter = this.state.columnFilter
+        if(e.target.checked){
+            columnFilter = columnFilter.filter(current => {return current !== e.target.id})
+        }
+        else if(!e.target.checked){
+            columnFilter.push(e.target.id)
+        }
+        var final = this.state.startingColumns;
+        for(var i=0; i < columnFilter.length; i++)
+        final = final.filter(current => {return current.dataIndex !== columnFilter[i]})
+        this.setState({columns: final, columnFilter: columnFilter})
+    }
+
 
     selectOrdersRow = (record) => {
         const selectedOrdersRowKeys = [...this.state.selectedOrdersRowKeys];
@@ -70,71 +161,17 @@ export default class ManualPlanning extends Component {
     }
 
     render() {
-        const data = [
-            {
-                key: '1',
-                bookingNr: '23928012',
-                address: 'Eindhoven',
-                customer: 'ABC',
-                truckId: '',
-            }, {
-                key: '2',
-                bookingNr: '23928012',
-                address: 'Eindhoven',
-                customer: 'ABC',
-                truckId: '',
-            },
-            {
-                key: '3',
-                bookingNr: '23928012',
-                address: 'Eindhoven',
-                customer: 'ABC',
-                truckId: '',
-            },
-            {
-                key: '4',
-                bookingNr: '23928012',
-                address: 'Eindhoven',
-                customer: 'ABC',
-                truckId: '',
-            },
-            {
-                key: '5',
-                bookingNr: '23928012',
-                address: 'Eindhoven',
-                customer: 'ABC',
-                truckId: '',
-            },
-            {
-                key: '6',
-                bookingNr: '23928012',
-                address: 'Eindhoven',
-                customer: 'ABC',
-                truckId: '',
-            },
-            {
-                key: '7',
-                bookingNr: '23928012',
-                address: 'Eindhoven',
-                customer: 'ABC',
-                truckId: '',
-            },
-            {
-                key: '8',
-                bookingNr: '23928012',
-                address: 'Eindhoven',
-                customer: 'ABC',
-                truckId: '',
-            },
-            {
-                key: '9',
-                bookingNr: '23928012',
-                address: 'Eindhoven',
-                customer: 'ABC',
-                truckId: '',
-            },
-
-        ];
+        const showHideMenu = (
+            <Menu>
+                <Menu.ItemGroup title = "Columns">
+                <Menu.Item  key="addressMenu"><Checkbox id="address" onChange={this.filterColumns} defaultChecked>Address</Checkbox></Menu.Item>
+                <Menu.Item  key="customerMenu"><Checkbox id="customer" onChange={this.filterColumns} defaultChecked>Customer</Checkbox></Menu.Item>
+                <Menu.Item  key="truckIdMenu"><Checkbox id="truckId" onChange={this.filterColumns} defaultChecked>TruckId</Checkbox></Menu.Item>                  
+                  
+                </Menu.ItemGroup>
+            </Menu>
+        )
+        
         const data2 = [
             {
                 key: '1',
@@ -204,13 +241,18 @@ export default class ManualPlanning extends Component {
         };
 
         return (
-            <Layout style={{width: "100%", backgroundColor: "white"}}>
+            
+            
+            <Layout style={{width: "100%", backgroundColor: "white"}}> 
                 <Row gutter={[0, 20]}>
                     <Col span={8}>
+                        <Dropdown overlay={showHideMenu} onVisibleChange={this.changeVisibility} visible={this.state.isVisible}>
+                            <Button>Show/Hide</Button>             
+                        </Dropdown>
                         <Select defaultValue="ITV" style={{width: 120}}>
                             <Option value="ITV">ITV</Option>
                             <Option value="KAT">KAT</Option>
-                        </Select>
+                        </Select>   
                     </Col>
                     <Col span={4} offset={12}>
                         <Button>Data visualization</Button>
@@ -218,7 +260,7 @@ export default class ManualPlanning extends Component {
                 </Row>
                 <Row gutter={[24, 8]}>
                     <Col span={12}>
-                        <Table bordered={true} rowSelection={ordersRowSelection} dataSource={data} columns={columns}
+                        <Table bordered={true} rowSelection={ordersRowSelection} dataSource={data} columns={this.state.columns} 
                                scroll={{x: 40}} scroll={{y: 400}} pagination={false} onRow={(record) => ({
                             onClick: () => {
                                 this.selectOrdersRow(record);
@@ -264,6 +306,7 @@ export default class ManualPlanning extends Component {
                 </Row>
 
             </Layout>
+            
 
         )
     }
