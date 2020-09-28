@@ -1,0 +1,1634 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UploadButton component should render the upload page correctly 1`] = `
+<UploadButton>
+  <Layout
+    style={
+      Object {
+        "backgroundColor": "white",
+      }
+    }
+  >
+    <BasicLayout
+      prefixCls="ant-layout"
+      style={
+        Object {
+          "backgroundColor": "white",
+        }
+      }
+      tagName="section"
+    >
+      <section
+        className="ant-layout"
+        style={
+          Object {
+            "backgroundColor": "white",
+          }
+        }
+      >
+        <Layout
+          style={
+            Object {
+              "backgroundColor": "white",
+              "display": "flex",
+              "height": "40vh",
+              "marginBottom": 20,
+            }
+          }
+        >
+          <BasicLayout
+            prefixCls="ant-layout"
+            style={
+              Object {
+                "backgroundColor": "white",
+                "display": "flex",
+                "height": "40vh",
+                "marginBottom": 20,
+              }
+            }
+            tagName="section"
+          >
+            <section
+              className="ant-layout"
+              style={
+                Object {
+                  "backgroundColor": "white",
+                  "display": "flex",
+                  "height": "40vh",
+                  "marginBottom": 20,
+                }
+              }
+            >
+              <Card
+                style={
+                  Object {
+                    "height": "100%",
+                  }
+                }
+              >
+                <div
+                  className="ant-card ant-card-bordered"
+                  style={
+                    Object {
+                      "height": "100%",
+                    }
+                  }
+                >
+                  <div
+                    className="ant-card-body"
+                    style={Object {}}
+                  >
+                    <Layout
+                      style={
+                        Object {
+                          "backgroundColor": "white",
+                          "flexDirection": "row",
+                          "marginBottom": 35,
+                        }
+                      }
+                    >
+                      <BasicLayout
+                        prefixCls="ant-layout"
+                        style={
+                          Object {
+                            "backgroundColor": "white",
+                            "flexDirection": "row",
+                            "marginBottom": 35,
+                          }
+                        }
+                        tagName="section"
+                      >
+                        <section
+                          className="ant-layout"
+                          style={
+                            Object {
+                              "backgroundColor": "white",
+                              "flexDirection": "row",
+                              "marginBottom": 35,
+                            }
+                          }
+                        >
+                          <Image
+                            preview={false}
+                            src={
+                              Object {
+                                "ReactComponent": Object {
+                                  "$$typeof": Symbol(react.forward_ref),
+                                  "render": [Function],
+                                },
+                                "__esModule": true,
+                                "default": "upload-file.svg",
+                              }
+                            }
+                            style={
+                              Object {
+                                "marginRight": 20,
+                              }
+                            }
+                            width={100}
+                          >
+                            <Image
+                              prefixCls="ant-image"
+                              preview={false}
+                              src={
+                                Object {
+                                  "ReactComponent": Object {
+                                    "$$typeof": Symbol(react.forward_ref),
+                                    "render": [Function],
+                                  },
+                                  "__esModule": true,
+                                  "default": "upload-file.svg",
+                                }
+                              }
+                              style={
+                                Object {
+                                  "marginRight": 20,
+                                }
+                              }
+                              width={100}
+                            >
+                              <div
+                                className="ant-image"
+                                style={
+                                  Object {
+                                    "height": undefined,
+                                    "marginRight": 20,
+                                    "width": 100,
+                                  }
+                                }
+                              >
+                                <img
+                                  className="ant-image-img"
+                                  onError={[Function]}
+                                  onLoad={[Function]}
+                                  src={
+                                    Object {
+                                      "ReactComponent": Object {
+                                        "$$typeof": Symbol(react.forward_ref),
+                                        "render": [Function],
+                                      },
+                                      "__esModule": true,
+                                      "default": "upload-file.svg",
+                                    }
+                                  }
+                                />
+                              </div>
+                            </Image>
+                          </Image>
+                          <Layout
+                            style={
+                              Object {
+                                "backgroundColor": "white",
+                                "flexDirection": "column",
+                              }
+                            }
+                          >
+                            <BasicLayout
+                              prefixCls="ant-layout"
+                              style={
+                                Object {
+                                  "backgroundColor": "white",
+                                  "flexDirection": "column",
+                                }
+                              }
+                              tagName="section"
+                            >
+                              <section
+                                className="ant-layout"
+                                style={
+                                  Object {
+                                    "backgroundColor": "white",
+                                    "flexDirection": "column",
+                                  }
+                                }
+                              >
+                                <Text
+                                  style={
+                                    Object {
+                                      "fontSize": "18",
+                                      "fontWeight": "bold",
+                                    }
+                                  }
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    style={
+                                      Object {
+                                        "fontSize": "18",
+                                        "fontWeight": "bold",
+                                      }
+                                    }
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                              "fontSize": "18",
+                                              "fontWeight": "bold",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                                "fontSize": "18",
+                                                "fontWeight": "bold",
+                                              }
+                                            }
+                                          >
+                                            Upload Documents
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </Text>
+                                <Text
+                                  style={
+                                    Object {
+                                      "fontSize": " 14",
+                                    }
+                                  }
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    style={
+                                      Object {
+                                        "fontSize": " 14",
+                                      }
+                                    }
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                              "fontSize": " 14",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                                "fontSize": " 14",
+                                              }
+                                            }
+                                          >
+                                            Upload the documents for the creation of the plannings
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </Text>
+                              </section>
+                            </BasicLayout>
+                          </Layout>
+                        </section>
+                      </BasicLayout>
+                    </Layout>
+                    <Divider>
+                      <div
+                        className="ant-divider ant-divider-horizontal"
+                        role="separator"
+                      />
+                    </Divider>
+                    <Layout
+                      style={
+                        Object {
+                          "backgroundColor": "white",
+                          "flexDirection": "row",
+                          "marginBottom": 35,
+                        }
+                      }
+                    >
+                      <BasicLayout
+                        prefixCls="ant-layout"
+                        style={
+                          Object {
+                            "backgroundColor": "white",
+                            "flexDirection": "row",
+                            "marginBottom": 35,
+                          }
+                        }
+                        tagName="section"
+                      >
+                        <section
+                          className="ant-layout"
+                          style={
+                            Object {
+                              "backgroundColor": "white",
+                              "flexDirection": "row",
+                              "marginBottom": 35,
+                            }
+                          }
+                        >
+                          <ForwardRef(FileExcelOutlined)
+                            style={
+                              Object {
+                                "fontSize": "100px",
+                                "marginRight": 20,
+                              }
+                            }
+                          >
+                            <AntdIcon
+                              icon={
+                                Object {
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "attrs": Object {
+                                          "d": "M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM514.1 580.1l-61.8-102.4c-2.2-3.6-6.1-5.8-10.3-5.8h-38.4c-2.3 0-4.5.6-6.4 1.9-5.6 3.5-7.3 10.9-3.7 16.6l82.3 130.4-83.4 132.8a12.04 12.04 0 0010.2 18.4h34.5c4.2 0 8-2.2 10.2-5.7L510 664.8l62.3 101.4c2.2 3.6 6.1 5.7 10.2 5.7H620c2.3 0 4.5-.7 6.5-1.9 5.6-3.6 7.2-11 3.6-16.6l-84-130.4 85.3-132.5a12.04 12.04 0 00-10.1-18.5h-35.7c-4.2 0-8.1 2.2-10.3 5.8l-61.2 102.3z",
+                                        },
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "file-excel",
+                                  "theme": "outlined",
+                                }
+                              }
+                              style={
+                                Object {
+                                  "fontSize": "100px",
+                                  "marginRight": 20,
+                                }
+                              }
+                            >
+                              <span
+                                aria-label="file-excel"
+                                className="anticon anticon-file-excel"
+                                role="img"
+                                style={
+                                  Object {
+                                    "fontSize": "100px",
+                                    "marginRight": 20,
+                                  }
+                                }
+                              >
+                                <IconReact
+                                  className=""
+                                  icon={
+                                    Object {
+                                      "icon": Object {
+                                        "attrs": Object {
+                                          "focusable": "false",
+                                          "viewBox": "64 64 896 896",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "attrs": Object {
+                                              "d": "M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM514.1 580.1l-61.8-102.4c-2.2-3.6-6.1-5.8-10.3-5.8h-38.4c-2.3 0-4.5.6-6.4 1.9-5.6 3.5-7.3 10.9-3.7 16.6l82.3 130.4-83.4 132.8a12.04 12.04 0 0010.2 18.4h34.5c4.2 0 8-2.2 10.2-5.7L510 664.8l62.3 101.4c2.2 3.6 6.1 5.7 10.2 5.7H620c2.3 0 4.5-.7 6.5-1.9 5.6-3.6 7.2-11 3.6-16.6l-84-130.4 85.3-132.5a12.04 12.04 0 00-10.1-18.5h-35.7c-4.2 0-8.1 2.2-10.3 5.8l-61.2 102.3z",
+                                            },
+                                            "tag": "path",
+                                          },
+                                        ],
+                                        "tag": "svg",
+                                      },
+                                      "name": "file-excel",
+                                      "theme": "outlined",
+                                    }
+                                  }
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    className=""
+                                    data-icon="file-excel"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-file-excel"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
+                                  >
+                                    <path
+                                      d="M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM514.1 580.1l-61.8-102.4c-2.2-3.6-6.1-5.8-10.3-5.8h-38.4c-2.3 0-4.5.6-6.4 1.9-5.6 3.5-7.3 10.9-3.7 16.6l82.3 130.4-83.4 132.8a12.04 12.04 0 0010.2 18.4h34.5c4.2 0 8-2.2 10.2-5.7L510 664.8l62.3 101.4c2.2 3.6 6.1 5.7 10.2 5.7H620c2.3 0 4.5-.7 6.5-1.9 5.6-3.6 7.2-11 3.6-16.6l-84-130.4 85.3-132.5a12.04 12.04 0 00-10.1-18.5h-35.7c-4.2 0-8.1 2.2-10.3 5.8l-61.2 102.3z"
+                                      key="svg-file-excel-svg-0"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(FileExcelOutlined)>
+                          <Layout
+                            style={
+                              Object {
+                                "backgroundColor": "white",
+                                "flexDirection": "column",
+                              }
+                            }
+                          >
+                            <BasicLayout
+                              prefixCls="ant-layout"
+                              style={
+                                Object {
+                                  "backgroundColor": "white",
+                                  "flexDirection": "column",
+                                }
+                              }
+                              tagName="section"
+                            >
+                              <section
+                                className="ant-layout"
+                                style={
+                                  Object {
+                                    "backgroundColor": "white",
+                                    "flexDirection": "column",
+                                  }
+                                }
+                              >
+                                <Text
+                                  style={
+                                    Object {
+                                      "fontSize": "18",
+                                      "fontWeight": "bold",
+                                    }
+                                  }
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    style={
+                                      Object {
+                                        "fontSize": "18",
+                                        "fontWeight": "bold",
+                                      }
+                                    }
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                              "fontSize": "18",
+                                              "fontWeight": "bold",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                                "fontSize": "18",
+                                                "fontWeight": "bold",
+                                              }
+                                            }
+                                          >
+                                            Upload Order List
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </Text>
+                                <Text
+                                  style={
+                                    Object {
+                                      "fontSize": " 14",
+                                    }
+                                  }
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    style={
+                                      Object {
+                                        "fontSize": " 14",
+                                      }
+                                    }
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                              "fontSize": " 14",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                                "fontSize": " 14",
+                                              }
+                                            }
+                                          >
+                                            Upload the Excel file that contains the list of all
+                                             
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </Text>
+                                <Text
+                                  style={
+                                    Object {
+                                      "fontSize": " 14",
+                                    }
+                                  }
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    style={
+                                      Object {
+                                        "fontSize": " 14",
+                                      }
+                                    }
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                              "fontSize": " 14",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                                "fontSize": " 14",
+                                              }
+                                            }
+                                          >
+                                            the orders that will be placed this month
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </Text>
+                              </section>
+                            </BasicLayout>
+                          </Layout>
+                        </section>
+                      </BasicLayout>
+                    </Layout>
+                    <Divider>
+                      <div
+                        className="ant-divider ant-divider-horizontal"
+                        role="separator"
+                      />
+                    </Divider>
+                    <Layout
+                      style={
+                        Object {
+                          "backgroundColor": "white",
+                          "flexDirection": "row",
+                        }
+                      }
+                    >
+                      <BasicLayout
+                        prefixCls="ant-layout"
+                        style={
+                          Object {
+                            "backgroundColor": "white",
+                            "flexDirection": "row",
+                          }
+                        }
+                        tagName="section"
+                      >
+                        <section
+                          className="ant-layout"
+                          style={
+                            Object {
+                              "backgroundColor": "white",
+                              "flexDirection": "row",
+                            }
+                          }
+                        >
+                          <ForwardRef(FileExcelOutlined)
+                            style={
+                              Object {
+                                "fontSize": "100px",
+                                "marginRight": 20,
+                              }
+                            }
+                          >
+                            <AntdIcon
+                              icon={
+                                Object {
+                                  "icon": Object {
+                                    "attrs": Object {
+                                      "focusable": "false",
+                                      "viewBox": "64 64 896 896",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "attrs": Object {
+                                          "d": "M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM514.1 580.1l-61.8-102.4c-2.2-3.6-6.1-5.8-10.3-5.8h-38.4c-2.3 0-4.5.6-6.4 1.9-5.6 3.5-7.3 10.9-3.7 16.6l82.3 130.4-83.4 132.8a12.04 12.04 0 0010.2 18.4h34.5c4.2 0 8-2.2 10.2-5.7L510 664.8l62.3 101.4c2.2 3.6 6.1 5.7 10.2 5.7H620c2.3 0 4.5-.7 6.5-1.9 5.6-3.6 7.2-11 3.6-16.6l-84-130.4 85.3-132.5a12.04 12.04 0 00-10.1-18.5h-35.7c-4.2 0-8.1 2.2-10.3 5.8l-61.2 102.3z",
+                                        },
+                                        "tag": "path",
+                                      },
+                                    ],
+                                    "tag": "svg",
+                                  },
+                                  "name": "file-excel",
+                                  "theme": "outlined",
+                                }
+                              }
+                              style={
+                                Object {
+                                  "fontSize": "100px",
+                                  "marginRight": 20,
+                                }
+                              }
+                            >
+                              <span
+                                aria-label="file-excel"
+                                className="anticon anticon-file-excel"
+                                role="img"
+                                style={
+                                  Object {
+                                    "fontSize": "100px",
+                                    "marginRight": 20,
+                                  }
+                                }
+                              >
+                                <IconReact
+                                  className=""
+                                  icon={
+                                    Object {
+                                      "icon": Object {
+                                        "attrs": Object {
+                                          "focusable": "false",
+                                          "viewBox": "64 64 896 896",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "attrs": Object {
+                                              "d": "M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM514.1 580.1l-61.8-102.4c-2.2-3.6-6.1-5.8-10.3-5.8h-38.4c-2.3 0-4.5.6-6.4 1.9-5.6 3.5-7.3 10.9-3.7 16.6l82.3 130.4-83.4 132.8a12.04 12.04 0 0010.2 18.4h34.5c4.2 0 8-2.2 10.2-5.7L510 664.8l62.3 101.4c2.2 3.6 6.1 5.7 10.2 5.7H620c2.3 0 4.5-.7 6.5-1.9 5.6-3.6 7.2-11 3.6-16.6l-84-130.4 85.3-132.5a12.04 12.04 0 00-10.1-18.5h-35.7c-4.2 0-8.1 2.2-10.3 5.8l-61.2 102.3z",
+                                            },
+                                            "tag": "path",
+                                          },
+                                        ],
+                                        "tag": "svg",
+                                      },
+                                      "name": "file-excel",
+                                      "theme": "outlined",
+                                    }
+                                  }
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    className=""
+                                    data-icon="file-excel"
+                                    fill="currentColor"
+                                    focusable="false"
+                                    height="1em"
+                                    key="svg-file-excel"
+                                    viewBox="64 64 896 896"
+                                    width="1em"
+                                  >
+                                    <path
+                                      d="M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM514.1 580.1l-61.8-102.4c-2.2-3.6-6.1-5.8-10.3-5.8h-38.4c-2.3 0-4.5.6-6.4 1.9-5.6 3.5-7.3 10.9-3.7 16.6l82.3 130.4-83.4 132.8a12.04 12.04 0 0010.2 18.4h34.5c4.2 0 8-2.2 10.2-5.7L510 664.8l62.3 101.4c2.2 3.6 6.1 5.7 10.2 5.7H620c2.3 0 4.5-.7 6.5-1.9 5.6-3.6 7.2-11 3.6-16.6l-84-130.4 85.3-132.5a12.04 12.04 0 00-10.1-18.5h-35.7c-4.2 0-8.1 2.2-10.3 5.8l-61.2 102.3z"
+                                      key="svg-file-excel-svg-0"
+                                    />
+                                  </svg>
+                                </IconReact>
+                              </span>
+                            </AntdIcon>
+                          </ForwardRef(FileExcelOutlined)>
+                          <Layout
+                            style={
+                              Object {
+                                "backgroundColor": "white",
+                                "flexDirection": "column",
+                              }
+                            }
+                          >
+                            <BasicLayout
+                              prefixCls="ant-layout"
+                              style={
+                                Object {
+                                  "backgroundColor": "white",
+                                  "flexDirection": "column",
+                                }
+                              }
+                              tagName="section"
+                            >
+                              <section
+                                className="ant-layout"
+                                style={
+                                  Object {
+                                    "backgroundColor": "white",
+                                    "flexDirection": "column",
+                                  }
+                                }
+                              >
+                                <Text
+                                  style={
+                                    Object {
+                                      "fontSize": "18",
+                                      "fontWeight": "bold",
+                                    }
+                                  }
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    style={
+                                      Object {
+                                        "fontSize": "18",
+                                        "fontWeight": "bold",
+                                      }
+                                    }
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                              "fontSize": "18",
+                                              "fontWeight": "bold",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                                "fontSize": "18",
+                                                "fontWeight": "bold",
+                                              }
+                                            }
+                                          >
+                                            Upload Truck Availibility List
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </Text>
+                                <Text
+                                  style={
+                                    Object {
+                                      "fontSize": " 14",
+                                    }
+                                  }
+                                >
+                                  <Base
+                                    component="span"
+                                    ellipsis={false}
+                                    style={
+                                      Object {
+                                        "fontSize": " 14",
+                                      }
+                                    }
+                                  >
+                                    <LocaleReceiver
+                                      componentName="Text"
+                                    >
+                                      <ResizeObserver
+                                        disabled={true}
+                                        onResize={[Function]}
+                                      >
+                                        <Typography
+                                          className=""
+                                          component="span"
+                                          style={
+                                            Object {
+                                              "WebkitLineClamp": null,
+                                              "fontSize": " 14",
+                                            }
+                                          }
+                                        >
+                                          <span
+                                            className="ant-typography"
+                                            style={
+                                              Object {
+                                                "WebkitLineClamp": null,
+                                                "fontSize": " 14",
+                                              }
+                                            }
+                                          >
+                                            Upload the documents for the creation of the plannings
+                                          </span>
+                                        </Typography>
+                                      </ResizeObserver>
+                                    </LocaleReceiver>
+                                  </Base>
+                                </Text>
+                              </section>
+                            </BasicLayout>
+                          </Layout>
+                        </section>
+                      </BasicLayout>
+                    </Layout>
+                  </div>
+                </div>
+              </Card>
+            </section>
+          </BasicLayout>
+        </Layout>
+        <Layout
+          style={
+            Object {
+              "backgroundColor": "white",
+            }
+          }
+        >
+          <BasicLayout
+            prefixCls="ant-layout"
+            style={
+              Object {
+                "backgroundColor": "white",
+              }
+            }
+            tagName="section"
+          >
+            <section
+              className="ant-layout"
+              style={
+                Object {
+                  "backgroundColor": "white",
+                }
+              }
+            >
+              <Row
+                gutter={16}
+              >
+                <div
+                  className="ant-row"
+                  style={
+                    Object {
+                      "marginLeft": -8,
+                      "marginRight": -8,
+                    }
+                  }
+                >
+                  <Col
+                    span={12}
+                  >
+                    <div
+                      className="ant-col ant-col-12"
+                      style={
+                        Object {
+                          "paddingLeft": 8,
+                          "paddingRight": 8,
+                        }
+                      }
+                    >
+                      <Card
+                        bordered={false}
+                        title="Upload Order List"
+                      >
+                        <div
+                          className="ant-card"
+                        >
+                          <div
+                            className="ant-card-head"
+                            style={Object {}}
+                          >
+                            <div
+                              className="ant-card-head-wrapper"
+                            >
+                              <div
+                                className="ant-card-head-title"
+                              >
+                                Upload Order List
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            className="ant-card-body"
+                            style={Object {}}
+                          >
+                            <Row
+                              gutter={
+                                Array [
+                                  16,
+                                  24,
+                                ]
+                              }
+                            >
+                              <div
+                                className="ant-row"
+                                style={
+                                  Object {
+                                    "marginBottom": 12,
+                                    "marginLeft": -8,
+                                    "marginRight": -8,
+                                    "marginTop": -12,
+                                  }
+                                }
+                              >
+                                <Col
+                                  className="gutter-row"
+                                >
+                                  <div
+                                    className="ant-col gutter-row"
+                                    style={
+                                      Object {
+                                        "paddingBottom": 12,
+                                        "paddingLeft": 8,
+                                        "paddingRight": 8,
+                                        "paddingTop": 12,
+                                      }
+                                    }
+                                  >
+                                    <Dragger
+                                      action="/api/sheets/"
+                                      id="dragger"
+                                      multiple={false}
+                                      name="file_1"
+                                      onChange={[Function]}
+                                    >
+                                      <Upload
+                                        accept=""
+                                        action="/api/sheets/"
+                                        beforeUpload={[Function]}
+                                        className=""
+                                        data={Object {}}
+                                        disabled={false}
+                                        id="dragger"
+                                        listType="text"
+                                        multiple={false}
+                                        name="file_1"
+                                        onChange={[Function]}
+                                        showUploadList={true}
+                                        style={
+                                          Object {
+                                            "height": undefined,
+                                          }
+                                        }
+                                        supportServerRender={true}
+                                        type="drag"
+                                      >
+                                        <span>
+                                          <div
+                                            className="ant-upload ant-upload-drag"
+                                            onDragLeave={[Function]}
+                                            onDragOver={[Function]}
+                                            onDrop={[Function]}
+                                            style={
+                                              Object {
+                                                "height": undefined,
+                                              }
+                                            }
+                                          >
+                                            <Upload
+                                              accept=""
+                                              action="/api/sheets/"
+                                              beforeUpload={[Function]}
+                                              className="ant-upload-btn"
+                                              component="span"
+                                              customRequest={null}
+                                              data={Object {}}
+                                              disabled={false}
+                                              headers={Object {}}
+                                              id="dragger"
+                                              listType="text"
+                                              multipart={false}
+                                              multiple={false}
+                                              name="file_1"
+                                              onChange={[Function]}
+                                              onError={[Function]}
+                                              onProgress={[Function]}
+                                              onStart={[Function]}
+                                              onSuccess={[Function]}
+                                              openFileDialogOnClick={true}
+                                              prefixCls="ant-upload"
+                                              showUploadList={true}
+                                              supportServerRender={true}
+                                              type="drag"
+                                              withCredentials={false}
+                                            >
+                                              <AjaxUploader
+                                                accept=""
+                                                action="/api/sheets/"
+                                                beforeUpload={[Function]}
+                                                className="ant-upload-btn"
+                                                component="span"
+                                                customRequest={null}
+                                                data={Object {}}
+                                                disabled={false}
+                                                headers={Object {}}
+                                                id="dragger"
+                                                listType="text"
+                                                multipart={false}
+                                                multiple={false}
+                                                name="file_1"
+                                                onChange={[Function]}
+                                                onError={[Function]}
+                                                onProgress={[Function]}
+                                                onStart={[Function]}
+                                                onSuccess={[Function]}
+                                                openFileDialogOnClick={true}
+                                                prefixCls="ant-upload"
+                                                showUploadList={true}
+                                                supportServerRender={true}
+                                                type="drag"
+                                                withCredentials={false}
+                                              >
+                                                <span
+                                                  className="ant-upload ant-upload-btn"
+                                                  onClick={[Function]}
+                                                  onDragOver={[Function]}
+                                                  onDrop={[Function]}
+                                                  onKeyDown={[Function]}
+                                                  role="button"
+                                                  tabIndex="0"
+                                                >
+                                                  <input
+                                                    accept=""
+                                                    id="dragger"
+                                                    key="rc-upload-1601303208111-1"
+                                                    multiple={false}
+                                                    onChange={[Function]}
+                                                    onClick={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "display": "none",
+                                                      }
+                                                    }
+                                                    type="file"
+                                                  />
+                                                  <div
+                                                    className="ant-upload-drag-container"
+                                                  >
+                                                    <p
+                                                      className="ant-upload-drag-icon"
+                                                    >
+                                                      <ForwardRef(InboxOutlined)>
+                                                        <AntdIcon
+                                                          icon={
+                                                            Object {
+                                                              "icon": Object {
+                                                                "attrs": Object {
+                                                                  "focusable": "false",
+                                                                  "viewBox": "0 0 1024 1024",
+                                                                },
+                                                                "children": Array [
+                                                                  Object {
+                                                                    "attrs": Object {
+                                                                      "d": "M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0060.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z",
+                                                                    },
+                                                                    "tag": "path",
+                                                                  },
+                                                                ],
+                                                                "tag": "svg",
+                                                              },
+                                                              "name": "inbox",
+                                                              "theme": "outlined",
+                                                            }
+                                                          }
+                                                        >
+                                                          <span
+                                                            aria-label="inbox"
+                                                            className="anticon anticon-inbox"
+                                                            role="img"
+                                                          >
+                                                            <IconReact
+                                                              className=""
+                                                              icon={
+                                                                Object {
+                                                                  "icon": Object {
+                                                                    "attrs": Object {
+                                                                      "focusable": "false",
+                                                                      "viewBox": "0 0 1024 1024",
+                                                                    },
+                                                                    "children": Array [
+                                                                      Object {
+                                                                        "attrs": Object {
+                                                                          "d": "M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0060.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z",
+                                                                        },
+                                                                        "tag": "path",
+                                                                      },
+                                                                    ],
+                                                                    "tag": "svg",
+                                                                  },
+                                                                  "name": "inbox",
+                                                                  "theme": "outlined",
+                                                                }
+                                                              }
+                                                            >
+                                                              <svg
+                                                                aria-hidden="true"
+                                                                className=""
+                                                                data-icon="inbox"
+                                                                fill="currentColor"
+                                                                focusable="false"
+                                                                height="1em"
+                                                                key="svg-inbox"
+                                                                viewBox="0 0 1024 1024"
+                                                                width="1em"
+                                                              >
+                                                                <path
+                                                                  d="M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0060.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z"
+                                                                  key="svg-inbox-svg-0"
+                                                                />
+                                                              </svg>
+                                                            </IconReact>
+                                                          </span>
+                                                        </AntdIcon>
+                                                      </ForwardRef(InboxOutlined)>
+                                                    </p>
+                                                    <p
+                                                      className="ant-upload-text"
+                                                    >
+                                                      Click or drag file to this area to upload
+                                                    </p>
+                                                    <p
+                                                      className="ant-upload-hint"
+                                                    >
+                                                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+                                                    </p>
+                                                  </div>
+                                                </span>
+                                              </AjaxUploader>
+                                            </Upload>
+                                          </div>
+                                          <LocaleReceiver
+                                            componentName="Upload"
+                                            defaultLocale={
+                                              Object {
+                                                "downloadFile": "Download file",
+                                                "previewFile": "Preview file",
+                                                "removeFile": "Remove file",
+                                                "uploadError": "Upload error",
+                                                "uploading": "Uploading...",
+                                              }
+                                            }
+                                          >
+                                            <UploadList
+                                              isImageUrl={[Function]}
+                                              items={Array []}
+                                              listType="text"
+                                              locale={
+                                                Object {
+                                                  "downloadFile": "Download file",
+                                                  "previewFile": "Preview file",
+                                                  "removeFile": "Remove file",
+                                                  "uploadError": "Upload error",
+                                                  "uploading": "Uploading...",
+                                                }
+                                              }
+                                              onRemove={[Function]}
+                                              previewFile={[Function]}
+                                              progress={
+                                                Object {
+                                                  "showInfo": false,
+                                                  "strokeWidth": 2,
+                                                }
+                                              }
+                                              showDownloadIcon={false}
+                                              showPreviewIcon={true}
+                                              showRemoveIcon={true}
+                                            >
+                                              <Animate
+                                                animation={Object {}}
+                                                className="ant-upload-list ant-upload-list-text"
+                                                component="div"
+                                                componentProps={Object {}}
+                                                onAppear={[Function]}
+                                                onEnd={[Function]}
+                                                onEnter={[Function]}
+                                                onLeave={[Function]}
+                                                transitionAppear={false}
+                                                transitionEnter={true}
+                                                transitionLeave={true}
+                                                transitionName=""
+                                              >
+                                                <div
+                                                  className="ant-upload-list ant-upload-list-text"
+                                                />
+                                              </Animate>
+                                            </UploadList>
+                                          </LocaleReceiver>
+                                        </span>
+                                      </Upload>
+                                    </Dragger>
+                                  </div>
+                                </Col>
+                              </div>
+                            </Row>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+                  </Col>
+                  <Col
+                    span={12}
+                  >
+                    <div
+                      className="ant-col ant-col-12"
+                      style={
+                        Object {
+                          "paddingLeft": 8,
+                          "paddingRight": 8,
+                        }
+                      }
+                    >
+                      <Card
+                        bordered={false}
+                        title="Upload Truck Availibility"
+                      >
+                        <div
+                          className="ant-card"
+                        >
+                          <div
+                            className="ant-card-head"
+                            style={Object {}}
+                          >
+                            <div
+                              className="ant-card-head-wrapper"
+                            >
+                              <div
+                                className="ant-card-head-title"
+                              >
+                                Upload Truck Availibility
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            className="ant-card-body"
+                            style={Object {}}
+                          >
+                            <Row
+                              gutter={
+                                Array [
+                                  16,
+                                  24,
+                                ]
+                              }
+                            >
+                              <div
+                                className="ant-row"
+                                style={
+                                  Object {
+                                    "marginBottom": 12,
+                                    "marginLeft": -8,
+                                    "marginRight": -8,
+                                    "marginTop": -12,
+                                  }
+                                }
+                              >
+                                <Col
+                                  className="gutter-row"
+                                >
+                                  <div
+                                    className="ant-col gutter-row"
+                                    style={
+                                      Object {
+                                        "paddingBottom": 12,
+                                        "paddingLeft": 8,
+                                        "paddingRight": 8,
+                                        "paddingTop": 12,
+                                      }
+                                    }
+                                  >
+                                    <Dragger
+                                      action="/api/sheets/"
+                                      multiple={false}
+                                      name="file_1"
+                                      onChange={[Function]}
+                                    >
+                                      <Upload
+                                        accept=""
+                                        action="/api/sheets/"
+                                        beforeUpload={[Function]}
+                                        className=""
+                                        data={Object {}}
+                                        disabled={false}
+                                        listType="text"
+                                        multiple={false}
+                                        name="file_1"
+                                        onChange={[Function]}
+                                        showUploadList={true}
+                                        style={
+                                          Object {
+                                            "height": undefined,
+                                          }
+                                        }
+                                        supportServerRender={true}
+                                        type="drag"
+                                      >
+                                        <span>
+                                          <div
+                                            className="ant-upload ant-upload-drag"
+                                            onDragLeave={[Function]}
+                                            onDragOver={[Function]}
+                                            onDrop={[Function]}
+                                            style={
+                                              Object {
+                                                "height": undefined,
+                                              }
+                                            }
+                                          >
+                                            <Upload
+                                              accept=""
+                                              action="/api/sheets/"
+                                              beforeUpload={[Function]}
+                                              className="ant-upload-btn"
+                                              component="span"
+                                              customRequest={null}
+                                              data={Object {}}
+                                              disabled={false}
+                                              headers={Object {}}
+                                              listType="text"
+                                              multipart={false}
+                                              multiple={false}
+                                              name="file_1"
+                                              onChange={[Function]}
+                                              onError={[Function]}
+                                              onProgress={[Function]}
+                                              onStart={[Function]}
+                                              onSuccess={[Function]}
+                                              openFileDialogOnClick={true}
+                                              prefixCls="ant-upload"
+                                              showUploadList={true}
+                                              supportServerRender={true}
+                                              type="drag"
+                                              withCredentials={false}
+                                            >
+                                              <AjaxUploader
+                                                accept=""
+                                                action="/api/sheets/"
+                                                beforeUpload={[Function]}
+                                                className="ant-upload-btn"
+                                                component="span"
+                                                customRequest={null}
+                                                data={Object {}}
+                                                disabled={false}
+                                                headers={Object {}}
+                                                listType="text"
+                                                multipart={false}
+                                                multiple={false}
+                                                name="file_1"
+                                                onChange={[Function]}
+                                                onError={[Function]}
+                                                onProgress={[Function]}
+                                                onStart={[Function]}
+                                                onSuccess={[Function]}
+                                                openFileDialogOnClick={true}
+                                                prefixCls="ant-upload"
+                                                showUploadList={true}
+                                                supportServerRender={true}
+                                                type="drag"
+                                                withCredentials={false}
+                                              >
+                                                <span
+                                                  className="ant-upload ant-upload-btn"
+                                                  onClick={[Function]}
+                                                  onDragOver={[Function]}
+                                                  onDrop={[Function]}
+                                                  onKeyDown={[Function]}
+                                                  role="button"
+                                                  tabIndex="0"
+                                                >
+                                                  <input
+                                                    accept=""
+                                                    key="rc-upload-1601303208111-2"
+                                                    multiple={false}
+                                                    onChange={[Function]}
+                                                    onClick={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "display": "none",
+                                                      }
+                                                    }
+                                                    type="file"
+                                                  />
+                                                  <div
+                                                    className="ant-upload-drag-container"
+                                                  >
+                                                    <p
+                                                      className="ant-upload-drag-icon"
+                                                    >
+                                                      <ForwardRef(InboxOutlined)>
+                                                        <AntdIcon
+                                                          icon={
+                                                            Object {
+                                                              "icon": Object {
+                                                                "attrs": Object {
+                                                                  "focusable": "false",
+                                                                  "viewBox": "0 0 1024 1024",
+                                                                },
+                                                                "children": Array [
+                                                                  Object {
+                                                                    "attrs": Object {
+                                                                      "d": "M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0060.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z",
+                                                                    },
+                                                                    "tag": "path",
+                                                                  },
+                                                                ],
+                                                                "tag": "svg",
+                                                              },
+                                                              "name": "inbox",
+                                                              "theme": "outlined",
+                                                            }
+                                                          }
+                                                        >
+                                                          <span
+                                                            aria-label="inbox"
+                                                            className="anticon anticon-inbox"
+                                                            role="img"
+                                                          >
+                                                            <IconReact
+                                                              className=""
+                                                              icon={
+                                                                Object {
+                                                                  "icon": Object {
+                                                                    "attrs": Object {
+                                                                      "focusable": "false",
+                                                                      "viewBox": "0 0 1024 1024",
+                                                                    },
+                                                                    "children": Array [
+                                                                      Object {
+                                                                        "attrs": Object {
+                                                                          "d": "M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0060.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z",
+                                                                        },
+                                                                        "tag": "path",
+                                                                      },
+                                                                    ],
+                                                                    "tag": "svg",
+                                                                  },
+                                                                  "name": "inbox",
+                                                                  "theme": "outlined",
+                                                                }
+                                                              }
+                                                            >
+                                                              <svg
+                                                                aria-hidden="true"
+                                                                className=""
+                                                                data-icon="inbox"
+                                                                fill="currentColor"
+                                                                focusable="false"
+                                                                height="1em"
+                                                                key="svg-inbox"
+                                                                viewBox="0 0 1024 1024"
+                                                                width="1em"
+                                                              >
+                                                                <path
+                                                                  d="M885.2 446.3l-.2-.8-112.2-285.1c-5-16.1-19.9-27.2-36.8-27.2H281.2c-17 0-32.1 11.3-36.9 27.6L139.4 443l-.3.7-.2.8c-1.3 4.9-1.7 9.9-1 14.8-.1 1.6-.2 3.2-.2 4.8V830a60.9 60.9 0 0060.8 60.8h627.2c33.5 0 60.8-27.3 60.9-60.8V464.1c0-1.3 0-2.6-.1-3.7.4-4.9 0-9.6-1.3-14.1zm-295.8-43l-.3 15.7c-.8 44.9-31.8 75.1-77.1 75.1-22.1 0-41.1-7.1-54.8-20.6S436 441.2 435.6 419l-.3-15.7H229.5L309 210h399.2l81.7 193.3H589.4zm-375 76.8h157.3c24.3 57.1 76 90.8 140.4 90.8 33.7 0 65-9.4 90.3-27.2 22.2-15.6 39.5-37.4 50.7-63.6h156.5V814H214.4V480.1z"
+                                                                  key="svg-inbox-svg-0"
+                                                                />
+                                                              </svg>
+                                                            </IconReact>
+                                                          </span>
+                                                        </AntdIcon>
+                                                      </ForwardRef(InboxOutlined)>
+                                                    </p>
+                                                    <p
+                                                      className="ant-upload-text"
+                                                    >
+                                                      Click or drag file to this area to upload
+                                                    </p>
+                                                    <p
+                                                      className="ant-upload-hint"
+                                                    >
+                                                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+                                                    </p>
+                                                  </div>
+                                                </span>
+                                              </AjaxUploader>
+                                            </Upload>
+                                          </div>
+                                          <LocaleReceiver
+                                            componentName="Upload"
+                                            defaultLocale={
+                                              Object {
+                                                "downloadFile": "Download file",
+                                                "previewFile": "Preview file",
+                                                "removeFile": "Remove file",
+                                                "uploadError": "Upload error",
+                                                "uploading": "Uploading...",
+                                              }
+                                            }
+                                          >
+                                            <UploadList
+                                              isImageUrl={[Function]}
+                                              items={Array []}
+                                              listType="text"
+                                              locale={
+                                                Object {
+                                                  "downloadFile": "Download file",
+                                                  "previewFile": "Preview file",
+                                                  "removeFile": "Remove file",
+                                                  "uploadError": "Upload error",
+                                                  "uploading": "Uploading...",
+                                                }
+                                              }
+                                              onRemove={[Function]}
+                                              previewFile={[Function]}
+                                              progress={
+                                                Object {
+                                                  "showInfo": false,
+                                                  "strokeWidth": 2,
+                                                }
+                                              }
+                                              showDownloadIcon={false}
+                                              showPreviewIcon={true}
+                                              showRemoveIcon={true}
+                                            >
+                                              <Animate
+                                                animation={Object {}}
+                                                className="ant-upload-list ant-upload-list-text"
+                                                component="div"
+                                                componentProps={Object {}}
+                                                onAppear={[Function]}
+                                                onEnd={[Function]}
+                                                onEnter={[Function]}
+                                                onLeave={[Function]}
+                                                transitionAppear={false}
+                                                transitionEnter={true}
+                                                transitionLeave={true}
+                                                transitionName=""
+                                              >
+                                                <div
+                                                  className="ant-upload-list ant-upload-list-text"
+                                                />
+                                              </Animate>
+                                            </UploadList>
+                                          </LocaleReceiver>
+                                        </span>
+                                      </Upload>
+                                    </Dragger>
+                                  </div>
+                                </Col>
+                              </div>
+                            </Row>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+                  </Col>
+                </div>
+              </Row>
+            </section>
+          </BasicLayout>
+        </Layout>
+      </section>
+    </BasicLayout>
+  </Layout>
+</UploadButton>
+`;
