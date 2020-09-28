@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Button, Layout, Form, Input, Typography, Select, Divider } from "antd";
+import {
+  Button,
+  Layout,
+  Form,
+  Input,
+  Typography,
+  Select,
+  Divider,
+  message,
+} from "antd";
+import axios from "axios";
 
 import { UserSwitchOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
@@ -11,8 +21,40 @@ export default class CreateAccountsComponent extends Component {
     super(props);
     this.state = {
       role: false,
+      nUssername: "",
+      nPassword: "",
+      nRole: "",
     };
   }
+  updateAccount = async (user_id, vUsername, vPassword, vRole) => {
+    return axios
+      .put(`/api/auth/user/${user_id}`, {
+        username: vUsername,
+        password: vPassword,
+        role: vRole,
+      })
+      .then((res) => {
+        message.error("User Updated");
+        return true;
+      })
+      .catch((error) => {
+        return false;
+      });
+  };
+  handleChangeUsername = (event) => {
+    this.setState({
+      nUssername: event.target.value,
+    });
+  };
+  handleChangePassword = (event) => {
+    this.setState({
+      password: event.target.value,
+    });
+  };
+  handleChangeRole = (value) => {
+    this.setState({ nRole: value });
+  };
+
   render() {
     const layout = {
       labelCol: { span: 8 },
@@ -29,9 +71,6 @@ export default class CreateAccountsComponent extends Component {
       number: {
         range: "${label} must be between ${min} and ${max}",
       },
-    };
-    const onGenderChange = (value) => {
-      this.setState({ role: value });
     };
 
     const onFinish = (values) => {
@@ -89,39 +128,21 @@ export default class CreateAccountsComponent extends Component {
             validateMessages={validateMessages}
             style={{ width: "30vh", marginRight: 50 }}
           >
-            <Form.Item
-              name={["user", "name"]}
-              label="Name"
-              rules={[{ required: true }]}
-            >
-              <Input />
+            <Form.Item name={["user", "Id"]} label="Id">
+              <Input placeholder={this.props.info.id} />
             </Form.Item>
-            <Form.Item
-              name={["user", "email"]}
-              label="Email"
-              rules={[{ type: "email" }]}
-            >
-              <Input />
+            <Form.Item name={["user", "Name"]} label="Name">
+              <Input placeholder={this.props.info.username} />
             </Form.Item>
             <Form.Item
               name={["user", "age"]}
               label="Role"
               rules={[{ type: "string", min: 0, max: 99 }]}
             >
-              <Select
-                placeholder="Select a option and change input text above"
-                onChange={onGenderChange}
-                allowClear
-              >
-                <Option value="administrator">Administrator</Option>
-                <Option value="view-only">View Only</Option>
-                <Option value="planner">Planner</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item name={["user", "introduction"]} label="Introduction">
-              <Input.TextArea />
+              <Select placeholder={this.props.info.role}></Select>
             </Form.Item>
           </Form>
+
           <Form
             {...layout}
             name="nest-messages"
@@ -129,28 +150,37 @@ export default class CreateAccountsComponent extends Component {
             validateMessages={validateMessages}
             style={{ width: "40vh", marginRight: 50 }}
           >
+            <Form.Item name={["user", "Id"]} label="Id">
+              <Input placeholder={this.props.info.id} />
+            </Form.Item>
             <Form.Item
-              name={["user", "name"]}
-              label="Name"
+              name={["user", "Username"]}
+              label="Username"
               rules={[{ required: true }]}
             >
-              <Input />
+              <Input
+                value={this.state.nUssername}
+                onChange={this.handleChangeUsername}
+              />
             </Form.Item>
             <Form.Item
-              name={["user", "email"]}
-              label="Email"
-              rules={[{ type: "email" }]}
+              name={["user", "Password"]}
+              label="Password"
+              rules={[{ required: true }]}
             >
-              <Input />
+              <Input
+                value={this.state.nPassword}
+                onChange={this.handleChangePassword}
+              />
             </Form.Item>
             <Form.Item
-              name={["user", "age"]}
+              name={["user", "Role"]}
               label="Role"
-              rules={[{ type: "string", min: 0, max: 99 }]}
+              rules={[{ type: "string", min: 0, max: 99, required: true }]}
             >
               <Select
                 placeholder="Select a option and change input text above"
-                onChange={onGenderChange}
+                onChange={this.handleChangeRole}
                 allowClear
               >
                 <Option value="administrator">Administrator</Option>
@@ -158,11 +188,19 @@ export default class CreateAccountsComponent extends Component {
                 <Option value="planner">Planner</Option>
               </Select>
             </Form.Item>
-            <Form.Item name={["user", "introduction"]} label="Introduction">
-              <Input.TextArea />
-            </Form.Item>
             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                onClick={() =>
+                  this.updateAccount(
+                    this.props.info.id,
+                    this.state.nUssername,
+                    this.state.nPassword,
+                    this.state.nRole
+                  )
+                }
+              >
                 Submit
               </Button>
             </Form.Item>

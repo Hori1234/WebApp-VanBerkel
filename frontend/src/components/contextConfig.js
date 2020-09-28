@@ -5,6 +5,7 @@ export const AuthContext = React.createContext({
   status: "pending",
   error: null,
   user: null,
+  getUsersStatus: "pending",
 });
 
 const AuthProvider = (props) => {
@@ -12,6 +13,7 @@ const AuthProvider = (props) => {
     status: "pending",
     error: null,
     user: null,
+    getUsersStatus: "pending",
   });
 
   React.useEffect((state) => {
