@@ -6,6 +6,7 @@ from backend.extensions import roles_required
 from . import bp
 from .schemas import FileSchema
 from .SheetParser import TruckAvailabilityParser, OrderListParser
+from backend.app import db
 
 
 @bp.route('/')
@@ -67,7 +68,14 @@ class Sheets(MethodView):
                           )
 
                 # parse the data using a Marshmallow schema
-                parser.parse()
+                data = parser.parse()
+
+                sheet = parser.sheet_table()
+                orders = [parser.row_table(**row) for row in data]
+                sheet.add_rows(orders)
+                db.session.add(sheet)
+                db.session.commit()
+
         except XLRDError:
             # The file could not be read by the spreadsheet parser
             abort(400,

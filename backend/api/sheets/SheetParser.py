@@ -6,6 +6,9 @@ from marshmallow.exceptions import ValidationError
 from marshmallow.fields import String, Integer, Boolean, Float
 from pandas import read_excel, notnull
 from backend.extensions import TimeValidation as Time, DateValidation as Date
+from backend.models.orders import Order, OrderSheet
+from backend.models.trucks import Truck, TruckSheet
+from backend.app import db
 
 
 class TruckAvailabilitySchema(Schema):
@@ -20,7 +23,7 @@ class TruckAvailabilitySchema(Schema):
     but will not be tested against type.
     """
 
-    id = String(data_key='Truck ID', required=True)
+    truck_id = String(data_key='Truck ID', required=True)
     s_number = Integer(data_key='Truck S No', required=True)
     availability = Boolean(data_key='Availability of truck', required=True)
     truck_type = String(data_key='Truck type', required=True)
@@ -85,10 +88,10 @@ class OrderListSchema(Schema):
     latest_dep_time = Integer(data_key='Latest Dep Time', required=True)
     truck_type = String(data_key='truck type', required=True)
     hierarchy = Float(data_key='Hierarchy', required=True)
-    delivery_deadline = Float(data_key='Delivery Deadline', required=True)
+    delivery_deadline = Integer(data_key='Delivery Deadline', required=True)
     driving_time = Integer(data_key='driving time', required=True)
     process_time = Integer(data_key='proces time', required=True)
-    service_time = Float(data_key='service time', required=True)
+    service_time = Integer(data_key='service time', required=True)
 
     class Meta:
         unknown = INCLUDE
@@ -141,6 +144,11 @@ class SheetParser(abc.ABC):
     schema: Type[Schema]
     """:class:`marshmallow.Schema` which validates the data
     on typing and missing values."""
+    sheet_table: Type[db.Model]
+    """:class:`flask_sqlalchemy.Model` Table that stores the data sheets"""
+    row_table: Type[db.Model]
+    """:class:`flask_sqlalchemy.Model` 
+    Table that stores the rows of the data sheets"""
 
     def __init__(self, file, *args, **kwargs):
         """Constructor method"""
@@ -226,6 +234,8 @@ class TruckAvailabilityParser(SheetParser):
                         'Truck type', 'Terminal Base', 'Truck Hierarchy',
                         'Truck Use Cost', 'Starting time', 'Date'}
     schema = TruckAvailabilitySchema
+    sheet_table = TruckSheet
+    row_table = Truck
 
 
 class OrderListParser(SheetParser):
@@ -237,6 +247,8 @@ class OrderListParser(SheetParser):
                         'Hierarchy', 'Delivery Deadline', 'driving time',
                         'proces time', 'service time'}
     schema = OrderListSchema
+    sheet_table = OrderSheet
+    row_table = Order
 
     def __init__(self, file):
         super().__init__(file)
@@ -259,3 +271,4 @@ class OrderListParser(SheetParser):
 
             for key, new_name in key_replacements.items():
                 i[new_name] = i.pop(key)
+        return data
