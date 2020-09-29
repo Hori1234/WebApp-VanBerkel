@@ -41,7 +41,7 @@ describe('React App', () => {
     await page.waitForSelector('#basic_username');
 
     await page.type('#basic_username', username);
-    await page.type('#basic_password', 'caca');
+    await page.type('#basic_password', password);
 
     await page.click('.ant-btn-primary');
 

@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 
 describe('React App', () => {
 
-  const username = "asd";
-  const password = "asd";
+  const username = "test";
+  const password = "test";
 
   it('succesfully go to the view planning page with homepage after logging in', async () => {
 
@@ -17,8 +17,13 @@ describe('React App', () => {
 
     await page.waitForSelector('#basic_username');
 
+<<<<<<< Updated upstream
     await page.type('#basic_username', username);
     await page.type('#basic_password', password);
+=======
+    await page.type('#basic_username', 'test');
+    await page.type('#basic_password', 'test');
+>>>>>>> Stashed changes
 
     await page.click('.ant-btn-primary');
 
@@ -42,8 +47,13 @@ describe('React App', () => {
 
     await page.waitForSelector('#basic_username');
 
+<<<<<<< Updated upstream
     await page.type('#basic_username', username);
     await page.type('#basic_password', password);
+=======
+    await page.type('#basic_username', 'test');
+    await page.type('#basic_password', 'test');
+>>>>>>> Stashed changes
 
     await page.click('.ant-btn-primary');
 
@@ -67,8 +77,13 @@ describe('React App', () => {
 
     await page.waitForSelector('#basic_username');
 
+<<<<<<< Updated upstream
     await page.type('#basic_username', username);
     await page.type('#basic_password', password);
+=======
+    await page.type('#basic_username', 'test');
+    await page.type('#basic_password', 'test');
+>>>>>>> Stashed changes
 
     await page.click('.ant-btn-primary');
 
@@ -92,8 +107,13 @@ describe('React App', () => {
 
     await page.waitForSelector('#basic_username');
 
+<<<<<<< Updated upstream
     await page.type('#basic_username', username);
     await page.type('#basic_password', password);
+=======
+    await page.type('#basic_username', 'test');
+    await page.type('#basic_password', 'test');
+>>>>>>> Stashed changes
 
     await page.click('.ant-btn-primary');
 
@@ -117,8 +137,13 @@ describe('React App', () => {
 
     await page.waitForSelector('#basic_username');
 
+<<<<<<< Updated upstream
     await page.type('#basic_username', username);
     await page.type('#basic_password', password);
+=======
+    await page.type('#basic_username', 'test');
+    await page.type('#basic_password', 'test');
+>>>>>>> Stashed changes
 
     await page.click('.ant-btn-primary');
 
@@ -144,8 +169,13 @@ describe('React App', () => {
 
     await page.waitForSelector('#basic_username');
 
+<<<<<<< Updated upstream
     await page.type('#basic_username', username);
     await page.type('#basic_password', password);
+=======
+    await page.type('#basic_username', 'test');
+    await page.type('#basic_password', 'test');
+>>>>>>> Stashed changes
 
     await page.click('.ant-btn-primary');
 
