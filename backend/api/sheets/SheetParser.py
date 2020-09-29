@@ -148,7 +148,7 @@ class SheetParser(abc.ABC):
     sheet_table: Type[db.Model]
     """:class:`flask_sqlalchemy.Model` Table that stores the data sheets"""
     row_table: Type[db.Model]
-    """:class:`flask_sqlalchemy.Model` 
+    """:class:`flask_sqlalchemy.Model`
     Table that stores the rows of the data sheets"""
 
     def __init__(self, file, *args, **kwargs):
@@ -220,10 +220,26 @@ class SheetParser(abc.ABC):
 
     @staticmethod
     def post_dataframe(dataframe):
+        """
+        Template method to edit the dataframe before parsing for sub classes.
+
+        :param dataframe: Result of reading `file` using pandas
+        :type dataframe: :class:`pandas.DataFrame`
+        :return: The (edited) dataframe
+        :rtype: :class:`pandas.DataFrame`
+        """
         return dataframe
 
     @staticmethod
     def post_parse(data):
+        """
+        Template method to edit the parsed data.
+
+        :param data: The parsed data
+        :type data: List[Dict]
+        :return: The (edited) data
+        :rtype: List[Dict]
+        """
         return data
 
     @staticmethod
@@ -263,20 +279,31 @@ class OrderListParser(SheetParser):
 
     @staticmethod
     def post_dataframe(dataframe):
+        # Change duplicate column names to read more easily
+        # Example: 'Truck.1' is changed to 'Truck (1)'
         dataframe.columns = [re.sub(r'[.](\d+)', ' (\g<1>)', i)  # noqa W605
                              for i in dataframe.columns]
+
+        # Replace '.' with another character, as Marshmallow thinks that
+        # a key, value item 'a.b': 'c' means {'a': {'b': 'c'}}
         dataframe.columns = [re.sub(r'[.]', '*', i) for i in dataframe.columns]
         return dataframe
 
     @staticmethod
     def post_parse(data):
+        # Change back the replaced character in :meth:`post_dataframe`
+        # to '.'
         for i in data:
+            # Keys are the old column names, values are the new column names
             key_replacements = {}
 
+            # Find new column names
             for key in i.keys():
                 new_name = re.sub(r'[*]', '.', key)
                 key_replacements[key] = new_name
 
+            # Replace old column names
             for key, new_name in key_replacements.items():
                 i[new_name] = i.pop(key)
+
         return data
