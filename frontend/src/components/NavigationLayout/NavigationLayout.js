@@ -13,6 +13,7 @@ import AccountManagementLayout from "../AccountManagerLayout/AccountManagementLa
 import "../Css/NavigationLayout.css";
 import Logout from "../Logout/Logout";
 import { useAuth } from '../contextConfig'
+import ManualPlanning from "../ManualPlanning/ManualPlanning";
 const { SubMenu } = Menu;
 const { Content, Sider, Footer } = Layout;
 
@@ -187,7 +188,9 @@ export default function NavigationLayout() {
                       <AccountManagementLayout />
                     </Route>
                     <Route path="/logout"><Logout/></Route>
-                    <Route path="/planning"></Route>
+                    <Route path="/planning">
+                      <ManualPlanning />
+                    </Route>
                     <Route path="/view"></Route>
                     <Route path="/data"></Route>
                     <Route path="/montly"></Route>
