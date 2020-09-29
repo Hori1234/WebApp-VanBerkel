@@ -13,70 +13,134 @@ import {
 import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
 const {Option} = Select;
-const data = [
-  {
-    key: "1",
-    bookingNr: "923928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
-  {
-    key: "2",
-    bookingNr: "12392801",
-    address: "Amsterdam",
-    customer: "ACC",
-    truckId: "",
-  },
-  {
-    key: "3",
-    bookingNr: "23",
-    address: "Utrecht",
-    customer: "CAC",
-    truckId: "",
-  },
-  {
-    key: "4",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ZZZ",
-    truckId: "",
-  },
-  {
-    key: "5",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
-  {
-    key: "6",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
-  {
-    key: "7",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
-  {
-    key: "8",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
-  {
-    key: "9",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
+const dataITV= [
+    {
+        key: '1',
+        bookingNr: '923928012',
+        address: 'Eindhoven',
+        customer: 'ITV',
+        truckId: '',
+    }, {
+        key: '2',
+        bookingNr: '12392801',
+        address: 'Amsterdam',
+        customer: 'ITV',
+        truckId: '',
+    },
+    {
+        key: '3',
+        bookingNr: '23',
+        address: 'Utrecht',
+        customer: 'ITV',
+        truckId: '',
+    },
+    {
+        key: '4',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ITV',
+        truckId: '',
+    },
+    {
+        key: '5',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ITV',
+        truckId: '',
+    },
+    {
+        key: '6',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ITV',
+        truckId: '',
+    },
+    {
+        key: '7',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ITV',
+        truckId: '',
+    },
+    {
+        key: '8',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+    {
+        key: '9',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+
+];
+const dataKAT = [
+    {
+        key: '1',
+        bookingNr: '923928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
+        truckId: '',
+    }, {
+        key: '2',
+        bookingNr: '12392801',
+        address: 'Amsterdam',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '3',
+        bookingNr: '23',
+        address: 'Utrecht',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '4',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '5',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '6',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '7',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '8',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+    {
+        key: '9',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
 ];
 const data2 = [
   {
@@ -136,7 +200,7 @@ const data2 = [
 ];
 const columns2 = [
   {
-    title: "TruckId",
+    title: "Truck ID",
     dataIndex: "truckId",
     sortDirections: ["descend", "ascend"],
     sorter: (a, b) => a.truckId.localeCompare(b.truckId),
@@ -167,40 +231,104 @@ export default class ManualPlanning extends Component {
             isVisible: false,
             columns: [
                 {
-                    title: "BookingNr",
-                    dataIndex: "bookingNr",
+                    title: 'Booking Nr',
+                    dataIndex: 'bookingNr',
                     sorter: (a, b) => a.bookingNr - b.bookingNr,
                     width: 110,
                 },
                 {
-                    title: "Address",
-                    dataIndex: "address",
-                    sortDirections: ["descend", "ascend"],
+                    title: 'Address',
+                    dataIndex: 'address',
+                    sortDirections: ['descend', 'ascend'],
                     sorter: (a, b) => a.address.localeCompare(b.address),
                     width: 100,
-                },
-                {
-                    title: "Customer",
-                    dataIndex: "customer",
-                    sortDirections: ["descend", "ascend"],
+
+                },{
+                    title: 'Customer',
+                    dataIndex: 'customer',
+                    sortDirections: ['descend', 'ascend'],
                     sorter: (a, b) => a.customer.localeCompare(b.customer),
                     width: 100,
-                },
-                {
-                    title: "TruckId",
-                    dataIndex: "truckId",
+
+                },{
+                    title: 'Truck ID',
+                    dataIndex: 'truckId',
                     width: 90,
+                },{
+
+                    title: 'Delivery Deadline',
+                    dataIndex: 'deliveryDeadline',
+                    width: 100,
+                },{
+
+                    title: 'Process Time',
+                    dataIndex: 'processTime',
+                    width: 100,}
+            ],
+            data: [
+                {
+                    key: '1',
+                    bookingNr: '923928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                }, {
+                    key: '2',
+                    bookingNr: '12392801',
+                    address: 'Amsterdam',
+                    customer: 'ACC',
+                    truckId: '',
                 },
                 {
-                    title: "DeliveryDeadline",
-                    dataIndex: "deliveryDeadline",
-                    width: 100,
+                    key: '3',
+                    bookingNr: '23',
+                    address: 'Utrecht',
+                    customer: 'CAC',
+                    truckId: '',
                 },
                 {
-                    title: "ProcessTime",
-                    dataIndex: "processTime",
-                    width: 100,
+                    key: '4',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ZZZ',
+                    truckId: '',
                 },
+                {
+                    key: '5',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+                {
+                    key: '6',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+                {
+                    key: '7',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+                {
+                    key: '8',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+                {
+                    key: '9',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+
             ],
             startingColumns: [],
             AOVisible: false,
@@ -209,43 +337,49 @@ export default class ManualPlanning extends Component {
     }
 
     componentDidMount() {
-        this.setState({startingColumns: this.state.columns});
+        this.setState({startingColumns: this.state.columns})
     }
-    changeVisibility = (isTrue) => {
+    changeVisibility = isTrue => {
         this.setState({isVisible: isTrue});
     };
     filterColumns = (e) => {
-        var columnFilter = this.state.columnFilter;
+        var columnFilter = this.state.columnFilter
         if (e.target.checked) {
-            columnFilter = columnFilter.filter((current) => {
-                return current !== e.target.id;
-            });
+            columnFilter = columnFilter.filter(current => {
+                return current !== e.target.id
+            })
         } else if (!e.target.checked) {
-            columnFilter.push(e.target.id);
+            columnFilter.push(e.target.id)
         }
         var final = this.state.startingColumns;
         for (var i = 0; i < columnFilter.length; i++)
-            final = final.filter((current) => {
-                return current.dataIndex !== columnFilter[i];
-            });
-        this.setState({columns: final, columnFilter: columnFilter});
-    };
+            final = final.filter(current => {
+                return current.dataIndex !== columnFilter[i]
+            })
+        this.setState({columns: final, columnFilter: columnFilter})
+    }
+    changeData = (d) => {
+        if (d == "KAT"){
+            this.setState({data: dataKAT})
+        }
+        else if (d == "ITV"){
+            this.setState({data: dataITV})
+        }
+
+    }
     selectOrdersRow = (record) => {
         const selectedOrdersRowKeys = [...this.state.selectedOrdersRowKeys];
         if (selectedOrdersRowKeys.indexOf(record.key) >= 0) {
-            selectedOrdersRowKeys.splice(
-                selectedOrdersRowKeys.indexOf(record.key),
-                1
-            );
+            selectedOrdersRowKeys.splice(selectedOrdersRowKeys.indexOf(record.key), 1);
         } else {
             selectedOrdersRowKeys.push(record.key);
         }
         this.setState({selectedOrdersRowKeys});
-    };
+    }
     onSelectedOrdersRowKeysChange = (selectedOrdersRowKeys) => {
         this.setState({selectedOrdersRowKeys});
-        console.log("orders", selectedOrdersRowKeys);
-    };
+        console.log('orders', selectedOrdersRowKeys);
+    }
     selectTrucksRow = (record) => {
         const selectedTrucksRowKeys = [...this.state.selectedTrucksRowKeys];
         if (selectedTrucksRowKeys.indexOf(record.key) >= 0) {
@@ -290,8 +424,8 @@ export default class ManualPlanning extends Component {
             <Menu>
                 <Menu.ItemGroup title="Columns">
                     <Menu.Item key="addressMenu">
-                        <Checkbox id="address" onChange={this.filterColumns} defaultChecked>
-                            Address
+                        <Checkbox id="address" onChange={this.filterColumns}
+                            defaultChecked>Address
                         </Checkbox>
                     </Menu.Item>
                     <Menu.Item key="customerMenu">
@@ -328,7 +462,7 @@ export default class ManualPlanning extends Component {
                     </Menu.Item>
                 </Menu.ItemGroup>
             </Menu>
-        );
+        )
         const {selectedOrdersRowKeys} = this.state;
         const {selectedTrucksRowKeys} = this.state;
         const ordersRowSelection = {
@@ -343,7 +477,7 @@ export default class ManualPlanning extends Component {
             <Layout style={{width: "100%", backgroundColor: "white"}}>
                 <Row gutter={[0, 10]}>
                     <Col span={8}>
-                        <Select defaultValue="ITV" style={{width: 120}}>
+                        <Select defaultValue="ITV" onChange={this.changeData}style={{width: 120}}>
                             <Option value="ITV">ITV</Option>
                             <Option value="KAT">KAT</Option>
                         </Select>
@@ -351,13 +485,13 @@ export default class ManualPlanning extends Component {
                         <Dropdown
                             overlay={showHideMenu}
                             onVisibleChange={this.changeVisibility}
-                            visible={this.state.isVisible}
-                        >
+                            visible={this.state.isVisible}>
+
                             <Button>Show/Hide</Button>
                         </Dropdown>
                     </Col>
                     <Col span={3} offset={13}>
-                        <Button>Data visualization</Button>
+                        <Button onClick={() => window.open("/data")}>Data visualization</Button>
                     </Col>
                 </Row>
                 <Row gutter={[24, 8]} justify="space-around" align="middle">
@@ -365,27 +499,27 @@ export default class ManualPlanning extends Component {
                         <Table
                             bordered={true}
                             rowSelection={ordersRowSelection}
-                            dataSource={data}
+                            dataSource={this.state.data}
                             columns={this.state.columns}
-                            scroll={{x: "max-content"}}
+                            scroll={{x: 'max-content'}}
                             scroll={{y: "50vh"}}
                             pagination={false}
                             onRow={(record) => ({
                                 onClick: () => {
                                     this.selectOrdersRow(record);
                                 },
-                            })}
-                        />
+                            })}/>
+
                         <Button onClick={this.showOrdersModal}>Add order</Button> &nbsp;&nbsp;
                         <Button>Delete order</Button>
                     </Col>
                     <Col span={3}>
                         <Row>
-                            <button style={{width: "100%"}}>assign</button>
+                            <button style={{width: "100%"}}>Assign</button>
                         </Row>
                         <br/>
                         <Row>
-                            <button style={{width: "100%"}}>unassign</button>
+                            <button style={{width: "100%"}}>Unassign</button>
                         </Row>
                         <br/>
                         <Row>
@@ -398,15 +532,15 @@ export default class ManualPlanning extends Component {
                             rowSelection={trucksRowSelection}
                             dataSource={data2}
                             columns={columns2}
-                            scroll={{x: "max-content"}}
+                            scroll={{x: 'max-content'}}
                             scroll={{y: "50vh"}}
                             pagination={false}
                             onRow={(record) => ({
                                 onClick: () => {
                                     this.selectTrucksRow(record);
-                                },
-                            })}
-                        />
+
+                            },
+                        })}/>
                         <Button onClick={this.ShowTruckModal}>Add truck</Button> &nbsp;&nbsp;
                         <Button>Delete truck</Button>
                     </Col>
@@ -429,6 +563,6 @@ export default class ManualPlanning extends Component {
                     {this.state.ATVisible && <AddTruckLayout/>}
                 </Modal>
             </Layout>
-        );
+        )
     }
 }
