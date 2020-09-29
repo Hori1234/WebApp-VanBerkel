@@ -2,53 +2,118 @@ import React, {Component} from "react";
 import {Layout, Button, Row, Col, Table, Select, Menu, Checkbox, Dropdown} from 'antd';
 
 const {Option} = Select;
-const data = [
+const dataITV= [
     {
         key: '1',
         bookingNr: '923928012',
         address: 'Eindhoven',
-        customer: 'ABC',
+        customer: 'ITV',
         truckId: '',
     }, {
         key: '2',
         bookingNr: '12392801',
         address: 'Amsterdam',
-        customer: 'ACC',
+        customer: 'ITV',
         truckId: '',
     },
     {
         key: '3',
         bookingNr: '23',
         address: 'Utrecht',
-        customer: 'CAC',
+        customer: 'ITV',
         truckId: '',
     },
     {
         key: '4',
         bookingNr: '23928012',
         address: 'Eindhoven',
-        customer: 'ZZZ',
+        customer: 'ITV',
         truckId: '',
     },
     {
         key: '5',
         bookingNr: '23928012',
         address: 'Eindhoven',
-        customer: 'ABC',
+        customer: 'ITV',
         truckId: '',
     },
     {
         key: '6',
         bookingNr: '23928012',
         address: 'Eindhoven',
-        customer: 'ABC',
+        customer: 'ITV',
         truckId: '',
     },
     {
         key: '7',
         bookingNr: '23928012',
         address: 'Eindhoven',
+        customer: 'ITV',
+        truckId: '',
+    },
+    {
+        key: '8',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
         customer: 'ABC',
+        truckId: '',
+    },
+    {
+        key: '9',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'ABC',
+        truckId: '',
+    },
+
+];
+const dataKAT = [
+    {
+        key: '1',
+        bookingNr: '923928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
+        truckId: '',
+    }, {
+        key: '2',
+        bookingNr: '12392801',
+        address: 'Amsterdam',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '3',
+        bookingNr: '23',
+        address: 'Utrecht',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '4',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '5',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '6',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
+        truckId: '',
+    },
+    {
+        key: '7',
+        bookingNr: '23928012',
+        address: 'Eindhoven',
+        customer: 'KAT',
         truckId: '',
     },
     {
@@ -188,6 +253,71 @@ export default class ManualPlanning extends Component {
                     width: 100,
                 }
             ],
+            data: [
+                {
+                    key: '1',
+                    bookingNr: '923928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                }, {
+                    key: '2',
+                    bookingNr: '12392801',
+                    address: 'Amsterdam',
+                    customer: 'ACC',
+                    truckId: '',
+                },
+                {
+                    key: '3',
+                    bookingNr: '23',
+                    address: 'Utrecht',
+                    customer: 'CAC',
+                    truckId: '',
+                },
+                {
+                    key: '4',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ZZZ',
+                    truckId: '',
+                },
+                {
+                    key: '5',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+                {
+                    key: '6',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+                {
+                    key: '7',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+                {
+                    key: '8',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+                {
+                    key: '9',
+                    bookingNr: '23928012',
+                    address: 'Eindhoven',
+                    customer: 'ABC',
+                    truckId: '',
+                },
+            
+            ],
             startingColumns: []
         };
     }
@@ -213,6 +343,15 @@ export default class ManualPlanning extends Component {
                 return current.dataIndex !== columnFilter[i]
             })
         this.setState({columns: final, columnFilter: columnFilter})
+    }
+    changeData = (d) => {
+        if (d == "KAT"){
+            this.setState({data: dataKAT})
+        }
+        else if (d == "ITV"){
+            this.setState({data: dataITV})
+        }
+
     }
     selectOrdersRow = (record) => {
         const selectedOrdersRowKeys = [...this.state.selectedOrdersRowKeys];
@@ -275,9 +414,9 @@ export default class ManualPlanning extends Component {
             <Layout style={{width: "100%", backgroundColor: "white"}}>
                 <Row gutter={[0, 10]}>
                     <Col span={8}>
-                        <Select defaultValue="ITV" style={{width: 120}}>
-                            <Option value="ITV">ITV</Option>
-                            <Option value="KAT">KAT</Option>
+                        <Select defaultValue="ITV" onChange={this.changeData} style={{width: 120}}>
+                            <Option value="ITV" >ITV</Option>
+                            <Option value="KAT" >KAT</Option>
                         </Select>
                         &nbsp;
                         <Dropdown overlay={showHideMenu} onVisibleChange={this.changeVisibility}
@@ -292,7 +431,7 @@ export default class ManualPlanning extends Component {
                 </Row>
                 <Row gutter={[24, 8]} justify="space-around" align="middle">
                     <Col span={12}>
-                        <Table bordered={true} rowSelection={ordersRowSelection} dataSource={data}
+                        <Table bordered={true} rowSelection={ordersRowSelection} dataSource={this.state.data}
                                columns={this.state.columns}
                                scroll={{x: 'max-content'}} scroll={{y: "50vh"}} pagination={false} onRow={(record) => ({
                             onClick: () => {
