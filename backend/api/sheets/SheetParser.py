@@ -1,6 +1,7 @@
 import abc
 import re
 from typing import Type
+import datetime
 from marshmallow import validates, Schema, INCLUDE
 from marshmallow.exceptions import ValidationError
 from marshmallow.fields import String, Integer, Boolean, Float
@@ -195,7 +196,8 @@ class SheetParser(abc.ABC):
         :return: The data that has been parsed and validated.
         :rtype: `List[dict]`
         """
-        data_dict = [{k: v for k, v in row.items() if notnull(v)}
+        data_dict = [{k: self.convert_time(v)
+                      for k, v in row.items() if notnull(v)}
                      for row in self.dataframe.to_dict(orient='records')]
         return self.post_parse(self.schema(many=True).load(data_dict))
 
@@ -224,6 +226,12 @@ class SheetParser(abc.ABC):
     def post_parse(data):
         return data
 
+    @staticmethod
+    def convert_time(value):
+        if isinstance(value, datetime.time):
+            return value.strftime('%H:%M')
+        return value
+
 
 class TruckAvailabilityParser(SheetParser):
     """
@@ -243,9 +251,9 @@ class OrderListParser(SheetParser):
     Parses the order list sheet.
     """
     unique_columns = {'Order Number'}
-    required_columns = {'Order Number', 'Latest Dep Time', 'truck type',
-                        'Hierarchy', 'Delivery Deadline', 'driving time',
-                        'proces time', 'service time'}
+    required_columns = {'Order Number', 'Inl* ter*', 'Latest Dep Time',
+                        'truck type', 'Hierarchy', 'Delivery Deadline',
+                        'driving time', 'proces time', 'service time'}
     schema = OrderListSchema
     sheet_table = OrderSheet
     row_table = Order
