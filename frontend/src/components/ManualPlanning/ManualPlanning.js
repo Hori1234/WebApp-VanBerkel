@@ -200,7 +200,7 @@ const data2 = [
 ];
 const columns2 = [
   {
-    title: "TruckId",
+    title: "Truck ID",
     dataIndex: "truckId",
     sortDirections: ["descend", "ascend"],
     sorter: (a, b) => a.truckId.localeCompare(b.truckId),
@@ -231,7 +231,7 @@ export default class ManualPlanning extends Component {
             isVisible: false,
             columns: [
                 {
-                    title: 'BookingNr',
+                    title: 'Booking Nr',
                     dataIndex: 'bookingNr',
                     sorter: (a, b) => a.bookingNr - b.bookingNr,
                     width: 110,
@@ -250,15 +250,15 @@ export default class ManualPlanning extends Component {
                     sorter: (a, b) => a.customer.localeCompare(b.customer),
                     width: 100,
                 }, {
-                    title: 'TruckId',
+                    title: 'Truck ID',
                     dataIndex: 'truckId',
                     width: 90,
                 }, {
-                    title: 'DeliveryDeadline',
+                    title: 'Delivery Deadline',
                     dataIndex: 'deliveryDeadline',
                     width: 100,
                 }, {
-                    title: 'ProcessTime',
+                    title: 'Process Time',
                     dataIndex: 'processTime',
                     width: 100,
                 }
@@ -475,7 +475,7 @@ export default class ManualPlanning extends Component {
 
                     </Col>
                     <Col span={3} offset={13}>
-                        <Button>Data visualization</Button>
+                        <Button onClick={() => window.open("/data")}>Data visualization</Button>
                     </Col>
                 </Row>
                 <Row gutter={[24, 8]} justify="space-around" align="middle">
@@ -492,11 +492,11 @@ export default class ManualPlanning extends Component {
                     </Col>
                     <Col span={3}>
                         <Row>
-                            <button style={{width: "100%"}}>assign</button>
+                            <button style={{width: "100%"}}>Assign</button>
                         </Row>
                         <br/>
                         <Row>
-                            <button style={{width: "100%"}}>unassign</button>
+                            <button style={{width: "100%"}}>Unassign</button>
                         </Row>
                         <br/>
                         <Row>
