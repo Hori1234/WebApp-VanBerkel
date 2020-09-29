@@ -281,7 +281,7 @@ class OrderListParser(SheetParser):
     def post_dataframe(dataframe):
         # Change duplicate column names to read more easily
         # Example: 'Truck.1' is changed to 'Truck (1)'
-        dataframe.columns = [re.sub(r'[.](\d+)', ' (\g<1>)', i)  # noqa W605
+        dataframe.columns = [re.sub(r'[.](\d+)', r' (\g<1>)', i)
                              for i in dataframe.columns]
 
         # Replace '.' with another character, as Marshmallow thinks that
@@ -299,7 +299,7 @@ class OrderListParser(SheetParser):
 
             # Find new column names
             for key in i.keys():
-                new_name = re.sub(r'[*]', '.', key)
+                new_name = re.sub(r'[*]', r'.', key)
                 key_replacements[key] = new_name
 
             # Replace old column names

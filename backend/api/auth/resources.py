@@ -124,7 +124,7 @@ class UserByID(MethodView):
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
     @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
-    def put(self, req, user_id):
+    def patch(self, req, user_id):
         """
         Change the information of a user.
 
