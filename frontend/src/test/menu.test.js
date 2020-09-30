@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 
 describe('React App', () => {
 
-  const username = "asd";
-  const password = "asd";
+  const username = "test";
+  const password = "test";
 
   it('succesfully go to the user management page with the side menu after logging in', async () => {
 

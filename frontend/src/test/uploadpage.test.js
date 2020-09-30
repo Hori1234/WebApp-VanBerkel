@@ -32,6 +32,7 @@ describe('React App', () => {
 
     await page.waitForSelector('input[type=file]');
     await page.waitFor(1000);
+
     const inputUploadHandle = await page.$('input[type=file]');
 
     inputUploadHandle.uploadFile(filePath);

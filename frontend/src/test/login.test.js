@@ -28,7 +28,7 @@ describe('React App', () => {
 
     expect(ErrorMessage).toEqual('account not valid');
 
-  }, 15000);
+  }, 120000);
 
   it('should redirect to correct page on succsesful login', async () => {
 
@@ -48,5 +48,5 @@ describe('React App', () => {
     await page.waitForSelector('.ant-layout-sider');
 
 
-  }, 10000);
+  }, 120000);
 });
