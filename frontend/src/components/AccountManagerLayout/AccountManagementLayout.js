@@ -10,10 +10,7 @@ import {
   Typography,
   Modal,
 } from "antd";
-import {
-  UserAddOutlined,
-  ArrowUpOutlined,
-} from "@ant-design/icons";
+import { UserAddOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 
 import CreateAccountsComponent from "./CreateAccountsComponent";
@@ -28,10 +25,22 @@ export default class AccountManagementLayout extends Component {
     this.state = {
       CAVisible: false,
       EAVisible: false,
-      DAVisible: false,
+      Metadata: {
+        id: "",
+        username: "",
+        role: "",
+      },
     };
   }
-  showModal = (value) => {
+
+  setUsers = (value) => {
+    this.setState({
+      users: value,
+    });
+  };
+
+  showModal = (value, vId, vUsername, vRole) => {
+    console.log(this.state.Metadata);
     switch (value) {
       case "ca":
         this.setState({
@@ -44,18 +53,19 @@ export default class AccountManagementLayout extends Component {
         this.setState({
           EAVisible: true,
         });
-        console.log("ea modal shown");
-        break;
-      case "da":
-        this.setState({
-          DAVisible: true,
+        this.setState((prevState) => {
+          let Metadata = Object.assign({}, prevState.Metadata); // creating copy of state variable Metadata
+          Metadata.id = vId; // update the name property, assign a new value
+          Metadata.username = vUsername;
+          Metadata.role = vRole;
+          return { Metadata }; // return new object Metadata object
         });
         console.log("ea modal shown");
         break;
       default:
       // no default
     }
-    console.log("modal shown");
+    console.log(this.state.Metadata);
   };
 
   handleOk = (e) => {
@@ -63,7 +73,6 @@ export default class AccountManagementLayout extends Component {
     this.setState({
       EAVisible: false,
       CAVisible: false,
-      DAVisible: false,
     });
   };
 
@@ -72,7 +81,6 @@ export default class AccountManagementLayout extends Component {
     this.setState({
       EAVisible: false,
       CAVisible: false,
-      DAVisible: false,
     });
   };
 
@@ -138,7 +146,11 @@ export default class AccountManagementLayout extends Component {
         </Layout>
         <Divider />
         <Layout
-          style={{ backgroundColor: "white", display: "flex", width: "100%" }}
+          style={{
+            backgroundColor: "white",
+            display: "flex",
+            width: "100%",
+          }}
         >
           <EditAccountComponent showModal={this.showModal} />
         </Layout>
@@ -171,7 +183,9 @@ export default class AccountManagementLayout extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          {this.state.EAVisible && <EditAccountModalComponent />}
+          {this.state.EAVisible && (
+            <EditAccountModalComponent info={this.state.Metadata} />
+          )}
         </Modal>
       </Layout>
     );

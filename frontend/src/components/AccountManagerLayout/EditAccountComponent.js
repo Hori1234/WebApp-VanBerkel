@@ -1,50 +1,86 @@
 import React, { Component } from "react";
-import {
-  Layout,
-  List,
-  Popover,
-  Spin,
-  Avatar,
-  Button,
-  message,
-} from "antd";
+import { Layout, List, Spin, Avatar, Button, message } from "antd";
 
-import axios from 'axios';
+import axios from "axios";
 
-import {
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import InfiniteScroll from "react-infinite-scroller";
 import "../Css/EditAC.css";
-
-const fakeDataUrl =
-  "https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo";
 
 export default class EditAccountComponent extends Component {
   state = {
     data: [],
     loading: false,
     hasMore: true,
-    visible: false,
-  };
-
-  handleVisibleChange = (visible) => {
-    this.setState({ visible });
+    error: "",
+    status: "",
   };
 
   componentDidMount() {
-    this.fetchData((res) => {
-      console.log(res);
-      this.setState({
-        data: res.data.results,
-      });
-    });
+    this.getUsers(1, 10);
+    console.log(this.state.data);
   }
 
-  fetchData = (callback) => {
-    axios(fakeDataUrl).then(callback);
+  getUsers = async (vPage, vPage_size) => {
+    return axios
+      .get("/api/auth/users", {
+        params: {
+          page: vPage,
+          page_size: vPage_size,
+        },
+      })
+      .then((res) => {
+        this.setState((state) => ({
+          ...state,
+          data: res.data,
+          status: "success",
+        }));
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+
+  deleteUser = (value) => {
+    return axios
+      .delete(`/api/auth/user/${value}`)
+      .then((res) => {
+        if (res.status === 404) {
+          message.error(res.message);
+        } else {
+          if (res.status === 204) {
+            message.error("Account succesfully deleted");
+          } else {
+            if (res.status === 401) {
+              message.error("Unauthorized Action");
+            } else {
+              message.error("Service Unavailable");
+            }
+          }
+        }
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+
+  deleteItemById = (id) => {
+    this.deleteUser(id);
+    const filteredData = this.state.data.filter((item) => item.id !== id);
+    this.setState({ data: filteredData });
   };
 
   handleInfiniteOnLoad = () => {
@@ -60,13 +96,13 @@ export default class EditAccountComponent extends Component {
       });
       return;
     }
-    this.fetchData((res) => {
-      data = data.concat(res.data.results);
-      this.setState({
-        data,
-        loading: false,
-      });
-    });
+    // this.fetchData((res) => {
+    //   data = data.concat(res.data.results);
+    //   this.setState({
+    //     data,
+    //     loading: false,
+    //   });
+    // });
   };
   render() {
     return (
@@ -94,39 +130,32 @@ export default class EditAccountComponent extends Component {
                     avatar={
                       <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                     }
-                    title={<a href="https://ant.design">{item.name.last}</a>}
-                    description={item.email}
+                    title={<a href="https://ant.design">{item.username}</a>}
+                    description={item.role}
                   />
                   <div>
                     <Button
                       style={{ marginRight: 20 }}
                       type="primary"
-                      onClick={() => this.props.showModal("ea")}
+                      onClick={() =>
+                        this.props.showModal(
+                          "ea",
+                          item.id,
+                          item.username,
+                          item.role
+                        )
+                      }
                       icon={<EditOutlined />}
                     >
                       Edit Account
                     </Button>
-                    <Popover
-                      content={
-                        <p
-                          onClick={() => {
-                            this.setState({
-                              visible: false,
-                            });
-                          }}
-                        >
-                          Close
-                        </p>
-                      }
-                      title="Title"
-                      trigger="click"
-                      visible={this.state.visible}
-                      onVisibleChange={this.handleVisibleChange}
+                    <Button
+                      type="primary"
+                      icon={<DeleteOutlined />}
+                      onClick={() => this.deleteItemById(item.id)}
                     >
-                      <Button type="primary" icon={<DeleteOutlined />}>
-                        Delete Account
-                      </Button>
-                    </Popover>
+                      Delete Account
+                    </Button>
                   </div>
                 </List.Item>
               )}
