@@ -333,6 +333,7 @@ export default class ManualPlanning extends Component {
             startingColumns: [],
             AOVisible: false,
             ATVisible: false,
+            magnifyOrders: false
         };
     }
 
@@ -406,6 +407,11 @@ export default class ManualPlanning extends Component {
             AOVisible: true,
         });
     }
+    magnifyOrdersModal = () => {
+        this.setState({
+            magnifyOrders: true,
+        });
+    }
     handleOk = (e) => {
         this.setState({
             AOVisible: false,
@@ -418,6 +424,12 @@ export default class ManualPlanning extends Component {
             ATVisible: false,
         });
     };
+    okMagnify = (e) => {
+        this.setState({magnifyOrders: false})
+    }
+    cancelMagnify = (e) => {
+        this.setState({magnifyOrders: false})
+    }
 
     render() {
         const showHideMenu = (
@@ -511,7 +523,8 @@ export default class ManualPlanning extends Component {
                             })}/>
                         <br/>
                         <Button onClick={this.showOrdersModal}>Add order</Button> &nbsp;&nbsp;
-                        <Button>Delete order</Button>
+                        <Button>Delete order</Button>&nbsp;&nbsp;
+                        <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
                     </Col>
                     <Col span={3}>
                         <Row>
@@ -562,6 +575,39 @@ export default class ManualPlanning extends Component {
                     onCancel={this.handleCancel}
                 >
                     {this.state.ATVisible && <AddTruckLayout/>}
+                </Modal>
+                <Modal
+                    title="Order List"
+                    visible={this.state.magnifyOrders}
+                    onOk={this.okMagnify}
+                    onCancel={this.cancelMagnify}
+                    width={1920}
+                    centered
+                >
+                    {this.state.magnifyOrders && 
+                    <Layout style={{width: "100%", backgroundColor: "white"}}>
+                        <Table
+                            bordered={true}
+                            rowSelection={ordersRowSelection}
+                            dataSource={this.state.data}
+                            columns={this.state.columns}
+                            scroll={{x: 'max-content'}}
+                            scroll={{y: "50vh"}}
+                            pagination={false}
+                            onRow={(record) => ({
+                                onClick: () => {
+                                    this.selectOrdersRow(record);
+                                },
+                            })}/>
+                        <Col span={12}>
+                            <br/>
+                            <Button onClick={this.showOrdersModal}>Add order</Button>&nbsp;&nbsp;
+                            <Button>Delete order</Button>
+                        </Col>
+                    </Layout>
+                        
+
+                            }
                 </Modal>
             </Layout>
         )
