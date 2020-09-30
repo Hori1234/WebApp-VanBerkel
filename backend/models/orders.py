@@ -2,6 +2,7 @@ from backend.app import db
 from sqlalchemy.sql import func
 from sqlalchemy.ext.orderinglist import ordering_list
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.ext.mutable import MutableDict
 
 
 class OrderSheet(db.Model):
@@ -30,7 +31,7 @@ class Order(db.Model):
     delivery_deadline = db.Column(db.Integer, nullable=False)
     driving_time = db.Column(db.Integer, nullable=False)
     process_time = db.Column(db.Integer, nullable=False)
-    others = db.Column(db.JSON)
+    others = db.Column(MutableDict.as_mutable(db.JSON))
 
     def __init__(self, inl_terminal: str, truck_type: str, hierarchy: float,
                  delivery_deadline: int, driving_time: int, process_time: int,
