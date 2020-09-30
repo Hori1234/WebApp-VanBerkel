@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { Button, Layout, Form, Input, Typography, Select, Divider } from "antd";
+import {
+  Button,
+  Layout,
+  Form,
+  Input,
+  Typography,
+  Select,
+  Divider,
+  message,
+} from "antd";
 import axios from "axios";
 
 import { UserAddOutlined } from "@ant-design/icons";
@@ -169,13 +178,15 @@ export default class CreateAccountsComponent extends Component {
               <Button
                 type="primary"
                 htmlType="submit"
-                onClick={() =>
+                onClick={() => {
                   this.addAccount(
                     this.state.username,
                     this.state.password,
                     this.state.role
-                  )
-                }
+                  );
+                  this.props.modalHandleOk();
+                  message.success("Account created !");
+                }}
               >
                 Submit
               </Button>
