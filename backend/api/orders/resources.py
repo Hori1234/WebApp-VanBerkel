@@ -10,7 +10,6 @@ from flask_smorest import abort
 
 @bp.route('/<int:sheet_id>')
 class Orders(MethodView):
-
     @roles_required('planner', 'administrator')
     @bp.response(OrderSchema(many=True))
     @bp.alt_response('NOT_FOUND', code=404)
@@ -46,3 +45,6 @@ class OrderByID(MethodView):
             abort(503,
                   message='Something went wrong on the server.',
                   status='Service Unavailable')
+
+
+
