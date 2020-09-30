@@ -14,16 +14,23 @@ class Orders(MethodView):
     @bp.response(OrderSchema(many=True))
     @bp.alt_response('NOT_FOUND', code=404)
     def get(self, sheet_id):
-        order_sheet = OrderSheet.query.get_or_404(sheet_id)
+        order_sheet = OrderSheet.query\
+            .get_or_404(sheet_id,
+                        description="Order sheet not found")
         return order_sheet.orders
 
     @roles_required('planner', 'administrator')
     @bp.arguments(OrderSchema)
     @bp.response(OrderSchema)
+    @bp.alt_response('NOT_FOUND', code=404)
     def post(self, order, sheet_id):
-        # TODO: Does not work yet
-        order = Order(id=sheet_id, **order)
-        return order
+        order_sheet = OrderSheet.query \
+            .get_or_404(sheet_id,
+                        description="Order sheet not found")
+        new_order = Order(**order)
+        order_sheet.add_row(new_order)
+        db.session.commit()
+        return new_order
 
 
 @bp.route('/<int:sheet_id>/<int:order_id>')

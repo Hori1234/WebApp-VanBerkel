@@ -170,6 +170,7 @@ def test_upload_order_missing_values(client):
     # something to assert that the values were missing
 
 
+@pytest.mark.skip('For now there are no unique columns in orders')
 def test_upload_order_duplicate_values(client):
     """
     Test a single order sheet with duplicate values

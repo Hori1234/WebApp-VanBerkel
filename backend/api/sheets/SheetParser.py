@@ -25,7 +25,6 @@ class TruckAvailabilitySchema(Schema):
     """
 
     truck_id = String(data_key='Truck ID', required=True)
-    s_number = Integer(data_key='Truck S No', required=True)
     availability = Boolean(data_key='Availability of truck', required=True)
     truck_type = String(data_key='Truck type', required=True)
     business_type = String(data_key='business Type')
@@ -84,15 +83,12 @@ class OrderListSchema(Schema):
     Any additional columns in the data will also be parsed,
     but will not be tested against type.
     """
-    order_number = Integer(data_key='Order Number', required=True)
     inl_terminal = String(data_key='Inl* ter*')
-    latest_dep_time = Integer(data_key='Latest Dep Time', required=True)
     truck_type = String(data_key='truck type', required=True)
     hierarchy = Float(data_key='Hierarchy', required=True)
     delivery_deadline = Integer(data_key='Delivery Deadline', required=True)
     driving_time = Integer(data_key='driving time', required=True)
     process_time = Integer(data_key='proces time', required=True)
-    service_time = Integer(data_key='service time', required=True)
 
     class Meta:
         unknown = INCLUDE
@@ -142,6 +138,8 @@ class SheetParser(abc.ABC):
     """Set of column names in which the values need to be unique."""
     required_columns: set
     """Set of column names in which all values are required."""
+    ignored_columns: set
+    """Set of column names which will be ignored."""
     schema: Type[Schema]
     """:class:`marshmallow.Schema` which validates the data
     on typing and missing values."""
@@ -216,7 +214,9 @@ class SheetParser(abc.ABC):
         :return: A :class:`pandas.DataFrame` containing the data from `file`.
         :rtype: :class:`pandas.DataFrame`
         """
-        return cls.post_dataframe(read_excel(file, *args, **kwargs))
+        df = read_excel(file, usecols=lambda x: x not in cls.ignored_columns,
+                        *args, **kwargs)
+        return cls.post_dataframe(df)
 
     @staticmethod
     def post_dataframe(dataframe):
@@ -253,10 +253,11 @@ class TruckAvailabilityParser(SheetParser):
     """
     Parses the truck availability sheet.
     """
-    unique_columns = {'Truck ID', 'Truck S No'}
-    required_columns = {'Truck ID', 'Truck S No', 'Availability of truck',
+    unique_columns = {'Truck ID'}
+    required_columns = {'Truck ID', 'Availability of truck',
                         'Truck type', 'Terminal Base', 'Truck Hierarchy',
                         'Truck Use Cost', 'Starting time', 'Date'}
+    ignored_columns = {'Truck S No'}
     schema = TruckAvailabilitySchema
     sheet_table = TruckSheet
     row_table = Truck
@@ -266,10 +267,11 @@ class OrderListParser(SheetParser):
     """
     Parses the order list sheet.
     """
-    unique_columns = {'Order Number'}
-    required_columns = {'Order Number', 'Inl* ter*', 'Latest Dep Time',
+    unique_columns = {}
+    required_columns = {'Inl* ter*',
                         'truck type', 'Hierarchy', 'Delivery Deadline',
-                        'driving time', 'proces time', 'service time'}
+                        'driving time', 'proces time'}
+    ignored_columns = {'Order Number', 'service time', 'Latest Dep Time'}
     schema = OrderListSchema
     sheet_table = OrderSheet
     row_table = Order

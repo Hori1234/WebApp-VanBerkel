@@ -8,10 +8,13 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
     Serializes the order table to JSON
     """
 
+    latest_dep_time = ma.Integer()
+    service_time = ma.Integer()
+
     class Meta:
         model = Order
         ordered = True
-        dump_only = ('order_number', )
+        dump_only = ('order_number', 'latest_dep_time', 'service_time')
         unknown = INCLUDE
 
     @post_dump

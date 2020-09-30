@@ -169,7 +169,7 @@ def get_truck_sheet(client, db):
     """
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_order(client, db):
     rv = get_order(client, db, 1)
 
@@ -177,14 +177,14 @@ def test_order(client, db):
     assert rv.order_number == 1
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_order_wrong(client, db):
     rv = get_order(client, db, 1000000)
 
     assert rv.status_code == 404
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_truck(client, db):
     rv = get_truck(client, db, 1)
 
@@ -192,14 +192,14 @@ def test_truck(client, db):
     assert rv.s_number == 1
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_truck_wrong(client, db):
     rv = get_truck(client, db, 1000000)
 
     assert rv.status_code == 404
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_orders(client, db):
     rv = get_orders(client, db, 1)
 
@@ -207,14 +207,14 @@ def test_orders(client, db):
     assert len(rv) > 0
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_orders_wrong(client, db):
     rv = get_orders(client, db, 20)
 
     assert rv.status_code == 404
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_trucks(client, db):
     rv = get_trucks(client, db, 1)
 
@@ -222,14 +222,14 @@ def test_trucks(client, db):
     assert len(rv) > 0
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_trucks_wrong(client, db):
     rv = get_trucks(client, db, 20)
 
     assert rv.status_code == 404
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_order_sheets(client, db):
     rv = get_order_sheet(client, db)
 
@@ -237,7 +237,7 @@ def test_order_sheets(client, db):
     assert len(rv) > 0
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_truck_sheets(client, db):
     rv = get_truck_sheet(client, db)
 
@@ -245,7 +245,7 @@ def test_truck_sheets(client, db):
     assert len(rv) > 0
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_patch_order(client, db):
     data = dict(
         truck_type='regional',
@@ -261,7 +261,7 @@ def test_patch_order(client, db):
         inl_terminal='KAT')
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_patch_order_invalid(client, db):
     data = dict(
         truck_type='big',
@@ -272,14 +272,14 @@ def test_patch_order_invalid(client, db):
     assert rv.status_code == 400
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_patch_order_wrong(client, db):
     rv = patch_order(client, db, 10000)
 
     assert rv.status_code == 404
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_patch_truck(client, db):
     data = dict(
         truck_type='port',
@@ -295,7 +295,7 @@ def test_patch_truck(client, db):
         terminal='KAT')
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_patch_truck_invalid(client, db):
     data = dict(
         truck_type='medium',
@@ -306,14 +306,14 @@ def test_patch_truck_invalid(client, db):
     assert rv.status_code == 400
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_patch_truck_wrong(client, db):
     rv = patch_truck(client, db, 100000)
 
     assert rv.status_code == 404
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_post_order(client, db):
     data = dict(
         id=1, order_number=134, inl_terminal='ITV', latest_dep_time=1000,
@@ -327,7 +327,7 @@ def test_post_order(client, db):
     )
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_post_order_invalid(client, db):
     data = dict(
         id=1, order_number=134, inl_terminal='BAD', latest_dep_time='1000',
@@ -338,7 +338,7 @@ def test_post_order_invalid(client, db):
     assert rv.status_code == 400
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_post_truck(client, db):
     data = dict(
         id=1, truck_id='45-TBD-1', s_number=50, availability=True,
@@ -354,7 +354,7 @@ def test_post_truck(client, db):
     )
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_post_truck_invalid(client, db):
     data = dict(
         id=1, truck_id=17, s_number=50, availability='bananas',
@@ -366,28 +366,28 @@ def test_post_truck_invalid(client, db):
     assert rv.status_code == 400
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_delete_order(client, db):
     rv = delete_order(client, db, 1)
 
     assert rv.status_code == 200
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_delete_order_wrong(client, db):
     rv = delete_order(client, db, 100000)
 
     assert rv.status_code == 404
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_delete_truck(client, db):
     rv = delete_truck(client, db, 1)
 
     assert rv.status_code == 200
 
 
-@pytest.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_delete_truck(client, db):
     rv = delete_truck(client, db, 100000)
 
