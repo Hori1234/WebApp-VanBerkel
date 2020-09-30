@@ -25,18 +25,23 @@ frontend-build:
   artifacts:
     paths:
       - frontend/node_modules/
+    expire_in: 1 hour
 
 # Check style of the code
 frontend-lint:
   stage: Linter
   needs: [frontend-build]
+  dependencies:
+    - frontend-build
   script:
     - npm run lint
 
 # Run tests
 frontend-test:
   stage: Tests
-  needs: [frontend-lint]
+  needs: [frontend-build, frontend-lint]
+  dependencies:
+    - frontend-build
   script:
     - npm test -- --coverage --watchAll=false
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
