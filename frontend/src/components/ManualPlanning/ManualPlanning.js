@@ -515,15 +515,15 @@ export default class ManualPlanning extends Component {
                     </Col>
                     <Col span={3}>
                         <Row>
-                            <button style={{width: "100%"}}>Assign</button>
+                            <Button style={{width: "100%"}}>Assign</Button>
                         </Row>
                         <br/>
                         <Row>
-                            <button style={{width: "100%"}}>Unassign</button>
+                            <Button style={{width: "100%"}}>Unassign</Button>
                         </Row>
                         <br/>
                         <Row>
-                            <button style={{width: "100%"}}>Auto Plan</button>
+                            <Button style={{width: "100%"}}>Auto Plan</Button>
                         </Row>
                     </Col>
                     <Col span={9}>
