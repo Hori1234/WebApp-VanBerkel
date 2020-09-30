@@ -28,17 +28,30 @@ describe('React App', () => {
         const currentPage = page.url();
         expect(currentPage).toEqual('http://localhost:3000/account');
 
-        await page.waitForSelector('.ant-btn-ant-btn-primary:nth-child(1)');
-        await page.click('.ant-btn-ant-btn-primary:nth-child(1)');
+        
+        await page.click('.ant-btn.ant-btn-primary');
 
         await page.waitForSelector('.ant-modal-content');
         await page.type('#nest-messages_user_name', 'Oswald');
         await page.type('#nest-messages_user_password', 'pOswald');
 
-        await page.click('.nest-messages_user_role');
-        await page.click('.nest-messages_user_role_list_0');
+        await page.click('.ant-select.ant-select-single.ant-select-allow-clear.ant-select-show-arrow');
 
+    
+        await page.$eval(
+            '#nest-messages_user_role',
+            element => element.setAttribute("aria-activedescendant", 'nest_messages_user_role_list_0')
+          );
 
+        await page.click('.ant-select-item-option-content:nth-child(1)');
+  
+        const test = page.$("button:contains('Submit')");
+        (await test).click;
+
+        await page.waitForSelector('.ant-message-custom-content.ant-message-success');
+        const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
+
+        expect(ErrorMessage).toEqual(`Account created !`);
 
       }, 120000);
 
