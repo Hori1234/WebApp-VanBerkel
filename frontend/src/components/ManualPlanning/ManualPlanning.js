@@ -509,7 +509,7 @@ export default class ManualPlanning extends Component {
                                     this.selectOrdersRow(record);
                                 },
                             })}/>
-
+                        <br/>
                         <Button onClick={this.showOrdersModal}>Add order</Button> &nbsp;&nbsp;
                         <Button>Delete order</Button>
                     </Col>
@@ -541,6 +541,7 @@ export default class ManualPlanning extends Component {
 
                             },
                         })}/>
+                        <br/>
                         <Button onClick={this.ShowTruckModal}>Add truck</Button> &nbsp;&nbsp;
                         <Button>Delete truck</Button>
                     </Col>
