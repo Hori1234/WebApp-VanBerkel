@@ -14,7 +14,10 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Order
         ordered = True
-        dump_only = ('order_number', 'latest_dep_time', 'service_time', 'others')
+        dump_only = ('order_number',
+                     'latest_dep_time',
+                     'service_time',
+                     'others')
         unknown = INCLUDE
 
     @post_dump

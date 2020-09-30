@@ -1,5 +1,15 @@
+from apispec.ext.marshmallow import common
+
+
 def register_api(api):
-    """Registers all the namespaces to the api."""
+    """
+    Registers all blueprint to the API.
+
+    Also adds the security scheme to the API documentation.
+
+    :param api: The API flask plugin
+    :type api: :class:`flask_smorest.Api`
+    """
 
     # import all blueprints
     # this is done in the function to prevent cycled imports
@@ -24,3 +34,33 @@ def register_api(api):
                        "name": "session"
                        }
     )
+
+
+def custom_name_resolver(schema):
+    """
+    Creates names for Marshmallow schemas in documentation.
+
+    In case a schema is created using partial=`True`, `Partial-`
+    will be added in front of the its name.
+
+    In case a schema name ends with `Schema`, the `Schema` part
+    is removed from the name.
+
+    Adapted from https://github.com/marshmallow-code/apispec/pull/476/
+
+    :param schema: Schema to name
+    :type schema: `marshmallow.Schema`
+    :return: The documented name for the schema
+    :rtype: str
+    """
+    # Get an instance of the schema
+    schema_instance = common.resolve_schema_instance(schema)
+    prefix = "Partial-" if schema_instance.partial else ""
+
+    # Get the class of the instance
+    schema_cls = common.resolve_schema_cls(schema)
+    name = prefix + schema_cls.__name__
+
+    if name.endswith("Schema"):
+        return name[:-6] or name
+    return name

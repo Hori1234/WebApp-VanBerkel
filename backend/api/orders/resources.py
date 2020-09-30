@@ -54,8 +54,8 @@ class OrderByID(MethodView):
                   status='Service Unavailable')
 
     @roles_required('planner', 'administrator')
+    @bp.arguments(OrderSchema(partial=True))
     @bp.response(OrderSchema)
-    @bp.arguments(OrderSchema)
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
     @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
@@ -63,7 +63,7 @@ class OrderByID(MethodView):
         try:
             order = Order.query.get_or_404(
                 (sheet_id, order_id), description='Order not found.')
-            #TODO: test 'k in order'
+
             for k, v in req.items():
                 if k != "other" and hasattr(order, k):
                     setattr(order, k, v)
@@ -82,9 +82,3 @@ class OrderByID(MethodView):
             abort(503,
                   message='Something went wrong on the server.',
                   status='SERVICE UNAVAILABLE')
-
-
-
-
-
-
