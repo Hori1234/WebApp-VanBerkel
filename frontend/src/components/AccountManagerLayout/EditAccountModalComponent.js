@@ -129,17 +129,20 @@ export default class CreateAccountsComponent extends Component {
             style={{ width: "30vh", marginRight: 50 }}
           >
             <Form.Item name={["user", "Id"]} label="Id">
-              <Input placeholder={this.props.info.id} />
+              <Input placeholder={this.props.info.id} disabled={true} />
             </Form.Item>
             <Form.Item name={["user", "Name"]} label="Name">
-              <Input placeholder={this.props.info.username} />
+              <Input placeholder={this.props.info.username} disabled={true} />
             </Form.Item>
             <Form.Item
               name={["user", "age"]}
               label="Role"
               rules={[{ type: "string", min: 0, max: 99 }]}
             >
-              <Select placeholder={this.props.info.role}></Select>
+              <Select
+                placeholder={this.props.info.role}
+                disabled={true}
+              ></Select>
             </Form.Item>
           </Form>
 
@@ -151,7 +154,7 @@ export default class CreateAccountsComponent extends Component {
             style={{ width: "40vh", marginRight: 50 }}
           >
             <Form.Item name={["user", "Id"]} label="Id">
-              <Input placeholder={this.props.info.id} />
+              <Input placeholder={this.props.info.id} disabled={true} />
             </Form.Item>
             <Form.Item
               name={["user", "Username"]}
@@ -192,14 +195,16 @@ export default class CreateAccountsComponent extends Component {
               <Button
                 type="primary"
                 htmlType="submit"
-                onClick={() =>
+                onClick={() => {
                   this.updateAccount(
                     this.props.info.id,
                     this.state.nUssername,
                     this.state.nPassword,
                     this.state.nRole
-                  )
-                }
+                  );
+                  this.props.modalHandleOk();
+                  message.success("Account updated succesfully");
+                }}
               >
                 Submit
               </Button>

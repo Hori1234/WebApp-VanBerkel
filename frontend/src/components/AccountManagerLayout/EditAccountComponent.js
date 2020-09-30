@@ -56,7 +56,7 @@ export default class EditAccountComponent extends Component {
           message.error(res.message);
         } else {
           if (res.status === 204) {
-            message.error("Account succesfully deleted");
+            message.success("Account succesfully deleted");
           } else {
             if (res.status === 401) {
               message.error("Unauthorized Action");
@@ -152,7 +152,9 @@ export default class EditAccountComponent extends Component {
                     <Button
                       type="primary"
                       icon={<DeleteOutlined />}
-                      onClick={() => this.deleteItemById(item.id)}
+                      onClick={() => {
+                        this.deleteItemById(item.id);
+                      }}
                     >
                       Delete Account
                     </Button>

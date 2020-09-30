@@ -165,10 +165,11 @@ export default class AccountManagementLayout extends Component {
           centered={false}
           maskClosable={false}
           visible={this.state.CAVisible}
-          onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          {this.state.CAVisible && <CreateAccountsComponent />}
+          {this.state.CAVisible && (
+            <CreateAccountsComponent modalHandleOk={this.handleOk} />
+          )}
         </Modal>
         <Modal
           title="Edit Account"
@@ -180,11 +181,13 @@ export default class AccountManagementLayout extends Component {
           }}
           visible={this.state.EAVisible}
           maskClosable={false}
-          onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
           {this.state.EAVisible && (
-            <EditAccountModalComponent info={this.state.Metadata} />
+            <EditAccountModalComponent
+              info={this.state.Metadata}
+              modalHandleOk={this.handleOk}
+            />
           )}
         </Modal>
       </Layout>
