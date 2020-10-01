@@ -76,7 +76,9 @@ export default class CreateAccountsComponent extends Component {
     const onFinish = (values) => {
       console.log(values);
     };
-
+    const onFinishFailed = (errorInfo) => {
+      message.error("Failed:", errorInfo);
+    };
     return (
       <Layout
         style={{
@@ -150,6 +152,7 @@ export default class CreateAccountsComponent extends Component {
             {...layout}
             name="nest-messages"
             onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
             validateMessages={validateMessages}
             style={{ width: "40vh", marginRight: 50 }}
           >

@@ -72,6 +72,12 @@ export default class CreateAccountsComponent extends Component {
   onFinish = (values) => {
     console.log(values);
   };
+  onFinishFailed = (errorInfo) => {
+    message.error("Failed:", errorInfo);
+    this.setState({
+      status: "error",
+    });
+  };
 
   render() {
     const layout = {
@@ -133,6 +139,7 @@ export default class CreateAccountsComponent extends Component {
             {...layout}
             name="nest-messages"
             onFinish={this.onFinish}
+            onFinishFailed={this.onFinishFailed}
             validateMessages={validateMessages}
             style={{ width: "60vh", marginRight: 50 }}
           >
@@ -179,13 +186,15 @@ export default class CreateAccountsComponent extends Component {
                 type="primary"
                 htmlType="submit"
                 onClick={() => {
-                  this.addAccount(
-                    this.state.username,
-                    this.state.password,
-                    this.state.role
-                  );
-                  this.props.modalHandleOk();
-                  message.success("Account created !");
+                  if (this.state.status != "error") {
+                    this.addAccount(
+                      this.state.username,
+                      this.state.password,
+                      this.state.role
+                    );
+                    this.props.modalHandleOk();
+                    message.success("Account created !");
+                  }
                 }}
               >
                 Submit
