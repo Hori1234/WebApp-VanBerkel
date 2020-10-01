@@ -34,19 +34,22 @@ def setup_db(db, client):
                 data=json.dumps(data),
                 content_type='application/json')
 
-    data = dict(
-        file_1=(open('./tests/data/truck_availability_test.xlsx', 'rb'),
-                'sheet.xlsx')
-    )
+    for i in range(2):
+        data = dict(
+            file_1=(open('./tests/data/truck_availability_test.xlsx', 'rb'),
+                    'sheet.xlsx')
+        )
 
-    client.post('/api/sheets/', content_type='multipart/form-data', data=data)
+        client.post('/api/sheets/', content_type='multipart/form-data',
+                    data=data)
 
-    data2 = dict(
-        file_1=(open('./tests/data/order_sheet_test.xlsx', 'rb'),
-                'sheet.xlsx')
-    )
+        data2 = dict(
+            file_1=(open('./tests/data/order_sheet_test.xlsx', 'rb'),
+                    'sheet.xlsx')
+        )
 
-    client.post('/api/sheets/', content_type='multipart/form-data', data=data2)
+        client.post('/api/sheets/', content_type='multipart/form-data',
+                    data=data2)
 
 
 def get_order(client, sheet_id, order_id):
@@ -167,23 +170,36 @@ def delete_truck(client, sheet_id, truck_id):
     return client.delete(f'/api/trucks/{sheet_id}/{truck_id}')
 
 
-def get_order_sheet(client):
+def get_order_sheet(client, page=1, page_size=10):
     """
     retrieves all uploaded order sheets
     :param client: the client to make the request
+    :param page: page of the request
+    :param page_size: number of items per page
     :return: a list of all order sheets in the database
     """
+    pagination_params = dict(
+        page=page,
+        page_size=page_size
+    )
+    return client.get('/api/sheets/orders', query_string=pagination_params)
 
 
-def get_truck_sheet(client):
+def get_truck_sheet(client, page=1, page_size=10):
     """
     retrieves all uploaded truck sheets
     :param client: the client to make the request
-    :return: a list of all truck sheets in the database
+    :param page: page of the request
+    :param page_size: number of items per page
+    :return: a list of all order sheets in the database
     """
+    pagination_params = dict(
+        page=page,
+        page_size=page_size
+    )
+    return client.get('/api/sheets/trucks', query_string=pagination_params)
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_order(client, db):
     rv = get_order(client, 1, 1)
 
@@ -192,14 +208,12 @@ def test_order(client, db):
     assert data['order_number'] == 1
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_order_wrong(client, db):
     rv = get_order(client, db, 1000000)
 
     assert rv.status_code == 404
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_truck(client, db):
     rv = get_truck(client, 1, 1)
 
@@ -208,14 +222,12 @@ def test_truck(client, db):
     assert data['s_number'] == 1
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_truck_wrong(client, db):
     rv = get_truck(client, 9, 1000000)
 
     assert rv.status_code == 404
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_orders(client, db):
     rv = get_orders(client, 1)
 
@@ -224,14 +236,12 @@ def test_orders(client, db):
     assert len(data) > 0
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_orders_wrong(client, db):
     rv = get_orders(client, 20)
 
     assert rv.status_code == 404
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_trucks(client, db):
     rv = get_trucks(client, 1)
 
@@ -240,70 +250,66 @@ def test_trucks(client, db):
     assert len(data) > 0
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_trucks_wrong(client, db):
     rv = get_trucks(client, 20)
 
     assert rv.status_code == 404
 
 
-@pytest.mark.skip('not implemented yet')
 def test_order_sheets(client, db):
-    rv = get_order_sheet(client)
+    rv = get_order_sheet(client, page=2, page_size=1)
 
     assert rv.status_code == 200
     data = rv.get_json()
-    assert len(data) > 0
+    assert len(data) == 1
+    assert data[0]['id'] == 2
 
 
-@pytest.mark.skip('not implemented yet')
 def test_truck_sheets(client, db):
-    rv = get_truck_sheet(client)
+    rv = get_truck_sheet(client, page=2, page_size=1)
 
     assert rv.status_code == 200
     data = rv.get_json()
-    assert len(data) > 0
+    assert len(data) == 1
+    assert data[0]['id'] == 2
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_patch_order(client, db):
     data = dict(
         truck_type='regional',
         inl_terminal='KAT'
     )
-    rv = patch_order(client, 1, 1, data=data)
+    rv = patch_order(client, 1, 1, **data)
 
     assert rv.status_code == 200
-    order = orders.Order.query.get_or_404((1, 1))
+    order = orders.Order.query.get((1, 1))
     assert order.truck_type == 'regional'
     assert order.inl_terminal == 'KAT'
 
 
-# @pytest.mark.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_patch_order_invalid(client, db):
     data = dict(
         truck_type='big',
         inl_terminal='DOG'
     )
-    rv = patch_order(client, 1, 1, data=data)
+    rv = patch_order(client, 1, 1, **data)
 
     assert rv.status_code == 400
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_patch_order_wrong(client, db):
     rv = patch_order(client, 9, 10000)
 
     assert rv.status_code == 404
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_patch_truck(client, db):
     data = dict(
         truck_type='port',
         terminal='KAT'
     )
-    rv = patch_truck(client, 1, 1, data=data)
+    rv = patch_truck(client, 1, 1, **data)
 
     assert rv.status_code == 200
     truck = trucks.Truck.query.get_or_404((1, 1))
@@ -311,97 +317,93 @@ def test_patch_truck(client, db):
     assert truck.terminal == 'KAT'
 
 
-# @pytest.mark.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_patch_truck_invalid(client, db):
     data = dict(
         truck_type='medium',
         terminal='SAD'
     )
-    rv = patch_truck(client, 1, 1, data=data)
+    rv = patch_truck(client, 1, 1, **data)
 
     assert rv.status_code == 400
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_patch_truck_wrong(client, db):
     rv = patch_truck(client, 9, 100000)
 
     assert rv.status_code == 404
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_post_order(client, db):
     data = dict(
-        id=1, order_number=134, inl_terminal='ITV', latest_dep_time=1000,
+        inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline=1300,
         driving_time=10, process_time=1, service_time=2
     )
-    rv = post_order(client, data)
+    rv = post_order(client, 1, **data)
     assert rv.status_code == 200
     order = orders.Order.query.get_or_404((1, 134))
     assert order.hierarchy == 3
 
 
-# @pytest.mark.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_post_order_invalid(client, db):
     data = dict(
-        id=1, order_number=134, inl_terminal='BAD', latest_dep_time='1000',
+        inl_terminal='BAD', latest_dep_time='1000',
         truck_type='great', hierarchy='3', delivery_deadline='1300',
         driving_time='10', process_time='1', service_time='21'
     )
-    rv = post_order(client, data)
+    rv = post_order(client, 1, **data)
     assert rv.status_code == 404
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_post_truck(client, db):
     data = dict(
-        id=1, truck_id='45-TBD-1', s_number=50, availability=True,
+        truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
-        hierarchy=2, use_cost=17, date=datetime.date(2020, 10, 24),
-        starting_time=datetime.time(12, 10, 30)
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30'
     )
-    rv = post_truck(client, data)
+    rv = post_truck(client, 1, **data)
 
     assert rv.status_code == 200
     truck = trucks.Truck.query.get_or_404((1, 50))
     assert truck.hierarchy == 2
 
 
-# @pytest.mark.skip('not implemented yet')
+@pytest.mark.skip('not implemented yet')
 def test_post_truck_invalid(client, db):
     data = dict(
-        id=1, truck_id=17, s_number=50, availability='bananas',
+        truck_id=17, availability='bananas',
         truck_type='Sand', business_type=53, terminal='DUCK',
-        hierarchy='2', use_cost='17', date=2017,
-        starting_time=12
+        hierarchy='2', use_cost='17', date='2020-10-01',
+        starting_time='15:30'
     )
-    rv = post_truck(client, data)
-    assert rv.status_code == 404
+    rv = post_truck(client, 1, **data)
+    assert rv.status_code == 400
 
 
-# @pytest.mark.skip('not implemented yet')
 def test_delete_order(client, db):
     rv = delete_order(client, 1, 1)
 
     assert rv.status_code == 204
 
 
-# @pytest.mark.skip('not implemented yet')
+
 def test_delete_order_wrong(client, db):
     rv = delete_order(client, 9, 100000)
 
     assert rv.status_code == 404
 
 
-# @pytest.mark.skip('not implemented yet')
+
 def test_delete_truck(client, db):
     rv = delete_truck(client, 1, 1)
 
     assert rv.status_code == 204
 
 
-# @pytest.mark.skip('not implemented yet')
+
 def test_delete_truck(client, db):
     rv = delete_truck(client, 9, 100000)
 
