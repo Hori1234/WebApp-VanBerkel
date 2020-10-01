@@ -186,7 +186,7 @@ export default class CreateAccountsComponent extends Component {
                 type="primary"
                 htmlType="submit"
                 onClick={() => {
-                  if (this.state.status != "error") {
+                  if (this.state.username != "" && this.state.password != "") {
                     this.addAccount(
                       this.state.username,
                       this.state.password,
