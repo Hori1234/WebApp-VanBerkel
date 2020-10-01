@@ -170,10 +170,11 @@ export default class CreateAccountsComponent extends Component {
             >
               <Select
                 placeholder="Select a option and change input text above"
+                defaultValue={"view-only"}
                 onChange={this.handleChangeRole}
                 allowClear
               >
-                <Option value={"administrator"}>Administrator</Option>
+                <Option value="administrator">Administrator</Option>
                 <Option value="view-only">View Only</Option>
                 <Option value="planner">Planner</Option>
               </Select>
