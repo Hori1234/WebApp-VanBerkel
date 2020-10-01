@@ -13,6 +13,9 @@ class TruckSheet(db.Model):
                                  "s_number", count_from=1),
                              cascade='all, delete-orphan')
 
+    def add_row(self, truck):
+        self.trucks.append(truck)
+
     def add_rows(self, rows):
         self.trucks.extend(rows)
 
