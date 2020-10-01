@@ -188,7 +188,8 @@ export default class CreateAccountsComponent extends Component {
                 onClick={() => {
                   if (
                     this.state.username !== "" &&
-                    this.state.password !== ""
+                    this.state.password !== "" &&
+                    this.state.role !== ""
                   ) {
                     this.addAccount(
                       this.state.username,
