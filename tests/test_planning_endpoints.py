@@ -35,310 +35,325 @@ def setup_db(db, client):
                 content_type='application/json')
 
     data = dict(
-        file_1=(open('data/truck_availability_test.xlsx', 'rb'),
+        file_1=(open('./tests/data/truck_availability_test.xlsx', 'rb'),
                 'sheet.xlsx')
     )
 
     client.post('/api/sheets/', content_type='multipart/form-data', data=data)
 
     data2 = dict(
-        file_1=(open('data/order_sheet_test.xlsx', 'rb'),
+        file_1=(open('./tests/data/order_sheet_test.xlsx', 'rb'),
                 'sheet.xlsx')
     )
 
     client.post('/api/sheets/', content_type='multipart/form-data', data=data2)
 
 
-def get_order(client, db, order_id):
+def get_order(client, sheet_id, order_id):
     """
     returns the order specified.
     :param client: The test client to make the request with
-    :param db: The database to search in
+    :param sheet_id: The id of the sheet
     :param order_id: The id of the order to find
     :return: Order with id=id
     """
+    return client.get(f'/api/orders/{sheet_id}/{order_id}')
 
 
-def get_truck(client, db, truck_id):
+def get_truck(client, sheet_id, truck_id):
     """
     returns the truck specified.
     :param client: The test client to make the request with
-    :param db: The database to search in
+    :param sheet_id: The id of the sheet
     :param truck_id: The id of the truck to find
     :return: truck with id=id
     """
+    return client.get(f'/api/trucks/{sheet_id}/{truck_id}')
 
 
-def post_order(client, db, **kwargs):
+def post_order(client, sheet_id, **kwargs):
     """
     attempts to add the specified order
     :param client: the client to make the request with
-    :param db: the database to put the order in
+    :param sheet_id: the sheet to add the order to
     :param kwargs: the details of the order to add
     :return:
     """
+    return client.post(f'/api/orders/{sheet_id}',
+                       data=json.dumps(kwargs),
+                       content_type='application/json')
 
 
-def post_truck(client, db, **kwargs):
+def post_truck(client, sheet_id, **kwargs):
     """
     attempts to add the specified truck
     :param client: the client to make the request with
-    :param db: the database to put the order in
+    :param sheet_id: the sheet to add the truck to
     :param kwargs: the details of the truck to add
     :return:
     """
+    return client.post(f'/api/trucks/{sheet_id}',
+                       data=json.dumps(kwargs),
+                       content_type='application/json')
 
 
-def patch_order(client, db, order_id, **kwargs):
+def patch_order(client, sheet_id, order_id, **kwargs):
     """
     attempts to change the specified row in order
     :param client: the client to make the request with
-    :param db: the database to make the alteration in
+    :param sheet_id: the id of the sheet
     :param order_id: the id of the order to change
     :param kwargs: the data that needs to be changed
     :return:
     """
+    return client.patch(f'/api/orders/{sheet_id}/{order_id}',
+                        data=json.dumps(kwargs),
+                        content_type='application/json')
 
 
-def patch_truck(client, db, truck_id, **kwargs):
+def patch_truck(client, sheet_id, truck_id, **kwargs):
     """
     attempts to change the specified row in truck
     :param client: the client to make the request with
-    :param db: the database to make the alteration in
+    :param sheet_id: the id of the sheet
     :param truck_id: the id of the truck to change
     :param kwargs: the data that needs to be changed
     :return:
     """
+    return client.patch(f'/api/trucks/{sheet_id}/{truck_id}',
+                        data=json.dumps(kwargs),
+                        content_type='application/json')
 
 
-def get_orders(client, db, sheet_id):
+def get_orders(client, sheet_id):
     """
     retrieves the orders associated with the specified sheet
     :param client: the client to make the request with
-    :param db: the database to pull the info from
     :param sheet_id: the sheet to get the info from
     :return: a list of all order associated with the specified sheet
     """
+    return client.get(f'/api/orders/{sheet_id}')
 
 
-def get_trucks(client, db, sheet_id):
+def get_trucks(client, sheet_id):
     """
     retrieves the trucks associated with the specified sheet
     :param client: the client to make the request with
-    :param db: the database to pull the info from
     :param sheet_id: the sheet to get the info from
     :return: a list of all trucks associated with the specified sheet
     """
+    return client.get(f'/api/trucks/{sheet_id}')
 
 
-def delete_order(client, db, order_id):
+def delete_order(client, sheet_id, order_id):
     """
     deletes the specified order from the database
     :param client: the client to make the request
-    :param db: the database to delete from
+    :param sheet_id: the id of the sheet
     :param order_id: the order to be deleted
     :return:
     """
+    return client.delete(f'/api/trucks/{sheet_id}/{order_id}')
 
 
-def delete_truck(client, db, order_id):
+def delete_truck(client, sheet_id, truck_id):
     """
     deletes the specified truck from the database
     :param client: the client to make the request
-    :param db: the database to delete from
-    :param order_id: the truck to be deleted
+    :param sheet_id: the id of the sheet
+    :param truck_id: the truck to be deleted
     :return:
     """
+    return client.delete(f'/api/trucks/{sheet_id}/{truck_id}')
 
 
-def get_order_sheet(client, db):
+def get_order_sheet(client):
     """
     retrieves all uploaded order sheets
     :param client: the client to make the request
-    :param db: the database to pull from
     :return: a list of all order sheets in the database
     """
 
 
-def get_truck_sheet(client, db):
+def get_truck_sheet(client):
     """
     retrieves all uploaded truck sheets
     :param client: the client to make the request
-    :param db: the database to pull from
     :return: a list of all truck sheets in the database
     """
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_order(client, db):
-    rv = get_order(client, db, 1)
+    rv = get_order(client, 1, 1)
 
     assert rv.status_code == 200
-    assert rv.order_number == 1
+    data = rv.get_json()
+    assert data['order_number'] == 1
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_order_wrong(client, db):
     rv = get_order(client, db, 1000000)
 
     assert rv.status_code == 404
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_truck(client, db):
-    rv = get_truck(client, db, 1)
+    rv = get_truck(client, 1, 1)
 
     assert rv.status_code == 200
-    assert rv.s_number == 1
+    data = rv.get_json()
+    assert data['s_number'] == 1
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_truck_wrong(client, db):
-    rv = get_truck(client, db, 1000000)
+    rv = get_truck(client, 9, 1000000)
 
     assert rv.status_code == 404
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_orders(client, db):
-    rv = get_orders(client, db, 1)
+    rv = get_orders(client, 1)
 
     assert rv.status_code == 200
-    assert len(rv) > 0
+    data = rv.get_json()
+    assert len(data) > 0
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_orders_wrong(client, db):
-    rv = get_orders(client, db, 20)
+    rv = get_orders(client, 20)
 
     assert rv.status_code == 404
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_trucks(client, db):
-    rv = get_trucks(client, db, 1)
+    rv = get_trucks(client, 1)
 
     assert rv.status_code == 200
-    assert len(rv) > 0
+    data = rv.get_json()
+    assert len(data) > 0
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_trucks_wrong(client, db):
-    rv = get_trucks(client, db, 20)
+    rv = get_trucks(client, 20)
 
     assert rv.status_code == 404
 
 
 @pytest.mark.skip('not implemented yet')
 def test_order_sheets(client, db):
-    rv = get_order_sheet(client, db)
+    rv = get_order_sheet(client)
 
     assert rv.status_code == 200
-    assert len(rv) > 0
+    data = rv.get_json()
+    assert len(data) > 0
 
 
 @pytest.mark.skip('not implemented yet')
 def test_truck_sheets(client, db):
-    rv = get_truck_sheet(client, db)
+    rv = get_truck_sheet(client)
 
     assert rv.status_code == 200
-    assert len(rv) > 0
+    data = rv.get_json()
+    assert len(data) > 0
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_patch_order(client, db):
     data = dict(
         truck_type='regional',
         inl_terminal='KAT'
     )
-    rv = patch_order(client, db, 1, data)
+    rv = patch_order(client, 1, 1, data=data)
 
     assert rv.status_code == 200
-    assert orders.Order.query.get_or_404(
-        id=1,
-        order_number=1,
-        truck_type='regional',
-        inl_terminal='KAT')
+    order = orders.Order.query.get_or_404((1, 1))
+    assert order.truck_type == 'regional'
+    assert order.inl_terminal == 'KAT'
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_patch_order_invalid(client, db):
     data = dict(
         truck_type='big',
         inl_terminal='DOG'
     )
-    rv = patch_order(client, db, 1, data)
+    rv = patch_order(client, 1, 1, data=data)
 
     assert rv.status_code == 400
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_patch_order_wrong(client, db):
-    rv = patch_order(client, db, 10000)
+    rv = patch_order(client, 9, 10000)
 
     assert rv.status_code == 404
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_patch_truck(client, db):
     data = dict(
         truck_type='port',
         terminal='KAT'
     )
-    rv = patch_truck(client, db, 1, data)
+    rv = patch_truck(client, 1, 1, data=data)
 
     assert rv.status_code == 200
-    assert trucks.Truck.query.get_or_404(
-        id=1,
-        s_number=1,
-        truck_type='port',
-        terminal='KAT')
+    truck = trucks.Truck.query.get_or_404((1, 1))
+    assert truck.truck_type == 'port'
+    assert truck.terminal == 'KAT'
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_patch_truck_invalid(client, db):
     data = dict(
         truck_type='medium',
         terminal='SAD'
     )
-    rv = patch_truck(client, db, 1, data)
+    rv = patch_truck(client, 1, 1, data=data)
 
     assert rv.status_code == 400
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_patch_truck_wrong(client, db):
-    rv = patch_truck(client, db, 100000)
+    rv = patch_truck(client, 9, 100000)
 
     assert rv.status_code == 404
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_post_order(client, db):
     data = dict(
         id=1, order_number=134, inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline=1300,
         driving_time=10, process_time=1, service_time=2
     )
-    rv = post_order(client, db, data)
+    rv = post_order(client, data)
     assert rv.status_code == 200
-    assert orders.Order.query.get_or_404(
-        id=1, order_number=134
-    )
+    order = orders.Order.query.get_or_404((1, 134))
+    assert order.hierarchy == 3
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_post_order_invalid(client, db):
     data = dict(
         id=1, order_number=134, inl_terminal='BAD', latest_dep_time='1000',
         truck_type='great', hierarchy='3', delivery_deadline='1300',
         driving_time='10', process_time='1', service_time='21'
     )
-    rv = post_order(client, db, data)
-    assert rv.status_code == 400
+    rv = post_order(client, data)
+    assert rv.status_code == 404
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_post_truck(client, db):
     data = dict(
         id=1, truck_id='45-TBD-1', s_number=50, availability=True,
@@ -346,15 +361,14 @@ def test_post_truck(client, db):
         hierarchy=2, use_cost=17, date=datetime.date(2020, 10, 24),
         starting_time=datetime.time(12, 10, 30)
     )
-    rv = post_truck(client, db, data)
+    rv = post_truck(client, data)
 
     assert rv.status_code == 200
-    assert trucks.Truck.query.get_or_404(
-        id=1, s_number=50, date=datetime.date(2020, 20, 24)
-    )
+    truck = trucks.Truck.query.get_or_404((1, 50))
+    assert truck.hierarchy == 2
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_post_truck_invalid(client, db):
     data = dict(
         id=1, truck_id=17, s_number=50, availability='bananas',
@@ -362,33 +376,33 @@ def test_post_truck_invalid(client, db):
         hierarchy='2', use_cost='17', date=2017,
         starting_time=12
     )
-    rv = post_truck(client, db, data)
-    assert rv.status_code == 400
+    rv = post_truck(client, data)
+    assert rv.status_code == 404
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_delete_order(client, db):
-    rv = delete_order(client, db, 1)
+    rv = delete_order(client, 1, 1)
 
-    assert rv.status_code == 200
+    assert rv.status_code == 204
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_delete_order_wrong(client, db):
-    rv = delete_order(client, db, 100000)
+    rv = delete_order(client, 9, 100000)
 
     assert rv.status_code == 404
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_delete_truck(client, db):
-    rv = delete_truck(client, db, 1)
+    rv = delete_truck(client, 1, 1)
 
-    assert rv.status_code == 200
+    assert rv.status_code == 204
 
 
-@pytest.mark.skip('not implemented yet')
+# @pytest.mark.skip('not implemented yet')
 def test_delete_truck(client, db):
-    rv = delete_truck(client, db, 100000)
+    rv = delete_truck(client, 9, 100000)
 
     assert rv.status_code == 404
