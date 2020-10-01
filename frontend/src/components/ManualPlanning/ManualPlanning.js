@@ -357,7 +357,7 @@ export default class ManualPlanning extends Component {
       columnFilter.push(e.target.id);
     }
     var final = this.state.startingColumns;
-    for (var i = 0; i < columnFilter.length; i++)
+    for (let i = 0; i < columnFilter.length; i++)
       final = final.filter((current) => {
         return current.dataIndex !== columnFilter[i];
       });
