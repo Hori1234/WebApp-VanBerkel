@@ -73,7 +73,7 @@ export default class CreateAccountsComponent extends Component {
     console.log(values);
   };
   onFinishFailed = (errorInfo) => {
-    message.error("Failed:", errorInfo);
+    message.error("Failed: Please complete all the required fields", errorInfo);
     this.setState({
       status: "error",
     });
