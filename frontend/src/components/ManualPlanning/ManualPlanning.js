@@ -12,6 +12,7 @@ import {
 } from "antd";
 import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
+import "./ManualPlanning.css";
 const {Option} = Select;
 const dataITV= [
     {
@@ -153,25 +154,25 @@ const data2 = [
     key: "2",
     truckId: "TS4",
     truckDriver: "Tom",
-    operation: "Regional",
+    operation: "Port",
   },
   {
     key: "3",
     truckId: "TS4",
     truckDriver: "Tom",
-    operation: "Regional",
+    operation: "Terminal",
   },
   {
     key: "4",
     truckId: "TS4",
     truckDriver: "Tom",
-    operation: "Regional",
+    operation: "Port",
   },
   {
     key: "5",
     truckId: "TS4",
     truckDriver: "Tom",
-    operation: "Regional",
+    operation: "Port",
   },
   {
     key: "6",
@@ -189,7 +190,7 @@ const data2 = [
     key: "8",
     truckId: "TS4",
     truckDriver: "Tom",
-    operation: "Regional",
+    operation: "Terminal",
   },
   {
     key: "9",
@@ -430,6 +431,16 @@ export default class ManualPlanning extends Component {
     cancelMagnify = (e) => {
         this.setState({magnifyOrders: false})
     }
+    truckRowColor = (e) =>{
+        if (e == "Regional"){
+            return "table-row-regional"
+        }
+        else if(e=="Terminal"){
+            return "table-row-terminal"
+        }else if (e=="Port"){
+            return "table-row-port"
+        }
+    };
 
     render() {
         const showHideMenu = (
@@ -541,6 +552,7 @@ export default class ManualPlanning extends Component {
                     </Col>
                     <Col span={9}>
                         <Table
+                            rowClassName={(record, index) => this.truckRowColor(record.operation)}                            
                             bordered={true}
                             rowSelection={trucksRowSelection}
                             dataSource={data2}
