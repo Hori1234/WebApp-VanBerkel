@@ -52,3 +52,33 @@ class TruckByID(MethodView):
     def get(self, sheet_id, truck_id):
         truck = Truck.query.get_or_404((sheet_id, truck_id))
         return truck
+
+    @roles_required('planner', 'administrator')
+    @bp.arguments(TruckSchema(partial=True))
+    @bp.response(TruckSchema)
+    @bp.alt_response('UNAUTHORIZED', code=401)
+    @bp.alt_response('NOT_FOUND', code=404)
+    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
+    def patch(self, req, sheet_id, truck_id):
+        try:
+            truck = Truck.query.get_or_404(
+                (sheet_id, truck_id), description='Truck not found.')
+
+            for k, v in req.items():
+                if k != "others" and hasattr(truck, k):
+                    setattr(truck, k, v)
+                else:
+                    truck.others[k] = v
+            db.session.commit()
+            return truck, 200
+        except ValueError as e:
+            # Some values of the arguments are not allowed
+            abort(400,
+                  message=str(e),
+                  status="Bad Request"
+                  )
+        except SQLAlchemyError:
+            # The database is unavailable
+            abort(503,
+                  message='Something went wrong on the server.',
+                  status='SERVICE UNAVAILABLE')

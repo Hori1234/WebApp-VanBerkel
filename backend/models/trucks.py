@@ -2,6 +2,7 @@ from backend.app import db
 from sqlalchemy.sql import func
 from sqlalchemy.ext.orderinglist import ordering_list
 import datetime
+from sqlalchemy.ext.mutable import MutableDict
 
 
 class TruckSheet(db.Model):
@@ -30,7 +31,7 @@ class Truck(db.Model):
     use_cost = db.Column(db.Float, nullable=False)
     date = db.Column(db.Date, nullable=False)
     starting_time = db.Column(db.Time, nullable=False)
-    others = db.Column(db.JSON)
+    others = db.Column(MutableDict.as_mutable(db.JSON))
 
     def __init__(self, truck_id: str, availability: bool,
                  truck_type: str, business_type: str, terminal: str,

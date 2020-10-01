@@ -65,7 +65,7 @@ class OrderByID(MethodView):
                 (sheet_id, order_id), description='Order not found.')
 
             for k, v in req.items():
-                if k != "other" and hasattr(order, k):
+                if k != "others" and hasattr(order, k):
                     setattr(order, k, v)
                 else:
                     order.others[k] = v
