@@ -203,8 +203,8 @@ export default class CreateAccountsComponent extends Component {
                 htmlType="submit"
                 onClick={() => {
                   if (
-                    this.state.nUssername != "" &&
-                    this.state.nPassword != ""
+                    this.state.nUssername !== "" &&
+                    this.state.nPassword !== ""
                   ) {
                     this.updateAccount(
                       this.props.info.id,

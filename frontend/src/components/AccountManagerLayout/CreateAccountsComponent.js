@@ -186,7 +186,10 @@ export default class CreateAccountsComponent extends Component {
                 type="primary"
                 htmlType="submit"
                 onClick={() => {
-                  if (this.state.username != "" && this.state.password != "") {
+                  if (
+                    this.state.username !== "" &&
+                    this.state.password !== ""
+                  ) {
                     this.addAccount(
                       this.state.username,
                       this.state.password,

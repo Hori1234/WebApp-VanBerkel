@@ -364,9 +364,9 @@ export default class ManualPlanning extends Component {
     this.setState({ columns: final, columnFilter: columnFilter });
   };
   changeData = (d) => {
-    if (d == "KAT") {
+    if (d === "KAT") {
       this.setState({ data: dataKAT });
-    } else if (d == "ITV") {
+    } else if (d === "ITV") {
       this.setState({ data: dataITV });
     }
   };
@@ -436,11 +436,11 @@ export default class ManualPlanning extends Component {
     this.setState({ magnifyOrders: false });
   };
   truckRowColor = (e) => {
-    if (e == "Regional") {
+    if (e === "Regional") {
       return "table-row-regional";
-    } else if (e == "Terminal") {
+    } else if (e === "Terminal") {
       return "table-row-terminal";
-    } else if (e == "Port") {
+    } else if (e === "Port") {
       return "table-row-port";
     }
   };
@@ -533,8 +533,7 @@ export default class ManualPlanning extends Component {
               rowSelection={ordersRowSelection}
               dataSource={this.state.data}
               columns={this.state.columns}
-              scroll={{ x: "max-content" }}
-              scroll={{ y: "50vh" }}
+              scroll={{ x: "max-content", y: "50vh" }}
               pagination={false}
               onRow={(record) => ({
                 onClick: () => {
@@ -570,8 +569,7 @@ export default class ManualPlanning extends Component {
               rowSelection={trucksRowSelection}
               dataSource={data2}
               columns={columns2}
-              scroll={{ x: "max-content" }}
-              scroll={{ y: "50vh" }}
+              scroll={{ x: "max-content", y: "50vh" }}
               pagination={false}
               onRow={(record) => ({
                 onClick: () => {
@@ -617,8 +615,7 @@ export default class ManualPlanning extends Component {
                 rowSelection={ordersRowSelection}
                 dataSource={this.state.data}
                 columns={this.state.columns}
-                scroll={{ x: "max-content" }}
-                scroll={{ y: "50vh" }}
+                scroll={{ x: "max-content", y: "50vh" }}
                 pagination={false}
                 onRow={(record) => ({
                   onClick: () => {
