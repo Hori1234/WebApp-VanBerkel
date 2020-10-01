@@ -6,6 +6,7 @@ import json
 from backend.models import trucks
 from backend.models import orders
 from backend.models.users import User
+import datetime
 
 
 @pytest.fixture(autouse=True)
@@ -50,6 +51,11 @@ def setup_db(db, client):
 
         client.post('/api/sheets/', content_type='multipart/form-data',
                     data=data2)
+
+    # The above two files are uploaded at pretty much the same time, so it is
+    # not defined which one is the latest
+    orders.OrderSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
+    trucks.TruckSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
 
 
 def get_order(client, sheet_id, order_id):
@@ -262,7 +268,7 @@ def test_order_sheets(client, db):
     assert rv.status_code == 200
     data = rv.get_json()
     assert len(data) == 1
-    assert data[0]['id'] == 2
+    assert data[0]['id'] == 1
 
 
 def test_truck_sheets(client, db):
@@ -271,7 +277,7 @@ def test_truck_sheets(client, db):
     assert rv.status_code == 200
     data = rv.get_json()
     assert len(data) == 1
-    assert data[0]['id'] == 2
+    assert data[0]['id'] == 1
 
 
 def test_patch_order(client, db):
@@ -389,19 +395,16 @@ def test_delete_order(client, db):
     assert rv.status_code == 204
 
 
-
 def test_delete_order_wrong(client, db):
     rv = delete_order(client, 9, 100000)
 
     assert rv.status_code == 404
 
 
-
 def test_delete_truck(client, db):
     rv = delete_truck(client, 1, 1)
 
     assert rv.status_code == 204
-
 
 
 def test_delete_truck(client, db):
