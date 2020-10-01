@@ -581,8 +581,8 @@ export default class ManualPlanning extends Component {
                     visible={this.state.magnifyOrders}
                     onOk={this.okMagnify}
                     onCancel={this.cancelMagnify}
-                    width={1920}
-                    centered
+                    width={"100%"}
+                    style={{ top: 20}}
                 >
                     {this.state.magnifyOrders && 
                     <Layout style={{width: "100%", backgroundColor: "white"}}>
