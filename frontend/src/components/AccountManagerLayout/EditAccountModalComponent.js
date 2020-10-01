@@ -76,7 +76,12 @@ export default class CreateAccountsComponent extends Component {
     const onFinish = (values) => {
       console.log(values);
     };
-
+    const onFinishFailed = (errorInfo) => {
+      message.error(
+        "Failed: Please complete all the required fields",
+        errorInfo
+      );
+    };
     return (
       <Layout
         style={{
@@ -150,6 +155,7 @@ export default class CreateAccountsComponent extends Component {
             {...layout}
             name="nest-messages"
             onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
             validateMessages={validateMessages}
             style={{ width: "40vh", marginRight: 50 }}
           >
@@ -196,14 +202,19 @@ export default class CreateAccountsComponent extends Component {
                 type="primary"
                 htmlType="submit"
                 onClick={() => {
-                  this.updateAccount(
-                    this.props.info.id,
-                    this.state.nUssername,
-                    this.state.nPassword,
-                    this.state.nRole
-                  );
-                  this.props.modalHandleOk();
-                  message.success("Account updated succesfully");
+                  if (
+                    this.state.nUssername !== "" &&
+                    this.state.nPassword !== ""
+                  ) {
+                    this.updateAccount(
+                      this.props.info.id,
+                      this.state.nUssername,
+                      this.state.nPassword,
+                      this.state.nRole
+                    );
+                    this.props.modalHandleOk();
+                    message.success("Account updated succesfully");
+                  }
                 }}
               >
                 Submit

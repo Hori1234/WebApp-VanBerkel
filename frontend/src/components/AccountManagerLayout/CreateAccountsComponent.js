@@ -72,6 +72,12 @@ export default class CreateAccountsComponent extends Component {
   onFinish = (values) => {
     console.log(values);
   };
+  onFinishFailed = (errorInfo) => {
+    message.error("Failed: Please complete all the required fields", errorInfo);
+    this.setState({
+      status: "error",
+    });
+  };
 
   render() {
     const layout = {
@@ -133,6 +139,7 @@ export default class CreateAccountsComponent extends Component {
             {...layout}
             name="nest-messages"
             onFinish={this.onFinish}
+            onFinishFailed={this.onFinishFailed}
             validateMessages={validateMessages}
             style={{ width: "60vh", marginRight: 50 }}
           >
@@ -166,7 +173,7 @@ export default class CreateAccountsComponent extends Component {
                 onChange={this.handleChangeRole}
                 allowClear
               >
-                <Option value={"administrator"}>Administrator</Option>
+                <Option value="administrator">Administrator</Option>
                 <Option value="view-only">View Only</Option>
                 <Option value="planner">Planner</Option>
               </Select>
@@ -179,13 +186,18 @@ export default class CreateAccountsComponent extends Component {
                 type="primary"
                 htmlType="submit"
                 onClick={() => {
-                  this.addAccount(
-                    this.state.username,
-                    this.state.password,
-                    this.state.role
-                  );
-                  this.props.modalHandleOk();
-                  message.success("Account created !");
+                  if (
+                    this.state.username !== "" &&
+                    this.state.password !== ""
+                  ) {
+                    this.addAccount(
+                      this.state.username,
+                      this.state.password,
+                      this.state.role
+                    );
+                    this.props.modalHandleOk();
+                    message.success("Account created !");
+                  }
                 }}
               >
                 Submit
