@@ -12,6 +12,7 @@ import {
 } from "antd";
 import { UserAddOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
+import axios from "axios";
 
 import CreateAccountsComponent from "./CreateAccountsComponent";
 import EditAccountComponent from "./EditAccountComponent";
@@ -25,6 +26,7 @@ export default class AccountManagementLayout extends Component {
     this.state = {
       CAVisible: false,
       EAVisible: false,
+      data: [],
       Metadata: {
         id: "",
         username: "",
@@ -33,12 +35,39 @@ export default class AccountManagementLayout extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this.getUsers();
+  };
   setUsers = (value) => {
     this.setState({
       users: value,
     });
   };
-
+  getUsers = async (vPage, vPage_size) => {
+    return axios
+      .get("/api/auth/users", {
+        params: {
+          page: vPage,
+          page_size: vPage_size,
+        },
+      })
+      .then((res) => {
+        this.setState((state) => ({
+          ...state,
+          data: res.data,
+          status: "success",
+        }));
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
   showModal = (value, vId, vUsername, vRole) => {
     console.log(this.state.Metadata);
     switch (value) {
@@ -126,14 +155,17 @@ export default class AccountManagementLayout extends Component {
             <Row gutter={16}>
               <Col span={12}>
                 <Card style={{ width: "20vh" }}>
-                  <Statistic title="Active Users" value={112893} />
+                  <Statistic
+                    title="Active Users"
+                    value={this.state.data.length}
+                  />
                 </Card>
               </Col>
               <Col span={12}>
                 <Card style={{ marginLeft: 40, width: "20vh" }}>
                   <Statistic
                     title="Active"
-                    value={11.28}
+                    value={this.state.data.length / 100}
                     precision={2}
                     valueStyle={{ color: "#3f8600" }}
                     prefix={<ArrowUpOutlined />}
@@ -165,10 +197,11 @@ export default class AccountManagementLayout extends Component {
           centered={false}
           maskClosable={false}
           visible={this.state.CAVisible}
-          onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          {this.state.CAVisible && <CreateAccountsComponent />}
+          {this.state.CAVisible && (
+            <CreateAccountsComponent modalHandleOk={this.handleOk} />
+          )}
         </Modal>
         <Modal
           title="Edit Account"
@@ -180,11 +213,13 @@ export default class AccountManagementLayout extends Component {
           }}
           visible={this.state.EAVisible}
           maskClosable={false}
-          onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
           {this.state.EAVisible && (
-            <EditAccountModalComponent info={this.state.Metadata} />
+            <EditAccountModalComponent
+              info={this.state.Metadata}
+              modalHandleOk={this.handleOk}
+            />
           )}
         </Modal>
       </Layout>
