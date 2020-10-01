@@ -10,7 +10,7 @@ describe('React App', () => {
 
   
 
-  it('should output an error on invalid accounts', async () => {
+  it('shall output an error on invalid accounts', async () => {
 
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -30,7 +30,7 @@ describe('React App', () => {
 
   }, 120000);
 
-  it('should redirect to correct page on succsesful login', async () => {
+  it('shall redirect to correct page on successful login', async () => {
 
 
     const browser = await puppeteer.launch({ headless: false });

@@ -5,7 +5,7 @@ describe('React App', () => {
   const username = "test";
   const password = "test";
 
-  it('succesfully go to the view planning page with homepage after logging in', async () => {
+  it('shall succesfully go to the view planning page with homepage after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
         headless: false,
@@ -30,7 +30,7 @@ describe('React App', () => {
     await browser.close();
   }, 120000);
 
-  it('succesfully go to the data visualisation page with homepage after logging in', async () => {
+  it('shall succesfully go to the data visualisation page with homepage after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
         headless: false,
@@ -55,7 +55,7 @@ describe('React App', () => {
     await browser.close();
   }, 120000);
 
-  it('succesfully go to the monthly data analytics page with homepage after logging in', async () => {
+  it('shall succesfully go to the monthly data analytics page with homepage after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
         headless: false,
@@ -80,7 +80,7 @@ describe('React App', () => {
     await browser.close();
   }, 120000);
 
-  it('succesfully go to the upload page with homepage after logging in', async () => {
+  it('shall succesfully go to the upload page with homepage after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
         headless: false,
@@ -105,7 +105,7 @@ describe('React App', () => {
     await browser.close();
   }, 120000);
 
-  it('succesfully go to the manual planning page with homepage after logging in', async () => {
+  it('shall succesfully go to the manual planning page with homepage after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
         headless: false,
@@ -132,7 +132,7 @@ describe('React App', () => {
 
   
 
-  it('succesfully go to the user account management page with homepage after logging in', async () => {
+  it('shall succesfully go to the user account management page with homepage after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
         headless: false,

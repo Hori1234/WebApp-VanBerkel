@@ -5,7 +5,7 @@ const path = require('path');
 describe('React App', () => {
 
   
-  it('correct error message after failed upload', async () => {
+  it('shall display correct error message after failed upload', async () => {
 
     const browser = await puppeteer.launch({ 
         headless: false,
@@ -48,7 +48,7 @@ describe('React App', () => {
 
 
 
-  it('correct response message after successful upload', async () => {
+  it('shall display correct response message after successful upload', async () => {
 
     const browser = await puppeteer.launch({ 
         headless: false,

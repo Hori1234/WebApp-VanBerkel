@@ -25,7 +25,7 @@ const ProvideUser = ({children}) => {
 describe('NavigationLayout component', () => {
 
 
-    it('should render the login page correctly', () => {
+    it('shall render the login page correctly', () => {
 
         const component = render(
             <ProvideUser>
@@ -35,7 +35,7 @@ describe('NavigationLayout component', () => {
         expect(component).toMatchSnapshot();
     });
 
-    it('should have the correct view button href', () => {
+    it('shall have the correct view button href', () => {
         const component = render(
             <ProvideUser>
                 <NavigationLayout/>
@@ -46,7 +46,7 @@ describe('NavigationLayout component', () => {
 
     });
 
-    it('should have the correct dataButton href', () => {
+    it('shall have the correct dataButton href', () => {
         const component = render(
             <ProvideUser>
                 <NavigationLayout/>
@@ -57,7 +57,7 @@ describe('NavigationLayout component', () => {
 
     });
 
-    it('should have the correct monthlyButton href', () => {
+    it('shall have the correct monthlyButton href', () => {
         const component = render(
             <ProvideUser>
                 <NavigationLayout/>
@@ -68,7 +68,7 @@ describe('NavigationLayout component', () => {
 
     });
 
-    it('should have the correct uploadButton href', () => {
+    it('shall have the correct uploadButton href', () => {
         const component = render(
             <ProvideUser>
                 <NavigationLayout/>
@@ -79,7 +79,7 @@ describe('NavigationLayout component', () => {
 
     });
 
-    it('should have the correct planningButton href', () => {
+    it('shall have the correct planningButton href', () => {
         const component = render(
             <ProvideUser>
                 <NavigationLayout/>
@@ -90,7 +90,7 @@ describe('NavigationLayout component', () => {
 
     });
 
-    it('should have the correct accountButton href', () => {
+    it('shall have the correct accountButton href', () => {
         const component = render(
             <ProvideUser>
                 <NavigationLayout/>
