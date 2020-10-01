@@ -48,7 +48,7 @@ export default class CreateAccountsComponent extends Component {
   };
   handleChangePassword = (event) => {
     this.setState({
-      password: event.target.value,
+      nPassword: event.target.value,
     });
   };
   handleChangeRole = (value) => {
@@ -214,6 +214,8 @@ export default class CreateAccountsComponent extends Component {
                     );
                     this.props.modalHandleOk();
                     message.success("Account updated succesfully");
+                  } else {
+                    message.error("Fill all the empty fields");
                   }
                 }}
               >
