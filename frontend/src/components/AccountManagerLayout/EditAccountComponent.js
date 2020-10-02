@@ -103,6 +103,7 @@ export default class EditAccountComponent extends Component {
     //     loading: false,
     //   });
     // });
+    this.getUsers(1, 10);
   };
   render() {
     return (
