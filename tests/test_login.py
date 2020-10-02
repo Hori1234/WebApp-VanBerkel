@@ -174,4 +174,3 @@ def test_get_user_no_auth(client):
 
     rv = client.get('/api/auth/user')
     assert rv.status_code == 401  # no user is logged in
-
