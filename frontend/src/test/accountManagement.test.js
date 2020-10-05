@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer');
-const path = require('path');
 
 const username = 'test';
 const password = 'test';
@@ -50,7 +49,7 @@ describe('React App', () => {
         const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
 
         expect(ErrorMessage).toEqual(`Account created !`);
-
+        await browser.close();
       }, 120000);
 
 
@@ -87,7 +86,7 @@ describe('React App', () => {
         const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-error', element => element.textContent);
 
         expect(ErrorMessage).toEqual('Failed: Please complete all the required fields');
-
+        await browser.close();
       }, 120000);
 
 
@@ -134,7 +133,7 @@ describe('React App', () => {
         const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
 
         expect(ErrorMessage).toEqual(`Account updated succesfully`);
-
+        await browser.close();
       }, 120000);
 
 
@@ -173,7 +172,7 @@ describe('React App', () => {
         const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-error', element => element.textContent);
 
         expect(ErrorMessage).toEqual('Fill all the empty fields');
-
+        await browser.close();
       }, 120000);
 
 
@@ -208,7 +207,7 @@ describe('React App', () => {
         const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
 
         expect(ErrorMessage).toEqual(`Account succesfully deleted`);
-
+        await browser.close();
       }, 120000);
 
 });
