@@ -69,6 +69,7 @@ export default class CreateAccountsComponent extends Component {
   handleChangeRole = (value) => {
     this.setState({ role: value });
   };
+
   onFinish = (values) => {
     console.log(values);
   };

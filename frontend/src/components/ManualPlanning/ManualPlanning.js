@@ -11,10 +11,17 @@ import {
   Dropdown,
   Modal,
 } from "antd";
+import axios from "axios";
+
 import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
 import "./ManualPlanning.css";
 const { Option } = Select;
+
+var vPage_orders = 1;
+var vPage_trucks = 1;
+var vPage_size = 10;
+
 const dataITV = [
   {
     key: "1",
@@ -145,85 +152,7 @@ const dataKAT = [
     truckId: "",
   },
 ];
-const data2 = [
-  {
-    key: "1",
-    truckId: "TS4",
-    truckDriver: "Tom",
-    operation: "Regional",
-  },
-  {
-    key: "2",
-    truckId: "TS4",
-    truckDriver: "Tom",
-    operation: "Port",
-  },
-  {
-    key: "3",
-    truckId: "TS4",
-    truckDriver: "Tom",
-    operation: "Terminal",
-  },
-  {
-    key: "4",
-    truckId: "TS4",
-    truckDriver: "Tom",
-    operation: "Port",
-  },
-  {
-    key: "5",
-    truckId: "TS4",
-    truckDriver: "Tom",
-    operation: "Port",
-  },
-  {
-    key: "6",
-    truckId: "TS4",
-    truckDriver: "Tom",
-    operation: "Regional",
-  },
-  {
-    key: "7",
-    truckId: "TS4",
-    truckDriver: "Tom",
-    operation: "Regional",
-  },
-  {
-    key: "8",
-    truckId: "TS4",
-    truckDriver: "Tom",
-    operation: "Terminal",
-  },
-  {
-    key: "9",
-    truckId: "TS4",
-    truckDriver: "Tom",
-    operation: "Regional",
-  },
-];
-const columns2 = [
-  {
-    title: "Truck ID",
-    dataIndex: "truckId",
-    sortDirections: ["descend", "ascend"],
-    sorter: (a, b) => a.truckId.localeCompare(b.truckId),
-    width: 100,
-  },
-  {
-    title: "Truck Driver",
-    dataIndex: "truckDriver",
-    sortDirections: ["descend", "ascend"],
-    sorter: (a, b) => a.truckId.localeCompare(b.truckId),
-    width: 100,
-  },
-  {
-    title: "Operation",
-    dataIndex: "operation",
-    sortDirections: ["descend", "ascend"],
-    sorter: (a, b) => a.truckId.localeCompare(b.truckId),
-    width: 100,
-  },
-];
+
 export default class ManualPlanning extends Component {
   constructor(props) {
     super(props);
@@ -269,80 +198,45 @@ export default class ManualPlanning extends Component {
           width: 100,
         },
       ],
-      data: [
+      columns2: [
         {
-          key: "1",
-          bookingNr: "923928012",
-          address: "Eindhoven",
-          customer: "ABC",
-          truckId: "",
+          title: "Truck ID",
+          dataIndex: "truckId",
+          sortDirections: ["descend", "ascend"],
+          sorter: (a, b) => a.truckId.localeCompare(b.truckId),
+          width: 100,
         },
         {
-          key: "2",
-          bookingNr: "12392801",
-          address: "Amsterdam",
-          customer: "ACC",
-          truckId: "",
+          title: "Truck Driver",
+          dataIndex: "truckDriver",
+          sortDirections: ["descend", "ascend"],
+          sorter: (a, b) => a.truckId.localeCompare(b.truckId),
+          width: 100,
         },
         {
-          key: "3",
-          bookingNr: "23",
-          address: "Utrecht",
-          customer: "CAC",
-          truckId: "",
-        },
-        {
-          key: "4",
-          bookingNr: "23928012",
-          address: "Eindhoven",
-          customer: "ZZZ",
-          truckId: "",
-        },
-        {
-          key: "5",
-          bookingNr: "23928012",
-          address: "Eindhoven",
-          customer: "ABC",
-          truckId: "",
-        },
-        {
-          key: "6",
-          bookingNr: "23928012",
-          address: "Eindhoven",
-          customer: "ABC",
-          truckId: "",
-        },
-        {
-          key: "7",
-          bookingNr: "23928012",
-          address: "Eindhoven",
-          customer: "ABC",
-          truckId: "",
-        },
-        {
-          key: "8",
-          bookingNr: "23928012",
-          address: "Eindhoven",
-          customer: "ABC",
-          truckId: "",
-        },
-        {
-          key: "9",
-          bookingNr: "23928012",
-          address: "Eindhoven",
-          customer: "ABC",
-          truckId: "",
+          title: "Availability",
+          dataIndex: "availability",
+          sortDirections: ["descend", "ascend"],
+          sorter: (a, b) => a.truckId.localeCompare(b.truckId),
+          width: 100,
         },
       ],
+      data: [],
+      data2: [],
       startingColumns: [],
       AOVisible: false,
       ATVisible: false,
       magnifyOrders: false,
+      status: "",
+      newOrder: {},
+      newTruck: {},
     };
   }
 
   componentDidMount() {
     this.setState({ startingColumns: this.state.columns });
+    this.getOrderList("latest");
+    this.getTruckList("latest");
   }
   changeVisibility = (isTrue) => {
     this.setState({ isVisible: isTrue });
@@ -365,7 +259,7 @@ export default class ManualPlanning extends Component {
   };
   changeData = (d) => {
     if (d === "KAT") {
-      this.setState({ data: dataKAT });
+      this.setState({ data: this.state.orderList });
     } else if (d === "ITV") {
       this.setState({ data: dataITV });
     }
@@ -443,6 +337,76 @@ export default class ManualPlanning extends Component {
     } else if (e === "Port") {
       return "table-row-port";
     }
+  };
+
+  deleteTruck = () => {};
+  deleteOrder = () => {};
+  addTruck = () => {};
+  addOrder = () => {};
+  getOrderList = async (value) => {
+    return axios
+      .get(`/api/orders/${value}`)
+      .then((res) => {
+        var outarray = [];
+        for (var i = 1; i < res.data.length; i++) {
+          var temp = {
+            key: res.data[i]["order_number"],
+            bookingNr: res.data[i]["Booking"],
+            address: res.data[i]["City"],
+            customer: res.data[i]["inl_terminal"],
+            truckId: res.data[i]["Truck (1)"],
+            deliveryDeadline: res.data[i]["delivery_deadline"],
+            processTime: res.data[i]["process_time"],
+          };
+          outarray.push(temp);
+        }
+        console.log(outarray);
+        this.setState((state) => ({
+          ...state,
+          data: outarray,
+          status: "success",
+        }));
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+  getTruckList = async (value) => {
+    return axios
+      .get(`/api/trucks/${value}`)
+      .then((res) => {
+        var outarray = [];
+        for (var i = 1; i < res.data.length; i++) {
+          var temp = {
+            key: res.data[i]["s_number"],
+            truckId: res.data[i]["truck_id"],
+            truckDriver: res.data[i]["Driver"],
+            availability: res.data[i]["starting_time"],
+          };
+          outarray.push(temp);
+        }
+        console.log(outarray);
+        this.setState((state) => ({
+          ...state,
+          data2: outarray,
+          status: "success",
+        }));
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
   };
 
   render() {
@@ -567,8 +531,8 @@ export default class ManualPlanning extends Component {
               }
               bordered={true}
               rowSelection={trucksRowSelection}
-              dataSource={data2}
-              columns={columns2}
+              dataSource={this.state.data2}
+              columns={this.state.columns2}
               scroll={{ x: "max-content", y: "50vh" }}
               pagination={false}
               onRow={(record) => ({
@@ -578,8 +542,7 @@ export default class ManualPlanning extends Component {
               })}
             />
             <br />
-            <Button onClick={this.ShowTruckModal}>Add truck</Button>{" "}
-            &nbsp;&nbsp;
+            <Button onClick={this.ShowTruckModal}>Add truck</Button>
             <Button>Delete truck</Button>
           </Col>
         </Row>

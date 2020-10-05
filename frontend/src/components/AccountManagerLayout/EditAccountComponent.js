@@ -8,6 +8,9 @@ import "antd/dist/antd.css";
 import InfiniteScroll from "react-infinite-scroller";
 import "../Css/EditAC.css";
 
+var vPage = 1;
+const vPage_size = 10;
+
 export default class EditAccountComponent extends Component {
   state = {
     data: [],
@@ -19,10 +22,12 @@ export default class EditAccountComponent extends Component {
 
   componentDidMount() {
     this.getUsers(1, 10);
+
     console.log(this.state.data);
   }
 
   getUsers = async (vPage, vPage_size) => {
+    let { data } = this.state;
     return axios
       .get("/api/auth/users", {
         params: {
@@ -31,9 +36,10 @@ export default class EditAccountComponent extends Component {
         },
       })
       .then((res) => {
+        data = data.concat(res.data);
         this.setState((state) => ({
           ...state,
-          data: res.data,
+          data,
           status: "success",
         }));
         return true;
@@ -88,22 +94,22 @@ export default class EditAccountComponent extends Component {
     this.setState({
       loading: true,
     });
-    if (data.length > 20) {
+
+    if (data.length < vPage * vPage_size) {
       message.warning("Infinite List loaded all");
+      console.log("i am heree");
       this.setState({
         hasMore: false,
         loading: false,
       });
       return;
     }
-    // this.fetchData((res) => {
-    //   data = data.concat(res.data.results);
-    //   this.setState({
-    //     data,
-    //     loading: false,
-    //   });
-    // });
-    this.getUsers(1, 10);
+    if (data.length === vPage * vPage_size) {
+      vPage = vPage + 1;
+      this.getUsers(vPage, 10);
+      console.log("Calling page: " + vPage);
+      return;
+    }
   };
   render() {
     return (
