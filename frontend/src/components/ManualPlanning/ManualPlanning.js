@@ -228,8 +228,28 @@ export default class ManualPlanning extends Component {
       ATVisible: false,
       magnifyOrders: false,
       status: "",
-      newOrder: {},
-      newTruck: {},
+      newOrder: {
+        order_number: "",
+        inl: "",
+        latest_dept_time: "",
+        truck_type: "",
+        hierarchy: "",
+        delivery_deadline: "",
+        driving_time: "",
+        process_time: "",
+        service_time: "",
+      },
+      newTruck: {
+        truck_id: "",
+        truck_snumber: "",
+        availability: "",
+        truck_type: "",
+        terminal: "",
+        hierarchy: "",
+        use_cost: "",
+        starting_time: "",
+        date: "",
+      },
     };
   }
 
