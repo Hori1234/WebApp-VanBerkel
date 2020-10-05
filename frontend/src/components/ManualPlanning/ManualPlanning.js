@@ -10,6 +10,7 @@ import {
   Checkbox,
   Dropdown,
   Modal,
+  message,
 } from "antd";
 import axios from "axios";
 
@@ -250,6 +251,7 @@ export default class ManualPlanning extends Component {
         starting_time: "",
         date: "",
       },
+      temp: [],
     };
   }
 
@@ -321,25 +323,10 @@ export default class ManualPlanning extends Component {
       ATVisible: true,
     });
   };
-  showOrdersModal = (vON,vInl,vLDT,vTT,vH,vDD,vDT,vPT,vST) => {
+  showOrdersModal = () => {
     this.setState({
       AOVisible: true,
     });
-    this.setState((prevState) => {
-      let newOrder = Object.assign({}, prevState.newOrder); // creating copy of state variable newOrder
-      newOrder.order_number= vON;
-      newOrder.inl= vInl;
-      newOrder.latest_dept_time= vLDT;
-      newOrder.truck_type= vTT;
-      newOrder.hierarchy= vH;
-      newOrder.delivery_deadline= vDD;
-      newOrder.driving_time= vDT;
-      newOrder.process_time= vPT;
-      newOrder.service_time= vST;
-      return { newOrder }; // return new object newOrder object
-    });
-    console.log(this.state.newOrder)
-    
   };
   magnifyOrdersModal = () => {
     this.setState({
@@ -376,8 +363,68 @@ export default class ManualPlanning extends Component {
 
   deleteTruck = () => {};
   deleteOrder = () => {};
-  addTruck = () => {};
-  addOrder = () => {};
+  addTruck = (value) => {
+    this.getOrderInfo();
+    return axios
+      .post(`/api/trucks/${value}`, {
+        truck_id: this.state.newTruck.truck_id,
+        availability: this.state.newTruck.availability,
+        truck_type: this.state.newTruck.truck_type,
+        business_type: this.state.newTruck.use_cost,
+        terminal: this.state.newTruck.terminal,
+        hierarchy: 0,
+        use_cost: 0,
+        date: this.state.newTruck.date,
+        starting_time: this.state.newTruck.starting_time,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          message.success("Order: " + "added succesfully");
+        }
+        this.handleOk();
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+  addOrder = (value) => {
+    this.getOrderInfo();
+    return axios
+      .post(`/api/orders/${value}`, {
+        inl_terminal: this.state.newOrder.inl,
+        truck_type: this.state.newOrder.truck_type,
+        hierarchy: 0,
+        delivery_deadline: 0,
+        driving_time: 0,
+        process_time: 0,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          message.success(
+            "Order: " +
+              res.data["inl_terminal"] +
+              res.data["truck_type"] +
+              "added succesfully"
+          );
+        }
+        this.handleOk();
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
   getOrderList = async (value) => {
     return axios
       .get(`/api/orders/${value}`)
@@ -443,7 +490,75 @@ export default class ManualPlanning extends Component {
         return false;
       });
   };
-  
+
+  setNewOrder = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
+    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
+    this.setState((prevState) => {
+      let newOrder = Object.assign({}, prevState.newOrder); // creating copy of state variable newOrder
+      newOrder.order_number = vON;
+      newOrder.inl = vInl;
+      newOrder.latest_dept_time = vLDT;
+      newOrder.truck_type = vTT;
+      newOrder.hierarchy = vH;
+      newOrder.delivery_deadline = vDD;
+      newOrder.driving_time = vDT;
+      newOrder.process_time = vPT;
+      newOrder.service_time = vST;
+      return { newOrder }; // return new object newOrder object
+    });
+    console.log(this.state.newOrder);
+  };
+
+  setNewTruck = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
+    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
+    this.setState((prevState) => {
+      let newTruck = Object.assign({}, prevState.newTruck); // creating copy of state variable newOrder
+      newTruck.truck_id = vON;
+      newTruck.truck_snumber = vInl;
+      newTruck.availability = vLDT;
+      newTruck.truck_type = vTT;
+      newTruck.hierarchy = vH;
+      newTruck.terminal = vDD;
+      newTruck.use_cost = vDT;
+      newTruck.starting_time = vPT;
+      newTruck.date = vST;
+      return { newTruck }; // return new object newOrder object
+    });
+    console.log(this.state.newTruck);
+  };
+  getOrderInfo = () => {
+    var temp = [];
+    temp = this.refs.addOrders.getFormData();
+    console.log(temp);
+    this.setNewOrder(
+      temp[0],
+      temp[1],
+      temp[2],
+      temp[3],
+      temp[4],
+      temp[5],
+      temp[6],
+      temp[7],
+      temp[8]
+    );
+  };
+
+  getTruckInfo = () => {
+    var temp = [];
+    temp = this.refs.addTrucks.getFormData();
+    console.log(temp);
+    this.setNewTruck(
+      temp[0],
+      temp[1],
+      temp[2],
+      temp[3],
+      temp[4],
+      temp[5],
+      temp[6],
+      temp[7],
+      temp[8]
+    );
+  };
 
   render() {
     const showHideMenu = (
@@ -542,8 +657,7 @@ export default class ManualPlanning extends Component {
               })}
             />
             <br />
-            <Button onClick={this.showOrdersModal}>Add order</Button>{" "}
-            &nbsp;&nbsp;
+            <Button onClick={() => this.showOrdersModal()}>Add order</Button>
             <Button>Delete order</Button>&nbsp;&nbsp;
             <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
           </Col>
@@ -587,17 +701,21 @@ export default class ManualPlanning extends Component {
           title="Add Order"
           visible={this.state.AOVisible}
           onCancel={this.handleCancel}
-          onOk={this.handleOk}
+          onOk={() => {
+            this.addOrder("latest");
+          }}
         >
-          {this.state.AOVisible && <AddOrdersLayout info={this.state.newOrder} />}
+          {this.state.AOVisible && <AddOrdersLayout ref="addOrders" />}
         </Modal>
         <Modal
           title="Add Truck"
           visible={this.state.ATVisible}
-          onOk={this.handleOk}
+          onOk={() => {
+            this.addTruck("latest");
+          }}
           onCancel={this.handleCancel}
         >
-          {this.state.ATVisible && <AddTruckLayout />}
+          {this.state.ATVisible && <AddTruckLayout ref="addTrucks" />}
         </Modal>
         <Modal
           title="Order List"
