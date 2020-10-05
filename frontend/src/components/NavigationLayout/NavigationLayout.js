@@ -99,7 +99,7 @@ function NavigationLayout() {
                   key="sub1"
                   defaultSelectedKeys={["0"]}
                   icon={<UserOutlined />}
-                  title="User Type: "
+                  title={auth.state.user.username}
                 >
                   <Menu.Item key="0" >
                     <Link to="/" >Home </Link>
@@ -131,7 +131,7 @@ function NavigationLayout() {
                   key="sub1"
                   defaultSelectedKeys={["1"]}
                   icon={<UserOutlined />}
-                  title="User Type: "
+                  title={auth.state.user.username}
                 >
                   <Menu.Item key="1">
                     <Link to="/">Home</Link>
@@ -160,7 +160,7 @@ function NavigationLayout() {
                   key="sub1"
                   defaultSelectedKeys={["3"]}
                   icon={<UserOutlined />}
-                  title="User Type: "
+                  title={auth.state.user.username}
                 >
                   <Menu.Item key="3">
                     <Link to="/">Home</Link>
