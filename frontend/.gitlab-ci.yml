@@ -3,6 +3,8 @@ image: node:latest
 
 # Cache node_modules for future jobs
 cache:
+  untracked: true
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - frontend/node_modules/
 
@@ -21,11 +23,7 @@ stages:
 frontend-build:
   stage: Build
   script:
-    - npm install
-  artifacts:
-    paths:
-      - frontend/node_modules/
-    expire_in: 1 hour
+    - npm ci
 
 # Check style of the code
 frontend-lint:
