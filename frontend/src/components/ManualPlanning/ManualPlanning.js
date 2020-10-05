@@ -321,17 +321,32 @@ export default class ManualPlanning extends Component {
       ATVisible: true,
     });
   };
-  showOrdersModal = () => {
+  showOrdersModal = (vON,vInl,vLDT,vTT,vH,vDD,vDT,vPT,vST) => {
     this.setState({
       AOVisible: true,
     });
+    this.setState((prevState) => {
+      let newOrder = Object.assign({}, prevState.newOrder); // creating copy of state variable newOrder
+      newOrder.order_number= vON;
+      newOrder.inl= vInl;
+      newOrder.latest_dept_time= vLDT;
+      newOrder.truck_type= vTT;
+      newOrder.hierarchy= vH;
+      newOrder.delivery_deadline= vDD;
+      newOrder.driving_time= vDT;
+      newOrder.process_time= vPT;
+      newOrder.service_time= vST;
+      return { newOrder }; // return new object newOrder object
+    });
+    console.log(this.state.newOrder)
+    
   };
   magnifyOrdersModal = () => {
     this.setState({
       magnifyOrders: true,
     });
   };
-  handleOk = (e) => {
+  handleOk = () => {
     this.setState({
       AOVisible: false,
       ATVisible: false,
@@ -428,6 +443,7 @@ export default class ManualPlanning extends Component {
         return false;
       });
   };
+  
 
   render() {
     const showHideMenu = (
@@ -570,10 +586,10 @@ export default class ManualPlanning extends Component {
         <Modal
           title="Add Order"
           visible={this.state.AOVisible}
-          onOk={this.handleOk}
           onCancel={this.handleCancel}
+          onOk={this.handleOk}
         >
-          {this.state.AOVisible && <AddOrdersLayout />}
+          {this.state.AOVisible && <AddOrdersLayout info={this.state.newOrder} />}
         </Modal>
         <Modal
           title="Add Truck"
