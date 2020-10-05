@@ -65,8 +65,8 @@ export default class CreateAccountsComponent extends Component {
     const validateMessages = {
       required: "${label} is required!",
       types: {
-        email: "${label} is not validate email!",
-        number: "${label} is not a validate number!",
+        email: "${label} is not a valid email!",
+        number: "${label} is not a valid number!",
       },
       number: {
         range: "${label} must be between ${min} and ${max}",
@@ -110,9 +110,9 @@ export default class CreateAccountsComponent extends Component {
                 backgroundColor: "white",
               }}
             >
-              <Title style={{ fontSize: 16 }}>Welecome </Title>
+              <Title style={{ fontSize: 16 }}>Welcome </Title>
               <Text style={{ fontSize: 14 }}>
-                Change the following fields in order to update the new user
+                Change the following fields to update the new user
                 information.
               </Text>
             </Layout>

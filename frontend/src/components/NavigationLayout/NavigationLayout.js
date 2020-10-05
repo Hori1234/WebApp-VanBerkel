@@ -29,25 +29,25 @@ function NavigationLayout() {
     selectedKeys: [],
   });
   const keys = (pathname) =>{
-    if(pathname == '/'){
+    if(pathname === '/'){
       return '0';
     }
-    else if(pathname == '/account'){
+    else if(pathname === '/account'){
       return '1';
     }
-    else if(pathname == '/upload'){
+    else if(pathname === '/upload'){
       return '2';
     }
-    else if(pathname == '/planning'){
+    else if(pathname === '/planning'){
       return '3';
     }
-    else if(pathname == '/view'){
+    else if(pathname === '/view'){
       return '4';
     }
-    else if(pathname == '/data'){
+    else if(pathname === '/data'){
       return '5';
     }
-    else if(pathname == '/montly'){
+    else if(pathname === '/montly'){
       return '6';
     }
   }
