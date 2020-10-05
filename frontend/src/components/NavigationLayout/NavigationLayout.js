@@ -5,7 +5,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {withRouter , useLocation, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Home from "../Home/Home";
 import UploadButton from "../UploadButton/UploadButton";
@@ -17,16 +17,40 @@ import ManualPlanning from "../ManualPlanning/ManualPlanning";
 const { SubMenu } = Menu;
 const { Content, Sider, Footer } = Layout;
 
-export default function NavigationLayout() {
+
+function NavigationLayout() {
 
   const auth = useAuth();
-
+  const location = useLocation();
   const [state, setState] = useState({
     isEmptyState: true,
     UserState: false,
     collapsed: false,
+    selectedKeys: [],
   });
-
+  const keys = (pathname) =>{
+    if(pathname == '/'){
+      return '0';
+    }
+    else if(pathname == '/account'){
+      return '1';
+    }
+    else if(pathname == '/upload'){
+      return '2';
+    }
+    else if(pathname == '/planning'){
+      return '3';
+    }
+    else if(pathname == '/view'){
+      return '4';
+    }
+    else if(pathname == '/data'){
+      return '5';
+    }
+    else if(pathname == '/montly'){
+      return '6';
+    }
+  }
   const onCollapse = (collapsed) => {
     setState({
       ...state,
@@ -40,10 +64,11 @@ export default function NavigationLayout() {
       divider.style.setProperty("display", "flex");
     }
   };
-
   return (
+
+
     !auth.state ?  <pre>Loading...</pre> :
-    <Router>
+    
       <Layout style={{ height: "100vh" }}>
         <Layout style={{ margin: 10 }}>
           <Sider
@@ -67,16 +92,17 @@ export default function NavigationLayout() {
               mode="inline"
               defaultOpenKeys={["sub1"]}
               style={{ height: "100%", borderRight: 0 }}
+              selectedKeys={keys(location.pathname)}
             >
-              {auth.state.user.role === "administrator" && (
+              {auth.state.user.role === "administrator" &&(
                 <SubMenu
                   key="sub1"
                   defaultSelectedKeys={["0"]}
                   icon={<UserOutlined />}
                   title="User Type: "
                 >
-                  <Menu.Item key="0">
-                    <Link to="/" >Home</Link>
+                  <Menu.Item key="0" >
+                    <Link to="/" >Home </Link>
                   </Menu.Item>
                   <Menu.Item key="1">
                     <Link to="/account">Account Management</Link>
@@ -207,7 +233,8 @@ export default function NavigationLayout() {
           </Layout>
         </Layout>
       </Layout>
-    </Router>
+    
   );
 
 }
+export default withRouter(NavigationLayout);
