@@ -10,6 +10,7 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
 
     latest_dep_time = ma.Integer()
     service_time = ma.Integer()
+    truck_id = ma.Integer()
 
     class Meta:
         model = Order

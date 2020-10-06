@@ -32,6 +32,8 @@ class Truck(db.Model):
     starting_time = db.Column(db.Time, nullable=False)
     others = db.Column(MutableDict.as_mutable(db.JSON))
 
+    orders = db.relationship('Order', backref='truck')
+
     def __init__(self, truck_id: str, availability: bool,
                  truck_type: str, business_type: str, terminal: str,
                  hierarchy: float, use_cost: float, date: datetime.date,

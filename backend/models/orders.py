@@ -23,6 +23,9 @@ class Order(db.Model):
                          db.ForeignKey('order_sheet.id', ondelete='CASCADE'))
     inl_terminal = db.Column(db.String, nullable=False)
     truck_type = db.Column(db.String, nullable=False)
+    truck_id = db.Column(db.Integer,
+                         db.ForeignKey('truck.s_number'))
+    departure_time = db.Column(db.Integer)
     hierarchy = db.Column(db.Float, nullable=False)
     delivery_deadline = db.Column(db.Integer, nullable=False)
     driving_time = db.Column(db.Integer, nullable=False)
@@ -31,10 +34,11 @@ class Order(db.Model):
 
     def __init__(self, inl_terminal: str, truck_type: str, hierarchy: float,
                  delivery_deadline: int, driving_time: int, process_time: int,
-                 sheet_id: int = None, **kwargs):
+                 sheet_id: int = None, truck_id: int = None, **kwargs):
         self.id = sheet_id
         self.inl_terminal = inl_terminal
         self.truck_type = truck_type
+        self.truck_id = truck_id
         self.hierarchy = hierarchy
         self.delivery_deadline = delivery_deadline
         self.driving_time = driving_time

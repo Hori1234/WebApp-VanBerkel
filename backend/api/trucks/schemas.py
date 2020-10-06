@@ -8,6 +8,8 @@ class TruckSchema(ma.SQLAlchemyAutoSchema):
     Serializes the order table to JSON
     """
 
+    orders = ma.List(ma.Integer, load_only=True)
+
     class Meta:
         model = Truck
         ordered = True

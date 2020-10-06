@@ -1,5 +1,6 @@
 from flask.views import MethodView
 from . import bp
+from backend.models.orders import Order
 from backend.models.trucks import Truck, TruckSheet
 from backend.extensions import roles_required
 from .schemas import TruckSchema
@@ -71,6 +72,19 @@ class Trucks(MethodView):
                 # Can't understand which sheet is requested
                 abort(404, message='Truck sheet not found')
                 return
+
+        # assign orders to the truck
+        order_numbers = truck.pop('orders', None)
+        if order_numbers is not None:
+            orders = Order.query \
+                .filter(Order.order_number.in_(order_numbers)) \
+                .all()
+            if len(orders) != len(orders):
+                abort(404,
+                      message='Not all orders were found!',
+                      status='Not Found')
+            truck.orders = orders
+
         # Create a new truck with all parameters
         new_truck = Truck(**truck)
 
@@ -155,6 +169,18 @@ class TruckByID(MethodView):
             truck = Truck.query.get_or_404(
                 truck_id,
                 description='Truck not found')
+
+            # Change orders assigned to truck
+            order_numbers = req.pop('orders', None)
+            if order_numbers is not None:
+                orders = Order.query\
+                    .filter(Order.order_number.in_(order_numbers))\
+                    .all()
+                if len(orders) != len(orders):
+                    abort(404,
+                          message='Not all orders were found!',
+                          status='Not Found')
+                truck.orders = orders
 
             # Iterate over the keys and values in the request
             for k, v in req.items():

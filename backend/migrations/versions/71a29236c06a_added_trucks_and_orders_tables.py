@@ -1,6 +1,6 @@
 """Added trucks and orders tables
 
-Revision ID: b9d32756fc56
+Revision ID: 71a29236c06a
 Revises: b6954ffedcc5
 Create Date: 2020-10-06 11:45:14.331222
 
@@ -42,6 +42,14 @@ def upgrade():
                     sa.Column('driving_time', sa.Integer(), nullable=False),
                     sa.Column('process_time', sa.Integer(), nullable=False),
                     sa.Column('others', sa.JSON(), nullable=True),
+                    sa.Column('departure_time',
+                              sa.Integer(),
+                              nullable=True),
+                    sa.Column('truck_id',
+                              sa.Integer(),
+                              nullable=True),
+                    sa.ForeignKeyConstraint(['truck_id'],
+                                            ['truck.s_number']),
                     sa.ForeignKeyConstraint(['sheet_id'],
                                             ['order_sheet.id'],
                                             ondelete='CASCADE'),
