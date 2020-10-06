@@ -58,26 +58,24 @@ def setup_db(db, client):
     trucks.TruckSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
 
 
-def get_order(client, sheet_id, order_id):
+def get_order(client, order_id):
     """
     returns the order specified.
     :param client: The test client to make the request with
-    :param sheet_id: The id of the sheet
     :param order_id: The id of the order to find
     :return: Order with id=id
     """
-    return client.get(f'/api/orders/{sheet_id}/{order_id}')
+    return client.get(f'/api/orders/{order_id}')
 
 
-def get_truck(client, sheet_id, truck_id):
+def get_truck(client, truck_id):
     """
     returns the truck specified.
     :param client: The test client to make the request with
-    :param sheet_id: The id of the sheet
     :param truck_id: The id of the truck to find
     :return: truck with id=id
     """
-    return client.get(f'/api/trucks/{sheet_id}/{truck_id}')
+    return client.get(f'/api/trucks/{truck_id}')
 
 
 def post_order(client, sheet_id, **kwargs):
@@ -88,7 +86,7 @@ def post_order(client, sheet_id, **kwargs):
     :param kwargs: the details of the order to add
     :return:
     """
-    return client.post(f'/api/orders/{sheet_id}',
+    return client.post(f'/api/orders/sheet/{sheet_id}',
                        data=json.dumps(kwargs),
                        content_type='application/json')
 
@@ -101,26 +99,25 @@ def post_truck(client, sheet_id, **kwargs):
     :param kwargs: the details of the truck to add
     :return:
     """
-    return client.post(f'/api/trucks/{sheet_id}',
+    return client.post(f'/api/trucks/sheet/{sheet_id}',
                        data=json.dumps(kwargs),
                        content_type='application/json')
 
 
-def patch_order(client, sheet_id, order_id, **kwargs):
+def patch_order(client, order_id, **kwargs):
     """
     attempts to change the specified row in order
     :param client: the client to make the request with
-    :param sheet_id: the id of the sheet
     :param order_id: the id of the order to change
     :param kwargs: the data that needs to be changed
     :return:
     """
-    return client.patch(f'/api/orders/{sheet_id}/{order_id}',
+    return client.patch(f'/api/orders/{order_id}',
                         data=json.dumps(kwargs),
                         content_type='application/json')
 
 
-def patch_truck(client, sheet_id, truck_id, **kwargs):
+def patch_truck(client, truck_id, **kwargs):
     """
     attempts to change the specified row in truck
     :param client: the client to make the request with
@@ -129,7 +126,7 @@ def patch_truck(client, sheet_id, truck_id, **kwargs):
     :param kwargs: the data that needs to be changed
     :return:
     """
-    return client.patch(f'/api/trucks/{sheet_id}/{truck_id}',
+    return client.patch(f'/api/trucks/{truck_id}',
                         data=json.dumps(kwargs),
                         content_type='application/json')
 
@@ -141,7 +138,7 @@ def get_orders(client, sheet_id):
     :param sheet_id: the sheet to get the info from
     :return: a list of all order associated with the specified sheet
     """
-    return client.get(f'/api/orders/{sheet_id}')
+    return client.get(f'/api/orders/sheet/{sheet_id}')
 
 
 def get_trucks(client, sheet_id):
@@ -151,29 +148,27 @@ def get_trucks(client, sheet_id):
     :param sheet_id: the sheet to get the info from
     :return: a list of all trucks associated with the specified sheet
     """
-    return client.get(f'/api/trucks/{sheet_id}')
+    return client.get(f'/api/trucks/sheet/{sheet_id}')
 
 
-def delete_order(client, sheet_id, order_id):
+def delete_order(client, order_id):
     """
     deletes the specified order from the database
     :param client: the client to make the request
-    :param sheet_id: the id of the sheet
     :param order_id: the order to be deleted
     :return:
     """
-    return client.delete(f'/api/trucks/{sheet_id}/{order_id}')
+    return client.delete(f'/api/trucks/{order_id}')
 
 
-def delete_truck(client, sheet_id, truck_id):
+def delete_truck(client, truck_id):
     """
     deletes the specified truck from the database
     :param client: the client to make the request
-    :param sheet_id: the id of the sheet
     :param truck_id: the truck to be deleted
     :return:
     """
-    return client.delete(f'/api/trucks/{sheet_id}/{truck_id}')
+    return client.delete(f'/api/trucks/{truck_id}')
 
 
 def get_order_sheet(client, page=1, page_size=10):
@@ -207,7 +202,7 @@ def get_truck_sheet(client, page=1, page_size=10):
 
 
 def test_order(client, db):
-    rv = get_order(client, 1, 1)
+    rv = get_order(client, 1)
 
     assert rv.status_code == 200
     data = rv.get_json()
@@ -215,13 +210,13 @@ def test_order(client, db):
 
 
 def test_order_wrong(client, db):
-    rv = get_order(client, db, 1000000)
+    rv = get_order(client, 1000000)
 
     assert rv.status_code == 404
 
 
 def test_truck(client, db):
-    rv = get_truck(client, 1, 1)
+    rv = get_truck(client, 1)
 
     assert rv.status_code == 200
     data = rv.get_json()
@@ -229,7 +224,7 @@ def test_truck(client, db):
 
 
 def test_truck_wrong(client, db):
-    rv = get_truck(client, 9, 1000000)
+    rv = get_truck(client, 1000000)
 
     assert rv.status_code == 404
 
@@ -285,10 +280,10 @@ def test_patch_order(client, db):
         truck_type='regional',
         inl_terminal='KAT'
     )
-    rv = patch_order(client, 1, 1, **data)
+    rv = patch_order(client, 1, **data)
 
     assert rv.status_code == 200
-    order = orders.Order.query.get((1, 1))
+    order = orders.Order.query.get(1)
     assert order.truck_type == 'regional'
     assert order.inl_terminal == 'KAT'
 
@@ -299,13 +294,13 @@ def test_patch_order_invalid(client, db):
         truck_type='big',
         inl_terminal='DOG'
     )
-    rv = patch_order(client, 1, 1, **data)
+    rv = patch_order(client, 1, **data)
 
     assert rv.status_code == 400
 
 
 def test_patch_order_wrong(client, db):
-    rv = patch_order(client, 9, 10000)
+    rv = patch_order(client, 10000)
 
     assert rv.status_code == 404
 
@@ -315,10 +310,10 @@ def test_patch_truck(client, db):
         truck_type='port',
         terminal='KAT'
     )
-    rv = patch_truck(client, 1, 1, **data)
+    rv = patch_truck(client, 1, **data)
 
     assert rv.status_code == 200
-    truck = trucks.Truck.query.get_or_404((1, 1))
+    truck = trucks.Truck.query.get_or_404(1)
     assert truck.truck_type == 'port'
     assert truck.terminal == 'KAT'
 
@@ -329,13 +324,13 @@ def test_patch_truck_invalid(client, db):
         truck_type='medium',
         terminal='SAD'
     )
-    rv = patch_truck(client, 1, 1, **data)
+    rv = patch_truck(client, 1, **data)
 
     assert rv.status_code == 400
 
 
 def test_patch_truck_wrong(client, db):
-    rv = patch_truck(client, 9, 100000)
+    rv = patch_truck(client, 100000)
 
     assert rv.status_code == 404
 
@@ -348,7 +343,8 @@ def test_post_order(client, db):
     )
     rv = post_order(client, 1, **data)
     assert rv.status_code == 200
-    order = orders.Order.query.get_or_404((1, 134))
+    data = rv.get_json()
+    order = orders.Order.query.get_or_404(data['order_number'])
     assert order.hierarchy == 3
 
 
@@ -373,7 +369,8 @@ def test_post_truck(client, db):
     rv = post_truck(client, 1, **data)
 
     assert rv.status_code == 200
-    truck = trucks.Truck.query.get_or_404((1, 50))
+    data = rv.get_json()
+    truck = trucks.Truck.query.get_or_404(data['s_number'])
     assert truck.hierarchy == 2
 
 
@@ -390,24 +387,24 @@ def test_post_truck_invalid(client, db):
 
 
 def test_delete_order(client, db):
-    rv = delete_order(client, 1, 1)
+    rv = delete_order(client, 1)
 
     assert rv.status_code == 204
 
 
 def test_delete_order_wrong(client, db):
-    rv = delete_order(client, 9, 100000)
+    rv = delete_order(client, 100000)
 
     assert rv.status_code == 404
 
 
 def test_delete_truck(client, db):
-    rv = delete_truck(client, 1, 1)
+    rv = delete_truck(client, 1)
 
     assert rv.status_code == 204
 
 
-def test_delete_truck(client, db):
-    rv = delete_truck(client, 9, 100000)
+def test_delete_truck_wrong(client, db):
+    rv = delete_truck(client, 100000)
 
     assert rv.status_code == 404

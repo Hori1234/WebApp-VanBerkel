@@ -1,6 +1,5 @@
 from backend.app import db
 from sqlalchemy.sql import func
-from sqlalchemy.ext.orderinglist import ordering_list
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.mutable import MutableDict
 
@@ -9,8 +8,6 @@ class OrderSheet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     upload_date = db.Column(db.DateTime, server_default=func.now())
     orders = db.relationship('Order', backref='ordersheet',
-                             collection_class=ordering_list(
-                                 "order_number", count_from=1),
                              cascade='all, delete-orphan')
 
     def add_row(self, order):
@@ -21,10 +18,9 @@ class OrderSheet(db.Model):
 
 
 class Order(db.Model):
-    id = db.Column(db.Integer,
-                   db.ForeignKey('order_sheet.id', ondelete='CASCADE'),
-                   primary_key=True, autoincrement=False)
     order_number = db.Column(db.Integer, primary_key=True)
+    sheet_id = db.Column(db.Integer,
+                         db.ForeignKey('order_sheet.id', ondelete='CASCADE'))
     inl_terminal = db.Column(db.String, nullable=False)
     truck_type = db.Column(db.String, nullable=False)
     hierarchy = db.Column(db.Float, nullable=False)
@@ -35,8 +31,8 @@ class Order(db.Model):
 
     def __init__(self, inl_terminal: str, truck_type: str, hierarchy: float,
                  delivery_deadline: int, driving_time: int, process_time: int,
-                 id: int = None, **kwargs):
-        self.id = id
+                 sheet_id: int = None, **kwargs):
+        self.id = sheet_id
         self.inl_terminal = inl_terminal
         self.truck_type = truck_type
         self.hierarchy = hierarchy

@@ -1,6 +1,5 @@
 from backend.app import db
 from sqlalchemy.sql import func
-from sqlalchemy.ext.orderinglist import ordering_list
 import datetime
 from sqlalchemy.ext.mutable import MutableDict
 
@@ -9,8 +8,6 @@ class TruckSheet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     upload_date = db.Column(db.DateTime, server_default=func.now())
     trucks = db.relationship('Truck', backref='trucksheet',
-                             collection_class=ordering_list(
-                                 "s_number", count_from=1),
                              cascade='all, delete-orphan')
 
     def add_row(self, truck):
@@ -21,11 +18,10 @@ class TruckSheet(db.Model):
 
 
 class Truck(db.Model):
-    id = db.Column(db.Integer,
-                   db.ForeignKey('truck_sheet.id', ondelete='CASCADE'),
-                   primary_key=True)
-    truck_id = db.Column(db.String, nullable=False)
     s_number = db.Column(db.Integer, primary_key=True)
+    sheet_id = db.Column(db.Integer,
+                         db.ForeignKey('truck_sheet.id', ondelete='CASCADE'))
+    truck_id = db.Column(db.String, nullable=False)
     availability = db.Column(db.Boolean, nullable=False)
     truck_type = db.Column(db.String, nullable=False)
     business_type = db.Column(db.String, nullable=False)
@@ -39,7 +35,8 @@ class Truck(db.Model):
     def __init__(self, truck_id: str, availability: bool,
                  truck_type: str, business_type: str, terminal: str,
                  hierarchy: float, use_cost: float, date: datetime.date,
-                 starting_time: datetime.time, **kwargs):
+                 starting_time: datetime.time, sheet_id: int = None, **kwargs):
+        self.sheet_id = sheet_id
         self.truck_id = truck_id
         self.availability = availability
         self.truck_type = truck_type
