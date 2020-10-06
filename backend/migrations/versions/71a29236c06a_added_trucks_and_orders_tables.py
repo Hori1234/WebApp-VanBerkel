@@ -31,6 +31,24 @@ def upgrade():
                               nullable=True),
                     sa.PrimaryKeyConstraint('id')
                     )
+    op.create_table('truck',
+                    sa.Column('s_number', sa.Integer(), nullable=False),
+                    sa.Column('sheet_id', sa.Integer(), nullable=True),
+                    sa.Column('truck_id', sa.String(), nullable=False),
+                    sa.Column('availability', sa.Boolean(), nullable=False),
+                    sa.Column('truck_type', sa.String(), nullable=False),
+                    sa.Column('business_type', sa.String(), nullable=False),
+                    sa.Column('terminal', sa.String(), nullable=False),
+                    sa.Column('hierarchy', sa.Float(), nullable=False),
+                    sa.Column('use_cost', sa.Float(), nullable=False),
+                    sa.Column('date', sa.Date(), nullable=False),
+                    sa.Column('starting_time', sa.Time(), nullable=False),
+                    sa.Column('others', sa.JSON(), nullable=True),
+                    sa.ForeignKeyConstraint(['sheet_id'],
+                                            ['truck_sheet.id'],
+                                            ondelete='CASCADE'),
+                    sa.PrimaryKeyConstraint('s_number')
+                    )
     op.create_table('order',
                     sa.Column('order_number', sa.Integer(), nullable=False),
                     sa.Column('sheet_id', sa.Integer(), nullable=True),
@@ -54,24 +72,6 @@ def upgrade():
                                             ['order_sheet.id'],
                                             ondelete='CASCADE'),
                     sa.PrimaryKeyConstraint('order_number')
-                    )
-    op.create_table('truck',
-                    sa.Column('s_number', sa.Integer(), nullable=False),
-                    sa.Column('sheet_id', sa.Integer(), nullable=True),
-                    sa.Column('truck_id', sa.String(), nullable=False),
-                    sa.Column('availability', sa.Boolean(), nullable=False),
-                    sa.Column('truck_type', sa.String(), nullable=False),
-                    sa.Column('business_type', sa.String(), nullable=False),
-                    sa.Column('terminal', sa.String(), nullable=False),
-                    sa.Column('hierarchy', sa.Float(), nullable=False),
-                    sa.Column('use_cost', sa.Float(), nullable=False),
-                    sa.Column('date', sa.Date(), nullable=False),
-                    sa.Column('starting_time', sa.Time(), nullable=False),
-                    sa.Column('others', sa.JSON(), nullable=True),
-                    sa.ForeignKeyConstraint(['sheet_id'],
-                                            ['truck_sheet.id'],
-                                            ondelete='CASCADE'),
-                    sa.PrimaryKeyConstraint('s_number')
                     )
     # ### end Alembic commands ###
 
