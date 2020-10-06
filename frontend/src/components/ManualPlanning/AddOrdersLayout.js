@@ -103,6 +103,7 @@ export default class AddOrdersLayout extends Component {
       number: {
         range: "${label} must be between ${min} and ${max}",
       },
+      
     };
     return (
       <Form style={{ width: "100vh", marginRight: 20 }} name="nest-messages"  onFinish={this.onFinish}
