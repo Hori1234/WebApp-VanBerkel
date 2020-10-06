@@ -79,7 +79,7 @@ class Trucks(MethodView):
             orders = Order.query \
                 .filter(Order.order_number.in_(order_numbers)) \
                 .all()
-            if len(orders) != len(orders):
+            if len(orders) != len(order_numbers):
                 abort(404,
                       message='Not all orders were found!',
                       status='Not Found')
@@ -176,7 +176,7 @@ class TruckByID(MethodView):
                 orders = Order.query\
                     .filter(Order.order_number.in_(order_numbers))\
                     .all()
-                if len(orders) != len(orders):
+                if len(orders) != len(order_numbers):
                     abort(404,
                           message='Not all orders were found!',
                           status='Not Found')

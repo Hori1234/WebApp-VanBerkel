@@ -158,7 +158,7 @@ def delete_order(client, order_id):
     :param order_id: the order to be deleted
     :return:
     """
-    return client.delete(f'/api/trucks/{order_id}')
+    return client.delete(f'/api/orders/{order_id}')
 
 
 def delete_truck(client, truck_id):
@@ -278,7 +278,8 @@ def test_truck_sheets(client, db):
 def test_patch_order(client, db):
     data = dict(
         truck_type='regional',
-        inl_terminal='KAT'
+        inl_terminal='KAT',
+        fun='YES'
     )
     rv = patch_order(client, 1, **data)
 
@@ -406,5 +407,127 @@ def test_delete_truck(client, db):
 
 def test_delete_truck_wrong(client, db):
     rv = delete_truck(client, 100000)
+
+    assert rv.status_code == 404
+
+
+def test_get_order_sheet_latest(client, db):
+    rv = get_orders(client, 'latest')
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert len(data) > 0
+
+
+def test_get_order_sheet_not_latest(client, db):
+    rv = get_orders(client, 'first')
+
+    assert rv.status_code == 404
+
+
+def test_new_order_latest(client, db):
+    data = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        driving_time=10, process_time=1, service_time=2
+    )
+    rv = post_order(client, 'latest', **data)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    order = orders.Order.query.get_or_404(data['order_number'])
+    assert order.hierarchy == 3
+
+
+def test_new_order_not_latest(client, db):
+    data = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        driving_time=10, process_time=1, service_time=2
+    )
+    rv = post_order(client, 'same dude', **data)
+
+    assert rv.status_code == 404
+
+
+def test_get_truck_sheet_latest(client, db):
+    rv = get_trucks(client, 'latest')
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert len(data) > 0
+
+
+def test_get_truck_sheet_not_latest(client, db):
+    rv = get_trucks(client, 'your mom')
+
+    assert rv.status_code == 404
+
+
+def test_new_truck_latest(client, db):
+    data = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30'
+    )
+    rv = post_truck(client, 'latest', **data)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    truck = trucks.Truck.query.get_or_404(data['s_number'])
+    assert truck.hierarchy == 2
+
+
+def test_new_truck_not_latest(client, db):
+    data = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30'
+    )
+    rv = post_truck(client, 'more testing = more better', **data)
+
+    assert rv.status_code == 404
+
+
+def test_new_truck_with_orders(client, db):
+    data = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30', orders=[1, 2, 3]
+    )
+    rv = post_truck(client, 1, **data)
+
+    assert rv.status_code == 200
+
+
+def test_new_truck_with_wrong_orders(client, db):
+    data = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30', orders=[1, 2, 30000]
+    )
+    rv = post_truck(client, 1, **data)
+
+    assert rv.status_code == 404
+
+
+def test_patch_truck_with_orders(client, db):
+    data = dict(
+        truck_type='port', orders=[1, 2]
+    )
+    rv = patch_truck(client, 1, **data)
+
+    assert rv.status_code == 200
+
+
+def test_patch_truck_with_wrong_orders(client, db):
+    data = dict(
+        truck_type='port', orders=[1, 200000]
+    )
+    rv = patch_truck(client, 1, **data)
 
     assert rv.status_code == 404
