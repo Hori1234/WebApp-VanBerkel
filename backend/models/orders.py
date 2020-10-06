@@ -1,7 +1,8 @@
 from backend.app import db
 from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.ext.mutable import MutableDict
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm.collections import attribute_mapped_collection
 
 
 class OrderSheet(db.Model):
@@ -30,7 +31,10 @@ class Order(db.Model):
     delivery_deadline = db.Column(db.Integer, nullable=False)
     driving_time = db.Column(db.Integer, nullable=False)
     process_time = db.Column(db.Integer, nullable=False)
-    others = db.Column(MutableDict.as_mutable(db.JSON))
+    others = association_proxy('properties',
+                               'value',
+                               creator=lambda k, v:
+                               OrderProperties(key=k, value=v))
 
     def __init__(self, inl_terminal: str, truck_type: str, hierarchy: float,
                  delivery_deadline: int, driving_time: int, process_time: int,
@@ -52,3 +56,17 @@ class Order(db.Model):
     @hybrid_property
     def latest_dep_time(self):
         return self.delivery_deadline - self.driving_time
+
+
+class OrderProperties(db.Model):
+    s_number = db.Column(db.Integer,
+                         db.ForeignKey('order.order_number',
+                                       ondelete='CASCADE'),
+                         primary_key=True)
+    key = db.Column(db.String, primary_key=True)
+    value = db.Column(db.String, nullable=False)
+
+    truck = db.relationship(Order, backref=db.backref(
+        'properties',
+        collection_class=attribute_mapped_collection('key'),
+        cascade='all, delete-orphan'))

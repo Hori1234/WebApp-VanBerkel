@@ -120,7 +120,7 @@ class OrderByID(MethodView):
         """
         Delete a specific order from an order sheet.
 
-        When an order is deleted, the other orders will get a new id assigned.git
+        When an order is deleted, the other orders will get a new id assigned
 
         Required roles: planner, administrator
         """
@@ -169,7 +169,12 @@ class OrderByID(MethodView):
                 else:
                     # If the key doesn't have column,
                     # place it in the other columns
-                    order.others[k] = v
+                    # if the value is null,
+                    # remove the key from the truck
+                    if k in order.others and v is None:
+                        del order.others[k]
+                    elif v is not None:
+                        order.others[k] = v
 
             db.session.commit()
             return order, 200
