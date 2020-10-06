@@ -43,7 +43,7 @@ export default class AddTruckLayout extends Component {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Text>hierarchy:</Text>
+            <Text>Hierarchy:</Text>
             <Form.Item rules={[{ required: true }]}>
               <Input />
             </Form.Item>

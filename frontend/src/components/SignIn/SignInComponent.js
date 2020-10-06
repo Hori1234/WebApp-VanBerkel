@@ -30,7 +30,7 @@ export default function SignInComponent() {
       password: state.password,
     });
 
-    if (!success) message.info("account not valid");
+    if (!success) message.info("Account not valid");
   };
 
   const handleChangeUsername = (event) => {
