@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Typography, Row, Col } from "antd";
+import {Form, Input, Typography, Row, Col, message} from "antd";
 import "antd/dist/antd.css";
 
 const { Text } = Typography;
@@ -17,6 +17,7 @@ export default class AddOrdersLayout extends Component {
       drivingTime: "",
       processTime: "",
       serviceTime: "",
+      status: "",
     };
   }
 
@@ -82,89 +83,82 @@ export default class AddOrdersLayout extends Component {
       serviceTime: event.target.value,
     });
   };
+  onFinishFailed = (errorInfo) => {
+    message.error("Failed: Please complete all the required fields", errorInfo);
+    this.setState({
+      status: "error",
+    });
+  };
+  onFinish = (values) => {
+    console.log(values);
+  };
 
   render() {
+    const validateMessages = {
+      required: "${label} is required!",
+      types: {
+        email: "${label} is not validate email!",
+        number: "${label} is not a validate number!",
+      },
+      number: {
+        range: "${label} must be between ${min} and ${max}",
+      },
+      
+    };
     return (
-      <Form>
+      <Form style={{ width: "100vh", marginRight: 20 }} name="nest-messages"  onFinish={this.onFinish}
+            onFinishFailed={this.onFinishFailed}
+            validateMessages={validateMessages}>
         <Row gutter={[24, 8]}>
-          <Col span={8}>
-            <Text>Order Number:</Text>
-            <Form.Item rules={[{ required: true }]}>
+          <Col span={12}>
+            <Form.Item name="orderNumber" label="Order Number:" rules={[{required: true}]}>
               <Input
                 value={this.state.orderNumber}
                 onChange={this.handleChangeOrderNumber}
               />
             </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Text>Inl:</Text>
-            <Form.Item rules={[{ required: true }]}>
+            <Form.Item name="Inl_terminal" label="Inl_terminal:" rules={[{ required: true }]}>
               <Input value={this.state.inl} onChange={this.handleChangeInl} />
             </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Text>Latest Dep Time:</Text>
-            <Form.Item rules={[{ required: true }]}>
+            <Form.Item  name="Latest Dep Time" label="Latest Dep Time:" rules={[{ required: true }]}>
               <Input
                 value={this.state.latestDepTime}
                 onChange={this.handleChangeLatestDepTime}
               />
             </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={[24, 8]}>
-          <Col span={8}>
-            <Text>Truck Type:</Text>
-            <Form.Item rules={[{ required: true }]}>
+            <Form.Item name="Truck Type" label="Truck Type:" rules={[{ required: true }]}>
               <Input
                 value={this.state.truckType}
                 onChange={this.handleChangeTruckType}
               />
             </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Text>Hierarchy:</Text>
-            <Form.Item rules={[{ required: true }]}>
+            <Form.Item name="Hierarchy" label="Hierarchy:" rules={[{ required: true }]}>
               <Input
                 value={this.state.hierarchy}
                 onChange={this.handleChangeHierarchy}
               />
             </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Text>Delivery Deadline:</Text>
-            <Form.Item rules={[{ required: true }]}>
+            <Form.Item name="Delivery Deadline" label="Delivery Deadline:" rules={[{ required: true }]}>
               <Input
                 value={this.state.deliveryDeadline}
                 onChange={this.handleChangeDeliveryDeadline}
               />
             </Form.Item>
           </Col>
-        </Row>
-
-        <Row gutter={[24, 8]}>
-          <Col span={8}>
-            <Text>Driving Time:</Text>
-            <Form.Item rules={[{ required: true }]}>
+          <Col span={12} >
+            <Form.Item name="Driving Time" label="Driving Time:" rules={[{ required: true }]}>
               <Input
                 value={this.state.drivingTime}
                 onChange={this.handleChangeDrivingTime}
               />
             </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Text>Process Time:</Text>
-            <Form.Item rules={[{ required: true }]}>
+            <Form.Item name="Process Time" label="Process Time:" rules={[{ required: true }]}>
               <Input
                 value={this.state.processTime}
                 onChange={this.handleChangeProcessTime}
               />
             </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Text>Service Time:</Text>
-            <Form.Item rules={[{ required: true }]}>
+            <Form.Item name="Service Time" label="Service Time:" rules={[{ required: true }]}>
               <Input
                 value={this.state.serviceTime}
                 onChange={this.handleChangeServiceTime}
