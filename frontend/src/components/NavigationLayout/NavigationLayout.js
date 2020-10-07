@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import "antd/dist/antd.css";
 import { Layout, Menu, Avatar, Divider } from "antd";
-import {
-  UserOutlined,
-} from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
@@ -12,13 +10,12 @@ import UploadButton from "../UploadButton/UploadButton";
 import AccountManagementLayout from "../AccountManagerLayout/AccountManagementLayout";
 import "../Css/NavigationLayout.css";
 import Logout from "../Logout/Logout";
-import { useAuth } from '../contextConfig'
+import { useAuth } from "../contextConfig";
 import ManualPlanning from "../ManualPlanning/ManualPlanning";
 const { SubMenu } = Menu;
 const { Content, Sider, Footer } = Layout;
 
 export default function NavigationLayout() {
-
   const auth = useAuth();
 
   const [state, setState] = useState({
@@ -41,8 +38,9 @@ export default function NavigationLayout() {
     }
   };
 
-  return (
-    !auth.state ?  <pre>Loading...</pre> :
+  return !auth.state ? (
+    <pre>Loading...</pre>
+  ) : (
     <Router>
       <Layout style={{ height: "100vh" }}>
         <Layout style={{ margin: 10 }}>
@@ -76,7 +74,7 @@ export default function NavigationLayout() {
                   title="User Type: "
                 >
                   <Menu.Item key="0">
-                    <Link to="/" >Home</Link>
+                    <Link to="/">Home</Link>
                   </Menu.Item>
                   <Menu.Item key="1">
                     <Link to="/account">Account Management</Link>
@@ -96,7 +94,9 @@ export default function NavigationLayout() {
                   <Menu.Item key="6">
                     <Link to="/montly">Monthly Data Analytics</Link>
                   </Menu.Item>
-                  <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                  <Menu.Item key="7" onClick={auth.logout}>
+                    Logout
+                  </Menu.Item>
                 </SubMenu>
               )}
 
@@ -125,7 +125,9 @@ export default function NavigationLayout() {
                   <Menu.Item key="6">
                     <Link to="/montly">Monthly Data Analytics</Link>
                   </Menu.Item>
-                  <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                  <Menu.Item key="7" onClick={auth.logout}>
+                    Logout
+                  </Menu.Item>
                 </SubMenu>
               )}
 
@@ -148,7 +150,9 @@ export default function NavigationLayout() {
                   <Menu.Item key="6">
                     <Link to="/montly">Monthly Data Analytics</Link>
                   </Menu.Item>
-                  <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                  <Menu.Item key="7" onClick={auth.logout}>
+                    Logout
+                  </Menu.Item>
                 </SubMenu>
               )}
             </Menu>
@@ -187,7 +191,9 @@ export default function NavigationLayout() {
                     <Route path="/account">
                       <AccountManagementLayout />
                     </Route>
-                    <Route path="/logout"><Logout/></Route>
+                    <Route path="/logout">
+                      <Logout />
+                    </Route>
                     <Route path="/planning">
                       <ManualPlanning />
                     </Route>
@@ -209,5 +215,4 @@ export default function NavigationLayout() {
       </Layout>
     </Router>
   );
-
 }
