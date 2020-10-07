@@ -86,8 +86,10 @@ const EditableTable = props => {
     const columnsOrder = [
         ...props.columns,
         {
-            title: 'operation',
-            dataIndex: 'operation',
+            title: 'Edit Row',
+            dataIndex: 'editRow',
+            fixed: 'right',
+            width: 110,
             render: (_, record) => {
               const editable = isEditing(record);
               return editable ? (

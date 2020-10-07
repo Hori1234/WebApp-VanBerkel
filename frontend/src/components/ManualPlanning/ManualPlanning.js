@@ -230,6 +230,8 @@ export default class ManualPlanning extends Component {
                     sortDirections: ["descend", "ascend"],
                     sorter: (a, b) => a.truckId.localeCompare(b.truckId),
                     width: 100,
+                    editable: true,
+
                 },
                 {
                     title: "Truck Driver",
@@ -237,6 +239,8 @@ export default class ManualPlanning extends Component {
                     sortDirections: ["descend", "ascend"],
                     sorter: (a, b) => a.truckId.localeCompare(b.truckId),
                     width: 100,
+                    editable: true,
+
                 },
                 {
                     title: "Availability",
@@ -244,6 +248,7 @@ export default class ManualPlanning extends Component {
                     sortDirections: ["descend", "ascend"],
                     sorter: (a, b) => a.truckId.localeCompare(b.truckId),
                     width: 100,
+                    editable: true,
                 },
             ],
             data: [],
@@ -722,22 +727,17 @@ export default class ManualPlanning extends Component {
                         </Row>
                     </Col>
                     <Col span={9}>
-                        <Table
-                            rowClassName={(record, index) =>
-                                this.truckRowColor(record.operation)
-                            }
-                            bordered={true}
-                            rowSelection={trucksRowSelection}
-                            dataSource={this.state.data2}
-                            columns={this.state.columns2}
-                            scroll={{x: "max-content", y: "50vh"}}
-                            pagination={false}
-                            onRow={(record) => ({
-                                onClick: () => {
-                                    this.selectTrucksRow(record);
-                                },
-                            })}
-                        />
+                      <EditableTable
+                        rowSelection={ordersRowSelection}
+                        dataSource={this.state.data2}
+                        columns={this.state.columns2}
+                        onRow={(record) => ({
+                          onClick: () => {
+                              this.selectOrdersRow(record);
+                          },
+                        })}
+                      >
+                      </EditableTable>                    
                         <br/>
                         <Button onClick={this.ShowTruckModal}>Add truck</Button>
                         <Button>Delete truck</Button>
