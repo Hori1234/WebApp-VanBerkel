@@ -120,7 +120,7 @@ class OrderByID(MethodView):
         """
         Delete a specific order from an order sheet.
 
-        When an order is deleted, the other orders will get a new id assigned
+        When an order is deleted, the other orders will get a new id assigned.
 
         Required roles: planner, administrator
         """

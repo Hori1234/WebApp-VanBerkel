@@ -10,30 +10,10 @@ import datetime
 
 
 @pytest.fixture(autouse=True)
-def setup_db(db, client):
+def setup_db(setup_users, login_user, create_db_without_users, client):
     """
     Setup the database for the current test.
-
-    After the test has been run, the database is rolled back.
-
-    :param `SQLAlchemy` db: The ORM for this test.
-    :param client: The test client for this test
     """
-    user = User(username='Midas Bergveen',
-                password='w8woord',
-                role='planner')
-    db.session.add(user)
-    db.session.commit()
-
-    data = dict(
-        username=user.username,
-        password='w8woord',
-        remember=True
-    )
-
-    client.post('/api/auth/login',
-                data=json.dumps(data),
-                content_type='application/json')
 
     for i in range(2):
         data = dict(

@@ -1,7 +1,9 @@
 import pytest
 import os
+import json
 from backend.app import db as _db
 from backend.app import create_app
+from backend.models.users import User
 from backend.config import Config
 
 
@@ -41,7 +43,7 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def db(app):
     """"
     Creates a database for the test.
@@ -52,10 +54,74 @@ def db(app):
     :param Flask App app: The Flask application for the test
     :returns Iterator[`SQLAlchemy`] db: ORM for the database
     """
-    _db.create_all()
-
     yield _db
 
-    _db.session.close()
-    _db.drop_all()
 
+@pytest.fixture(scope='module')
+def setup_users(db):
+    """
+    Setup users for this module.
+
+    :param db: The ORM object
+    :type db: :class:`flask_sqlalchemy.SQLAlchemy`
+    """
+
+    db.create_all()
+
+    user = User(username='Midas Bergveen',
+                password='w8woord',
+                role='administrator')
+    db.session.add(user)
+    user1 = User(username='Twan van Broekhoven',
+                 password='SomethingClever',
+                 role='administrator')
+    db.session.add(user1)
+    db.session.commit()
+
+    yield
+
+    db.session.close()
+    db.drop_all()
+
+
+@pytest.fixture
+def login_user(client):
+    """
+    Logs in the user before each test.
+
+    Client is recreated for each test, so the cookies should be set again.
+
+    :param client: Flask test client
+    :type client: :class:`flask.testing.FlaskClient`
+    """
+
+    data = dict(
+        username='Midas Bergveen',
+        password='w8woord',
+        remember=False
+    )
+
+    client.post('/api/auth/login',
+                data=json.dumps(data),
+                content_type='application/json')
+
+
+@pytest.fixture
+def create_db_without_users(db):
+    """
+    Create the database before each test.
+
+    After the test has been ran, all tables except for the user table
+    are deleted. This is because the user table is resource intensive to make.
+
+    :param db: The ORM object
+    :type db: :class:`flask_sqlalchemy.SQLAlchemy`
+    """
+    db.create_all()
+
+    yield
+
+    db.session.close()
+    db.metadata.drop_all(bind=db.engine,
+                         tables=[table for k, table in db.metadata.tables.items()
+                                 if k != 'user'])
