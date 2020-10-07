@@ -1,14 +1,38 @@
 import React, { Component } from "react";
 import Chart from "react-google-charts";
 import "../Css/DataVisualization.css";
+import {
+  Row,
+  Col,
+  Layout,
+  Button
+} from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
+import "antd/dist/antd.css";
+import axios from "axios";
+
+function downloadFile() {
+  axios({
+    url: 'http://localhost:5000/data/firstride.pdf',
+    method: 'GET',
+    responseType: 'blob', // important
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'FirstRide.pdf');
+    document.body.appendChild(link);
+    link.click();
+  });
+}
 
 //Dummy list data
-var truckIDsDummy = ['23', '23', '23', '234', '235'];
-var orderIDsDummy = ['124124', '124124', '124124', '236234592', '234623466'];
-var startTimesDummy = ['8:00', '10:30', '16:00', '12:00', '16:00'];
-var endTimesDummy = ['10:30', '12:00', '18:00', '18:00', '18:00'];
-var durationsDummy = ['2:30', '1:30', '2:00', '6:00', '2:00'];
-var destinationsDummy = ['Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven'];
+var truckIDsDummy = ['23', '23', '23', '234', '235', '1', '2', '3', '4', '5', '6', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7'];
+var orderIDsDummy = ['124124', '124124', '124124', '236234592', '234623466', '2', '2', '2', '2', '2', '2', '2', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7'];
+var startTimesDummy = ['8:00', '10:30', '16:00', '12:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00'];
+var endTimesDummy = ['10:30', '12:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00'];
+var durationsDummy = ['2:30', '1:30', '2:00', '6:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00'];
+var destinationsDummy = ['Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven'];
 
 // creates the tooltip of an order
 function createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination) {
@@ -23,6 +47,19 @@ function createCustomHTMLTooltip(orderID, startTime, endTime, duration, destinat
   )
 }
 
+function calculateDuration(startTime,endTime){
+  let startDate = createDataTime(startTime);
+  let endDate = createDataTime(endTime);
+  let minutes = ((endDate - startDate) / (1000 * 60));
+  let finalMinutes = minutes % 60;
+  if(finalMinutes < 10){
+    finalMinutes = "0" + finalMinutes;
+  }
+  let finalHours = (minutes - finalMinutes) / 60;
+  let duration = finalHours + ":" + finalMinutes;
+  return duration;
+}
+
 //create javascript data object
 function createDataTime(time) {
   let index = time.indexOf(":");
@@ -34,17 +71,18 @@ function createDataTime(time) {
 }
 
 // create single data input for timeline
-function createSingleDataInput(truckID, orderID, startTime, endTime, duration, destination) {
+function createSingleDataInput(truckID, orderID, startTime, endTime, destination) {
+  let duration = calculateDuration(startTime,endTime);
   return ([truckID,
-    orderID,
+    +orderID,
     createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination),
     createDataTime(startTime),
     createDataTime(endTime),
   ])
 }
 
-// create a list with all data points for the list timeline
-function createAllDataInput(truckIDs, orderIDs, startTimes, endTimes, durations, destinations) {
+// create a list with all data points for the timeline
+function createAllDataInput(truckIDs, orderIDs, startTimes, endTimes, destinations) {
   let listLength = truckIDs.length;
   let listDataInputs = [[{ type: 'string', id: 'Room' },
   { type: 'string', id: 'Name' },
@@ -52,10 +90,10 @@ function createAllDataInput(truckIDs, orderIDs, startTimes, endTimes, durations,
   { type: 'date', id: 'Start' },
   { type: 'date', id: 'End' },]];
   for (let i = 0; i < listLength; i++) {
-    let tempList = createSingleDataInput(truckIDs[i], orderIDs[i], startTimes[i], endTimes[i], durations[i], destinations[i]);
+    let tempList = createSingleDataInput(truckIDs[i], orderIDs[i], startTimes[i], endTimes[i], destinations[i]);
     listDataInputs.push(tempList)
   }
-  return(
+  return (
     listDataInputs
   )
 }
@@ -63,96 +101,34 @@ function createAllDataInput(truckIDs, orderIDs, startTimes, endTimes, durations,
 export default class DataVisualization extends Component {
   render() {
     return (
-      <Chart
-        width={'100%'}
-        height={'100%'}
-        chartType="Timeline"
-        loader={<div>Loading Chart</div>}
-         data={createAllDataInput(truckIDsDummy,orderIDsDummy,startTimesDummy,endTimesDummy,durationsDummy,destinationsDummy)
-           //[
-        //   [
-        //     { type: 'string', id: 'Room' },
-        //     { type: 'string', id: 'Name' },
-        //     { type: 'string', role: 'tooltip', 'p': { 'html': true } },
-        //     { type: 'date', id: 'Start' },
-        //     { type: 'date', id: 'End' },
-        //   ],
-          // createAllDataInput(truckIDsDummy,orderIDsDummy,startTimesDummy,endTimesDummy,durationsDummy,destinationsDummy)
-          // ,
-          // createSingleDataInput('Truck 1', '167639B', '8:00', '10:30', '2:30', 'Amsterdam')
-          // ,
-          // createSingleDataInput('Truck 1', '167639B', '10:30', '12:30', '2:30', 'Eindhoven')
-          // ,
-          // createSingleDataInput(truckIDsDummy[0],orderIDsDummy[0],startTimesDummy[0],endTimesDummy[0],durationsDummy[0],destinationsDummy[0])
-          // ,
-          // createSingleDataInput(truckIDsDummy[1],orderIDsDummy[1],startTimesDummy[1],endTimesDummy[1],durationsDummy[1],destinationsDummy[1])
-          // ,
-          // createSingleDataInput(truckIDsDummy[2],orderIDsDummy[2],startTimesDummy[2],endTimesDummy[2],durationsDummy[2],destinationsDummy[2])
-          // ,
-          // createSingleDataInput(truckIDsDummy[3],orderIDsDummy[3],startTimesDummy[3],endTimesDummy[3],durationsDummy[3],destinationsDummy[3])
-          // ,
-          // createSingleDataInput(truckIDsDummy[4],orderIDsDummy[4],startTimesDummy[4],endTimesDummy[4],durationsDummy[4],destinationsDummy[4])
-          // ,
-          // [
-          //   'Truck 1',
-          //   'order id',
-          //   createCustomHTMLTooltip('167639B', '8:00', '10:30', '2:30', 'Eindhoven'),
-          //   new Date(0, 0, 0, 14, 0, 0),
-          //   new Date(0, 0, 0, 15, 30, 0),
-          // ],
-          // [
-          //   'Truck 1',
-          //   'order id',
-          //   createCustomHTMLTooltip('167639B', '8:00', '10:30', '2:30', 'Eindhoven'),
-          //   new Date(0, 0, 0, 16, 0, 0),
-          //   new Date(0, 0, 0, 17, 30, 0),
-          // ],
-          // [
-          //   'Truck 2',
-          //   'order id',
-          //   createCustomHTMLTooltip('167639B', '8:00', '10:30', '2:30', 'Eindhoven'),
-          //   new Date(0, 0, 0, 12, 30, 0),
-          //   new Date(0, 0, 0, 14, 0, 0),
-          // ],
-          // [
-          //   'Truck 2',
-          //   'order id',
-          //   createCustomHTMLTooltip('167639B', '8:00', '10:30', '2:30', 'Eindhoven'),
-          //   new Date(0, 0, 0, 14, 30, 0),
-          //   new Date(0, 0, 0, 16, 0, 0),
-          // ],
-          // [
-          //   'Truck 2',
-          //   'order id',
-          //   createCustomHTMLTooltip('167639B', '8:00', '10:30', '2:30', 'Eindhoven'),
-          //   new Date(0, 0, 0, 16, 30, 0),
-          //   new Date(0, 0, 0, 18, 0, 0),
-          // ],
-          // [
-          //   'Truck 3',
-          //   'order id',
-          //   createCustomHTMLTooltip('167639B', '8:00', '10:30', '2:30', 'Eindhoven'),
-          //   new Date(0, 0, 0, 9, 30, 0),
-          //   new Date(0, 0, 0, 11, 0, 0),
-          // ],
-          // [
-          //   'Truck 3',
-          //   'order id',
-          //   createCustomHTMLTooltip('167639B', '8:00', '10:30', '2:30', 'Eindhoven'),
-          //   new Date(0, 0, 0, 15, 30, 0),
-          //   new Date(0, 0, 0, 18, 0, 0),
-          // ],
-        //]
-      }
-        options={{
-          timeline: {
-            colorByRowLabel: true,
-            allowHtml: true,
-            avoidOverlappingGridLines: false,
-          },
-        }}
-        rootProps={{ 'data-testid': '5' }}
-      />
+      <Layout style={{
+        display: "flex",
+        height: "100%",
+        width: "100%",
+        background: "white",
+      }}>
+        <Chart
+          width={'100%'}
+          height={'100%'}
+          chartType="Timeline"
+          loader={<div>Loading Chart</div>}
+          data={createAllDataInput(truckIDsDummy, orderIDsDummy, startTimesDummy, endTimesDummy, destinationsDummy)
+          }
+          options={{
+            timeline: {
+              colorByRowLabel: true,
+              allowHtml: true,
+              avoidOverlappingGridLines: false,
+            },
+          }}
+          rootProps={{ 'data-testid': '5' }}
+        />
+        <Row>
+          <Col span={6} offset={18} >
+            <Button type="primary" icon={<DownloadOutlined />} size={'large'} style={{ width: "100%" }} onClick={downloadFile}>Download First-Rides</Button>
+          </Col>
+        </Row>
+      </Layout>
     )
   }
 }
