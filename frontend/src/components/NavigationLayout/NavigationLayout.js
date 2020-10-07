@@ -70,7 +70,7 @@ function NavigationLayout() {
     !auth.state ?  <pre>Loading...</pre> :
     
       <Layout style={{ height: "100vh" }}>
-        <Layout style={{ margin: 10 }}>
+        <Layout style={{ margin: 10}}>
           <Sider
             collapsible
             collapsed={state.collapsed}
@@ -87,97 +87,97 @@ function NavigationLayout() {
               />
 
               <Divider>T.R.U.C.K.</Divider>
+              <Menu
+                mode="inline"
+                defaultOpenKeys={["sub1"]}
+                style={{ height: "100%", borderRight: 0 }}
+                selectedKeys={keys(location.pathname)}
+              >
+                {auth.state.user.role === "administrator" &&(
+                  <SubMenu
+                    key="sub1"
+                    defaultSelectedKeys={["0"]}
+                    icon={<UserOutlined />}
+                    title={auth.state.user.username}
+                  >
+                    <Menu.Item key="0" >
+                      <Link to="/" >Home </Link>
+                    </Menu.Item>
+                    <Menu.Item key="1">
+                      <Link to="/account">Account Management</Link>
+                    </Menu.Item>
+                    <Menu.Item key="2">
+                      <Link to="/upload">Upload</Link>
+                    </Menu.Item>
+                    <Menu.Item key="3">
+                      <Link to="/planning">Create Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="4">
+                      <Link to="/view">View Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="5">
+                      <Link to="/data">Data Visualization</Link>
+                    </Menu.Item>
+                    <Menu.Item key="6">
+                      <Link to="/montly">Monthly Data Analytics</Link>
+                    </Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                  </SubMenu>
+                )}
+
+                {auth.state.user.role === "planner" && (
+                  <SubMenu
+                    key="sub1"
+                    defaultSelectedKeys={["1"]}
+                    icon={<UserOutlined />}
+                    title={auth.state.user.username}
+                  >
+                    <Menu.Item key="1">
+                      <Link to="/">Home</Link>
+                    </Menu.Item>
+                    <Menu.Item key="2">
+                      <Link to="/upload">Upload</Link>
+                    </Menu.Item>
+                    <Menu.Item key="3">
+                      <Link to="/planning">Create Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="4">
+                      <Link to="/view">View Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="5">
+                      <Link to="/data">Data Visualization</Link>
+                    </Menu.Item>
+                    <Menu.Item key="6">
+                      <Link to="/montly">Monthly Data Analytics</Link>
+                    </Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                  </SubMenu>
+                )}
+
+                {auth.state.user.role === "view-only" && (
+                  <SubMenu
+                    key="sub1"
+                    defaultSelectedKeys={["3"]}
+                    icon={<UserOutlined />}
+                    title={auth.state.user.username}
+                  >
+                    <Menu.Item key="3">
+                      <Link to="/">Home</Link>
+                    </Menu.Item>
+                    <Menu.Item key="4">
+                      <Link to="/view">View Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="5">
+                      <Link to="/data">Data Visualization</Link>
+                    </Menu.Item>
+                    <Menu.Item key="6">
+                      <Link to="/montly">Monthly Data Analytics</Link>
+                    </Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                  </SubMenu>
+                )}
+              </Menu>
             </Layout>
-            <Menu
-              mode="inline"
-              defaultOpenKeys={["sub1"]}
-              style={{ height: "100%", borderRight: 0 }}
-              selectedKeys={keys(location.pathname)}
-            >
-              {auth.state.user.role === "administrator" &&(
-                <SubMenu
-                  key="sub1"
-                  defaultSelectedKeys={["0"]}
-                  icon={<UserOutlined />}
-                  title={auth.state.user.username}
-                >
-                  <Menu.Item key="0" >
-                    <Link to="/" >Home </Link>
-                  </Menu.Item>
-                  <Menu.Item key="1">
-                    <Link to="/account">Account Management</Link>
-                  </Menu.Item>
-                  <Menu.Item key="2">
-                    <Link to="/upload">Upload</Link>
-                  </Menu.Item>
-                  <Menu.Item key="3">
-                    <Link to="/planning">Create Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="4">
-                    <Link to="/view">View Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="5">
-                    <Link to="/data">Data Visualization</Link>
-                  </Menu.Item>
-                  <Menu.Item key="6">
-                    <Link to="/montly">Monthly Data Analytics</Link>
-                  </Menu.Item>
-                  <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
-                </SubMenu>
-              )}
-
-              {auth.state.user.role === "planner" && (
-                <SubMenu
-                  key="sub1"
-                  defaultSelectedKeys={["1"]}
-                  icon={<UserOutlined />}
-                  title={auth.state.user.username}
-                >
-                  <Menu.Item key="1">
-                    <Link to="/">Home</Link>
-                  </Menu.Item>
-                  <Menu.Item key="2">
-                    <Link to="/upload">Upload</Link>
-                  </Menu.Item>
-                  <Menu.Item key="3">
-                    <Link to="/planning">Create Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="4">
-                    <Link to="/view">View Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="5">
-                    <Link to="/data">Data Visualization</Link>
-                  </Menu.Item>
-                  <Menu.Item key="6">
-                    <Link to="/montly">Monthly Data Analytics</Link>
-                  </Menu.Item>
-                  <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
-                </SubMenu>
-              )}
-
-              {auth.state.user.role === "view-only" && (
-                <SubMenu
-                  key="sub1"
-                  defaultSelectedKeys={["3"]}
-                  icon={<UserOutlined />}
-                  title={auth.state.user.username}
-                >
-                  <Menu.Item key="3">
-                    <Link to="/">Home</Link>
-                  </Menu.Item>
-                  <Menu.Item key="4">
-                    <Link to="/view">View Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="5">
-                    <Link to="/data">Data Visualization</Link>
-                  </Menu.Item>
-                  <Menu.Item key="6">
-                    <Link to="/montly">Monthly Data Analytics</Link>
-                  </Menu.Item>
-                  <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
-                </SubMenu>
-              )}
-            </Menu>
           </Sider>
           <Layout style={{ padding: "0 24px 24px", height: "100%" }}>
             <Layout
