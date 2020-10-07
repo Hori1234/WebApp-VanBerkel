@@ -7,7 +7,7 @@ const password = 'test';
 describe('React App', () => {
 
   
-    it('shall succesfully create an account', async () => {
+    it('shall succesfully magnify the orders', async () => {
 
         const browser = await puppeteer.launch({ 
             headless: false,
@@ -33,6 +33,12 @@ describe('React App', () => {
 
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-12 > button:nth-child(5)')
         await page.waitFor(1500);
+
+        const elementStyle = await page.$eval('body > div:nth-child(7) > div > div.ant-modal-wrap', element => element);
+
+        //expect(page.waitForSelector('body > div:nth-child(7) > div > div.ant-modal-wrap').style.toEqual(''));
+        console.log(elementStyle);
+
         await browser.close();
 
       }, 120000);
