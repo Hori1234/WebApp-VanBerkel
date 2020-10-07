@@ -28,13 +28,13 @@ def upgrade():
     sa.PrimaryKeyConstraint('s_number', 'key')
     )
     op.create_table('order_properties',
-    sa.Column('s_number', sa.Integer(), nullable=False),
+    sa.Column('order_number', sa.Integer(), nullable=False),
     sa.Column('key', sa.String(), nullable=False),
     sa.Column('value', sa.String(), nullable=False),
-    sa.ForeignKeyConstraint(['s_number'],
+    sa.ForeignKeyConstraint(['order_number'],
                             ['order.order_number'],
                             ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('s_number', 'key')
+    sa.PrimaryKeyConstraint('order_number', 'key')
     )
     # ### end Alembic commands ###
 

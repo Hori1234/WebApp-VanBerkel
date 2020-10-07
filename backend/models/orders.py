@@ -59,14 +59,14 @@ class Order(db.Model):
 
 
 class OrderProperties(db.Model):
-    s_number = db.Column(db.Integer,
-                         db.ForeignKey('order.order_number',
-                                       ondelete='CASCADE'),
-                         primary_key=True)
+    order_number = db.Column(db.Integer,
+                             db.ForeignKey('order.order_number',
+                                           ondelete='CASCADE'),
+                             primary_key=True)
     key = db.Column(db.String, primary_key=True)
     value = db.Column(db.String, nullable=False)
 
-    truck = db.relationship(Order, backref=db.backref(
+    order = db.relationship(Order, backref=db.backref(
         'properties',
         collection_class=attribute_mapped_collection('key'),
         cascade='all, delete-orphan'))
