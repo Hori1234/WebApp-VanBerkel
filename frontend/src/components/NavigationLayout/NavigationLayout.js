@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "antd/dist/antd.css";
-import { Layout, Menu, Avatar, Divider } from "antd";
+import { Layout, Menu, Avatar, Divider, Image } from "antd";
 import {
   UserOutlined,
 } from "@ant-design/icons";
@@ -15,7 +15,7 @@ import Logout from "../Logout/Logout";
 import { useAuth } from '../contextConfig'
 import ManualPlanning from "../ManualPlanning/ManualPlanning";
 const { SubMenu } = Menu;
-const { Content, Sider, Footer } = Layout;
+const { Content, Sider, Footer, Header } = Layout;
 
 
 function NavigationLayout() {
@@ -180,6 +180,11 @@ function NavigationLayout() {
             </Layout>
           </Sider>
           <Layout style={{ padding: "0 24px 24px", height: "100%" }}>
+            <Header style={{ backgroundColor: "white"}}>
+              <Image
+              src={require("../Images/van-berkel-logo-final.png")}
+              />
+            </Header>
             <Layout
               style={{
                 marginTop: 25,
