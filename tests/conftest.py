@@ -122,6 +122,6 @@ def create_db_without_users(db):
     yield
 
     db.session.close()
-    for k, table in db.metadata.tables.items():
-        if k != 'user':
-            table.drop(db.engine)
+    db.metadata.drop_all(bind=db.engine,
+                         tables=[table for k, table in db.metadata.tables.items()
+                                 if k != 'user'])
