@@ -13,7 +13,7 @@ import {
   message,
 } from "antd";
 import axios from "axios";
-
+import EditableTable from "./EditableTable"
 import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
 import "./ManualPlanning.css";
@@ -168,6 +168,7 @@ export default class ManualPlanning extends Component {
           dataIndex: "bookingNr",
           sorter: (a, b) => a.bookingNr - b.bookingNr,
           width: 110,
+          editable: true,
         },
         {
           title: "Address",
@@ -175,6 +176,7 @@ export default class ManualPlanning extends Component {
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.address.localeCompare(b.address),
           width: 100,
+          editable: true,
         },
         {
           title: "Customer",
@@ -182,21 +184,29 @@ export default class ManualPlanning extends Component {
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.customer.localeCompare(b.customer),
           width: 100,
+          editable: true,
+
         },
         {
           title: "Truck ID",
           dataIndex: "truckId",
           width: 90,
+          editable: true,
+
         },
         {
           title: "Delivery Deadline",
           dataIndex: "deliveryDeadline",
           width: 100,
+          editable: true,
+
         },
         {
           title: "Process Time",
           dataIndex: "processTime",
           width: 100,
+          editable: true,
+
         },
       ],
       columns2: [
@@ -559,6 +569,7 @@ export default class ManualPlanning extends Component {
       temp[8]
     );
   };
+  
 
   render() {
     const showHideMenu = (
@@ -643,19 +654,17 @@ export default class ManualPlanning extends Component {
         </Row>
         <Row gutter={[24, 8]} justify="space-around" align="middle">
           <Col span={12}>
-            <Table
-              bordered={true}
+            <EditableTable 
               rowSelection={ordersRowSelection}
               dataSource={this.state.data}
               columns={this.state.columns}
-              scroll={{ x: "max-content", y: "50vh" }}
-              pagination={false}
               onRow={(record) => ({
                 onClick: () => {
                   this.selectOrdersRow(record);
                 },
-              })}
-            />
+              })}     
+            >
+            </EditableTable>
             <br />
             <Button onClick={() => this.showOrdersModal()}>Add order</Button>
             <Button>Delete order</Button>&nbsp;&nbsp;
