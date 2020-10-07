@@ -3,7 +3,7 @@ from . import bp
 from backend.models.orders import Order
 from backend.models.trucks import Truck, TruckSheet
 from backend.extensions import roles_required
-from .schemas import TruckSchema
+from .schemas import TruckSchema, TruckTableSchema
 from backend.app import db
 from sqlalchemy.exc import SQLAlchemyError
 from flask_smorest import abort
@@ -12,7 +12,7 @@ from flask_smorest import abort
 @bp.route('/sheet/<sheet_id_or_latest>')
 class Trucks(MethodView):
     @roles_required('planner', 'administrator')
-    @bp.response(TruckSchema(many=True))
+    @bp.response(TruckTableSchema)
     @bp.alt_response('NOT_FOUND', code=404)
     def get(self, sheet_id_or_latest):
         """
@@ -39,7 +39,7 @@ class Trucks(MethodView):
                 # Can't understand which sheet is requested
                 abort(404, message='Truck sheet not found')
                 return
-        return truck_sheet.trucks
+        return truck_sheet
 
     @roles_required('planner', 'administrator')
     @bp.arguments(TruckSchema)
@@ -76,6 +76,9 @@ class Trucks(MethodView):
         # store order numbers before creating the truck,
         # as we will be adding them later
         order_numbers = truck.pop('orders', None)
+
+        # Filter any None values in the request
+        truck = {k: v for k, v in truck.items() if v is not None}
 
         # Create a new truck with all parameters
         new_truck = Truck(**truck)

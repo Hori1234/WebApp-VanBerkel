@@ -2,7 +2,7 @@ from flask.views import MethodView
 from . import bp
 from backend.models.orders import Order, OrderSheet
 from backend.extensions import roles_required
-from .schemas import OrderSchema
+from .schemas import OrderSchema, OrderTableSchema
 from backend.app import db
 from sqlalchemy.exc import SQLAlchemyError
 from flask_smorest import abort
@@ -14,7 +14,7 @@ from flask_smorest import abort
 class Orders(MethodView):
 
     @roles_required('planner', 'administrator')
-    @bp.response(OrderSchema(many=True))
+    @bp.response(OrderTableSchema)
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
     def get(self, sheet_id_or_latest):
@@ -42,7 +42,7 @@ class Orders(MethodView):
                 # Can't understand which sheet is requested
                 abort(404, message='Order sheet not found')
                 return
-        return order_sheet.orders
+        return order_sheet
 
     @roles_required('planner', 'administrator')
     @bp.arguments(OrderSchema)
@@ -77,6 +77,10 @@ class Orders(MethodView):
                 # Can't understand which sheet is requested
                 abort(404, 'Order sheet not found')
                 return
+
+        # Filter any None value in the request
+        order = {k: v for k, v in order.items() if v is not None}
+
         # Create a new order with all parameters
         new_order = Order(**order)
 

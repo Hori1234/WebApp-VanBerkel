@@ -1,6 +1,6 @@
 from backend.app import ma
-from marshmallow import INCLUDE, post_dump, post_load
-from backend.models.orders import Order
+from marshmallow import INCLUDE, post_dump
+from backend.models.orders import Order, OrderSheet
 
 
 class OrderSchema(ma.SQLAlchemyAutoSchema):
@@ -31,9 +31,11 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
         obj.pop('others')
         return obj
 
-    @post_load
-    def filter_none(self, obj, many, **kwargs):
-        """
-        Filters out None values in the columns unknown to the schema.
-        """
-        return {k: v for k, v in obj.items() if v is not None}
+
+class OrderTableSchema(ma.SQLAlchemySchema):
+
+    orders = ma.Nested(OrderSchema, many=True)
+    column_names = ma.Dict()
+
+    class Meta:
+        model = OrderSheet

@@ -11,6 +11,24 @@ class OrderSheet(db.Model):
     orders = db.relationship('Order', backref='ordersheet',
                              cascade='all, delete-orphan')
 
+    @hybrid_property
+    def column_names(self):
+        property_names = OrderProperties.query. \
+            with_entities(OrderProperties.key).join(Order) \
+            .filter(Order.sheet_id == self.id).distinct().all()
+        property_names = {name: name for name, in property_names}
+        standard_names = {'order_number': 'Order Number',
+                          'truck_type': 'Truck type',
+                          'truck_id': 'Truck ID',
+                          'inl_terminal': 'Terminal',
+                          'departure_time': 'Departure time',
+                          'driving_time': 'Driving time',
+                          'process_time': 'Process time',
+                          'service_time': 'Service time',
+                          'latest_dep_time': 'Latest departure time'
+                          }
+        return {**standard_names, **property_names}
+
     def add_row(self, order):
         self.orders.append(order)
 

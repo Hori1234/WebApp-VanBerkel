@@ -2,6 +2,7 @@ from backend.app import db
 from sqlalchemy.sql import func
 import datetime
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm.collections import attribute_mapped_collection
 
 
@@ -10,6 +11,24 @@ class TruckSheet(db.Model):
     upload_date = db.Column(db.DateTime, server_default=func.now())
     trucks = db.relationship('Truck', backref='trucksheet',
                              cascade='all, delete-orphan')
+
+    @hybrid_property
+    def column_names(self):
+        property_names = TruckProperties.query.\
+            with_entities(TruckProperties.key).join(Truck)\
+            .filter(Truck.sheet_id == self.id).distinct().all()
+        property_names = {name: name for name, in property_names}
+        standard_names = {'s_number': 'S Number',
+                          'truck_id': 'Truck ID',
+                          'availability': 'Availability',
+                          'truck_type': 'Truck type',
+                          'business_type': 'Business type',
+                          'terminal': 'Terminal',
+                          'hierarchy': 'Hierarchy',
+                          'use_cost': 'Use cost',
+                          'date': 'Date',
+                          'starting': 'Starting time'}
+        return {**standard_names, **property_names}
 
     def add_row(self, truck):
         self.trucks.append(truck)

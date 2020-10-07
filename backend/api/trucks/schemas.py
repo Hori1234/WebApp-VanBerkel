@@ -1,6 +1,6 @@
 from backend.app import ma
-from marshmallow import INCLUDE, post_dump, post_load
-from backend.models.trucks import Truck
+from marshmallow import INCLUDE, post_dump
+from backend.models.trucks import Truck, TruckSheet
 
 
 class TruckSchema(ma.SQLAlchemyAutoSchema):
@@ -27,9 +27,11 @@ class TruckSchema(ma.SQLAlchemyAutoSchema):
         obj.pop('others')
         return obj
 
-    @post_load
-    def filter_none(self, obj, many, **kwargs):
-        """
-        Filters out None values in the columns unknown to the schema.
-        """
-        return {k: v for k, v in obj.items() if v is not None}
+
+class TruckTableSchema(ma.SQLAlchemySchema):
+
+    trucks = ma.Nested(TruckSchema, many=True)
+    column_names = ma.Dict()
+
+    class Meta:
+        model = TruckSheet
