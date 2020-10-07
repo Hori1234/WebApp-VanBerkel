@@ -1,12 +1,15 @@
 from backend.app import ma
 from marshmallow import INCLUDE, post_dump
-from backend.models.trucks import Truck
+from backend.models.trucks import Truck, TruckSheet
 
 
 class TruckSchema(ma.SQLAlchemyAutoSchema):
     """
     Serializes the order table to JSON
     """
+
+    orders = ma.List(ma.Integer, load_only=True)
+    others = ma.Dict(dump_only=True)
 
     class Meta:
         model = Truck
@@ -17,9 +20,18 @@ class TruckSchema(ma.SQLAlchemyAutoSchema):
     @post_dump
     def flatten_others(self, obj, many, **kwargs):
         """
-        Flattens the others field of an order
+        Flattens the others field of an order.
         """
         for k, v in obj['others'].items():
             obj[k] = v
         obj.pop('others')
         return obj
+
+
+class TruckTableSchema(ma.SQLAlchemySchema):
+
+    trucks = ma.Nested(TruckSchema, many=True)
+    column_names = ma.Dict()
+
+    class Meta:
+        model = TruckSheet
