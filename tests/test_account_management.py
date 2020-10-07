@@ -63,9 +63,9 @@ def change_user_details(client, userid, **kwargs):
     :param kwargs: the details that need to be changed
     :return:
     """
-    return client.put(f'/api/auth/user/{userid}',
-                      data=json.dumps(kwargs),
-                      content_type='application/json')
+    return client.patch(f'/api/auth/user/{userid}',
+                        data=json.dumps(kwargs),
+                        content_type='application/json')
 
 
 def get_user_list(client, page, per_page):

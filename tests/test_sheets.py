@@ -1,5 +1,8 @@
 import pytest
 import json
+
+from backend.models import trucks
+from backend.models import orders
 from backend.models.users import User
 
 
@@ -48,13 +51,14 @@ def upload_one_sheet(client, file):
                        data=data)
 
 
-def test_upload_ta_success(client):
+def test_upload_ta_success(client, db):
     """
     Test just a truck availability sheet
     """
     rv = upload_one_sheet(client,
                           './tests/data/truck_availability_test.xlsx')
     assert rv.status_code == 200
+    assert trucks.TruckSheet.query.get_or_404(1, description='file not found')
 
 
 def test_upload_orders_success(client):
@@ -64,6 +68,7 @@ def test_upload_orders_success(client):
     rv = upload_one_sheet(client,
                           './tests/data/order_sheet_test.xlsx')
     assert rv.status_code == 200
+    assert orders.OrderSheet.query.get_or_404(1, description='file not found')
 
 
 def test_upload_ta_missing_column(client):
@@ -81,8 +86,8 @@ def test_upload_ta_duplicates_in_columns(client):
     """
     Test a single truck availability sheet with duplicates in columns
     """
-    rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_duplicate_columns.xlsx')
+    rv = upload_one_sheet(
+        client, './tests/data/truck_availability_duplicate_columns.xlsx')
 
     assert rv.status_code == 422
     # something to assert that the columns contain duplicates
@@ -103,8 +108,8 @@ def test_upload_ta_data_validation_terminal(client):
     """
     Test a single truck availability sheet with incorrect terminals
     """
-    rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_wrong_terminals.xlsx')
+    rv = upload_one_sheet(
+        client, './tests/data/truck_availability_wrong_terminals.xlsx')
 
     assert rv.status_code == 422
     # something to assert that the column contained incorrect values
@@ -114,8 +119,8 @@ def test_upload_ta_data_validation_trucktype(client):
     """
     Test a single truck availability sheet with incorrect truck types
     """
-    rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_wrong_trucktype.xlsx')
+    rv = upload_one_sheet(
+        client, './tests/data/truck_availability_wrong_trucktype.xlsx')
 
     assert rv.status_code == 422
     # something to assert that the column contained incorrect values
@@ -165,6 +170,7 @@ def test_upload_order_missing_values(client):
     # something to assert that the values were missing
 
 
+@pytest.mark.skip('For now there are no unique columns in orders')
 def test_upload_order_duplicate_values(client):
     """
     Test a single order sheet with duplicate values
@@ -228,5 +234,3 @@ def test_upload_one_but_it_is_not_right(client):
 
     assert rv.status_code == 400
     # something to assert that it's not one of the sheets
-
-

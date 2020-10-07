@@ -34,7 +34,6 @@ export default class CreateAccountsComponent extends Component {
         role: vRole,
       })
       .then((res) => {
-        message.error("User Updated");
         return true;
       })
       .catch((error) => {
