@@ -73,8 +73,14 @@ class Trucks(MethodView):
                 abort(404, message='Truck sheet not found')
                 return
 
-        # assign orders to the truck
+        # store order numbers before creating the truck,
+        # as we will be adding them later
         order_numbers = truck.pop('orders', None)
+
+        # Create a new truck with all parameters
+        new_truck = Truck(**truck)
+
+        # Assign the orders to the truck
         if order_numbers is not None:
             orders = Order.query \
                 .filter(Order.order_number.in_(order_numbers)) \
@@ -83,10 +89,7 @@ class Trucks(MethodView):
                 abort(404,
                       message='Not all orders were found!',
                       status='Not Found')
-            truck.orders = orders
-
-        # Create a new truck with all parameters
-        new_truck = Truck(**truck)
+            new_truck.orders = orders
 
         # Add the truck to the truck sheet
         truck_sheet.add_row(new_truck)
@@ -191,7 +194,12 @@ class TruckByID(MethodView):
                 else:
                     # If the key doesn't have column,
                     # place it in the other columns
-                    truck.others[k] = v
+                    # if the value is null,
+                    # remove the key from the truck
+                    if k in truck.others and v is None:
+                        del truck.others[k]
+                    elif v is not None:
+                        truck.others[k] = v
 
             db.session.commit()
             return truck, 200

@@ -1,7 +1,8 @@
 from backend.app import db
 from sqlalchemy.sql import func
 import datetime
-from sqlalchemy.ext.mutable import MutableDict
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm.collections import attribute_mapped_collection
 
 
 class TruckSheet(db.Model):
@@ -30,7 +31,10 @@ class Truck(db.Model):
     use_cost = db.Column(db.Float, nullable=False)
     date = db.Column(db.Date, nullable=False)
     starting_time = db.Column(db.Time, nullable=False)
-    others = db.Column(MutableDict.as_mutable(db.JSON))
+    others = association_proxy('properties',
+                               'value',
+                               creator=lambda k, v:
+                               TruckProperties(key=k, value=v))
 
     orders = db.relationship('Order', backref='truck')
 
@@ -49,3 +53,17 @@ class Truck(db.Model):
         self.date = date
         self.starting_time = starting_time
         self.others = kwargs
+
+
+class TruckProperties(db.Model):
+    s_number = db.Column(db.Integer,
+                         db.ForeignKey('truck.s_number',
+                                       ondelete='CASCADE'),
+                         primary_key=True)
+    key = db.Column(db.String, primary_key=True)
+    value = db.Column(db.String, nullable=False)
+
+    truck = db.relationship(Truck, backref=db.backref(
+                'properties',
+                collection_class=attribute_mapped_collection('key'),
+                cascade='all, delete-orphan'))
