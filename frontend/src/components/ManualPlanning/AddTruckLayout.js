@@ -89,7 +89,7 @@ export default class AddTruckLayout extends Component {
         <Row gutter={[24, 8]}>
           <Col span={12}>
             <Form.Item
-              name={""}
+              name={"truckID"}
               label={"Truck Id:"}
               rules={[{ required: true }]}
             >
@@ -100,7 +100,7 @@ export default class AddTruckLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-              name={"Truck S No"}
+              name={"truckSNo"}
               label={"Truck S No:"}
               rules={[{ required: true }]}
             >
@@ -121,7 +121,7 @@ export default class AddTruckLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-              name={"Truck Type"}
+              name={"truckType"}
               label={"Truck Type:"}
               rules={[{ required: true }]}
             >
@@ -141,8 +141,8 @@ export default class AddTruckLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-              name={"hierarchy"}
-              label={"hierarchy:"}
+              name={"Hierarchy"}
+              label={"Hierarchy:"}
               rules={[{ required: true }]}
             >
               <Input
@@ -154,7 +154,7 @@ export default class AddTruckLayout extends Component {
 
           <Col span={12}>
             <Form.Item
-              name={"Use Cost"}
+              name={"useCost"}
               label={"Use Cost:"}
               rules={[{ required: true }]}
             >
@@ -164,7 +164,7 @@ export default class AddTruckLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-              name={"Starting Time"}
+              name={"startingTime"}
               label={"Starting Time:"}
               rules={[{ required: true }]}
             >

@@ -132,7 +132,7 @@ export default class AddOrdersLayout extends Component {
               <Input value={this.state.inl} onChange={this.handleChangeInl} />
             </Form.Item>
             <Form.Item
-              name="Latest Dep Time"
+              name="latestDepTime"
               label="Latest Dep Time:"
               rules={[{ required: true }]}
             >
@@ -142,7 +142,7 @@ export default class AddOrdersLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-              name="Truck Type"
+              name="truckType"
               label="Truck Type:"
               rules={[{ required: true }]}
             >
@@ -162,7 +162,7 @@ export default class AddOrdersLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-              name="Delivery Deadline"
+              name="deliveryDeadline"
               label="Delivery Deadline:"
               rules={[{ required: true }]}
             >
@@ -174,7 +174,7 @@ export default class AddOrdersLayout extends Component {
           </Col>
           <Col span={12}>
             <Form.Item
-              name="Driving Time"
+              name="drivingTime"
               label="Driving Time:"
               rules={[{ required: true }]}
             >
@@ -184,7 +184,7 @@ export default class AddOrdersLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-              name="Process Time"
+              name="processTime"
               label="Process Time:"
               rules={[{ required: true }]}
             >
@@ -194,7 +194,7 @@ export default class AddOrdersLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-              name="Service Time"
+              name="serviceTime"
               label="Service Time:"
               rules={[{ required: true }]}
             >
