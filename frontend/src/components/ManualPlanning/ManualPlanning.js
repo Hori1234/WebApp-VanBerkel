@@ -387,22 +387,22 @@ export default class ManualPlanning extends Component {
   deleteTruck = () => {};
   deleteOrder = () => {};
   addTruck = (value) => {
-    this.getOrderInfo();
+    this.getTruckInfo();
     return axios
-      .post(`/api/trucks/${value}`, {
+      .post(`/api/trucks/sheet/${value}`, {
         truck_id: this.state.newTruck.truck_id,
-        availability: this.state.newTruck.availability,
+        availability: false,
         truck_type: this.state.newTruck.truck_type,
         business_type: this.state.newTruck.use_cost,
         terminal: this.state.newTruck.terminal,
         hierarchy: 0,
         use_cost: 0,
-        date: this.state.newTruck.date,
+        date: toString(this.state.newTruck.date),
         starting_time: this.state.newTruck.starting_time,
       })
       .then((res) => {
         if (res.status === 200) {
-          message.success("Order: " + "added succesfully");
+          message.success("Trcuk: " + "added succesfully");
         }
         this.handleOk();
         return true;
@@ -419,7 +419,7 @@ export default class ManualPlanning extends Component {
   addOrder = (value) => {
     this.getOrderInfo();
     return axios
-      .post(`/api/orders/${value}`, {
+      .post(`/api/orders/sheet/${value}`, {
         inl_terminal: this.state.newOrder.inl,
         truck_type: this.state.newOrder.truck_type,
         hierarchy: 0,
@@ -554,7 +554,7 @@ export default class ManualPlanning extends Component {
   };
   getOrderInfo = () => {
     var temp = [];
-    temp = this.refs.addOrders.getFormData();
+    temp = this.refs.addOrders.getFormOrderData();
     console.log(temp);
     this.setNewOrder(
       temp[0],
@@ -571,7 +571,7 @@ export default class ManualPlanning extends Component {
 
   getTruckInfo = () => {
     var temp = [];
-    temp = this.refs.addTrucks.getFormData();
+    temp = this.refs.addTrucks.getFormTruckData();
     console.log(temp);
     this.setNewTruck(
       temp[0],
