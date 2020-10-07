@@ -384,8 +384,12 @@ export default class ManualPlanning extends Component {
     }
   };
 
+  //API Calls ============================================================>
+
   deleteTruck = () => {};
   deleteOrder = () => {};
+
+  //Adding the truck and the order
   addTruck = (value) => {
     this.getTruckInfo();
     return axios
@@ -449,6 +453,7 @@ export default class ManualPlanning extends Component {
       });
   };
 
+  //Getting the truck and orders list from the db
   getOrderList = async (value) => {
     return axios
       .get(`/api/orders/sheet/${value}`)
@@ -517,6 +522,7 @@ export default class ManualPlanning extends Component {
       });
   };
 
+  //setting the new orders and the new truck
   setNewOrder = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
     console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
     this.setState((prevState) => {
@@ -534,7 +540,6 @@ export default class ManualPlanning extends Component {
     });
     console.log(this.state.newOrder);
   };
-
   setNewTruck = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
     console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
     this.setState((prevState) => {
@@ -552,6 +557,8 @@ export default class ManualPlanning extends Component {
     });
     console.log(this.state.newTruck);
   };
+
+  //Getting the new order's and new truck's information from their modals
   getOrderInfo = () => {
     var temp = [];
     temp = this.refs.addOrders.getFormOrderData();
@@ -568,7 +575,6 @@ export default class ManualPlanning extends Component {
       temp[8]
     );
   };
-
   getTruckInfo = () => {
     var temp = [];
     temp = this.refs.addTrucks.getFormTruckData();
