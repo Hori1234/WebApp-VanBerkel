@@ -337,7 +337,7 @@ def test_post_order_invalid(client, db):
         driving_time='10', process_time='1', service_time='21'
     )
     rv = post_order(client, 1, **data)
-    assert rv.status_code == 404
+    assert rv.status_code == 400
 
 
 def test_post_truck(client, db):
@@ -358,9 +358,9 @@ def test_post_truck(client, db):
 @pytest.mark.skip('not implemented yet')
 def test_post_truck_invalid(client, db):
     data = dict(
-        truck_id=17, availability='bananas',
-        truck_type='Sand', business_type=53, terminal='DUCK',
-        hierarchy='2', use_cost='17', date='2020-10-01',
+        truck_id='17', availability=True,
+        truck_type='Sand', business_type='53', terminal='DUCK',
+        hierarchy=2, use_cost=17, date='2020-10-01',
         starting_time='15:30'
     )
     rv = post_truck(client, 1, **data)
@@ -470,8 +470,8 @@ def test_new_truck_latest(client, db):
     rv = post_truck(client, 'latest', **data)
 
     assert rv.status_code == 200
-    data = rv.get_json()
-    truck = trucks.Truck.query.get_or_404(data['s_number'])
+    data2 = rv.get_json()
+    truck = trucks.Truck.query.get_or_404(data2['s_number'])
     assert truck.hierarchy == 2
 
 
@@ -519,6 +519,9 @@ def test_patch_truck_with_orders(client, db):
 
     assert rv.status_code == 200
 
+    truck = trucks.Truck.query.get(1)
+    assert truck.truck_type == 'port'
+
 
 def test_patch_truck_with_wrong_orders(client, db):
     data = dict(
@@ -527,3 +530,108 @@ def test_patch_truck_with_wrong_orders(client, db):
     rv = patch_truck(client, 1, **data)
 
     assert rv.status_code == 404
+
+
+def test_remove_then_add_truck(client, db):
+    data = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30', orders=[1, 2, 3]
+    )
+    rv = delete_truck(client, 1)
+    assert rv.status_code == 204
+
+    rv2 = post_truck(client, 'latest', **data)
+    assert rv2.status_code == 200
+
+    data2 = rv2.get_json()
+    truck = trucks.Truck.query.get(data2['s_number'])
+    assert truck.truck_id == '45-TBD-1'
+    assert truck.use_cost == 17
+
+
+def test_remove_then_add_order(client, db):
+    data = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        driving_time=10, process_time=1, service_time=2
+    )
+    rv = delete_order(client, 2)
+    assert rv.status_code == 204
+
+    rv2 = post_order(client, 'latest', **data)
+    assert rv2.status_code == 200
+
+    data2 = rv2.get_json()
+    order = orders.Order.query.get(data2['order_number'])
+    assert order.inl_terminal == 'ITV'
+    assert order.process_time == 1
+
+
+def test_remove_data_from_truck(client, db):
+    data = dict(
+        remarks=None
+    )
+    truck = trucks.Truck.query.get(3)
+    assert 'remarks' in [*truck.others]
+
+    rv = patch_truck(client, 3, **data)
+    assert rv.status_code == 200
+
+    truck = trucks.Truck.query.get(3)
+    assert 'remarks' not in [*truck.others]
+    # something to make sure that there is now no longer a remark
+
+
+def test_remove_data_from_order(client, db):
+    data = dict(
+        time1=None
+    )
+    order = orders.Order.query.get(4)
+    assert 'time1' in [*order.others]
+
+    rv = patch_order(client, 4, **data)
+    assert rv.status_code == 200
+
+    order = orders.Order.query.get(4)
+    assert 'time1' not in [*order.others]
+    # something to make sure that there is no longer a time1 value
+
+
+def test_add_new_columns_trucks(client, db):
+    data = dict(
+        money='much',
+        king='Midas',
+        boardgame='Terraforming Mars',
+        years_spent=5
+    )
+    rv = patch_truck(client, 1, **data)
+    assert rv.status_code == 200
+
+    data2 = rv.get_json()
+    truck = trucks.Truck.query.get(data2['s_number'])
+    assert 'boardgame' in [*truck.others]
+    assert truck.others['boardgame'] == 'Terraforming Mars'
+    assert 'money' in [*truck.others]
+    assert truck.others['money'] == 'much'
+    # figure out if the new columns are included
+
+
+def test_add_new_columns_orders(client, db):
+    data = dict(
+        money='much',
+        king='Midas',
+        boardgame='Terraforming Mars',
+        years_spent=5
+    )
+    rv = patch_order(client, 4, **data)
+    assert rv.status_code == 200
+
+    data2 = rv.get_json()
+    order = orders.Order.query.get(data2['order_number'])
+    assert 'boardgame' in [*order.others]
+    assert order.others['boardgame'] == 'Terraforming Mars'
+    assert 'money' in [*order.others]
+    assert order.others['money'] == 'much'
+    # figure out if the new columns are included

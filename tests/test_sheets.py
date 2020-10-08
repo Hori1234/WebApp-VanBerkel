@@ -41,6 +41,10 @@ def test_upload_ta_success(client, db):
     assert rv.status_code == 200
     assert trucks.TruckSheet.query.get_or_404(1, description='file not found')
 
+    truck = trucks.Truck.query.get(5)
+    assert truck.truck_type == 'regional'
+    assert truck.terminal == 'ITV'
+
 
 def test_upload_orders_success(client):
     """
@@ -50,6 +54,10 @@ def test_upload_orders_success(client):
                           './tests/data/order_sheet_test.xlsx')
     assert rv.status_code == 200
     assert orders.OrderSheet.query.get_or_404(1, description='file not found')
+
+    order = orders.Order.query.get(8)
+    assert order.latest_dep_time == 630
+    assert order.truck_type == 'port'
 
 
 def test_upload_ta_missing_column(client):
