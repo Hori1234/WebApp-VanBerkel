@@ -119,7 +119,7 @@ export default class AddTruckLayout extends Component {
                     <Col span={12}>
                         <Form.Item
                             name={""}
-                            label={"Truck Id:"}
+                            label={"truckId:"}
                             rules={[{required: true}]}
                         >
                             <Input
@@ -129,7 +129,7 @@ export default class AddTruckLayout extends Component {
                             />
                         </Form.Item>
                         <Form.Item
-                            name={"Truck S No"}
+                            name={"truckSNo"}
                             label={"Truck S No:"}
                             rules={[{required: true}]}
                         >
@@ -150,7 +150,7 @@ export default class AddTruckLayout extends Component {
                             />
                         </Form.Item>
                         <Form.Item
-                            name={"Truck Type"}
+                            name={"truckType"}
                             label={"Truck Type:"}
                             rules={[{required: true}]}
                         >
@@ -170,8 +170,8 @@ export default class AddTruckLayout extends Component {
                             />
                         </Form.Item>
                         <Form.Item
-                            name={"hierarchy"}
-                            label={"hierarchy:"}
+                            name={"Hierarchy"}
+                            label={"Hierarchy:"}
                             rules={[{required: true}]}
                         >
                             <Input
@@ -180,7 +180,7 @@ export default class AddTruckLayout extends Component {
                             />
                         </Form.Item>
                         <Form.Item
-                            name={"Use Cost"}
+                            name={"useCost"}
                             label={"Use Cost:"}
                             rules={[{required: true}]}
                         >
@@ -193,7 +193,7 @@ export default class AddTruckLayout extends Component {
 
                     <Col span={12}>
                         <Form.Item
-                            name={"Starting Time"}
+                            name={"startingTime"}
                             label={"Starting Time:"}
                             rules={[{required: true}]}
                         >
@@ -228,7 +228,7 @@ export default class AddTruckLayout extends Component {
                             <Input value={this.state.remarks} onChange={this.handleChangeRemarks}/>
                         </Form.Item>
                         <Form.Item
-                            name={"Business_type"}
+                            name={"businessType"}
                             label={"Business_type:"}
                         >
                             <Input value={this.state.business_type} onChange={this.handleChangeBusiness_type}/>
