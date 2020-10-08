@@ -31,7 +31,6 @@ var truckIDsDummy = ['23', '23', '23', '234', '235', '1', '2', '3', '4', '5', '6
 var orderIDsDummy = ['124124', '124124', '124124', '236234592', '234623466', '2', '2', '2', '2', '2', '2', '2', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7'];
 var startTimesDummy = ['8:00', '10:30', '16:00', '12:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00'];
 var endTimesDummy = ['10:30', '12:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00'];
-var durationsDummy = ['2:30', '1:30', '2:00', '6:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00', '2:00'];
 var destinationsDummy = ['Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven'];
 
 // creates the tooltip of an order
@@ -47,12 +46,12 @@ function createCustomHTMLTooltip(orderID, startTime, endTime, duration, destinat
   )
 }
 
-function calculateDuration(startTime,endTime){
+function calculateDuration(startTime, endTime) {
   let startDate = createDataTime(startTime);
   let endDate = createDataTime(endTime);
   let minutes = ((endDate - startDate) / (1000 * 60));
   let finalMinutes = minutes % 60;
-  if(finalMinutes < 10){
+  if (finalMinutes < 10) {
     finalMinutes = "0" + finalMinutes;
   }
   let finalHours = (minutes - finalMinutes) / 60;
@@ -72,7 +71,7 @@ function createDataTime(time) {
 
 // create single data input for timeline
 function createSingleDataInput(truckID, orderID, startTime, endTime, destination) {
-  let duration = calculateDuration(startTime,endTime);
+  let duration = calculateDuration(startTime, endTime);
   return ([truckID,
     +orderID,
     createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination),
@@ -124,8 +123,11 @@ export default class DataVisualization extends Component {
           rootProps={{ 'data-testid': '5' }}
         />
         <Row>
-          <Col span={6} offset={18} >
+          <Col span={6}>
             <Button type="primary" icon={<DownloadOutlined />} size={'large'} style={{ width: "100%" }} onClick={downloadFile}>Download First-Rides</Button>
+          </Col>
+          <Col span={4} offset={14} >
+            <Button type="primary" size={'large'} style={{ width: "100%" }}>Publish</Button>
           </Col>
         </Row>
       </Layout>
