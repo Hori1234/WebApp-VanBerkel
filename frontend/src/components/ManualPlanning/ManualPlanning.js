@@ -386,8 +386,76 @@ export default class ManualPlanning extends Component {
 
   //API Calls ============================================================>
 
-  deleteTruck = () => {};
-  deleteOrder = () => {};
+  deleteOrder = (value) => {
+    return axios
+      .delete(`/api/orders/${value}`)
+      .then((res) => {
+        if (res.status === 404) {
+          message.error(res.message);
+        } else {
+          if (res.status === 204) {
+            message.success("Account succesfully deleted");
+          } else {
+            if (res.status === 401) {
+              message.error("Unauthorized Action");
+            } else {
+              message.error("Service Unavailable");
+            }
+          }
+        }
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+  deleteOrderById = (data) => {
+    data.forEach((id) => {
+      this.deleteOrder(id);
+      const filteredData = this.state.data.filter((item) => item.id !== id);
+      this.setState({ data: filteredData });
+    });
+  };
+  deleteTruck = (value) => {
+    return axios
+      .delete(`/api/trucks/${value}`)
+      .then((res) => {
+        if (res.status === 404) {
+          message.error(res.message);
+        } else {
+          if (res.status === 204) {
+            message.success("Account succesfully deleted");
+          } else {
+            if (res.status === 401) {
+              message.error("Unauthorized Action");
+            } else {
+              message.error("Service Unavailable");
+            }
+          }
+        }
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+  deleteTruckById = (data) => {
+    data.forEach((id) => {
+      this.deleteTruck(id);
+      const filteredData = this.state.data2.filter((item) => item.id !== id);
+      this.setState({ data2: filteredData });
+    });
+  };
 
   //Adding the truck and the order
   addTruck = (value) => {
@@ -705,7 +773,14 @@ export default class ManualPlanning extends Component {
             ></EditableTable>
             <br />
             <Button onClick={() => this.showOrdersModal()}>Add order</Button>
-            <Button>Delete order</Button>&nbsp;&nbsp;
+            <Button
+              onClick={() =>
+                this.deleteOrderById(this.state.selectedOrdersRowKeys)
+              }
+            >
+              Delete order
+            </Button>
+            &nbsp;&nbsp;
             <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
           </Col>
           <Col span={3}>
@@ -734,7 +809,13 @@ export default class ManualPlanning extends Component {
             ></EditableTable>
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
-            <Button>Delete truck</Button>
+            <Button
+              onClick={() =>
+                this.deleteTruckById(this.state.selectedTrucksRowKeys)
+              }
+            >
+              Delete truck
+            </Button>
           </Col>
         </Row>
 
