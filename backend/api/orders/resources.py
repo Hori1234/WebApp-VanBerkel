@@ -130,7 +130,7 @@ class OrderByID(MethodView):
         """
         try:
             # try to get the order from the orders table
-            order = OrderSheet.query.get_or_404(
+            order = Order.query.get_or_404(
                 order_id,
                 description='Order not found')
             # delete the order

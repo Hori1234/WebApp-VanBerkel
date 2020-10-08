@@ -351,7 +351,7 @@ def test_post_truck(client, db):
 
     assert rv.status_code == 200
     data = rv.get_json()
-    truck = trucks.Truck.query.get_or_404(data['s_number'])
+    truck = trucks.Truck.query.get(data['s_number'])
     assert truck.hierarchy == 2
 
 
@@ -372,6 +372,14 @@ def test_delete_order(client, db):
 
     assert rv.status_code == 204
 
+    # Check if order was deleted
+    order = orders.Order.query.get(1)
+    assert order is None
+
+    # Check if there are any orders left
+    order_list = orders.Order.query.filter_by(sheet_id=1).all()
+    assert len(order_list) > 0
+
 
 def test_delete_order_wrong(client, db):
     rv = delete_order(client, 100000)
@@ -383,6 +391,14 @@ def test_delete_truck(client, db):
     rv = delete_truck(client, 1)
 
     assert rv.status_code == 204
+
+    # Check if the truck was deleted
+    truck = trucks.Truck.query.get(1)
+    assert truck is None
+
+    # Check if there are any trucks left
+    truck_list = trucks.Truck.query.filter_by(sheet_id=1).all()
+    assert len(truck_list) > 0
 
 
 def test_delete_truck_wrong(client, db):
