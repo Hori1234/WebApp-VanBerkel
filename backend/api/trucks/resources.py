@@ -5,7 +5,6 @@ from backend.models.trucks import Truck, TruckSheet
 from backend.extensions import roles_required
 from .schemas import TruckSchema, TruckTableSchema
 from backend.app import db
-from sqlalchemy.exc import SQLAlchemyError
 from flask_smorest import abort
 
 
@@ -37,8 +36,7 @@ class Trucks(MethodView):
                     .first_or_404()
             else:
                 # Can't understand which sheet is requested
-                abort(404, message='Truck sheet not found')
-                return
+                return abort(404, message='Truck sheet not found')
         return truck_sheet
 
     @roles_required('planner', 'administrator')
@@ -70,8 +68,7 @@ class Trucks(MethodView):
                     .first_or_404()
             else:
                 # Can't understand which sheet is requested
-                abort(404, message='Truck sheet not found')
-                return
+                return abort(404, message='Truck sheet not found')
 
         # store order numbers before creating the truck,
         # as we will be adding them later
@@ -81,7 +78,13 @@ class Trucks(MethodView):
         truck = {k: v for k, v in truck.items() if v is not None}
 
         # Create a new truck with all parameters
-        new_truck = Truck(**truck)
+        try:
+            new_truck = Truck(**truck)
+        except ValueError as e:
+            # Some values of the arguments are not allowed
+            return abort(400,
+                         message=str(e),
+                         status="Bad Request")
 
         # Assign the orders to the truck
         if order_numbers is not None:
@@ -114,16 +117,10 @@ class TruckByID(MethodView):
 
         Required roles: planner, administrator
         """
-        try:
-            # Try to parse the sheet_id to an int and get the truck
-            truck = Truck.query.get_or_404(
-                truck_id,
-                description='Truck not found')
-        except SQLAlchemyError:
-            abort(503,
-                  message='Something went wrong on the server.',
-                  status='Service Unavailable')
-            return
+        # Try to parse the sheet_id to an int and get the truck
+        truck = Truck.query.get_or_404(
+            truck_id,
+            description='Truck not found')
         return truck
 
     @roles_required('planner', 'administrator')
@@ -139,18 +136,13 @@ class TruckByID(MethodView):
 
         Required roles: planner, administrator
         """
-        try:
-            # Try to parse the sheet_id to an int and get the truck
-            truck = Truck.query.get_or_404(
-                truck_id,
-                description='Truck not found')
-            db.session.delete(truck)
-            db.session.commit()
-            return "", 204
-        except SQLAlchemyError:
-            abort(503,
-                  message='Something went wrong on the server.',
-                  status='Service Unavailable')
+        # Try to parse the sheet_id to an int and get the truck
+        truck = Truck.query.get_or_404(
+            truck_id,
+            description='Truck not found')
+        db.session.delete(truck)
+        db.session.commit()
+        return "", 204
 
     @roles_required('planner', 'administrator')
     @bp.arguments(TruckSchema(partial=True))
@@ -212,8 +204,3 @@ class TruckByID(MethodView):
                   message=str(e),
                   status="Bad Request"
                   )
-        except SQLAlchemyError:
-            # The database is unavailable
-            abort(503,
-                  message='Something went wrong on the server.',
-                  status='SERVICE UNAVAILABLE')

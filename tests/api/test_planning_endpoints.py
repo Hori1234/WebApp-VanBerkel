@@ -1,12 +1,14 @@
-from datetime import datetime
-
+import datetime
+from pathlib import Path
 import pytest
 import json
 
 from backend.models import trucks
 from backend.models import orders
-from backend.models.users import User
-import datetime
+
+
+def get_file_path(file):
+    return Path(__file__).parent / 'data' / file
 
 
 @pytest.fixture(autouse=True)
@@ -17,7 +19,7 @@ def setup_db(setup_users, login_user, create_db_without_users, client):
 
     for i in range(2):
         data = dict(
-            file_1=(open('./tests/data/truck_availability_test.xlsx', 'rb'),
+            file_1=(open(get_file_path('truck_availability_test.xlsx'), 'rb'),
                     'sheet.xlsx')
         )
 
@@ -25,7 +27,7 @@ def setup_db(setup_users, login_user, create_db_without_users, client):
                     data=data)
 
         data2 = dict(
-            file_1=(open('./tests/data/order_sheet_test.xlsx', 'rb'),
+            file_1=(open(get_file_path('order_sheet_test.xlsx'), 'rb'),
                     'sheet.xlsx')
         )
 
@@ -151,37 +153,10 @@ def delete_truck(client, truck_id):
     return client.delete(f'/api/trucks/{truck_id}')
 
 
-def get_order_sheet(client, page=1, page_size=10):
-    """
-    retrieves all uploaded order sheets
-    :param client: the client to make the request
-    :param page: page of the request
-    :param page_size: number of items per page
-    :return: a list of all order sheets in the database
-    """
-    pagination_params = dict(
-        page=page,
-        page_size=page_size
-    )
-    return client.get('/api/sheets/orders', query_string=pagination_params)
+# GET ORDER TESTS
 
 
-def get_truck_sheet(client, page=1, page_size=10):
-    """
-    retrieves all uploaded truck sheets
-    :param client: the client to make the request
-    :param page: page of the request
-    :param page_size: number of items per page
-    :return: a list of all order sheets in the database
-    """
-    pagination_params = dict(
-        page=page,
-        page_size=page_size
-    )
-    return client.get('/api/sheets/trucks', query_string=pagination_params)
-
-
-def test_order(client, db):
+def test_get_order(client, db):
     rv = get_order(client, 1)
 
     assert rv.status_code == 200
@@ -189,13 +164,15 @@ def test_order(client, db):
     assert data['order_number'] == 1
 
 
-def test_order_wrong(client, db):
+def test_get_order_invalid(client, db):
     rv = get_order(client, 1000000)
 
     assert rv.status_code == 404
 
+# GET TRUCK TESTS
 
-def test_truck(client, db):
+
+def test_get_truck(client, db):
     rv = get_truck(client, 1)
 
     assert rv.status_code == 200
@@ -203,13 +180,15 @@ def test_truck(client, db):
     assert data['s_number'] == 1
 
 
-def test_truck_wrong(client, db):
+def test_get_truck_invalid(client, db):
     rv = get_truck(client, 1000000)
 
     assert rv.status_code == 404
 
+# GET ORDERS TESTS
 
-def test_orders(client, db):
+
+def test_get_orders(client, db):
     rv = get_orders(client, 1)
 
     assert rv.status_code == 200
@@ -217,13 +196,29 @@ def test_orders(client, db):
     assert len(data) > 0
 
 
-def test_orders_wrong(client, db):
+def test_get_orders_invalid(client, db):
     rv = get_orders(client, 20)
 
     assert rv.status_code == 404
 
 
-def test_trucks(client, db):
+def test_get_order_sheet_latest(client, db):
+    rv = get_orders(client, 'latest')
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert len(data) > 0
+
+
+def test_get_order_sheet_not_latest(client, db):
+    rv = get_orders(client, 'first')
+
+    assert rv.status_code == 404
+
+# GET TRUCKS TESTS
+
+
+def test_get_trucks(client, db):
     rv = get_trucks(client, 1)
 
     assert rv.status_code == 200
@@ -231,51 +226,62 @@ def test_trucks(client, db):
     assert len(data) > 0
 
 
-def test_trucks_wrong(client, db):
+def test_get_trucks_invalid(client, db):
     rv = get_trucks(client, 20)
 
     assert rv.status_code == 404
 
 
-def test_order_sheets(client, db):
-    rv = get_order_sheet(client, page=2, page_size=1)
+def test_get_truck_sheet_latest(client, db):
+    rv = get_trucks(client, 'latest')
 
     assert rv.status_code == 200
     data = rv.get_json()
-    assert len(data) == 1
-    assert data[0]['id'] == 1
+    assert len(data) > 0
 
 
-def test_truck_sheets(client, db):
-    rv = get_truck_sheet(client, page=2, page_size=1)
+def test_get_truck_sheet_not_latest(client, db):
+    rv = get_trucks(client, 'test')
 
-    assert rv.status_code == 200
-    data = rv.get_json()
-    assert len(data) == 1
-    assert data[0]['id'] == 1
+    assert rv.status_code == 404
+
+
+# PATCH ORDER TESTS
 
 
 def test_patch_order(client, db):
-    data = dict(
+    request = dict(
         truck_type='regional',
         inl_terminal='KAT',
-        fun='YES'
+        SomethingNew='TEST',
+        SomethingNewAlso=None
     )
-    rv = patch_order(client, 1, **data)
+    rv = patch_order(client, 1, **request)
 
     assert rv.status_code == 200
     order = orders.Order.query.get(1)
     assert order.truck_type == 'regional'
     assert order.inl_terminal == 'KAT'
+    assert order.others['SomethingNew'] == 'TEST'
+    assert 'SomethingNewAlso' not in order.others
 
 
-@pytest.mark.skip('not implemented yet')
+def test_patch_order_remove_others(client, db):
+    request = dict(
+        Container=None
+    )
+    rv = patch_order(client, 1, **request)
+    assert rv.status_code == 200
+    order = orders.Order.query.get(1)
+    assert 'Container' not in order.others
+
+
 def test_patch_order_invalid(client, db):
-    data = dict(
+    request = dict(
         truck_type='big',
         inl_terminal='DOG'
     )
-    rv = patch_order(client, 1, **data)
+    rv = patch_order(client, 1, **request)
 
     assert rv.status_code == 400
 
@@ -285,27 +291,44 @@ def test_patch_order_wrong(client, db):
 
     assert rv.status_code == 404
 
+# PATCH TRUCK TESTS
+
 
 def test_patch_truck(client, db):
-    data = dict(
+    request = dict(
         truck_type='port',
-        terminal='KAT'
+        terminal='KAT',
+        SomethingNew='NEW!',
+        SomethingNewAlso=None
     )
-    rv = patch_truck(client, 1, **data)
+    rv = patch_truck(client, 1, **request)
 
     assert rv.status_code == 200
-    truck = trucks.Truck.query.get_or_404(1)
+    truck = trucks.Truck.query.get(1)
     assert truck.truck_type == 'port'
     assert truck.terminal == 'KAT'
+    assert truck.others['SomethingNew'] == 'NEW!'
+    assert 'SomethingNewAlso' not in truck.others
 
 
-@pytest.mark.skip('not implemented yet')
+def test_patch_truck_remove_others(client, db):
+    request = dict(
+        Driver=None,
+    )
+
+    rv = patch_truck(client, 1, **request)
+    assert rv.status_code == 200
+
+    truck = trucks.Truck.query.get(1)
+    assert 'Driver' not in truck.others
+
+
 def test_patch_truck_invalid(client, db):
-    data = dict(
+    request = dict(
         truck_type='medium',
         terminal='SAD'
     )
-    rv = patch_truck(client, 1, **data)
+    rv = patch_truck(client, 1, **request)
 
     assert rv.status_code == 400
 
@@ -316,38 +339,97 @@ def test_patch_truck_wrong(client, db):
     assert rv.status_code == 404
 
 
+def test_patch_truck_with_orders(client, db):
+    request = dict(
+        truck_type='port', orders=[1, 2]
+    )
+    rv = patch_truck(client, 1, **request)
+
+    assert rv.status_code == 200
+
+    truck = trucks.Truck.query.get(1)
+    assert truck.truck_type == 'port'
+
+
+def test_patch_truck_with_wrong_orders(client, db):
+    request = dict(
+        truck_type='port', orders=[1, 200000]
+    )
+    rv = patch_truck(client, 1, **request)
+
+    assert rv.status_code == 404
+
+# POST ORDER TESTS
+
+
 def test_post_order(client, db):
-    data = dict(
+    request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline=1300,
         driving_time=10, process_time=1, service_time=2
     )
-    rv = post_order(client, 1, **data)
+    rv = post_order(client, 1, **request)
     assert rv.status_code == 200
     data = rv.get_json()
     order = orders.Order.query.get_or_404(data['order_number'])
     assert order.hierarchy == 3
 
 
-@pytest.mark.skip('not implemented yet')
-def test_post_order_invalid(client, db):
-    data = dict(
-        inl_terminal='BAD', latest_dep_time='1000',
-        truck_type='great', hierarchy='3', delivery_deadline='1300',
-        driving_time='10', process_time='1', service_time='21'
+def test_post_order_invalid_truck_type(client, db):
+    request = dict(
+        inl_terminal='KAT', latest_dep_time=1000,
+        truck_type='TEST', hierarchy=3, delivery_deadline=1300,
+        driving_time=10, process_time=1, service_time=21
     )
-    rv = post_order(client, 1, **data)
+    rv = post_order(client, 1, **request)
     assert rv.status_code == 400
 
 
+def test_post_order_invalid_terminal(client, db):
+    request = dict(
+        inl_terminal='TEST', latest_dep_time=1000,
+        truck_type='Port', hierarchy=3, delivery_deadline=1300,
+        driving_time=10, process_time=1, service_time=21
+    )
+    rv = post_order(client, 1, **request)
+    assert rv.status_code == 400
+
+
+def test_post_order_latest(client, db):
+    request = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        driving_time=10, process_time=1, service_time=2
+    )
+    rv = post_order(client, 'latest', **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    order = orders.Order.query.get_or_404(data['order_number'])
+    assert order.hierarchy == 3
+
+
+def test_post_order_not_latest(client, db):
+    request = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        driving_time=10, process_time=1, service_time=2
+    )
+    rv = post_order(client, 'same dude', **request)
+
+    assert rv.status_code == 404
+
+# POST TRUCK TESTS
+
+
 def test_post_truck(client, db):
-    data = dict(
+    request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
         starting_time='15:30'
     )
-    rv = post_truck(client, 1, **data)
+    rv = post_truck(client, 1, **request)
 
     assert rv.status_code == 200
     data = rv.get_json()
@@ -355,16 +437,80 @@ def test_post_truck(client, db):
     assert truck.hierarchy == 2
 
 
-@pytest.mark.skip('not implemented yet')
-def test_post_truck_invalid(client, db):
-    data = dict(
-        truck_id='17', availability=True,
-        truck_type='Sand', business_type='53', terminal='DUCK',
+def test_post_truck_invalid_truck_type(client, db):
+    request = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='Sand', business_type='test', terminal='KAT',
         hierarchy=2, use_cost=17, date='2020-10-01',
         starting_time='15:30'
     )
-    rv = post_truck(client, 1, **data)
+    rv = post_truck(client, 1, **request)
     assert rv.status_code == 400
+
+
+def test_post_truck_invalid_terminal(client, db):
+    request = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='TEST',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30'
+    )
+    rv = post_truck(client, 1, **request)
+    assert rv.status_code == 400
+
+
+def test_post_truck_latest(client, db):
+    request = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30'
+    )
+    rv = post_truck(client, 'latest', **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    truck = trucks.Truck.query.get_or_404(data['s_number'])
+    assert truck.hierarchy == 2
+
+
+def test_new_truck_not_latest(client, db):
+    request = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30'
+    )
+    rv = post_truck(client, 'more testing = more better', **request)
+
+    assert rv.status_code == 404
+
+
+def test_post_truck_with_orders(client, db):
+    request = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30', orders=[1, 2, 3]
+    )
+    rv = post_truck(client, 1, **request)
+
+    assert rv.status_code == 200
+
+
+def test_post_truck_with_wrong_orders(client, db):
+    request = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30', orders=[1, 2, 30000]
+    )
+    rv = post_truck(client, 1, **request)
+
+    assert rv.status_code == 404
+
+
+# DELETE ORDER TESTS
 
 
 def test_delete_order(client, db):
@@ -385,6 +531,8 @@ def test_delete_order_wrong(client, db):
     rv = delete_order(client, 100000)
 
     assert rv.status_code == 404
+
+# DELETE TRUCK TESTS
 
 
 def test_delete_truck(client, db):
@@ -407,133 +555,8 @@ def test_delete_truck_wrong(client, db):
     assert rv.status_code == 404
 
 
-def test_get_order_sheet_latest(client, db):
-    rv = get_orders(client, 'latest')
-
-    assert rv.status_code == 200
-    data = rv.get_json()
-    assert len(data) > 0
-
-
-def test_get_order_sheet_not_latest(client, db):
-    rv = get_orders(client, 'first')
-
-    assert rv.status_code == 404
-
-
-def test_new_order_latest(client, db):
-    data = dict(
-        inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
-        driving_time=10, process_time=1, service_time=2
-    )
-    rv = post_order(client, 'latest', **data)
-
-    assert rv.status_code == 200
-    data = rv.get_json()
-    order = orders.Order.query.get_or_404(data['order_number'])
-    assert order.hierarchy == 3
-
-
-def test_new_order_not_latest(client, db):
-    data = dict(
-        inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
-        driving_time=10, process_time=1, service_time=2
-    )
-    rv = post_order(client, 'same dude', **data)
-
-    assert rv.status_code == 404
-
-
-def test_get_truck_sheet_latest(client, db):
-    rv = get_trucks(client, 'latest')
-
-    assert rv.status_code == 200
-    data = rv.get_json()
-    assert len(data) > 0
-
-
-def test_get_truck_sheet_not_latest(client, db):
-    rv = get_trucks(client, 'your mom')
-
-    assert rv.status_code == 404
-
-
-def test_new_truck_latest(client, db):
-    data = dict(
-        truck_id='45-TBD-1', availability=True,
-        truck_type='terminal', business_type='ITV', terminal='ITV',
-        hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30'
-    )
-    rv = post_truck(client, 'latest', **data)
-
-    assert rv.status_code == 200
-    data2 = rv.get_json()
-    truck = trucks.Truck.query.get_or_404(data2['s_number'])
-    assert truck.hierarchy == 2
-
-
-def test_new_truck_not_latest(client, db):
-    data = dict(
-        truck_id='45-TBD-1', availability=True,
-        truck_type='terminal', business_type='ITV', terminal='ITV',
-        hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30'
-    )
-    rv = post_truck(client, 'more testing = more better', **data)
-
-    assert rv.status_code == 404
-
-
-def test_new_truck_with_orders(client, db):
-    data = dict(
-        truck_id='45-TBD-1', availability=True,
-        truck_type='terminal', business_type='ITV', terminal='ITV',
-        hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30', orders=[1, 2, 3]
-    )
-    rv = post_truck(client, 1, **data)
-
-    assert rv.status_code == 200
-
-
-def test_new_truck_with_wrong_orders(client, db):
-    data = dict(
-        truck_id='45-TBD-1', availability=True,
-        truck_type='terminal', business_type='ITV', terminal='ITV',
-        hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30', orders=[1, 2, 30000]
-    )
-    rv = post_truck(client, 1, **data)
-
-    assert rv.status_code == 404
-
-
-def test_patch_truck_with_orders(client, db):
-    data = dict(
-        truck_type='port', orders=[1, 2]
-    )
-    rv = patch_truck(client, 1, **data)
-
-    assert rv.status_code == 200
-
-    truck = trucks.Truck.query.get(1)
-    assert truck.truck_type == 'port'
-
-
-def test_patch_truck_with_wrong_orders(client, db):
-    data = dict(
-        truck_type='port', orders=[1, 200000]
-    )
-    rv = patch_truck(client, 1, **data)
-
-    assert rv.status_code == 404
-
-
-def test_remove_then_add_truck(client, db):
-    data = dict(
+def test_delete_then_post_truck(client, db):
+    request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
@@ -542,17 +565,17 @@ def test_remove_then_add_truck(client, db):
     rv = delete_truck(client, 1)
     assert rv.status_code == 204
 
-    rv2 = post_truck(client, 'latest', **data)
+    rv2 = post_truck(client, 'latest', **request)
     assert rv2.status_code == 200
 
-    data2 = rv2.get_json()
-    truck = trucks.Truck.query.get(data2['s_number'])
+    data = rv2.get_json()
+    truck = trucks.Truck.query.get(data['s_number'])
     assert truck.truck_id == '45-TBD-1'
     assert truck.use_cost == 17
 
 
-def test_remove_then_add_order(client, db):
-    data = dict(
+def test_delete_then_post_order(client, db):
+    request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline=1300,
         driving_time=10, process_time=1, service_time=2
@@ -560,78 +583,10 @@ def test_remove_then_add_order(client, db):
     rv = delete_order(client, 2)
     assert rv.status_code == 204
 
-    rv2 = post_order(client, 'latest', **data)
+    rv2 = post_order(client, 'latest', **request)
     assert rv2.status_code == 200
 
-    data2 = rv2.get_json()
-    order = orders.Order.query.get(data2['order_number'])
+    data = rv2.get_json()
+    order = orders.Order.query.get(data['order_number'])
     assert order.inl_terminal == 'ITV'
     assert order.process_time == 1
-
-
-def test_remove_data_from_truck(client, db):
-    data = dict(
-        remarks=None
-    )
-    truck = trucks.Truck.query.get(3)
-    assert 'remarks' in [*truck.others]
-
-    rv = patch_truck(client, 3, **data)
-    assert rv.status_code == 200
-
-    truck = trucks.Truck.query.get(3)
-    assert 'remarks' not in [*truck.others]
-    # something to make sure that there is now no longer a remark
-
-
-def test_remove_data_from_order(client, db):
-    data = dict(
-        time1=None
-    )
-    order = orders.Order.query.get(4)
-    assert 'time1' in [*order.others]
-
-    rv = patch_order(client, 4, **data)
-    assert rv.status_code == 200
-
-    order = orders.Order.query.get(4)
-    assert 'time1' not in [*order.others]
-    # something to make sure that there is no longer a time1 value
-
-
-def test_add_new_columns_trucks(client, db):
-    data = dict(
-        money='much',
-        king='Midas',
-        boardgame='Terraforming Mars',
-        years_spent=5
-    )
-    rv = patch_truck(client, 1, **data)
-    assert rv.status_code == 200
-
-    data2 = rv.get_json()
-    truck = trucks.Truck.query.get(data2['s_number'])
-    assert 'boardgame' in [*truck.others]
-    assert truck.others['boardgame'] == 'Terraforming Mars'
-    assert 'money' in [*truck.others]
-    assert truck.others['money'] == 'much'
-    # figure out if the new columns are included
-
-
-def test_add_new_columns_orders(client, db):
-    data = dict(
-        money='much',
-        king='Midas',
-        boardgame='Terraforming Mars',
-        years_spent=5
-    )
-    rv = patch_order(client, 4, **data)
-    assert rv.status_code == 200
-
-    data2 = rv.get_json()
-    order = orders.Order.query.get(data2['order_number'])
-    assert 'boardgame' in [*order.others]
-    assert order.others['boardgame'] == 'Terraforming Mars'
-    assert 'money' in [*order.others]
-    assert order.others['money'] == 'much'
-    # figure out if the new columns are included

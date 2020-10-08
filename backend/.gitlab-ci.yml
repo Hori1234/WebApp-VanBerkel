@@ -61,6 +61,6 @@ backend-test:
     - backend-build
   script:
     - source venv/bin/activate
-    - coverage run --source=backend -m pytest tests
+    - coverage run --source=backend --branch -m pytest tests
     - coverage report -m
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'

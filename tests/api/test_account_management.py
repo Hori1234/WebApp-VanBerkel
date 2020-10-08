@@ -73,8 +73,11 @@ def test_create_account(db, client):
     assert data['role'] == "view-only"
     assert 'id' in data
 
-    # clean up user after the test
     user = User.query.get(3)
+    # make sure the user password is encrypted
+    assert user.password.decode('utf-8') != 'wachtzin'
+
+    # clean up user after the test
     db.session.delete(user)
     db.session.commit()
 

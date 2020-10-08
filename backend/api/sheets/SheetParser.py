@@ -2,6 +2,7 @@ import abc
 import re
 from typing import Type
 import datetime
+from flask import current_app
 from marshmallow import validates, Schema, INCLUDE
 from marshmallow.exceptions import ValidationError
 from marshmallow.fields import String, Integer, Boolean, Float
@@ -50,9 +51,12 @@ class TruckAvailabilitySchema(Schema):
         :raises :class:`marshmallow.exceptions.ValidationError`: if
                 `val.lower()` is not `terminal`, `regional` or `port`.
         """
-        if val.lower() not in ['terminal', 'regional', 'port']:
-            raise ValidationError('Truck type must be one of '
-                                  'terminal, regional or port.')
+        trucks = current_app.config['TRUCK_TYPES']
+        if val.lower() not in trucks:
+            raise ValidationError(
+                f"Truck type must be one of {', '.join(trucks[:-1])} "
+                f"or {trucks[-1]}"
+            )
 
     @validates('terminal')
     def validate_terminal(self, val):
@@ -67,9 +71,12 @@ class TruckAvailabilitySchema(Schema):
         :raises :class:`marshmallow.exceptions.ValidationError`: if
         `val.lower()` is not `itv`, `kat` or `oss`.
         """
-        if val.lower() not in ['itv', 'kat', 'oss']:
-            raise ValidationError('Terminal base must be one of '
-                                  'ITV, KAT or OSS.')
+        terminals = current_app.config['TERMINALS']
+        if val.upper() not in terminals:
+            raise ValidationError(
+                f"Terminal base must be one of {', '.join(terminals[:-1])} "
+                f"or {terminals[-1]}"
+            )
 
 
 class OrderListSchema(Schema):
@@ -106,9 +113,12 @@ class OrderListSchema(Schema):
         :raises :class:`marshmallow.exceptions.ValidationError`: if
         `val.lower()` is not `itv`, `kat` or `oss`.
         """
-        if val.lower() not in ['itv', 'kat', 'oss']:
-            raise ValidationError('Terminal base must be one of '
-                                  'ITV, KAT or OSS.')
+        terminals = current_app.config['TERMINALS']
+        if val.upper() not in terminals:
+            raise ValidationError(
+                f"Terminal must be one of {', '.join(terminals[:-1])} "
+                f"or {terminals[-1]}"
+            )
 
     @validates('truck_type')
     def validate_truck_type(self, val):
@@ -120,9 +130,12 @@ class OrderListSchema(Schema):
         :raises :class:`marshmallow.exceptions.ValidationError`: if
         `val.lower()` is not `terminal`, `regional` or `port`.
         """
-        if val.lower() not in ['terminal', 'regional', 'port']:
-            raise ValidationError('Truck type must be one of '
-                                  'terminal, regional or port.')
+        trucks = current_app.config['TRUCK_TYPES']
+        if val.lower() not in trucks:
+            raise ValidationError(
+                f"Truck type must be one of {', '.join(trucks[:-1])} "
+                f"or {trucks[-1]}"
+            )
 
 
 class SheetParser(abc.ABC):
@@ -277,7 +290,21 @@ class OrderListParser(SheetParser):
     row_table = Order
 
     def __init__(self, file):
-        super().__init__(file)
+        super().__init__(file, converters={'Delivery Deadline':
+                                           self.round_float_to_int})
+
+    @staticmethod
+    def round_float_to_int(x):
+        """
+        Rounds a float to an integer if x is a float
+        :param x: number to round
+        :type x: float
+        :return: number
+        :rtype: int
+        """
+        if isinstance(x, float):
+            return round(x)
+        return x
 
     @staticmethod
     def post_dataframe(dataframe):
