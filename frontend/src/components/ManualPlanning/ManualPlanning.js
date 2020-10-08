@@ -282,9 +282,9 @@ export default class ManualPlanning extends Component {
     this.getOrderList("latest");
     this.getTruckList("latest");
   }
-  setData= (e) =>{
-      this.setState({data:e})
-  }
+  setData = (e) => {
+    this.setState({ data: e });
+  };
   changeVisibility = (isTrue) => {
     this.setState({ isVisible: isTrue });
   };
@@ -416,8 +416,8 @@ export default class ManualPlanning extends Component {
         return false;
       });
   };
-  deleteOrderById = (data) => {
-    data.forEach((id) => {
+  deleteOrderById = (info) => {
+    info.forEach((id) => {
       this.deleteOrder(id);
       const filteredData = this.state.data.filter((item) => item.id !== id);
       this.setState({ data: filteredData });
@@ -736,7 +736,6 @@ export default class ManualPlanning extends Component {
     };
 
     return (
-    
       <Layout style={{ width: "100%", backgroundColor: "white" }}>
         <Row gutter={[0, 10]}>
           <Col span={8}>
@@ -803,7 +802,7 @@ export default class ManualPlanning extends Component {
           </Col>
           <Col span={9}>
             <EditableTable
-              rowSelection={ordersRowSelection}
+              rowSelection={trucksRowSelection}
               dataSource={this.state.data2}
               columns={this.state.columns2}
               onRow={(record) => ({
@@ -811,13 +810,13 @@ export default class ManualPlanning extends Component {
                   this.selectOrdersRow(record);
                 },
               })}
-            ></EditableTable> 
+            ></EditableTable>
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
             <Button
-              onClick={() =>
-                this.deleteTruckById(this.state.selectedTrucksRowKeys)
-              }
+              onClick={() => {
+                this.deleteTruckById(this.state.selectedTrucksRowKeys);
+              }}
             >
               Delete truck
             </Button>
