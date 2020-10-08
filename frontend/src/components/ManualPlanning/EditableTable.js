@@ -38,7 +38,6 @@ const EditableCell = ({
 
 const EditableTable = props => {
     const [form] = Form.useForm();
-    const [data, setData] = useState(...props.dataSource);
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record) => record.key === editingKey;
 
@@ -68,13 +67,11 @@ const EditableTable = props => {
             if (index > -1) {
                 const item = newData[index];
                 newData.splice(index, 1, { ...item, ...row });
-                console.log(newData)
-                props.setColumns(newData)
+                props.setData(newData)
                 setEditingKey('');
             } else {
                 newData.push(row);
-                console.log(newData)
-                props.setColumns(newData)
+                props.setData(newData)
                 setEditingKey('');
             }
         } catch (errInfo) {

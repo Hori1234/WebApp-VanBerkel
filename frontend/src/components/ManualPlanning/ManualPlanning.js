@@ -285,6 +285,9 @@ export default class ManualPlanning extends Component {
   setData= (e) =>{
       this.setState({data:e})
   }
+  setData2= (e) =>{
+    this.setState({data2:e})
+}
   changeVisibility = (isTrue) => {
     this.setState({ isVisible: isTrue });
   };
@@ -695,7 +698,7 @@ export default class ManualPlanning extends Component {
               rowSelection={ordersRowSelection}
               dataSource={this.state.data}
               columns={this.state.columns}
-              setColumns={this.setData}
+              setData={this.setData}
               onRow={(record) => ({
                 onClick: () => {
                   this.selectOrdersRow(record);
@@ -725,6 +728,7 @@ export default class ManualPlanning extends Component {
               rowSelection={ordersRowSelection}
               dataSource={this.state.data2}
               columns={this.state.columns2}
+              setData={this.setData2}
               onRow={(record) => ({
                 onClick: () => {
                   this.selectOrdersRow(record);
