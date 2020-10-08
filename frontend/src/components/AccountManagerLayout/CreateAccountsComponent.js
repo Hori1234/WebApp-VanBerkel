@@ -126,10 +126,10 @@ export default class CreateAccountsComponent extends Component {
                 backgroundColor: "white",
               }}
             >
-              <Title style={{ fontSize: 16 }}>Welecome </Title>
+              <Title style={{ fontSize: 16 }}>Welcome </Title>
               <Text style={{ fontSize: 14 }}>
-                Complete the following for in order to add a new user. Every
-                field is required to be filled
+                Complete the following form in order to add a new user. Every
+                field is required to be filled.
               </Text>
             </Layout>
           </Layout>

@@ -685,7 +685,7 @@ export default class ManualPlanning extends Component {
           </Menu.Item>
           <Menu.Item key="truckIdMenu">
             <Checkbox id="truckId" onChange={this.filterColumns} defaultChecked>
-              TruckId
+              Truck ID
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="deliveryDeadline">
@@ -694,7 +694,7 @@ export default class ManualPlanning extends Component {
               onChange={this.filterColumns}
               defaultChecked
             >
-              deliveryDeadline
+              Delivery Deadline
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="processTime">
@@ -703,7 +703,7 @@ export default class ManualPlanning extends Component {
               onChange={this.filterColumns}
               defaultChecked
             >
-              processTime
+              Process Time
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="processTime">

@@ -62,7 +62,7 @@ export default class EditAccountComponent extends Component {
           message.error(res.message);
         } else {
           if (res.status === 204) {
-            message.success("Account succesfully deleted");
+            message.success("Account successfully deleted");
           } else {
             if (res.status === 401) {
               message.error("Unauthorized Action");
