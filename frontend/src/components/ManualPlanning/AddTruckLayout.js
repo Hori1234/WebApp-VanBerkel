@@ -118,7 +118,7 @@ export default class AddTruckLayout extends Component {
                 <Row gutter={[24, 8]}>
                     <Col span={12}>
                         <Form.Item
-                            name={""}
+                            name={"truckID"}
                             label={"truckId:"}
                             rules={[{required: true}]}
                         >
