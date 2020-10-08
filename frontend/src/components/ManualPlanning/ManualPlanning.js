@@ -172,18 +172,18 @@ export default class ManualPlanning extends Component {
           editable: true,
         },
         {
-          title: "Address",
-          dataIndex: "address",
+          title: "City",
+          dataIndex: "city",
           sortDirections: ["descend", "ascend"],
-          sorter: (a, b) => a.address.localeCompare(b.address),
+          sorter: (a, b) => a.city.localeCompare(b.city),
           width: 100,
           editable: true,
         },
         {
-          title: "Customer",
-          dataIndex: "customer",
+          title: "Inl_Terminal",
+          dataIndex: "inl_terminal",
           sortDirections: ["descend", "ascend"],
-          sorter: (a, b) => a.customer.localeCompare(b.customer),
+          sorter: (a, b) => a.inl_terminal.localeCompare(b.inl_terminal),
           width: 100,
           editable: true,
         },
@@ -217,19 +217,193 @@ export default class ManualPlanning extends Component {
           width: 100,
           editable: true,
         },
-      ],
-      columns2: [
         {
-          title: "Truck ID",
-          dataIndex: "truckId",
-          sortDirections: ["descend", "ascend"],
-          sorter: (a, b) => a.truckId.localeCompare(b.truckId),
+          title: "Closing",
+          dataIndex: "closing",
           width: 100,
           editable: true,
         },
         {
-          title: "Truck Driver",
-          dataIndex: "truckDriver",
+          title: "Container",
+          dataIndex: "container",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Date",
+          dataIndex: "date",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Delay",
+          dataIndex: "delay",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Gate",
+          dataIndex: "gate",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Gate1",
+          dataIndex: "gate1",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Gross",
+          dataIndex: "gross",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "inl_ter_1",
+          dataIndex: "inl_ter_1",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Invoice_reference",
+          dataIndex: "invoice_reference",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "L_D",
+          dataIndex: "l_D",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Max_departure",
+          dataIndex: "max_departure",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Max_departure",
+          dataIndex: "max_departure",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Pickup",
+          dataIndex: "pickup",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Seal",
+          dataIndex: "seal",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Status",
+          dataIndex: "status",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Ship_comp",
+          dataIndex: "ship_comp",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Tariff_type",
+          dataIndex: "tariff_type",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Terminal1",
+          dataIndex: "terminal1",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Time",
+          dataIndex: "time",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Time1",
+          dataIndex: "time1",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Time2",
+          dataIndex: "time2",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Time3",
+          dataIndex: "time3",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Truck1",
+          dataIndex: "truck1",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Truck2",
+          dataIndex: "truck2",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Truck_used",
+          dataIndex: "truck_used",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Unit_type",
+          dataIndex: "unit_type",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Voyage_inland_carrier",
+          dataIndex: "voyage_inland_carrier",
+          width: 200,
+          editable: true,
+        },
+        {
+          title: "Weight",
+          dataIndex: "weight",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Departure_time",
+          dataIndex: "departure_time",
+          width: 100,
+          editable: true,
+        },
+      ],
+      columns2: [
+        {
+          title: "Truck_id",
+          dataIndex: "truck_id",
+          sortDirections: ["descend", "ascend"],
+          sorter: (a, b) => a.truck_id.localeCompare(b.truck_id),
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Driver",
+          dataIndex: "driver",
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.truckId.localeCompare(b.truckId),
           width: 100,
@@ -240,6 +414,60 @@ export default class ManualPlanning extends Component {
           dataIndex: "availability",
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.truckId.localeCompare(b.truckId),
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Owner",
+          dataIndex: "owner",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Remarks",
+          dataIndex: "remarks",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Business_type",
+          dataIndex: "business_type",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Date",
+          dataIndex: "date",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Hierarchy",
+          dataIndex: "hierarchy",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Starting",
+          dataIndex: "starting",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Terminal",
+          dataIndex: "terminal",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Truck_type",
+          dataIndex: "truck_type",
+          width: 100,
+          editable: true,
+        },
+        {
+          title: "Use_cost",
+          dataIndex: "use_cost",
           width: 100,
           editable: true,
         },
@@ -270,8 +498,12 @@ export default class ManualPlanning extends Component {
         terminal: "",
         hierarchy: "",
         use_cost: "",
-        starting_time: "",
+        starting: "",
         date: "",
+        owner: "",
+        driver: "",
+        remarks: "",
+        business_type: "",
       },
       temp: [],
     };
@@ -282,12 +514,12 @@ export default class ManualPlanning extends Component {
     this.getOrderList("latest");
     this.getTruckList("latest");
   }
-  setData= (e) =>{
-      this.setState({data:e})
-  }
-  setData2= (e) =>{
-    this.setState({data2:e})
-}
+  setData = (e) => {
+    this.setState({ data: e });
+  };
+  setData2 = (e) => {
+    this.setState({ data2: e });
+  };
   changeVisibility = (isTrue) => {
     this.setState({ isVisible: isTrue });
   };
@@ -419,8 +651,8 @@ export default class ManualPlanning extends Component {
         return false;
       });
   };
-  deleteOrderById = (data) => {
-    data.forEach((id) => {
+  deleteOrderById = (info) => {
+    info.forEach((id) => {
       this.deleteOrder(id);
       const filteredData = this.state.data.filter((item) => item.id !== id);
       this.setState({ data: filteredData });
@@ -526,7 +758,6 @@ export default class ManualPlanning extends Component {
       });
   };
 
-  //Getting the truck and orders list from the db
   getOrderList = async (value) => {
     return axios
       .get(`/api/orders/sheet/${value}`)
@@ -536,13 +767,42 @@ export default class ManualPlanning extends Component {
           var temp = {
             key: res.data.orders[i]["order_number"],
             bookingNr: res.data.orders[i]["Booking"],
-            address: res.data.orders[i]["City"],
-            customer: res.data.orders[i]["inl_terminal"],
+            city: res.data.orders[i]["City"],
+            inl_terminal: res.data.orders[i]["inl_terminal"],
             truckId: res.data.orders[i]["Truck (1)"],
             deliveryDeadline: res.data.orders[i]["delivery_deadline"],
             processTime: res.data.orders[i]["process_time"],
             drivingTime: res.data.orders[i]["driving_time"],
             serviceTime: res.data.orders[i]["service_time"],
+            closing: res.data.orders[i]["Closing"],
+            container: res.data.orders[i]["Container"],
+            date: res.data.orders[i]["Date"],
+            delay: res.data.orders[i]["Delay"],
+            gate: res.data.orders[i]["Gate"],
+            gate1: res.data.orders[i]["Gate (1)"],
+            gross: res.data.orders[i]["Gross (kgs)"],
+            inl_ter_1: res.data.orders[i]["Inl. ter. (1)"],
+            invoice_reference: res.data.orders[i]["Invoice reference"],
+            l_d: res.data.orders[i]["L/D"],
+            max_departure: res.data.orders[i]["Max. departure"],
+            pickup: res.data.orders[i]["Pickup"],
+            seal: res.data.orders[i]["Seal"],
+            status: res.data.orders[i]["Status"],
+            ship_comp: res.data.orders[i]["Ship. comp."],
+            tariff_type: res.data.orders[i]["Tariff type"],
+            terminal1: res.data.orders[i]["Terminal (1)"],
+            time: res.data.orders[i]["Time"],
+            time1: res.data.orders[i]["Time (1)"],
+            time2: res.data.orders[i]["Time (2)"],
+            time3: res.data.orders[i]["Time (3)"],
+            truck1: res.data.orders[i]["Truck (1)"],
+            truck2: res.data.orders[i]["Truck (2)"],
+            truck_used: res.data.orders[i]["Truck Used"],
+            unit_type: res.data.orders[i]["Unit type"],
+            voyage_inland_carrier: res.data.orders[i]["Voyage/inland carrier"],
+            weight: res.data.orders[i]["Weight"],
+            departure_time: res.data.orders[i]["Departure time"],
+            truck_id: res.data.orders[i]["Truck Id"],
           };
           outarray.push(temp);
         }
@@ -571,9 +831,18 @@ export default class ManualPlanning extends Component {
         for (var i = 1; i < res.data.trucks.length; i++) {
           var temp = {
             key: res.data.trucks[i]["s_number"],
-            truckId: res.data.trucks[i]["truck_id"],
-            truckDriver: res.data.trucks[i]["Driver"],
-            availability: res.data.trucks[i]["starting_time"],
+            truck_id: res.data.trucks[i]["truck_id"],
+            driver: res.data.trucks[i]["Driver"],
+            availability: res.data.trucks[i]["availability"],
+            starting: res.data.trucks[i]["starting_time"],
+            truck_type: res.data.trucks[i]["truck_type"],
+            terminal: res.data.trucks[i]["terminal"],
+            hierarchy: res.data.trucks[i]["hierarchy"],
+            use_cost: res.data.trucks[i]["use_cost"],
+            date: res.data.trucks[i]["date"],
+            owner: res.data.trucks[i]["Owner"],
+            remarks: res.data.trucks[i]["Remarks"],
+            business_type: res.data.trucks[i]["business_type"],
           };
           outarray.push(temp);
         }
@@ -669,18 +938,18 @@ export default class ManualPlanning extends Component {
     const showHideMenu = (
       <Menu>
         <Menu.ItemGroup title="Columns">
-          <Menu.Item key="addressMenu">
-            <Checkbox id="address" onChange={this.filterColumns} defaultChecked>
-              Address
+          <Menu.Item key="cityMenu">
+            <Checkbox id="city" onChange={this.filterColumns} defaultChecked>
+              city
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="customerMenu">
+          <Menu.Item key="inl_terminalMenu">
             <Checkbox
-              id="customer"
+              id="inl_terminal"
               onChange={this.filterColumns}
               defaultChecked
             >
-              Customer
+              inl_terminal
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="truckIdMenu">
@@ -706,7 +975,7 @@ export default class ManualPlanning extends Component {
               Process Time
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="processTime">
+          <Menu.Item key="drivingTime">
             <Checkbox
               id="drivingTime"
               onChange={this.filterColumns}
@@ -715,13 +984,99 @@ export default class ManualPlanning extends Component {
               drivingTime
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="processTime">
+          <Menu.Item key="serviceTime">
             <Checkbox
               id="serviceTime"
               onChange={this.filterColumns}
               defaultChecked
             >
               serviceTime
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="closing">
+            <Checkbox id="closing" onChange={this.filterColumns} defaultChecked>
+              closing
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="container">
+            <Checkbox
+              id="container"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              container
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="date">
+            <Checkbox id="date" onChange={this.filterColumns} defaultChecked>
+              date
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="delay">
+            <Checkbox id="delay" onChange={this.filterColumns} defaultChecked>
+              delay
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="gate">
+            <Checkbox id="gate" onChange={this.filterColumns} defaultChecked>
+              gate
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="gate1">
+            <Checkbox id="gate1" onChange={this.filterColumns} defaultChecked>
+              gate1
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="gross">
+            <Checkbox id="gross" onChange={this.filterColumns} defaultChecked>
+              gross
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="inl_ter_1">
+            <Checkbox
+              id="inl_ter_1"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              inl_ter_1
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="l_d">
+            <Checkbox id="l_d" onChange={this.filterColumns} defaultChecked>
+              l_d
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="max_departure">
+            <Checkbox
+              id="max_departure"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              max_departure
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="pickup">
+            <Checkbox id="pickup" onChange={this.filterColumns} defaultChecked>
+              pickup
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="seal">
+            <Checkbox id="seal" onChange={this.filterColumns} defaultChecked>
+              seal
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="status">
+            <Checkbox id="status" onChange={this.filterColumns} defaultChecked>
+              status
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="ship_comp">
+            <Checkbox
+              id="ship_comp"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              ship_comp
             </Checkbox>
           </Menu.Item>
         </Menu.ItemGroup>
@@ -737,9 +1092,7 @@ export default class ManualPlanning extends Component {
       selectedTrucksRowKeys,
       onChange: this.onSelectedTrucksRowKeysChange,
     };
-
     return (
-    
       <Layout style={{ width: "100%", backgroundColor: "white" }}>
         <Row gutter={[0, 10]}>
           <Col span={8}>
@@ -806,7 +1159,7 @@ export default class ManualPlanning extends Component {
           </Col>
           <Col span={9}>
             <EditableTable
-              rowSelection={ordersRowSelection}
+              rowSelection={trucksRowSelection}
               dataSource={this.state.data2}
               columns={this.state.columns2}
               setData={this.setData2}
@@ -815,7 +1168,7 @@ export default class ManualPlanning extends Component {
                   this.selectOrdersRow(record);
                 },
               })}
-            ></EditableTable> 
+            ></EditableTable>
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
             <Button

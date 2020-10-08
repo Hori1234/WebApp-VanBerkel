@@ -140,8 +140,8 @@ class TruckByID(MethodView):
         Required roles: planner, administrator
         """
         try:
-            # Try to parse the sheet_id to an int and get the truck sheet
-            truck = TruckSheet.query.get_or_404(
+            # Try to parse the sheet_id to an int and get the truck
+            truck = Truck.query.get_or_404(
                 truck_id,
                 description='Truck not found')
             db.session.delete(truck)
