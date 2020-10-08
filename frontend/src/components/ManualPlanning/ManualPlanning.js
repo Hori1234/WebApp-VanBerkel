@@ -1159,7 +1159,7 @@ export default class ManualPlanning extends Component {
           </Col>
           <Col span={9}>
             <EditableTable
-              rowSelection={ordersRowSelection}
+              rowSelection={trucksRowSelection}
               dataSource={this.state.data2}
               columns={this.state.columns2}
               setData={this.setData2}
