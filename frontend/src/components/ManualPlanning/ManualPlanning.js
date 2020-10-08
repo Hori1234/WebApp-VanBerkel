@@ -1,16 +1,16 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import {
-    Layout,
-    Button,
-    Row,
-    Col,
-    Table,
-    Select,
-    Menu,
-    Checkbox,
-    Dropdown,
-    Modal,
-    message,
+  Layout,
+  Button,
+  Row,
+  Col,
+  Table,
+  Select,
+  Menu,
+  Checkbox,
+  Dropdown,
+  Modal,
+  message,
 } from "antd";
 import axios from "axios";
 import EditableTable from "./EditableTable";
@@ -18,141 +18,141 @@ import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
 import "./ManualPlanning.css";
 
-const {Option} = Select;
+const { Option } = Select;
 
 var vPage_orders = 1;
 var vPage_trucks = 1;
 var vPage_size = 10;
 
 const dataITV = [
-    {
-        key: "1",
-        bookingNr: "923928012",
-        address: "Eindhoven",
-        customer: "ITV",
-        truckId: "",
-    },
-    {
-        key: "2",
-        bookingNr: "12392801",
-        address: "Amsterdam",
-        customer: "ITV",
-        truckId: "",
-    },
-    {
-        key: "3",
-        bookingNr: "23",
-        address: "Utrecht",
-        customer: "ITV",
-        truckId: "",
-    },
-    {
-        key: "4",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "ITV",
-        truckId: "",
-    },
-    {
-        key: "5",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "ITV",
-        truckId: "",
-    },
-    {
-        key: "6",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "ITV",
-        truckId: "",
-    },
-    {
-        key: "7",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "ITV",
-        truckId: "",
-    },
-    {
-        key: "8",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "ABC",
-        truckId: "",
-    },
-    {
-        key: "9",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "ABC",
-        truckId: "",
-    },
+  {
+    key: "1",
+    bookingNr: "923928012",
+    address: "Eindhoven",
+    customer: "ITV",
+    truckId: "",
+  },
+  {
+    key: "2",
+    bookingNr: "12392801",
+    address: "Amsterdam",
+    customer: "ITV",
+    truckId: "",
+  },
+  {
+    key: "3",
+    bookingNr: "23",
+    address: "Utrecht",
+    customer: "ITV",
+    truckId: "",
+  },
+  {
+    key: "4",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "ITV",
+    truckId: "",
+  },
+  {
+    key: "5",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "ITV",
+    truckId: "",
+  },
+  {
+    key: "6",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "ITV",
+    truckId: "",
+  },
+  {
+    key: "7",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "ITV",
+    truckId: "",
+  },
+  {
+    key: "8",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "ABC",
+    truckId: "",
+  },
+  {
+    key: "9",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "ABC",
+    truckId: "",
+  },
 ];
 const dataKAT = [
-    {
-        key: "1",
-        bookingNr: "923928012",
-        address: "Eindhoven",
-        customer: "KAT",
-        truckId: "",
-    },
-    {
-        key: "2",
-        bookingNr: "12392801",
-        address: "Amsterdam",
-        customer: "KAT",
-        truckId: "",
-    },
-    {
-        key: "3",
-        bookingNr: "23",
-        address: "Utrecht",
-        customer: "KAT",
-        truckId: "",
-    },
-    {
-        key: "4",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "KAT",
-        truckId: "",
-    },
-    {
-        key: "5",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "KAT",
-        truckId: "",
-    },
-    {
-        key: "6",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "KAT",
-        truckId: "",
-    },
-    {
-        key: "7",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "KAT",
-        truckId: "",
-    },
-    {
-        key: "8",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "ABC",
-        truckId: "",
-    },
-    {
-        key: "9",
-        bookingNr: "23928012",
-        address: "Eindhoven",
-        customer: "ABC",
-        truckId: "",
-    },
+  {
+    key: "1",
+    bookingNr: "923928012",
+    address: "Eindhoven",
+    customer: "KAT",
+    truckId: "",
+  },
+  {
+    key: "2",
+    bookingNr: "12392801",
+    address: "Amsterdam",
+    customer: "KAT",
+    truckId: "",
+  },
+  {
+    key: "3",
+    bookingNr: "23",
+    address: "Utrecht",
+    customer: "KAT",
+    truckId: "",
+  },
+  {
+    key: "4",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "KAT",
+    truckId: "",
+  },
+  {
+    key: "5",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "KAT",
+    truckId: "",
+  },
+  {
+    key: "6",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "KAT",
+    truckId: "",
+  },
+  {
+    key: "7",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "KAT",
+    truckId: "",
+  },
+  {
+    key: "8",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "ABC",
+    truckId: "",
+  },
+  {
+    key: "9",
+    bookingNr: "23928012",
+    address: "Eindhoven",
+    customer: "ABC",
+    truckId: "",
+  },
 ];
 
 export default class ManualPlanning extends Component {
@@ -510,179 +510,254 @@ export default class ManualPlanning extends Component {
         };
     }
 
-    componentDidMount() {
-        this.setState({startingColumns: this.state.columns});
-        this.getOrderList("latest");
-        this.getTruckList("latest");
+  componentDidMount() {
+    this.setState({ startingColumns: this.state.columns });
+    this.getOrderList("latest");
+    this.getTruckList("latest");
+  }
+  setData= (e) =>{
+      this.setState({data:e})
+  }
+  setData2= (e) =>{
+    this.setState({data2:e})
+}
+  changeVisibility = (isTrue) => {
+    this.setState({ isVisible: isTrue });
+  };
+  filterColumns = (e) => {
+    var columnFilter = this.state.columnFilter;
+    if (e.target.checked) {
+      columnFilter = columnFilter.filter((current) => {
+        return current !== e.target.id;
+      });
+    } else if (!e.target.checked) {
+      columnFilter.push(e.target.id);
     }
+    var final = this.state.startingColumns;
+    for (let i = 0; i < columnFilter.length; i++)
+      final = final.filter((current) => {
+        return current.dataIndex !== columnFilter[i];
+      });
+    this.setState({ columns: final, columnFilter: columnFilter });
+  };
+  changeData = (d) => {
+    if (d === "KAT") {
+      this.setState({ data: this.state.orderList });
+    } else if (d === "ITV") {
+      this.setState({ data: dataITV });
+    }
+  };
+  selectOrdersRow = (record) => {
+    const selectedOrdersRowKeys = [...this.state.selectedOrdersRowKeys];
+    if (selectedOrdersRowKeys.indexOf(record.key) >= 0) {
+      selectedOrdersRowKeys.splice(
+        selectedOrdersRowKeys.indexOf(record.key),
+        1
+      );
+    } else {
+      selectedOrdersRowKeys.push(record.key);
+    }
+    this.setState({ selectedOrdersRowKeys });
+  };
+  onSelectedOrdersRowKeysChange = (selectedOrdersRowKeys) => {
+    this.setState({ selectedOrdersRowKeys });
+    console.log("orders", selectedOrdersRowKeys);
+  };
+  selectTrucksRow = (record) => {
+    const selectedTrucksRowKeys = [...this.state.selectedTrucksRowKeys];
+    if (selectedTrucksRowKeys.indexOf(record.key) >= 0) {
+      selectedTrucksRowKeys.splice(
+        selectedTrucksRowKeys.indexOf(record.key),
+        1
+      );
+    } else {
+      selectedTrucksRowKeys.push(record.key);
+    }
+    this.setState({ selectedTrucksRowKeys });
+  };
+  onSelectedTrucksRowKeysChange = (selectedTrucksRowKeys) => {
+    this.setState({ selectedTrucksRowKeys });
+    console.log("trucks", selectedTrucksRowKeys);
+  };
+  ShowTruckModal = () => {
+    this.setState({
+      ATVisible: true,
+    });
+  };
+  showOrdersModal = () => {
+    this.setState({
+      AOVisible: true,
+    });
+  };
+  magnifyOrdersModal = () => {
+    this.setState({
+      magnifyOrders: true,
+    });
+  };
+  handleOk = () => {
+    this.setState({
+      AOVisible: false,
+      ATVisible: false,
+    });
+  };
+  handleCancel = (e) => {
+    this.setState({
+      AOVisible: false,
+      ATVisible: false,
+    });
+  };
+  okMagnify = (e) => {
+    this.setState({ magnifyOrders: false });
+  };
+  cancelMagnify = (e) => {
+    this.setState({ magnifyOrders: false });
+  };
+  truckRowColor = (e) => {
+    if (e === "Regional") {
+      return "table-row-regional";
+    } else if (e === "Terminal") {
+      return "table-row-terminal";
+    } else if (e === "Port") {
+      return "table-row-port";
+    }
+  };
 
-    changeVisibility = (isTrue) => {
-        this.setState({isVisible: isTrue});
-    };
-    filterColumns = (e) => {
-        var columnFilter = this.state.columnFilter;
-        if (e.target.checked) {
-            columnFilter = columnFilter.filter((current) => {
-                return current !== e.target.id;
-            });
-        } else if (!e.target.checked) {
-            columnFilter.push(e.target.id);
-        }
-        var final = this.state.startingColumns;
-        for (let i = 0; i < columnFilter.length; i++)
-            final = final.filter((current) => {
-                return current.dataIndex !== columnFilter[i];
-            });
-        this.setState({columns: final, columnFilter: columnFilter});
-    };
-    changeData = (d) => {
-        if (d === "KAT") {
-            this.setState({data: this.state.orderList});
-        } else if (d === "ITV") {
-            this.setState({data: dataITV});
-        }
-    };
-    selectOrdersRow = (record) => {
-        const selectedOrdersRowKeys = [...this.state.selectedOrdersRowKeys];
-        if (selectedOrdersRowKeys.indexOf(record.key) >= 0) {
-            selectedOrdersRowKeys.splice(
-                selectedOrdersRowKeys.indexOf(record.key),
-                1
-            );
-        } else {
-            selectedOrdersRowKeys.push(record.key);
-        }
-        this.setState({selectedOrdersRowKeys});
-    };
-    onSelectedOrdersRowKeysChange = (selectedOrdersRowKeys) => {
-        this.setState({selectedOrdersRowKeys});
-        console.log("orders", selectedOrdersRowKeys);
-    };
-    selectTrucksRow = (record) => {
-        const selectedTrucksRowKeys = [...this.state.selectedTrucksRowKeys];
-        if (selectedTrucksRowKeys.indexOf(record.key) >= 0) {
-            selectedTrucksRowKeys.splice(
-                selectedTrucksRowKeys.indexOf(record.key),
-                1
-            );
-        } else {
-            selectedTrucksRowKeys.push(record.key);
-        }
-        this.setState({selectedTrucksRowKeys});
-    };
-    onSelectedTrucksRowKeysChange = (selectedTrucksRowKeys) => {
-        this.setState({selectedTrucksRowKeys});
-        console.log("trucks", selectedTrucksRowKeys);
-    };
-    ShowTruckModal = () => {
-        this.setState({
-            ATVisible: true,
-        });
-    };
-    showOrdersModal = () => {
-        this.setState({
-            AOVisible: true,
-        });
-    };
-    magnifyOrdersModal = () => {
-        this.setState({
-            magnifyOrders: true,
-        });
-    };
-    handleOk = () => {
-        this.setState({
-            AOVisible: false,
-            ATVisible: false,
-        });
-    };
-    handleCancel = (e) => {
-        this.setState({
-            AOVisible: false,
-            ATVisible: false,
-        });
-    };
-    okMagnify = (e) => {
-        this.setState({magnifyOrders: false});
-    };
-    cancelMagnify = (e) => {
-        this.setState({magnifyOrders: false});
-    };
-    truckRowColor = (e) => {
-        if (e === "Regional") {
-            return "table-row-regional";
-        } else if (e === "Terminal") {
-            return "table-row-terminal";
-        } else if (e === "Port") {
-            return "table-row-port";
-        }
-    };
+  //API Calls ============================================================>
 
-    deleteTruck = () => {
-    };
-    deleteOrder = () => {
-    };
-    addTruck = (value) => {
-        this.getTruckInfo();
-        return axios
-            .post(`/api/trucks/sheet/${value}`, {
-                truck_id: this.state.newTruck.truck_id,
-                availability: false,
-                truck_type: this.state.newTruck.truck_type,
-                business_type: this.state.newTruck.use_cost,
-                terminal: this.state.newTruck.terminal,
-                hierarchy: 0,
-                use_cost: 0,
-                date: toString(this.state.newTruck.date),
-                starting_time: this.state.newTruck.starting_time,
-            })
-            .then((res) => {
-                if (res.status === 200) {
-                    message.success("Trcuk: " + "added succesfully");
-                }
-                this.handleOk();
-                return true;
-            })
-            .catch((error) => {
-                this.setState((state) => ({
-                    ...state,
-                    status: "error",
-                    error: error,
-                }));
-                return false;
-            });
-    };
-    addOrder = (value) => {
-        this.getOrderInfo();
-        return axios
-            .post(`/api/orders/sheet/${value}`, {
-                inl_terminal: this.state.newOrder.inl,
-                truck_type: this.state.newOrder.truck_type,
-                hierarchy: 0,
-                delivery_deadline: 0,
-                driving_time: 0,
-                process_time: 0,
-            })
-            .then((res) => {
-                if (res.status === 200) {
-                    message.success(
-                        "Order: " +
-                        res.data["inl_terminal"] +
-                        res.data["truck_type"] +
-                        "added succesfully"
-                    );
-                }
-                this.handleOk();
-                return true;
-            })
-            .catch((error) => {
-                this.setState((state) => ({
-                    ...state,
-                    status: "error",
-                    error: error,
-                }));
-                return false;
-            });
-    };
+  deleteOrder = (value) => {
+    return axios
+      .delete(`/api/orders/${value}`)
+      .then((res) => {
+        if (res.status === 404) {
+          message.error(res.message);
+        } else {
+          if (res.status === 204) {
+            message.success("Account succesfully deleted");
+          } else {
+            if (res.status === 401) {
+              message.error("Unauthorized Action");
+            } else {
+              message.error("Service Unavailable");
+            }
+          }
+        }
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+  deleteOrderById = (data) => {
+    data.forEach((id) => {
+      this.deleteOrder(id);
+      const filteredData = this.state.data.filter((item) => item.id !== id);
+      this.setState({ data: filteredData });
+    });
+  };
+  deleteTruck = (value) => {
+    return axios
+      .delete(`/api/trucks/${value}`)
+      .then((res) => {
+        if (res.status === 404) {
+          message.error(res.message);
+        } else {
+          if (res.status === 204) {
+            message.success("Account succesfully deleted");
+          } else {
+            if (res.status === 401) {
+              message.error("Unauthorized Action");
+            } else {
+              message.error("Service Unavailable");
+            }
+          }
+        }
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+  deleteTruckById = (data) => {
+    data.forEach((id) => {
+      this.deleteTruck(id);
+      const filteredData = this.state.data2.filter((item) => item.id !== id);
+      this.setState({ data2: filteredData });
+    });
+  };
+
+  //Adding the truck and the order
+  addTruck = (value) => {
+    this.getTruckInfo();
+    return axios
+      .post(`/api/trucks/sheet/${value}`, {
+        truck_id: this.state.newTruck.truck_id,
+        availability: false,
+        truck_type: this.state.newTruck.truck_type,
+        business_type: this.state.newTruck.use_cost,
+        terminal: this.state.newTruck.terminal,
+        hierarchy: 0,
+        use_cost: 0,
+        date: toString(this.state.newTruck.date),
+        starting_time: this.state.newTruck.starting_time,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          message.success("Trcuk: " + "added succesfully");
+        }
+        this.handleOk();
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+  addOrder = (value) => {
+    this.getOrderInfo();
+    return axios
+      .post(`/api/orders/sheet/${value}`, {
+        inl_terminal: this.state.newOrder.inl,
+        truck_type: this.state.newOrder.truck_type,
+        hierarchy: 0,
+        delivery_deadline: 0,
+        driving_time: 0,
+        process_time: 0,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          message.success(
+            "Order: " +
+              res.data["inl_terminal"] +
+              res.data["truck_type"] +
+              "added succesfully"
+          );
+        }
+        this.handleOk();
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
 
     getOrderList = async (value) => {
         return axios
@@ -791,74 +866,75 @@ export default class ManualPlanning extends Component {
             });
     };
 
-    setNewOrder = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
-        console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
-        this.setState((prevState) => {
-            let newOrder = Object.assign({}, prevState.newOrder); // creating copy of state variable newOrder
-            newOrder.order_number = vON;
-            newOrder.inl = vInl;
-            newOrder.latest_dept_time = vLDT;
-            newOrder.truck_type = vTT;
-            newOrder.hierarchy = vH;
-            newOrder.delivery_deadline = vDD;
-            newOrder.driving_time = vDT;
-            newOrder.process_time = vPT;
-            newOrder.service_time = vST;
-            return {newOrder}; // return new object newOrder object
-        });
-        console.log(this.state.newOrder);
-    };
+  //setting the new orders and the new truck
+  setNewOrder = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
+    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
+    this.setState((prevState) => {
+      let newOrder = Object.assign({}, prevState.newOrder); // creating copy of state variable newOrder
+      newOrder.order_number = vON;
+      newOrder.inl = vInl;
+      newOrder.latest_dept_time = vLDT;
+      newOrder.truck_type = vTT;
+      newOrder.hierarchy = vH;
+      newOrder.delivery_deadline = vDD;
+      newOrder.driving_time = vDT;
+      newOrder.process_time = vPT;
+      newOrder.service_time = vST;
+      return { newOrder }; // return new object newOrder object
+    });
+    console.log(this.state.newOrder);
+  };
+  setNewTruck = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
+    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
+    this.setState((prevState) => {
+      let newTruck = Object.assign({}, prevState.newTruck); // creating copy of state variable newOrder
+      newTruck.truck_id = vON;
+      newTruck.truck_snumber = vInl;
+      newTruck.availability = vLDT;
+      newTruck.truck_type = vTT;
+      newTruck.hierarchy = vH;
+      newTruck.terminal = vDD;
+      newTruck.use_cost = vDT;
+      newTruck.starting_time = vPT;
+      newTruck.date = vST;
+      return { newTruck }; // return new object newOrder object
+    });
+    console.log(this.state.newTruck);
+  };
 
-    setNewTruck = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
-        console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
-        this.setState((prevState) => {
-            let newTruck = Object.assign({}, prevState.newTruck); // creating copy of state variable newOrder
-            newTruck.truck_id = vON;
-            newTruck.truck_snumber = vInl;
-            newTruck.availability = vLDT;
-            newTruck.truck_type = vTT;
-            newTruck.hierarchy = vH;
-            newTruck.terminal = vDD;
-            newTruck.use_cost = vDT;
-            newTruck.starting_time = vPT;
-            newTruck.date = vST;
-            return {newTruck}; // return new object newOrder object
-        });
-        console.log(this.state.newTruck);
-    };
-    getOrderInfo = () => {
-        var temp = [];
-        temp = this.refs.addOrders.getFormOrderData();
-        console.log(temp);
-        this.setNewOrder(
-            temp[0],
-            temp[1],
-            temp[2],
-            temp[3],
-            temp[4],
-            temp[5],
-            temp[6],
-            temp[7],
-            temp[8]
-        );
-    };
-
-    getTruckInfo = () => {
-        var temp = [];
-        temp = this.refs.addTrucks.getFormTruckData();
-        console.log(temp);
-        this.setNewTruck(
-            temp[0],
-            temp[1],
-            temp[2],
-            temp[3],
-            temp[4],
-            temp[5],
-            temp[6],
-            temp[7],
-            temp[8]
-        );
-    };
+  //Getting the new order's and new truck's information from their modals
+  getOrderInfo = () => {
+    var temp = [];
+    temp = this.refs.addOrders.getFormOrderData();
+    console.log(temp);
+    this.setNewOrder(
+      temp[0],
+      temp[1],
+      temp[2],
+      temp[3],
+      temp[4],
+      temp[5],
+      temp[6],
+      temp[7],
+      temp[8]
+    );
+  };
+  getTruckInfo = () => {
+    var temp = [];
+    temp = this.refs.addTrucks.getFormTruckData();
+    console.log(temp);
+    this.setNewTruck(
+      temp[0],
+      temp[1],
+      temp[2],
+      temp[3],
+      temp[4],
+      temp[5],
+      temp[6],
+      temp[7],
+      temp[8]
+    );
+  };
 
     render() {
         const showHideMenu = (
@@ -1091,6 +1167,7 @@ export default class ManualPlanning extends Component {
                             rowSelection={ordersRowSelection}
                             dataSource={this.state.data}
                             columns={this.state.columns}
+                            setData={this.setData}
                             onRow={(record) => ({
                                 onClick: () => {
                                     this.selectOrdersRow(record);
@@ -1099,7 +1176,10 @@ export default class ManualPlanning extends Component {
                         ></EditableTable>
                         <br/>
                         <Button onClick={() => this.showOrdersModal()}>Add order</Button>
-                        <Button>Delete order</Button>&nbsp;&nbsp;
+                        <Button onClick={() =>
+                this.deleteOrderById(this.state.selectedOrdersRowKeys)
+              }
+            >Delete order</Button>&nbsp;&nbsp;
                         <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
                     </Col>
                     <Col span={3}>
@@ -1120,6 +1200,7 @@ export default class ManualPlanning extends Component {
                             rowSelection={ordersRowSelection}
                             dataSource={this.state.data2}
                             columns={this.state.columns2}
+                            setData={this.setData2}
                             onRow={(record) => ({
                                 onClick: () => {
                                     this.selectOrdersRow(record);
@@ -1128,69 +1209,72 @@ export default class ManualPlanning extends Component {
                         ></EditableTable>
                         <br/>
                         <Button onClick={this.ShowTruckModal}>Add truck</Button>
-                        <Button>Delete truck</Button>
+                        <Button onClick={() =>
+                this.deleteTruckById(this.state.selectedTrucksRowKeys)
+              }
+            >Delete truck</Button>
                     </Col>
                 </Row>
 
-                <Modal
-                    style={{
-                        width: "100vh",
-                        display: "flex",
-                        alignItems: "center",
-                        marginLeft: 280,
-                    }}
-                    title="Add Order"
-                    visible={this.state.AOVisible}
-                    onCancel={this.handleCancel}
-                    onOk={() => {
-                        this.addOrder("latest");
-                    }}
-                >
-                    {this.state.AOVisible && <AddOrdersLayout ref="addOrders"/>}
-                </Modal>
-                <Modal
-                    title="Add Truck"
-                    visible={this.state.ATVisible}
-                    onOk={() => {
-                        this.addTruck("latest");
-                    }}
-                    onCancel={this.handleCancel}
-                >
-                    {this.state.ATVisible && <AddTruckLayout ref="addTrucks"/>}
-                </Modal>
-                <Modal
-                    title="Order List"
-                    visible={this.state.magnifyOrders}
-                    onOk={this.okMagnify}
-                    onCancel={this.cancelMagnify}
-                    width={"100%"}
-                    style={{top: 20}}
-                >
-                    {this.state.magnifyOrders && (
-                        <Layout style={{width: "100%", backgroundColor: "white"}}>
-                            <Table
-                                bordered={true}
-                                rowSelection={ordersRowSelection}
-                                dataSource={this.state.data}
-                                columns={this.state.columns}
-                                scroll={{x: "max-content", y: "50vh"}}
-                                pagination={false}
-                                onRow={(record) => ({
-                                    onClick: () => {
-                                        this.selectOrdersRow(record);
-                                    },
-                                })}
-                            />
-                            <Col span={12}>
-                                <br/>
-                                <Button onClick={this.showOrdersModal}>Add order</Button>
-                                &nbsp;&nbsp;
-                                <Button>Delete order</Button>
-                            </Col>
-                        </Layout>
-                    )}
-                </Modal>
+        <Modal
+          style={{
+            width: "100vh",
+            display: "flex",
+            alignItems: "center",
+            marginLeft: 280,
+          }}
+          title="Add Order"
+          visible={this.state.AOVisible}
+          onCancel={this.handleCancel}
+          onOk={() => {
+            this.addOrder("latest");
+          }}
+        >
+          {this.state.AOVisible && <AddOrdersLayout ref="addOrders" />}
+        </Modal>
+        <Modal
+          title="Add Truck"
+          visible={this.state.ATVisible}
+          onOk={() => {
+            this.addTruck("latest");
+          }}
+          onCancel={this.handleCancel}
+        >
+          {this.state.ATVisible && <AddTruckLayout ref="addTrucks" />}
+        </Modal>
+        <Modal
+          title="Order List"
+          visible={this.state.magnifyOrders}
+          onOk={this.okMagnify}
+          onCancel={this.cancelMagnify}
+          width={"100%"}
+          style={{ top: 20 }}
+        >
+          {this.state.magnifyOrders && (
+            <Layout style={{ width: "100%", backgroundColor: "white" }}>
+              <Table
+                bordered={true}
+                rowSelection={ordersRowSelection}
+                dataSource={this.state.data}
+                columns={this.state.columns}
+                scroll={{ x: "max-content", y: "50vh" }}
+                pagination={false}
+                onRow={(record) => ({
+                  onClick: () => {
+                    this.selectOrdersRow(record);
+                  },
+                })}
+              />
+              <Col span={12}>
+                <br />
+                <Button onClick={this.showOrdersModal}>Add order</Button>
+                &nbsp;&nbsp;
+                <Button>Delete order</Button>
+              </Col>
             </Layout>
-        );
-    }
+          )}
+        </Modal>
+      </Layout>
+    );
+  }
 }
