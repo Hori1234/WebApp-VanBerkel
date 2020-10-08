@@ -37,11 +37,9 @@ const EditableCell = ({
 };
 
 const EditableTable = props => {
-    console.log(props.dataSource)
     const [form] = Form.useForm();
-    const [data, setData] = useState(props.dataSource);
+    const [data, setData] = useState(...props.dataSource);
     const [editingKey, setEditingKey] = useState('');
-
     const isEditing = (record) => record.key === editingKey;
 
     const edit = (record) => {
@@ -70,11 +68,13 @@ const EditableTable = props => {
             if (index > -1) {
                 const item = newData[index];
                 newData.splice(index, 1, { ...item, ...row });
-                props.dataSource = newData;
+                console.log(newData)
+                props.setColumns(newData)
                 setEditingKey('');
             } else {
                 newData.push(row);
-                props.dataSource = newData;
+                console.log(newData)
+                props.setColumns(newData)
                 setEditingKey('');
             }
         } catch (errInfo) {
@@ -103,7 +103,7 @@ const EditableTable = props => {
                   >
                     Save
                   </a>
-                  <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                  <Popconfirm title="Are you sure you want to cancel?" onConfirm={cancel}>
                     <a>Cancel</a>
                   </Popconfirm>
                 </span>
@@ -144,7 +144,9 @@ const EditableTable = props => {
                 dataSource={props.dataSource}
                 columns={mergedColumns}
                 scroll={{ x: "max-content", y: "50vh" }}
-                pagination={false}
+                pagination={{
+                  onChange: cancel,
+                }}
                 rowClassName="editable-row"
                 onRow={props.onRow}
             />

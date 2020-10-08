@@ -282,7 +282,9 @@ export default class ManualPlanning extends Component {
     this.getOrderList("latest");
     this.getTruckList("latest");
   }
-
+  setData= (e) =>{
+      this.setState({data:e})
+  }
   changeVisibility = (isTrue) => {
     this.setState({ isVisible: isTrue });
   };
@@ -658,7 +660,9 @@ export default class ManualPlanning extends Component {
       selectedTrucksRowKeys,
       onChange: this.onSelectedTrucksRowKeysChange,
     };
+
     return (
+    
       <Layout style={{ width: "100%", backgroundColor: "white" }}>
         <Row gutter={[0, 10]}>
           <Col span={8}>
@@ -691,6 +695,7 @@ export default class ManualPlanning extends Component {
               rowSelection={ordersRowSelection}
               dataSource={this.state.data}
               columns={this.state.columns}
+              setColumns={this.setData}
               onRow={(record) => ({
                 onClick: () => {
                   this.selectOrdersRow(record);
@@ -725,7 +730,7 @@ export default class ManualPlanning extends Component {
                   this.selectOrdersRow(record);
                 },
               })}
-            ></EditableTable>
+            ></EditableTable> 
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
             <Button>Delete truck</Button>
