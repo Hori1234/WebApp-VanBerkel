@@ -506,6 +506,7 @@ export default class ManualPlanning extends Component {
         business_type: "",
       },
       temp: [],
+      originalOrders:[],
     };
   }
 
@@ -539,13 +540,34 @@ export default class ManualPlanning extends Component {
       });
     this.setState({ columns: final, columnFilter: columnFilter });
   };
-  changeData = (d) => {
-    if (d === "KAT") {
-      this.setState({ data: this.state.orderList });
+  changeDataOrders = (d) => {
+    
+    if (d === "Both") {
+      this.setState({data: this.state.originalOrders})
     } else if (d === "ITV") {
-      this.setState({ data: dataITV });
+      this.getItv(this.state.originalOrders)
+    } else if (d === "KAT") {
+      this.getKat(this.state.originalOrders)
     }
   };
+  getItv = (e) => {
+    let itvData = [];
+    e.forEach(element => {
+      if(element.inl_terminal == "ITV"){     
+        itvData.push(element)
+      }
+    });
+    this.setState({data:itvData})
+  }
+  getKat = (e) => {
+    let katData = [];
+    e.forEach(element => {
+      if(element.inl_terminal == "KAT"){     
+        katData.push(element)
+      }
+    });
+    this.setState({data:katData})
+  }
   selectOrdersRow = (record) => {
     const selectedOrdersRowKeys = [...this.state.selectedOrdersRowKeys];
     if (selectedOrdersRowKeys.indexOf(record.key) >= 0) {
@@ -810,6 +832,7 @@ export default class ManualPlanning extends Component {
         this.setState((state) => ({
           ...state,
           data: outarray,
+          originalOrders: outarray,
           status: "success",
         }));
         return true;
@@ -1097,10 +1120,11 @@ export default class ManualPlanning extends Component {
         <Row gutter={[0, 10]}>
           <Col span={8}>
             <Select
-              defaultValue="ITV"
-              onChange={this.changeData}
+              defaultValue="Both"
+              onChange={this.changeDataOrders}
               style={{ width: 120 }}
             >
+              <Option value="Both">Both</Option>
               <Option value="ITV">ITV</Option>
               <Option value="KAT">KAT</Option>
             </Select>
