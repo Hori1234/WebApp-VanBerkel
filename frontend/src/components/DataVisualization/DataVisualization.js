@@ -11,7 +11,7 @@ import { DownloadOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import axios from "axios";
 
-function downloadFile() {
+export function downloadFile() {
   axios({
     url: 'http://localhost:5000/data/firstride.pdf',
     method: 'GET',
@@ -34,7 +34,7 @@ var endTimesDummy = ['10:30', '12:00', '18:00', '18:00', '18:00', '18:00', '18:0
 var destinationsDummy = ['Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven'];
 
 // creates the tooltip of an order
-function createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination) {
+export function createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination) {
   return (
     '<ul class="flex-container">' +
     '<li class="flex-item" style="text-align: center" ><h4><b>' + orderID + '</b></h4></li>' +
@@ -46,7 +46,7 @@ function createCustomHTMLTooltip(orderID, startTime, endTime, duration, destinat
   )
 }
 
-function calculateDuration(startTime, endTime) {
+export function calculateDuration(startTime, endTime) {
   let startDate = createDataTime(startTime);
   let endDate = createDataTime(endTime);
   let minutes = ((endDate - startDate) / (1000 * 60));
@@ -60,7 +60,7 @@ function calculateDuration(startTime, endTime) {
 }
 
 //create javascript data object
-function createDataTime(time) {
+export function createDataTime(time) {
   let index = time.indexOf(":");
   let hours = time.substr(0, index)
   let minutes = time.substr(index + 1)
@@ -70,7 +70,7 @@ function createDataTime(time) {
 }
 
 // create single data input for timeline
-function createSingleDataInput(truckID, orderID, startTime, endTime, destination) {
+export function createSingleDataInput(truckID, orderID, startTime, endTime, destination) {
   let duration = calculateDuration(startTime, endTime);
   return ([truckID,
     +orderID,
@@ -81,7 +81,7 @@ function createSingleDataInput(truckID, orderID, startTime, endTime, destination
 }
 
 // create a list with all data points for the timeline
-function createAllDataInput(truckIDs, orderIDs, startTimes, endTimes, destinations) {
+export function createAllDataInput(truckIDs, orderIDs, startTimes, endTimes, destinations) {
   let listLength = truckIDs.length;
   let listDataInputs = [[{ type: 'string', id: 'Room' },
   { type: 'string', id: 'Name' },
