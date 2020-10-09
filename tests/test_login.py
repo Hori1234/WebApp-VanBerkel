@@ -6,18 +6,24 @@ from backend.models.users import User
 @pytest.fixture(autouse=True)
 def setup_db(db):
     """
-    Setup the database for the current test.
-
-    After the test has been run, the database is rolled back.
-
-    :param `SQLAlchemy` db: The ORM for this test.
+    Run the fixtures needed for this module.
     """
-    db.session.begin_nested()
-    user = User(username='Midas Bergveen', password='w8woord')
+    db.create_all()
+
+    user = User(username='Midas Bergveen',
+                password='w8woord',
+                role='administrator')
     db.session.add(user)
-    user = User(username='Twan van Broekhoven', password='SomethingClever')
-    db.session.add(user)
+    user1 = User(username='Twan van Broekhoven',
+                 password='SomethingClever',
+                 role='administrator')
+    db.session.add(user1)
     db.session.commit()
+
+    yield
+
+    db.session.close()
+    db.drop_all()
 
 
 def login(client, username: str, password: str, remember_me: bool):
@@ -28,7 +34,8 @@ def login(client, username: str, password: str, remember_me: bool):
     :param username: Username for the post request
     :param password: Password for the post request
     :param remember_me: Remember for the post request
-    :returns response: :class:`Werkzeug.Response` response of the endpoint
+    :return response: response of the endpoint
+    :rtype: :class:`werkzeug.Response`
     """
     data = dict(
         username=username,
@@ -46,7 +53,8 @@ def logout(client):
     Makes a post request to /api/auth/logout.
 
     :param client: Teh testing client to make the request
-    :returns response: :class:`Werkzeug.Response` response of the endpoint
+    :return response: response of the endpoint
+    :rtype: :class:`werkzeug.Response`
     """
     return client.post('/api/auth/logout')
 
@@ -174,4 +182,3 @@ def test_get_user_no_auth(client):
 
     rv = client.get('/api/auth/user')
     assert rv.status_code == 401  # no user is logged in
-

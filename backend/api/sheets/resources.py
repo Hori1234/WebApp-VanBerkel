@@ -2,10 +2,13 @@ from flask.views import MethodView
 from flask_smorest import abort
 from xlrd import XLRDError
 from marshmallow.exceptions import ValidationError
-from backend.extensions import roles_required
 from . import bp
-from .schemas import FileSchema
+from .schemas import FileSchema, SheetSchema
 from .SheetParser import TruckAvailabilityParser, OrderListParser
+from backend.app import db
+from backend.models.orders import OrderSheet
+from backend.models.trucks import TruckSheet
+from backend.extensions import roles_required
 
 
 @bp.route('/')
@@ -13,7 +16,7 @@ class Sheets(MethodView):
 
     @roles_required('planner', 'administrator')
     @bp.arguments(FileSchema, location='files')
-    @bp.response(code=200)
+    @bp.response(SheetSchema, code=200)
     @bp.alt_response("BAD_REQUEST", code=400)
     def post(self, file):
         """
@@ -67,7 +70,15 @@ class Sheets(MethodView):
                           )
 
                 # parse the data using a Marshmallow schema
-                parser.parse()
+                data = parser.parse()
+
+                sheet = parser.sheet_table()
+                orders = [parser.row_table(**row) for row in data]
+                sheet.add_rows(orders)
+                db.session.add(sheet)
+                db.session.commit()
+                return sheet, 200
+
         except XLRDError:
             # The file could not be read by the spreadsheet parser
             abort(400,
@@ -83,3 +94,63 @@ class Sheets(MethodView):
             )
 
         return '', 200
+
+
+@bp.route('/orders')
+class ListOrderSheet(MethodView):
+
+    @roles_required('planner', 'administrator')
+    @bp.response(SheetSchema(many=True))
+    @bp.alt_response('UNAUTHORIZED', code=401)
+    @bp.alt_response('NOT_FOUND', code=404)
+    @bp.paginate()
+    def get(self, pagination_parameters):
+        """
+        Get a list of uploaded order sheets in the system.
+
+        The list is served in pages. These can be controlled using
+        the parameters in the query string.
+        Roles required: Planner, Administrator
+        """
+        # Get a list of sheets according to the page and page_size parameters
+        pagination = OrderSheet.query\
+            .order_by(OrderSheet.upload_date.desc())\
+            .paginate(
+                page=pagination_parameters.page,
+                per_page=pagination_parameters.page_size)
+
+        # Set the total number of users
+        # for the X-Pagination header in the response
+        pagination_parameters.item_count = pagination.total
+
+        return pagination.items
+
+
+@bp.route('/trucks')
+class TruckOrderSheet(MethodView):
+
+    @roles_required('planner', 'administrator')
+    @bp.response(SheetSchema(many=True))
+    @bp.alt_response('UNAUTHORIZED', code=401)
+    @bp.alt_response('NOT_FOUND', code=404)
+    @bp.paginate()
+    def get(self, pagination_parameters):
+        """
+        Get a list of uploaded truck sheets in the system.
+
+        The list is served in pages. These can be controlled using
+        the parameters in the query string.
+        Roles required: Planner, Administrator
+        """
+        # Get a list of sheets according to the page and page_size parameters
+        pagination = TruckSheet.query\
+            .order_by(TruckSheet.upload_date.desc())\
+            .paginate(
+                page=pagination_parameters.page,
+                per_page=pagination_parameters.page_size)
+
+        # Set the total number of users
+        # for the X-Pagination header in the response
+        pagination_parameters.item_count = pagination.total
+
+        return pagination.items

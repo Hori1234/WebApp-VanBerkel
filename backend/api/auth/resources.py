@@ -6,7 +6,7 @@ from backend.app import db
 from backend.extensions import roles_required
 from flask_smorest import abort
 from . import bp
-from .schemas import LoginArguments, AccountInfo, AccountChange
+from .schemas import LoginArguments, AccountInfo
 from backend.models.users import User
 
 
@@ -118,13 +118,13 @@ class Users(MethodView):
 class UserByID(MethodView):
 
     @roles_required("administrator")
-    @bp.arguments(AccountChange)
+    @bp.arguments(AccountInfo(partial=True))
     @bp.response(AccountInfo)
     @bp.alt_response('BAD_REQUEST', code=400)
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
     @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
-    def put(self, req, user_id):
+    def patch(self, req, user_id):
         """
         Change the information of a user.
 

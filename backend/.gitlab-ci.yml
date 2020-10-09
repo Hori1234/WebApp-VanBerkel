@@ -1,7 +1,7 @@
 # This file is a template, and might need editing before it works on your project.
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
-image: python:latest
+image: python:3.8.6-buster
 services:
   - postgres:latest
 
@@ -39,17 +39,26 @@ backend-build:
     - cd backend
     - pip install -r requirements.txt
     - flask db upgrade
+  artifacts:
+    paths:
+      - venv/
+    expire_in: 1 hour
 
 backend-lint:
   stage: Linter
   needs: [backend-build]
+  dependencies:
+    - backend-build
   script:
     - source venv/bin/activate
-    - flake8 backend/*.py
+    - flake8 --exclude=backend/migrations backend/*.py
+
 
 backend-test:
   stage: Tests
-  needs: [backend-lint]
+  needs: [backend-build, backend-lint]
+  dependencies:
+    - backend-build
   script:
     - source venv/bin/activate
     - coverage run --source=backend -m pytest tests

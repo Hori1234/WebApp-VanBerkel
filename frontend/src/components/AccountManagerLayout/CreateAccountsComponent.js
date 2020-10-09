@@ -69,6 +69,7 @@ export default class CreateAccountsComponent extends Component {
   handleChangeRole = (value) => {
     this.setState({ role: value });
   };
+
   onFinish = (values) => {
     console.log(values);
   };
@@ -125,10 +126,10 @@ export default class CreateAccountsComponent extends Component {
                 backgroundColor: "white",
               }}
             >
-              <Title style={{ fontSize: 16 }}>Welecome </Title>
+              <Title style={{ fontSize: 16 }}>Welcome </Title>
               <Text style={{ fontSize: 14 }}>
-                Complete the following for in order to add a new user. Every
-                field is required to be filled
+                Complete the following form in order to add a new user. Every
+                field is required to be filled.
               </Text>
             </Layout>
           </Layout>
@@ -188,7 +189,8 @@ export default class CreateAccountsComponent extends Component {
                 onClick={() => {
                   if (
                     this.state.username !== "" &&
-                    this.state.password !== ""
+                    this.state.password !== "" &&
+                    this.state.role !== ""
                   ) {
                     this.addAccount(
                       this.state.username,

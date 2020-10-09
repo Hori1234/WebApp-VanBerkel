@@ -1,8 +1,6 @@
 import React from 'react';
-import { shallow, render, mount } from 'enzyme';
-import Upload, { Layout } from 'antd';
+import { shallow} from 'enzyme';
 import UploadButton from './UploadButton';
-import { Dragger, message } from 'antd';
 
 describe('UploadButton component', () => {
 

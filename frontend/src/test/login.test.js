@@ -2,13 +2,9 @@ const puppeteer = require('puppeteer');
 
 describe('React App', () => {
 
-  const noUsername = "asd";
-  const noPassword = "asd";
-
   const username = "test";
   const password = "test";
 
-  
 
   it('shall output an error on invalid accounts', async () => {
 

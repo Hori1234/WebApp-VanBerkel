@@ -3,35 +3,12 @@ import json
 from backend.models.users import User
 
 
-@pytest.fixture(autouse=True, scope='function')
-def setup_db(db, client):
+@pytest.fixture(autouse=True)
+def setup_db(setup_users, login_user, create_db_without_users):
     """
-    Setup the database for the current test.
-
-    After the test has been run, the database is rolled back.
-
-    :param client:
-    :param `SQLAlchemy` db: The ORM for this test.
+    Run the fixtures needed for this module.
     """
-    user = User(username='Midas Bergveen',
-                password='w8woord',
-                role='administrator')
-    db.session.add(user)
-    user1 = User(username='Twan van Broekhoven',
-                 password='SomethingClever',
-                 role='administrator')
-    db.session.add(user1)
-    db.session.commit()
-
-    data = dict(
-        username=user.username,
-        password='w8woord',
-        remember=True
-    )
-
-    client.post('/api/auth/login',
-                data=json.dumps(data),
-                content_type='application/json')
+    pass
 
 
 def remove_user(client, userID):
@@ -39,7 +16,8 @@ def remove_user(client, userID):
     Removes the given user from the database
     :param client: the client
     :param userID: the user to be deleted
-    :return: 204 if successful, 404 if user was not found, 400 if user is logged in
+    :return: 204 if successful, 404 if user was not found,
+             400 if user is logged in
     """
     return client.delete(f'/api/auth/user/{userID}')
 
@@ -63,9 +41,9 @@ def change_user_details(client, userid, **kwargs):
     :param kwargs: the details that need to be changed
     :return:
     """
-    return client.put(f'/api/auth/user/{userid}',
-                      data=json.dumps(kwargs),
-                      content_type='application/json')
+    return client.patch(f'/api/auth/user/{userid}',
+                        data=json.dumps(kwargs),
+                        content_type='application/json')
 
 
 def get_user_list(client, page, per_page):
@@ -83,7 +61,7 @@ def get_user_list(client, page, per_page):
     return client.get('/api/auth/users', query_string=pagedetails)
 
 
-def test_create_account(client):
+def test_create_account(db, client):
     rv = add_user(client,
                   username="Bernard",
                   password="wachtzin",
@@ -94,6 +72,11 @@ def test_create_account(client):
     assert data['username'] == "Bernard"
     assert data['role'] == "view-only"
     assert 'id' in data
+
+    # clean up user after the test
+    user = User.query.get(3)
+    db.session.delete(user)
+    db.session.commit()
 
 
 def test_create_incomplete_account(client):
@@ -123,24 +106,6 @@ def test_create_duplicate_user(client):
 
     assert rv.status_code == 400
     assert 'message' in rv.get_json()
-
-
-def test_delete_account(client):
-    rv = remove_user(client, 2)
-
-    assert rv.status_code == 204
-
-
-def test_delete_nonexistent_account(client):
-    rv = remove_user(client, 300)
-
-    assert rv.status_code == 404
-
-
-def test_delete_own_account(client):
-    rv = remove_user(client, 1)
-
-    assert rv.status_code == 400
 
 
 def test_change_information(client):
@@ -198,3 +163,28 @@ def test_get_too_many_users(client):
     rv = get_user_list(client, 2, 10)
 
     assert rv.status_code == 404
+
+
+def test_delete_account(db, client):
+    rv = remove_user(client, 2)
+
+    assert rv.status_code == 204
+
+    # clean up after test
+    user = User(username='Twan van Broekhoven',
+                password='SomethingClever',
+                role='administrator')
+    db.session.add(user)
+    db.session.commit()
+
+
+def test_delete_nonexistent_account(client):
+    rv = remove_user(client, 300)
+
+    assert rv.status_code == 404
+
+
+def test_delete_own_account(client):
+    rv = remove_user(client, 1)
+
+    assert rv.status_code == 400

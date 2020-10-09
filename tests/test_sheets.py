@@ -1,33 +1,17 @@
 import pytest
 import json
+
+from backend.models import trucks
+from backend.models import orders
 from backend.models.users import User
 
 
 @pytest.fixture(autouse=True)
-def setup_db(db, client):
+def setup_db(setup_users, login_user, create_db_without_users):
     """
-    Setup the database for the current test.
-
-    After the test has been run, the database is rolled back.
-
-    :param `SQLAlchemy` db: The ORM for this test.
-    :param client: The test client for this test
+    Run the fixtures needed for this module.
     """
-    user = User(username='Midas Bergveen',
-                password='w8woord',
-                role='planner')
-    db.session.add(user)
-    db.session.commit()
-
-    data = dict(
-        username=user.username,
-        password='w8woord',
-        remember=True
-    )
-
-    client.post('/api/auth/login',
-                data=json.dumps(data),
-                content_type='application/json')
+    pass
 
 
 def upload_one_sheet(client, file):
@@ -48,13 +32,14 @@ def upload_one_sheet(client, file):
                        data=data)
 
 
-def test_upload_ta_success(client):
+def test_upload_ta_success(client, db):
     """
     Test just a truck availability sheet
     """
     rv = upload_one_sheet(client,
                           './tests/data/truck_availability_test.xlsx')
     assert rv.status_code == 200
+    assert trucks.TruckSheet.query.get_or_404(1, description='file not found')
 
 
 def test_upload_orders_success(client):
@@ -64,6 +49,7 @@ def test_upload_orders_success(client):
     rv = upload_one_sheet(client,
                           './tests/data/order_sheet_test.xlsx')
     assert rv.status_code == 200
+    assert orders.OrderSheet.query.get_or_404(1, description='file not found')
 
 
 def test_upload_ta_missing_column(client):
@@ -81,8 +67,8 @@ def test_upload_ta_duplicates_in_columns(client):
     """
     Test a single truck availability sheet with duplicates in columns
     """
-    rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_duplicate_columns.xlsx')
+    rv = upload_one_sheet(
+        client, './tests/data/truck_availability_duplicate_columns.xlsx')
 
     assert rv.status_code == 422
     # something to assert that the columns contain duplicates
@@ -103,8 +89,8 @@ def test_upload_ta_data_validation_terminal(client):
     """
     Test a single truck availability sheet with incorrect terminals
     """
-    rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_wrong_terminals.xlsx')
+    rv = upload_one_sheet(
+        client, './tests/data/truck_availability_wrong_terminals.xlsx')
 
     assert rv.status_code == 422
     # something to assert that the column contained incorrect values
@@ -114,8 +100,8 @@ def test_upload_ta_data_validation_trucktype(client):
     """
     Test a single truck availability sheet with incorrect truck types
     """
-    rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_wrong_trucktype.xlsx')
+    rv = upload_one_sheet(
+        client, './tests/data/truck_availability_wrong_trucktype.xlsx')
 
     assert rv.status_code == 422
     # something to assert that the column contained incorrect values
@@ -165,6 +151,7 @@ def test_upload_order_missing_values(client):
     # something to assert that the values were missing
 
 
+@pytest.mark.skip('For now there are no unique columns in orders')
 def test_upload_order_duplicate_values(client):
     """
     Test a single order sheet with duplicate values
@@ -228,5 +215,3 @@ def test_upload_one_but_it_is_not_right(client):
 
     assert rv.status_code == 400
     # something to assert that it's not one of the sheets
-
-

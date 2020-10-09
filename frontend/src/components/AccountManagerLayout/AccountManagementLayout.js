@@ -136,7 +136,7 @@ export default class AccountManagementLayout extends Component {
                 Create Accounts
               </Text>
               <Text style={{ fontSize: " 14" }}>
-                This page is used in order to create accounts
+                This page is used create accounts
               </Text>
             </Layout>
             <Layout
