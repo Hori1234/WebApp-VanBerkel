@@ -157,6 +157,9 @@ def delete_truck(client, truck_id):
 
 
 def test_get_order(client, db):
+    """
+    Tests the intended use of the get order endpoint.
+    """
     rv = get_order(client, 1)
 
     assert rv.status_code == 200
@@ -165,6 +168,9 @@ def test_get_order(client, db):
 
 
 def test_get_order_invalid(client, db):
+    """
+    Tests the get order endpoint but with an invalid order number.
+    """
     rv = get_order(client, 1000000)
 
     assert rv.status_code == 404
@@ -173,6 +179,9 @@ def test_get_order_invalid(client, db):
 
 
 def test_get_truck(client, db):
+    """
+    Tests the intended use of the get truck endpoint.
+    """
     rv = get_truck(client, 1)
 
     assert rv.status_code == 200
@@ -181,6 +190,9 @@ def test_get_truck(client, db):
 
 
 def test_get_truck_invalid(client, db):
+    """
+    Tests the get truck endpoint but with an invalid truck id.
+    """
     rv = get_truck(client, 1000000)
 
     assert rv.status_code == 404
@@ -189,6 +201,9 @@ def test_get_truck_invalid(client, db):
 
 
 def test_get_orders(client, db):
+    """
+    Tests the intended use of the get orders endpoint.
+    """
     rv = get_orders(client, 1)
 
     assert rv.status_code == 200
@@ -197,12 +212,18 @@ def test_get_orders(client, db):
 
 
 def test_get_orders_invalid(client, db):
+    """
+    Tests the get orders endpoint but with invalid order numbers.
+    """
     rv = get_orders(client, 20)
 
     assert rv.status_code == 404
 
 
 def test_get_order_sheet_latest(client, db):
+    """
+    Tests the intended use of the get order sheet latest endpoint.
+    """
     rv = get_orders(client, 'latest')
 
     assert rv.status_code == 200
@@ -211,6 +232,9 @@ def test_get_order_sheet_latest(client, db):
 
 
 def test_get_order_sheet_not_latest(client, db):
+    """
+    Tests the get order sheet latest endpoint but not with the latest sheet.
+    """
     rv = get_orders(client, 'first')
 
     assert rv.status_code == 404
@@ -219,6 +243,9 @@ def test_get_order_sheet_not_latest(client, db):
 
 
 def test_get_trucks(client, db):
+    """
+    Tests the intended use of the get trucks endpoint.
+    """
     rv = get_trucks(client, 1)
 
     assert rv.status_code == 200
@@ -227,12 +254,18 @@ def test_get_trucks(client, db):
 
 
 def test_get_trucks_invalid(client, db):
+    """
+    Tests the get trucks endpoint but with a invalid trucks.
+    """
     rv = get_trucks(client, 20)
 
     assert rv.status_code == 404
 
 
 def test_get_truck_sheet_latest(client, db):
+    """
+    Tests the intended use of the get truck sheet latest endpoint.
+    """
     rv = get_trucks(client, 'latest')
 
     assert rv.status_code == 200
@@ -241,6 +274,9 @@ def test_get_truck_sheet_latest(client, db):
 
 
 def test_get_truck_sheet_not_latest(client, db):
+    """
+    Tests the truck sheet latest endpoint but not with the latest sheet.
+    """
     rv = get_trucks(client, 'test')
 
     assert rv.status_code == 404
@@ -250,6 +286,9 @@ def test_get_truck_sheet_not_latest(client, db):
 
 
 def test_patch_order(client, db):
+    """
+    Tests the intended use of the patch order endpoint.
+    """
     request = dict(
         truck_type='regional',
         inl_terminal='KAT',
@@ -267,6 +306,10 @@ def test_patch_order(client, db):
 
 
 def test_patch_order_remove_others(client, db):
+    """
+    Tests the patch order endpoint but when you remove data one of the
+    not required columns that then the order is still valid.
+    """
     request = dict(
         Container=None
     )
@@ -277,6 +320,10 @@ def test_patch_order_remove_others(client, db):
 
 
 def test_patch_order_invalid(client, db):
+    """
+    Tests the patch order endpoint but when you remove or change data one of the
+    required columns that then the order is not correct or acceptable anymore.
+    """
     request = dict(
         truck_type='big',
         inl_terminal='DOG'
@@ -287,6 +334,9 @@ def test_patch_order_invalid(client, db):
 
 
 def test_patch_order_wrong(client, db):
+    """
+    Tests the patch order endpoint but with a non-existing order number.
+    """
     rv = patch_order(client, 10000)
 
     assert rv.status_code == 404
@@ -295,6 +345,9 @@ def test_patch_order_wrong(client, db):
 
 
 def test_patch_truck(client, db):
+    """
+    Tests the intended use of the patch truck endpoint.
+    """
     request = dict(
         truck_type='port',
         terminal='KAT',
@@ -312,6 +365,10 @@ def test_patch_truck(client, db):
 
 
 def test_patch_truck_remove_others(client, db):
+    """
+    Tests the patch truck endpoint but when you remove data one of the
+    not required columns that then the truck is still valid.
+    """
     request = dict(
         Driver=None,
     )
@@ -324,6 +381,10 @@ def test_patch_truck_remove_others(client, db):
 
 
 def test_patch_truck_invalid(client, db):
+    """
+    Tests the patch truck endpoint but when you remove data one of the
+    required columns that then the truck is not valid anymore.
+    """
     request = dict(
         truck_type='medium',
         terminal='SAD'
@@ -334,12 +395,19 @@ def test_patch_truck_invalid(client, db):
 
 
 def test_patch_truck_wrong(client, db):
+    """
+    Tests the patch truck endpoint but with a wrong truck id.
+    """
     rv = patch_truck(client, 100000)
 
     assert rv.status_code == 404
 
 
 def test_patch_truck_with_orders(client, db):
+    """
+    Tests the intended use of the patch truck endpoint with an associated
+    order.
+    """
     request = dict(
         truck_type='port', orders=[1, 2]
     )
@@ -352,6 +420,9 @@ def test_patch_truck_with_orders(client, db):
 
 
 def test_patch_truck_with_wrong_orders(client, db):
+    """
+    Tests the patch truck endpoint with a wrongly associated order.
+    """
     request = dict(
         truck_type='port', orders=[1, 200000]
     )
@@ -363,6 +434,9 @@ def test_patch_truck_with_wrong_orders(client, db):
 
 
 def test_post_order(client, db):
+    """
+    Tests the intended use of the post order endpoint.
+    """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline=1300,
@@ -376,6 +450,9 @@ def test_post_order(client, db):
 
 
 def test_post_order_invalid_truck_type(client, db):
+    """
+    Tests the post order endpoint but with an invalid truck type.
+    """
     request = dict(
         inl_terminal='KAT', latest_dep_time=1000,
         truck_type='TEST', hierarchy=3, delivery_deadline=1300,
@@ -386,6 +463,9 @@ def test_post_order_invalid_truck_type(client, db):
 
 
 def test_post_order_invalid_terminal(client, db):
+    """
+    Tests the post order endpoint but with an invalid terminal.
+    """
     request = dict(
         inl_terminal='TEST', latest_dep_time=1000,
         truck_type='Port', hierarchy=3, delivery_deadline=1300,
@@ -396,6 +476,9 @@ def test_post_order_invalid_terminal(client, db):
 
 
 def test_post_order_latest(client, db):
+    """
+    Tests the intended post order latest endpoint.
+    """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline=1300,
@@ -410,6 +493,9 @@ def test_post_order_latest(client, db):
 
 
 def test_post_order_not_latest(client, db):
+    """
+    Tests the post order latest endpoint but not the latest.
+    """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline=1300,
@@ -423,6 +509,9 @@ def test_post_order_not_latest(client, db):
 
 
 def test_post_truck(client, db):
+    """
+    Tests the intended use of the post truck endpoint.
+    """
     request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
@@ -438,6 +527,9 @@ def test_post_truck(client, db):
 
 
 def test_post_truck_invalid_truck_type(client, db):
+    """
+    Tests the post truck endpoint but with an invalid truck type.
+    """
     request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='Sand', business_type='test', terminal='KAT',
@@ -449,6 +541,9 @@ def test_post_truck_invalid_truck_type(client, db):
 
 
 def test_post_truck_invalid_terminal(client, db):
+    """
+    Tests the post truck endpoint but with an invalid terminal.
+    """
     request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='TEST',
@@ -460,6 +555,9 @@ def test_post_truck_invalid_terminal(client, db):
 
 
 def test_post_truck_latest(client, db):
+    """
+    Tests the intended use of the post truck latest endpoint.
+    """
     request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
@@ -474,7 +572,10 @@ def test_post_truck_latest(client, db):
     assert truck.hierarchy == 2
 
 
-def test_new_truck_not_latest(client, db):
+def test_post_truck_not_latest(client, db):
+    """
+    Tests the post truck latest endpoint but not the latest.
+    """
     request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
@@ -487,6 +588,10 @@ def test_new_truck_not_latest(client, db):
 
 
 def test_post_truck_with_orders(client, db):
+    """
+    Tests the intended use of the post truck endpoint with an associated list
+    of order numbers.
+    """
     request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
@@ -499,6 +604,10 @@ def test_post_truck_with_orders(client, db):
 
 
 def test_post_truck_with_wrong_orders(client, db):
+    """
+    Tests the post truck endpoint but with a list of order numbers that is
+    invalid.
+    """
     request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
@@ -514,6 +623,9 @@ def test_post_truck_with_wrong_orders(client, db):
 
 
 def test_delete_order(client, db):
+    """
+    Tests the intended use of the delete order endpoint.
+    """
     rv = delete_order(client, 1)
 
     assert rv.status_code == 204
@@ -528,6 +640,9 @@ def test_delete_order(client, db):
 
 
 def test_delete_order_wrong(client, db):
+    """
+    Tests the delete order endpoint but with an invalid order number.
+    """
     rv = delete_order(client, 100000)
 
     assert rv.status_code == 404
@@ -536,6 +651,9 @@ def test_delete_order_wrong(client, db):
 
 
 def test_delete_truck(client, db):
+    """
+    Tests the intended use of the delete truck endpoint.
+    """
     rv = delete_truck(client, 1)
 
     assert rv.status_code == 204
@@ -550,12 +668,18 @@ def test_delete_truck(client, db):
 
 
 def test_delete_truck_wrong(client, db):
+    """
+    Teststhe delete truck endpoint but with an invalid truck id.
+    """
     rv = delete_truck(client, 100000)
 
     assert rv.status_code == 404
 
 
 def test_delete_then_post_truck(client, db):
+    """
+    Tests the post truck endpoint after a truck is deleted.
+    """
     request = dict(
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
@@ -575,6 +699,9 @@ def test_delete_then_post_truck(client, db):
 
 
 def test_delete_then_post_order(client, db):
+    """
+    Tests the post order endpoint after an order is deleted.
+    """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline=1300,
