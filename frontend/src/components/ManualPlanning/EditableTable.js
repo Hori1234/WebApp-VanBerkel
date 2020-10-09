@@ -20,12 +20,6 @@ const EditableCell = ({
           style={{
             margin: 0,
           }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
         >
           {inputNode}
         </Form.Item>
@@ -44,11 +38,41 @@ const EditableTable = props => {
   const edit = (record) => {
     form.setFieldsValue({
       bookingNr: "",
-      address: "",
-      customer: "",
+      city: "",
+      inl_terminal:"",
       truckId: "",
       deliveryDeadline: "",
       processTime: "",
+      drivingTime: "",
+      serviceTime: "",
+      closing: "",
+      container: "",
+      date: "",
+      delay: "",
+      gate: "",
+      gate1: "",
+      gross: "",
+      inl_ter_1: "",
+      invoice_reference: "",
+      l_d: "",
+      max_departure: "",
+      pickup: "",
+      seal: "",
+      status: "",
+      ship_comp: "",
+      tariff_type: "",
+      terminal1: "",
+      time: "",
+      time1: "",
+      time2: "",
+      time3: "",
+      truck1: "",
+      truck2: "",
+      truck_used: "",
+      unit_type: "",
+      voyage_inland_carrier:"",
+      weight: "",
+      departure_time: "",
       ...record,
     });
     setEditingKey(record.key);
