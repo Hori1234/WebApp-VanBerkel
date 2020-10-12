@@ -1,6 +1,7 @@
 from backend.app import db
 from flask import current_app
 from sqlalchemy.sql import func
+from sqlalchemy.event import listens_for
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm.collections import attribute_mapped_collection
@@ -95,6 +96,15 @@ class Order(db.Model):
     @hybrid_property
     def latest_dep_time(self):
         return self.delivery_deadline - self.driving_time
+
+
+@listens_for(Order.truck_id, 'set')
+def update_departure_time(target, value, oldvalue, initiator):
+    """
+    Sets Order.departure_time to null if truck_id was set to null.
+    """
+    if value is None and oldvalue is not None:
+        target.departure_time = None
 
 
 class OrderProperties(db.Model):

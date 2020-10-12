@@ -341,6 +341,42 @@ def test_patch_order_wrong(client, db):
 
     assert rv.status_code == 404
 
+
+# TODO: document in UTP
+def test_patch_order_set_truck_id(client, db):
+    """
+    Tests the patch order when setting and removing a truck_id and departure
+    time.
+    """
+    request = dict(
+        truck_id=1,
+        departure_time=600
+    )
+    rv = patch_order(client, 1, **request)
+
+    # truck has been added
+    assert rv.status_code == 200
+    assert rv.get_json()['truck_id'] == 1
+    assert rv.get_json()['departure_time'] == 600
+
+    order = orders.Order.query.get(1)
+    truck = trucks.Truck.query.get(1)
+    # also been changed in the database
+    assert order.departure_time == 600
+    assert order.truck == truck
+
+    request2 = dict(
+        truck_id=None
+    )
+    rv2 = patch_order(client, 1, **request2)
+
+    # truck has been removed from the order
+    assert rv2.status_code == 200
+    assert rv2.get_json()['truck_id'] is None
+    assert rv2.get_json()['departure_time'] is None
+    assert order.truck is None
+    assert order.departure_time is None
+
 # PATCH TRUCK TESTS
 
 
@@ -429,6 +465,7 @@ def test_patch_truck_with_wrong_orders(client, db):
     rv = patch_truck(client, 1, **request)
 
     assert rv.status_code == 404
+
 
 # POST ORDER TESTS
 
