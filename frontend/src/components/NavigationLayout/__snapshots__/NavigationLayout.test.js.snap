@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NavigationLayout component should render the login page correctly 1`] = `
+exports[`NavigationLayout component shall render the login page correctly 1`] = `
 <section
   class="ant-layout"
   style="height:100vh"

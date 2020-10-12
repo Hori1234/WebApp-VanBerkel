@@ -30,7 +30,7 @@ export default function SignInComponent() {
       password: state.password,
     });
 
-    if (!success) message.info("account not valid");
+    if (!success) message.info("Account not valid");
   };
 
   const handleChangeUsername = (event) => {
@@ -101,7 +101,7 @@ export default function SignInComponent() {
           Sign In
         </Title>
         <Title style={{ marginLeft: -190 }} level={5}>
-          Fil the form in order to login
+          Fill the form to log in
         </Title>
       </Layout>
 

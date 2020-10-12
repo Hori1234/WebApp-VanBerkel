@@ -111,32 +111,32 @@ export default class AddTruckLayout extends Component {
     });
   };
 
-  render() {
-    return (
-      <Form>
-        <Row gutter={[24, 8]}>
-          <Col span={12}>
-            <Form.Item
-              name={""}
-              label={"truckId:"}
-              rules={[{ required: true }]}
-            >
-              <Input
-                disabled={false}
-                value={this.state.truck_id}
-                onChange={this.handleChangeTruckId}
-              />
-            </Form.Item>
-            <Form.Item
-              name={"truckSNo"}
-              label={"Truck S No:"}
-              rules={[{ required: true }]}
-            >
-              <Input
-                value={this.state.truck_snumber}
-                onChange={this.handleChangeTruckSNumber}
-              />
-            </Form.Item>
+    render() {
+        return (
+            <Form>
+                <Row gutter={[24, 8]}>
+                    <Col span={12}>
+                        <Form.Item
+                            name={"truckID"}
+                            label={"truckId:"}
+                            rules={[{required: true}]}
+                        >
+                            <Input
+                                disabled={false}
+                                value={this.state.truck_id}
+                                onChange={this.handleChangeTruckId}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name={"truckSNo"}
+                            label={"Truck S No:"}
+                            rules={[{required: true}]}
+                        >
+                            <Input
+                                value={this.state.truck_snumber}
+                                onChange={this.handleChangeTruckSNumber}
+                            />
+                        </Form.Item>
 
             <Form.Item
               name={"Availability"}
