@@ -34,6 +34,7 @@ export default class AddOrdersLayout extends Component {
             status: "",
             ship_comp: "",
             tariff_type: "",
+            terminal:"",
             terminal1: "",
             time: "",
             time1: "",
@@ -47,6 +48,12 @@ export default class AddOrdersLayout extends Component {
             weight: "",
             departure_time: "",
             truck_id: "",
+            f:"",
+            g:"",
+            pod:"",
+            positie:"",
+            reference:"",
+            temperature:"",
 
         };
     }
@@ -54,7 +61,7 @@ export default class AddOrdersLayout extends Component {
     getFormOrderData = () => {
         let temp = [];
         temp.push(
-            this.state.orderNumber,
+            this.state.bookingNumber,
             this.state.inl,
             this.state.latestDepTime,
             this.state.truckType,
@@ -197,6 +204,11 @@ export default class AddOrdersLayout extends Component {
             tariff_type: event.target.value,
         });
     };
+    handleChangeTerminal = (event) => {
+        this.setState({
+            terminal: event.target.value,
+        });
+    };
     handleChangeTerminal1 = (event) => {
         this.setState({
             terminal1: event.target.value,
@@ -262,6 +274,36 @@ export default class AddOrdersLayout extends Component {
             truck_id: event.target.value,
         });
     };
+    handleChangeF = (event) => {
+        this.setState({
+            f: event.target.value,
+        });
+    };
+    handleChangeG = (event) => {
+        this.setState({
+            g: event.target.value,
+        });
+    };
+    handleChangePod = (event) => {
+        this.setState({
+            pod: event.target.value,
+        });
+    };
+    handleChangePositie = (event) => {
+        this.setState({
+            positie: event.target.value,
+        });
+    };
+     handleChangeReference = (event) => {
+        this.setState({
+            reference: event.target.value,
+        });
+    };
+     handleChangeTemperature = (event) => {
+        this.setState({
+            temperature: event.target.value,
+        });
+    };
 
 
     onFinishFailed = (errorInfo) => {
@@ -307,7 +349,7 @@ export default class AddOrdersLayout extends Component {
                         </Form.Item>
                         <Form.Item
                             name="Inl_terminal"
-                            label="Inl_terminal:"
+                            label="Inl_terminal_Out:"
                             rules={[{required: true}]}
                         >
                             <Input value={this.state.inl} onChange={this.handleChangeInl}/>
@@ -343,6 +385,33 @@ export default class AddOrdersLayout extends Component {
                             />
                         </Form.Item>
                         <Form.Item
+                            name="Container"
+                            label="Container:"
+                        >
+                            <Input
+                                value={this.state.container}
+                                onChange={this.handleChangeContainer}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="Unit_type"
+                            label="Unit_type:"
+                        >
+                            <Input
+                                value={this.state.unit_type}
+                                onChange={this.handleChangeUnit_type}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="Ship_comp"
+                            label="Ship_comp:"
+                        >
+                            <Input
+                                value={this.state.ship_comp}
+                                onChange={this.handleChangeShip_comp}
+                            />
+                        </Form.Item>
+                        <Form.Item
                             name="City"
                             label="City:"
                         >
@@ -358,15 +427,6 @@ export default class AddOrdersLayout extends Component {
                             <Input
                                 value={this.state.closing}
                                 onChange={this.handleChangeClosing}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="Container"
-                            label="Container:"
-                        >
-                            <Input
-                                value={this.state.container}
-                                onChange={this.handleChangeContainer}
                             />
                         </Form.Item>
                         <Form.Item
@@ -389,7 +449,7 @@ export default class AddOrdersLayout extends Component {
                         </Form.Item>
                         <Form.Item
                             name="Gate"
-                            label="Gate:"
+                            label="Gate_Out:"
                         >
                             <Input
                                 value={this.state.gate}
@@ -398,7 +458,7 @@ export default class AddOrdersLayout extends Component {
                         </Form.Item>
                         <Form.Item
                             name="Gate1"
-                            label="Gate1:"
+                            label="Gate_In:"
                         >
                             <Input
                                 value={this.state.gate1}
@@ -416,7 +476,7 @@ export default class AddOrdersLayout extends Component {
                         </Form.Item>
                         <Form.Item
                             name="Inl_ter_1"
-                            label="Inl_ter_1:"
+                            label="Inl_terminal_In:"
                         >
                             <Input
                                 value={this.state.inl_ter_1}
@@ -477,6 +537,15 @@ export default class AddOrdersLayout extends Component {
                                 onChange={this.handleChangeStatus}
                             />
                         </Form.Item>
+                        <Form.Item
+                            name="Temperature"
+                            label="Temperature:"
+                        >
+                            <Input
+                                value={this.state.temperature}
+                                onChange={this.handleChangeTemperature}
+                            />
+                        </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item
@@ -519,16 +588,6 @@ export default class AddOrdersLayout extends Component {
                                 onChange={this.handleChangeDeliveryDeadline}
                             />
                         </Form.Item>
-
-                        <Form.Item
-                            name="Ship_comp"
-                            label="Ship_comp:"
-                        >
-                            <Input
-                                value={this.state.ship_comp}
-                                onChange={this.handleChangeShip_comp}
-                            />
-                        </Form.Item>
                         <Form.Item
                             name="Tariff_type"
                             label="Tariff_type:"
@@ -539,8 +598,17 @@ export default class AddOrdersLayout extends Component {
                             />
                         </Form.Item>
                         <Form.Item
+                            name="Terminal"
+                            label="Terminal_import:"
+                        >
+                            <Input
+                                value={this.state.terminal}
+                                onChange={this.handleChangeTerminal}
+                            />
+                        </Form.Item>
+                        <Form.Item
                             name="Terminal1"
-                            label="Terminal1:"
+                            label="Terminal_export:"
                         >
                             <Input
                                 value={this.state.terminal1}
@@ -549,7 +617,7 @@ export default class AddOrdersLayout extends Component {
                         </Form.Item>
                         <Form.Item
                             name="Time"
-                            label="Time:"
+                            label="Time_Out_1:"
                         >
                             <Input
                                 value={this.state.time}
@@ -558,7 +626,7 @@ export default class AddOrdersLayout extends Component {
                         </Form.Item>
                         <Form.Item
                             name="Time1"
-                            label="Time1:"
+                            label="Time_Out_2:"
                         >
                             <Input
                                 value={this.state.time1}
@@ -567,7 +635,7 @@ export default class AddOrdersLayout extends Component {
                         </Form.Item>
                         <Form.Item
                             name="Time2"
-                            label="Time2:"
+                            label="Time_Inland_Transport:"
                         >
                             <Input
                                 value={this.state.time2}
@@ -576,7 +644,7 @@ export default class AddOrdersLayout extends Component {
                         </Form.Item>
                         <Form.Item
                             name="Time3"
-                            label="Time3:"
+                            label="Time_In:"
                         >
                             <Input
                                 value={this.state.time3}
@@ -611,15 +679,6 @@ export default class AddOrdersLayout extends Component {
                             />
                         </Form.Item>
                         <Form.Item
-                            name="Unit_type"
-                            label="Unit_type:"
-                        >
-                            <Input
-                                value={this.state.unit_type}
-                                onChange={this.handleChangeUnit_type}
-                            />
-                        </Form.Item>
-                        <Form.Item
                             name="Voyage_inland_carrier"
                             label="Voyage_inland_carrier:"
                         >
@@ -647,6 +706,51 @@ export default class AddOrdersLayout extends Component {
                             />
                         </Form.Item>
                         <Form.Item
+                            name="F"
+                            label="F:"
+                        >
+                            <Input
+                                value={this.state.f}
+                                onChange={this.handleChangeF}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="G"
+                            label="G:"
+                        >
+                            <Input
+                                value={this.state.g}
+                                onChange={this.handleChangeG}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="POD"
+                            label="POD:"
+                        >
+                            <Input
+                                value={this.state.pod}
+                                onChange={this.handleChangePod}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="Positie"
+                            label="Positie:"
+                        >
+                            <Input
+                                value={this.state.positie}
+                                onChange={this.handleChangePositie}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="Reference"
+                            label="Reference:"
+                        >
+                            <Input
+                                value={this.state.reference}
+                                onChange={this.handleChangeReference}
+                            />
+                        </Form.Item>
+                        <Form.Item
                             name="Truck_id"
                             label="Truck_id:"
                         >
@@ -655,6 +759,7 @@ export default class AddOrdersLayout extends Component {
                                 onChange={this.handleChangeTruck_id}
                             />
                         </Form.Item>
+
                     </Col>
                 </Row>
             </Form>
