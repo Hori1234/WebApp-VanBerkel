@@ -125,7 +125,14 @@ export default class EditAccountComponent extends Component {
       DAVisible: true,
       item: e,
     });
-  }
+  };
+
+  handleDelete = (id) => {
+    this.setState({
+      DAVisible: false,
+    });
+    this.deleteItemById(id)
+  };
 
   render() {
     return (
@@ -195,6 +202,9 @@ export default class EditAccountComponent extends Component {
         <Modal
           title="Delete Account"
           style={{
+            position: "absolute",
+            left: "25%",
+            top: "37%",
             width: "100vh",
             display: "flex",
             alignItems: "center",
@@ -203,7 +213,7 @@ export default class EditAccountComponent extends Component {
           visible={this.state.DAVisible}
           maskClosable={false}
           onCancel={this.handleCancel}
-          onOk={() => this.deleteItemById(this.state.item)}
+          onOk={() => this.handleDelete(this.state.item)}
         >
           {this.state.DAVisible && (
             <DeleteAccountConfirmationComponent />
