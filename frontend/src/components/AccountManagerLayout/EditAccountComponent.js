@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, List, Spin, Avatar, Button, message } from "antd";
+import { Layout, List, Spin, Avatar, Button, message, Modal } from "antd";
 
 import axios from "axios";
 
@@ -7,7 +7,7 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import InfiniteScroll from "react-infinite-scroller";
 import "../Css/EditAC.css";
-
+import DeleteAccountConfirmationComponent from "./DeleteAccountModalComponent";
 var vPage = 1;
 const vPage_size = 10;
 
@@ -18,6 +18,8 @@ export default class EditAccountComponent extends Component {
     hasMore: true,
     error: "",
     status: "",
+    DAVisible: false,
+    item: "",
   };
 
   componentDidMount() {
@@ -111,6 +113,20 @@ export default class EditAccountComponent extends Component {
       return;
     }
   };
+
+  handleCancel = (e) => {
+    this.setState({
+      DAVisible: false,
+    });
+  };
+
+  showDeleteAccountModal = (e) => {
+    this.setState({
+      DAVisible: true,
+      item: e,
+    });
+  }
+
   render() {
     return (
       <Layout
@@ -159,12 +175,11 @@ export default class EditAccountComponent extends Component {
                     <Button
                       type="primary"
                       icon={<DeleteOutlined />}
-                      onClick={() => {
-                        this.deleteItemById(item.id);
-                      }}
+                      onClick={() => this.showDeleteAccountModal(item.id)}
                     >
                       Delete Account
                     </Button>
+                    
                   </div>
                 </List.Item>
               )}
@@ -177,6 +192,23 @@ export default class EditAccountComponent extends Component {
             </List>
           </InfiniteScroll>
         </div>
+        <Modal
+          title="Delete Account"
+          style={{
+            width: "100vh",
+            display: "flex",
+            alignItems: "center",
+            marginLeft: 280,
+          }}
+          visible={this.state.DAVisible}
+          maskClosable={false}
+          onCancel={this.handleCancel}
+          onOk={() => this.deleteItemById(this.state.item)}
+        >
+          {this.state.DAVisible && (
+            <DeleteAccountConfirmationComponent />
+          )}
+        </Modal>
       </Layout>
     );
   }
