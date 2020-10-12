@@ -41,9 +41,10 @@ def roles_required(*roles):
             return func(*args, **kwargs)
 
         # document authentication to the API documentation
-        decorated_view._apidoc.setdefault('response', {}) \
-            .setdefault('security', []) \
-            .append({'cookieAuth': []})
+        if hasattr(decorated_view, '_apidoc'):
+            decorated_view._apidoc.setdefault('response', {}) \
+                .setdefault('security', []) \
+                .append({'cookieAuth': []})
 
         return decorated_view
 
