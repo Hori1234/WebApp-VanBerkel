@@ -11,6 +11,7 @@ import {
   Dropdown,
   Modal,
   message,
+  Popconfirm
 } from "antd";
 import axios from "axios";
 import EditableTable from "./EditableTable";
@@ -168,7 +169,7 @@ export default class ManualPlanning extends Component {
           title: "Booking Nr",
           dataIndex: "bookingNr",
           sorter: (a, b) => a.bookingNr - b.bookingNr,
-          width: 110,
+          width: 150,
           editable: true,
         },
         {
@@ -176,7 +177,7 @@ export default class ManualPlanning extends Component {
           dataIndex: "city",
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.city.localeCompare(b.city),
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
@@ -184,211 +185,253 @@ export default class ManualPlanning extends Component {
           dataIndex: "inl_terminal",
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.inl_terminal.localeCompare(b.inl_terminal),
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Truck ID",
           dataIndex: "truckId",
-          width: 90,
+          width: 150,
           editable: true,
         },
         {
           title: "Delivery Deadline",
           dataIndex: "deliveryDeadline",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Process Time",
           dataIndex: "processTime",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Driving Time",
           dataIndex: "drivingTime",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Service Time",
           dataIndex: "serviceTime",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Closing",
           dataIndex: "closing",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Container",
           dataIndex: "container",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Date",
           dataIndex: "date",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Delay",
           dataIndex: "delay",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Gate",
           dataIndex: "gate",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Gate1",
           dataIndex: "gate1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Gross",
           dataIndex: "gross",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "inl_ter_1",
           dataIndex: "inl_ter_1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Invoice_reference",
           dataIndex: "invoice_reference",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "L_D",
           dataIndex: "l_D",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Max_departure",
           dataIndex: "max_departure",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Max_departure",
           dataIndex: "max_departure",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Pickup",
           dataIndex: "pickup",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Seal",
           dataIndex: "seal",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Status",
           dataIndex: "status",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Ship_comp",
           dataIndex: "ship_comp",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Tariff_type",
           dataIndex: "tariff_type",
-          width: 100,
+          width: 150,
+          editable: true,
+        },
+          {
+          title: "Terminal",
+          dataIndex: "terminal",
+          width: 150,
           editable: true,
         },
         {
           title: "Terminal1",
           dataIndex: "terminal1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Time",
           dataIndex: "time",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Time1",
           dataIndex: "time1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Time2",
           dataIndex: "time2",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Time3",
           dataIndex: "time3",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Truck1",
           dataIndex: "truck1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Truck2",
           dataIndex: "truck2",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Truck_used",
           dataIndex: "truck_used",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Unit_type",
           dataIndex: "unit_type",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Voyage_inland_carrier",
           dataIndex: "voyage_inland_carrier",
-          width: 200,
+          width: 250,
           editable: true,
         },
         {
           title: "Weight",
           dataIndex: "weight",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Departure_time",
           dataIndex: "departure_time",
-          width: 100,
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "F",
+          dataIndex: "f",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "G",
+          dataIndex: "g",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "POF",
+          dataIndex: "pod",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Positie",
+          dataIndex: "positie",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Reference",
+          dataIndex: "reference",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Temperature",
+          dataIndex: "temperature",
+          width: 150,
           editable: true,
         },
       ],
@@ -478,6 +521,7 @@ export default class ManualPlanning extends Component {
       AOVisible: false,
       ATVisible: false,
       magnifyOrders: false,
+      magnifyTrucks: false,
       status: "",
       newOrder: {
         order_number: "",
@@ -506,6 +550,7 @@ export default class ManualPlanning extends Component {
         business_type: "",
       },
       temp: [],
+      originalOrders:[],
     };
   }
 
@@ -539,13 +584,34 @@ export default class ManualPlanning extends Component {
       });
     this.setState({ columns: final, columnFilter: columnFilter });
   };
-  changeData = (d) => {
-    if (d === "KAT") {
-      this.setState({ data: this.state.orderList });
+  changeDataOrders = (d) => {
+    
+    if (d === "Both") {
+      this.setState({data: this.state.originalOrders})
     } else if (d === "ITV") {
-      this.setState({ data: dataITV });
+      this.getItv(this.state.originalOrders)
+    } else if (d === "KAT") {
+      this.getKat(this.state.originalOrders)
     }
   };
+  getItv = (e) => {
+    let itvData = [];
+    e.forEach(element => {
+      if(element.inl_terminal == "ITV"){     
+        itvData.push(element)
+      }
+    });
+    this.setState({data:itvData})
+  }
+  getKat = (e) => {
+    let katData = [];
+    e.forEach(element => {
+      if(element.inl_terminal == "KAT"){     
+        katData.push(element)
+      }
+    });
+    this.setState({data:katData})
+  }
   selectOrdersRow = (record) => {
     const selectedOrdersRowKeys = [...this.state.selectedOrdersRowKeys];
     if (selectedOrdersRowKeys.indexOf(record.key) >= 0) {
@@ -593,6 +659,11 @@ export default class ManualPlanning extends Component {
       magnifyOrders: true,
     });
   };
+  magnifyTrucksModal = () => {
+    this.setState({
+      magnifyTrucks: true,
+    });
+  };
   handleOk = () => {
     this.setState({
       AOVisible: false,
@@ -606,10 +677,10 @@ export default class ManualPlanning extends Component {
     });
   };
   okMagnify = (e) => {
-    this.setState({ magnifyOrders: false });
+    this.setState({ magnifyOrders: false, magnifyTrucks:false });
   };
   cancelMagnify = (e) => {
-    this.setState({ magnifyOrders: false });
+    this.setState({ magnifyOrders: false, magnifyTrucks: false  });
   };
   truckRowColor = (e) => {
     if (e === "Regional") {
@@ -790,6 +861,7 @@ export default class ManualPlanning extends Component {
             status: res.data.orders[i]["Status"],
             ship_comp: res.data.orders[i]["Ship. comp."],
             tariff_type: res.data.orders[i]["Tariff type"],
+            terminal: res.data.orders[i]["Terminal"],
             terminal1: res.data.orders[i]["Terminal (1)"],
             time: res.data.orders[i]["Time"],
             time1: res.data.orders[i]["Time (1)"],
@@ -803,6 +875,13 @@ export default class ManualPlanning extends Component {
             weight: res.data.orders[i]["Weight"],
             departure_time: res.data.orders[i]["Departure time"],
             truck_id: res.data.orders[i]["Truck Id"],
+            f: res.data.orders[i]["F"],
+            g: res.data.orders[i]["G"],
+            pod: res.data.orders[i]["POD"],
+            positie: res.data.orders[i]["Positie"],
+            reference: res.data.orders[i]["Reference"],
+            temperature: res.data.orders[i]["Temperature °C"],
+
           };
           outarray.push(temp);
         }
@@ -810,6 +889,7 @@ export default class ManualPlanning extends Component {
         this.setState((state) => ({
           ...state,
           data: outarray,
+          originalOrders: outarray,
           status: "success",
         }));
         return true;
@@ -1134,10 +1214,11 @@ export default class ManualPlanning extends Component {
         <Row gutter={[0, 10]}>
           <Col span={8}>
             <Select
-              defaultValue="ITV"
-              onChange={this.changeData}
+              defaultValue="Both"
+              onChange={this.changeDataOrders}
               style={{ width: 120 }}
             >
+              <Option value="Both">Both</Option>
               <Option value="ITV">ITV</Option>
               <Option value="KAT">KAT</Option>
             </Select>
@@ -1146,6 +1227,7 @@ export default class ManualPlanning extends Component {
               overlay={showHideMenu}
               onVisibleChange={this.changeVisibility}
               visible={this.state.isVisible}
+              style={{height:"50vh"}}
             >
               <Button>Show/Hide</Button>
             </Dropdown>
@@ -1171,13 +1253,13 @@ export default class ManualPlanning extends Component {
             ></EditableTable>
             <br />
             <Button onClick={() => this.showOrdersModal()}>Add order</Button>
-            <Button
-              onClick={() =>
+            <Popconfirm title="Are you sure you want to delete the selected orders？" okText="Yes" cancelText="No" onConfirm={() =>
                 this.deleteOrderById(this.state.selectedOrdersRowKeys)
-              }
-            >
-              Delete order
-            </Button>
+              }>
+              <Button>
+                Delete order
+              </Button>
+            </Popconfirm>
             &nbsp;&nbsp;
             <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
           </Col>
@@ -1231,13 +1313,15 @@ export default class ManualPlanning extends Component {
             ></EditableTable>
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
-            <Button
-              onClick={() =>
+            <Popconfirm title="Are you sure you want to delete the selected trucks？" okText="Yes" cancelText="No"  onConfirm={() =>
                 this.deleteTruckById(this.state.selectedTrucksRowKeys)
-              }
-            >
-              Delete truck
-            </Button>
+              }>
+              <Button>
+                Delete truck
+              </Button>
+            </Popconfirm>
+            &nbsp;&nbsp;
+            <Button onClick={this.magnifyTrucksModal}>Magnify</Button>
           </Col>
         </Row>
 
@@ -1277,24 +1361,57 @@ export default class ManualPlanning extends Component {
         >
           {this.state.magnifyOrders && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
-              <Table
-                bordered={true}
-                rowSelection={ordersRowSelection}
-                dataSource={this.state.data}
-                columns={this.state.columns}
-                scroll={{ x: "max-content", y: "50vh" }}
-                pagination={false}
-                onRow={(record) => ({
-                  onClick: () => {
-                    this.selectOrdersRow(record);
-                  },
-                })}
-              />
+              <EditableTable
+              rowSelection={ordersRowSelection}
+              dataSource={this.state.data}
+              columns={this.state.columns}
+              setData={this.setData}
+              onRow={(record) => ({
+                onClick: () => {
+                  this.selectOrdersRow(record);
+                },
+              })}
+            ></EditableTable>
               <Col span={12}>
                 <br />
                 <Button onClick={this.showOrdersModal}>Add order</Button>
                 &nbsp;&nbsp;
                 <Button>Delete order</Button>
+              </Col>
+            </Layout>
+          )}
+        </Modal>
+        <Modal
+          title="Truck List"
+          visible={this.state.magnifyTrucks}
+          onOk={this.okMagnify}
+          onCancel={this.cancelMagnify}
+          width={"100%"}
+          style={{ top: 20 }}
+        >
+          {this.state.magnifyTrucks && (
+            <Layout style={{ width: "100%", backgroundColor: "white" }}>
+              <EditableTable
+              rowSelection={trucksRowSelection}
+              dataSource={this.state.data2}
+              columns={this.state.columns2}
+              setData={this.setData2}
+              onRow={(record) => ({
+                onClick: () => {
+                  this.selectOrdersRow(record);
+                },
+              })}
+            ></EditableTable>
+              <Col span={12}>
+                <br />
+                <Button onClick={this.ShowTruckModal}>Add truck</Button>
+            <Popconfirm title="Are you sure you want to delete the selected trucks？" okText="Yes" cancelText="No"  onConfirm={() =>
+                this.deleteTruckById(this.state.selectedTrucksRowKeys)
+              }>
+              <Button>
+                Delete truck
+              </Button>
+            </Popconfirm>
               </Col>
             </Layout>
           )}
