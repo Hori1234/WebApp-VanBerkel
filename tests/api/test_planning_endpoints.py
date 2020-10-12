@@ -342,7 +342,6 @@ def test_patch_order_wrong(client, db):
     assert rv.status_code == 404
 
 
-# TODO: document in UTP
 def test_patch_order_set_truck_id(client, db):
     """
     Tests the patch order when setting and removing a truck_id and departure
