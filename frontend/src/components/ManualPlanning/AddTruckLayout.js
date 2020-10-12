@@ -29,11 +29,11 @@ export default class AddTruckLayout extends Component {
     temp.push(
       this.state.truck_id,
       this.state.truck_snumber,
-      this.state.availability,
+      Boolean(this.state.availability),
       this.state.truck_type,
       this.state.terminal,
-      this.state.hierarchy,
-      this.state.use_cost,
+      Number(this.state.hierarchy),
+      Number(this.state.use_cost),
       this.state.starting_time,
       this.state.date,
       this.state.owner,
@@ -111,32 +111,32 @@ export default class AddTruckLayout extends Component {
     });
   };
 
-    render() {
-        return (
-            <Form>
-                <Row gutter={[24, 8]}>
-                    <Col span={12}>
-                        <Form.Item
-                            name={"truckID"}
-                            label={"truckId:"}
-                            rules={[{required: true}]}
-                        >
-                            <Input
-                                disabled={false}
-                                value={this.state.truck_id}
-                                onChange={this.handleChangeTruckId}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name={"truckSNo"}
-                            label={"Truck S No:"}
-                            rules={[{required: true}]}
-                        >
-                            <Input
-                                value={this.state.truck_snumber}
-                                onChange={this.handleChangeTruckSNumber}
-                            />
-                        </Form.Item>
+  render() {
+    return (
+      <Form>
+        <Row gutter={[24, 8]}>
+          <Col span={12}>
+            <Form.Item
+              name={"truckID"}
+              label={"truckId:"}
+              rules={[{ required: true }]}
+            >
+              <Input
+                disabled={false}
+                value={this.state.truck_id}
+                onChange={this.handleChangeTruckId}
+              />
+            </Form.Item>
+            <Form.Item
+              name={"truckSNo"}
+              label={"Truck S No:"}
+              rules={[{ required: true }]}
+            >
+              <Input
+                value={this.state.truck_snumber}
+                onChange={this.handleChangeTruckSNumber}
+              />
+            </Form.Item>
 
             <Form.Item
               name={"Availability"}

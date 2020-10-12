@@ -92,18 +92,18 @@ const EditableTable = (props) => {
           message.success("Order updated succesfully");
         } else {
           if (res.status === 401) {
-            message.error("Bad request: " + res.data.message);
+            message.error("Bad request: " + res.message);
           } else {
             if (res.status === 404) {
-              message.error("Not Found: " + res.data.message);
+              message.error("Not Found: " + res.message);
             } else {
               if (res.status === 422) {
-                message.error("Unprocessable Entity: " + res.data.message);
+                message.error("Unprocessable Entity: " + res.message);
               } else {
                 if (res.satatus === 503) {
-                  message.warning("Server not Found: " + res.data.message);
+                  message.warning("Server not Found: " + res.message);
                 } else {
-                  message.error(res.data.message);
+                  message.error(res.message);
                 }
               }
             }

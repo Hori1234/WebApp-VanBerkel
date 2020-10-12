@@ -11,7 +11,7 @@ import {
   Dropdown,
   Modal,
   message,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import axios from "axios";
 import EditableTable from "./EditableTable";
@@ -320,7 +320,7 @@ export default class ManualPlanning extends Component {
           width: 150,
           editable: true,
         },
-          {
+        {
           title: "Terminal",
           dataIndex: "terminal",
           width: 150,
@@ -550,7 +550,7 @@ export default class ManualPlanning extends Component {
         business_type: "",
       },
       temp: [],
-      originalOrders:[],
+      originalOrders: [],
     };
   }
 
@@ -585,33 +585,32 @@ export default class ManualPlanning extends Component {
     this.setState({ columns: final, columnFilter: columnFilter });
   };
   changeDataOrders = (d) => {
-    
     if (d === "Both") {
-      this.setState({data: this.state.originalOrders})
+      this.setState({ data: this.state.originalOrders });
     } else if (d === "ITV") {
-      this.getItv(this.state.originalOrders)
+      this.getItv(this.state.originalOrders);
     } else if (d === "KAT") {
-      this.getKat(this.state.originalOrders)
+      this.getKat(this.state.originalOrders);
     }
   };
   getItv = (e) => {
     let itvData = [];
-    e.forEach(element => {
-      if(element.inl_terminal == "ITV"){     
-        itvData.push(element)
+    e.forEach((element) => {
+      if (element.inl_terminal == "ITV") {
+        itvData.push(element);
       }
     });
-    this.setState({data:itvData})
-  }
+    this.setState({ data: itvData });
+  };
   getKat = (e) => {
     let katData = [];
-    e.forEach(element => {
-      if(element.inl_terminal == "KAT"){     
-        katData.push(element)
+    e.forEach((element) => {
+      if (element.inl_terminal == "KAT") {
+        katData.push(element);
       }
     });
-    this.setState({data:katData})
-  }
+    this.setState({ data: katData });
+  };
   selectOrdersRow = (record) => {
     const selectedOrdersRowKeys = [...this.state.selectedOrdersRowKeys];
     if (selectedOrdersRowKeys.indexOf(record.key) >= 0) {
@@ -677,10 +676,10 @@ export default class ManualPlanning extends Component {
     });
   };
   okMagnify = (e) => {
-    this.setState({ magnifyOrders: false, magnifyTrucks:false });
+    this.setState({ magnifyOrders: false, magnifyTrucks: false });
   };
   cancelMagnify = (e) => {
-    this.setState({ magnifyOrders: false, magnifyTrucks: false  });
+    this.setState({ magnifyOrders: false, magnifyTrucks: false });
   };
   truckRowColor = (e) => {
     if (e === "Regional") {
@@ -702,7 +701,7 @@ export default class ManualPlanning extends Component {
           message.error(res.message);
         } else {
           if (res.status === 204) {
-            message.success("Account succesfully deleted");
+            message.success("Order succesfully deleted");
           } else {
             if (res.status === 401) {
               message.error("Unauthorized Action");
@@ -737,7 +736,7 @@ export default class ManualPlanning extends Component {
           message.error(res.message);
         } else {
           if (res.status === 204) {
-            message.success("Account succesfully deleted");
+            message.success("Truck succesfully deleted");
           } else {
             if (res.status === 401) {
               message.error("Unauthorized Action");
@@ -783,6 +782,10 @@ export default class ManualPlanning extends Component {
       .then((res) => {
         if (res.status === 200) {
           message.success("Trcuk: " + "added succesfully");
+        } else {
+          if (res.status === 422) {
+            message.success(res.message);
+          }
         }
         this.handleOk();
         return true;
@@ -815,6 +818,20 @@ export default class ManualPlanning extends Component {
               res.data["truck_type"] +
               "added succesfully"
           );
+        } else {
+          if (res.status === 401) {
+            message.error("Unauthorized: " + res.message);
+          } else {
+            if (res.status === 404) {
+              message.error("Not Found: " + res.message);
+            } else {
+              if (res.status === 422) {
+                message.error("	Unprocessable Entity: " + res.message);
+              } else {
+                message.error(res.message);
+              }
+            }
+          }
         }
         this.handleOk();
         return true;
@@ -881,7 +898,6 @@ export default class ManualPlanning extends Component {
             positie: res.data.orders[i]["Positie"],
             reference: res.data.orders[i]["Reference"],
             temperature: res.data.orders[i]["Temperature °C"],
-
           };
           outarray.push(temp);
         }
@@ -1227,7 +1243,7 @@ export default class ManualPlanning extends Component {
               overlay={showHideMenu}
               onVisibleChange={this.changeVisibility}
               visible={this.state.isVisible}
-              style={{height:"50vh"}}
+              style={{ height: "50vh" }}
             >
               <Button>Show/Hide</Button>
             </Dropdown>
@@ -1253,12 +1269,15 @@ export default class ManualPlanning extends Component {
             ></EditableTable>
             <br />
             <Button onClick={() => this.showOrdersModal()}>Add order</Button>
-            <Popconfirm title="Are you sure you want to delete the selected orders？" okText="Yes" cancelText="No" onConfirm={() =>
+            <Popconfirm
+              title="Are you sure you want to delete the selected orders？"
+              okText="Yes"
+              cancelText="No"
+              onConfirm={() =>
                 this.deleteOrderById(this.state.selectedOrdersRowKeys)
-              }>
-              <Button>
-                Delete order
-              </Button>
+              }
+            >
+              <Button>Delete order</Button>
             </Popconfirm>
             &nbsp;&nbsp;
             <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
@@ -1313,12 +1332,15 @@ export default class ManualPlanning extends Component {
             ></EditableTable>
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
-            <Popconfirm title="Are you sure you want to delete the selected trucks？" okText="Yes" cancelText="No"  onConfirm={() =>
+            <Popconfirm
+              title="Are you sure you want to delete the selected trucks？"
+              okText="Yes"
+              cancelText="No"
+              onConfirm={() =>
                 this.deleteTruckById(this.state.selectedTrucksRowKeys)
-              }>
-              <Button>
-                Delete truck
-              </Button>
+              }
+            >
+              <Button>Delete truck</Button>
             </Popconfirm>
             &nbsp;&nbsp;
             <Button onClick={this.magnifyTrucksModal}>Magnify</Button>
@@ -1362,21 +1384,30 @@ export default class ManualPlanning extends Component {
           {this.state.magnifyOrders && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
               <EditableTable
-              rowSelection={ordersRowSelection}
-              dataSource={this.state.data}
-              columns={this.state.columns}
-              setData={this.setData}
-              onRow={(record) => ({
-                onClick: () => {
-                  this.selectOrdersRow(record);
-                },
-              })}
-            ></EditableTable>
+                rowSelection={ordersRowSelection}
+                dataSource={this.state.data}
+                columns={this.state.columns}
+                setData={this.setData}
+                onRow={(record) => ({
+                  onClick: () => {
+                    this.selectOrdersRow(record);
+                  },
+                })}
+              ></EditableTable>
               <Col span={12}>
                 <br />
                 <Button onClick={this.showOrdersModal}>Add order</Button>
                 &nbsp;&nbsp;
-                <Button>Delete order</Button>
+                <Popconfirm
+                  title="Are you sure you want to delete the selected trucks？"
+                  okText="Yes"
+                  cancelText="No"
+                  onConfirm={() =>
+                    this.deleteOrderById(this.state.selectedOrdersRowKeys)
+                  }
+                >
+                  <Button>Delete Order</Button>
+                </Popconfirm>
               </Col>
             </Layout>
           )}
@@ -1392,26 +1423,29 @@ export default class ManualPlanning extends Component {
           {this.state.magnifyTrucks && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
               <EditableTable
-              rowSelection={trucksRowSelection}
-              dataSource={this.state.data2}
-              columns={this.state.columns2}
-              setData={this.setData2}
-              onRow={(record) => ({
-                onClick: () => {
-                  this.selectOrdersRow(record);
-                },
-              })}
-            ></EditableTable>
+                rowSelection={trucksRowSelection}
+                dataSource={this.state.data2}
+                columns={this.state.columns2}
+                setData={this.setData2}
+                onRow={(record) => ({
+                  onClick: () => {
+                    this.selectOrdersRow(record);
+                  },
+                })}
+              ></EditableTable>
               <Col span={12}>
                 <br />
                 <Button onClick={this.ShowTruckModal}>Add truck</Button>
-            <Popconfirm title="Are you sure you want to delete the selected trucks？" okText="Yes" cancelText="No"  onConfirm={() =>
-                this.deleteTruckById(this.state.selectedTrucksRowKeys)
-              }>
-              <Button>
-                Delete truck
-              </Button>
-            </Popconfirm>
+                <Popconfirm
+                  title="Are you sure you want to delete the selected trucks？"
+                  okText="Yes"
+                  cancelText="No"
+                  onConfirm={() =>
+                    this.deleteTruckById(this.state.selectedTrucksRowKeys)
+                  }
+                >
+                  <Button>Delete truck</Button>
+                </Popconfirm>
               </Col>
             </Layout>
           )}
