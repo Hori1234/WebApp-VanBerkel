@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Table, Input, InputNumber, Popconfirm, Form } from "antd";
+import { Table, Input, InputNumber, Popconfirm, Form, message } from "antd";
+import axios from "axios";
 
 const EditableCell = ({
   editing,
@@ -30,16 +31,16 @@ const EditableCell = ({
   );
 };
 
-const EditableTable = props => {
-    const [form] = Form.useForm();
-    const [editingKey, setEditingKey] = useState('');
-    const isEditing = (record) => record.key === editingKey;
+const EditableTable = (props) => {
+  const [form] = Form.useForm();
+  const [editingKey, setEditingKey] = useState("");
+  const isEditing = (record) => record.key === editingKey;
 
   const edit = (record) => {
     form.setFieldsValue({
       bookingNr: "",
       city: "",
-      inl_terminal:"",
+      inl_terminal: "",
       truckId: "",
       deliveryDeadline: "",
       processTime: "",
@@ -70,7 +71,7 @@ const EditableTable = props => {
       truck2: "",
       truck_used: "",
       unit_type: "",
-      voyage_inland_carrier:"",
+      voyage_inland_carrier: "",
       weight: "",
       departure_time: "",
       ...record,
@@ -80,6 +81,40 @@ const EditableTable = props => {
 
   const cancel = () => {
     setEditingKey("");
+  };
+
+  const editAccount = (order_id, Data) => {
+    console.log(Data);
+    return axios
+      .patch(`/api/orders/${order_id}`, Data)
+      .then((res) => {
+        if (res.status === 200) {
+          message.success("Order updated succesfully");
+        } else {
+          if (res.status === 401) {
+            message.error("Bad request: " + res.data.message);
+          } else {
+            if (res.status === 404) {
+              message.error("Not Found: " + res.data.message);
+            } else {
+              if (res.status === 422) {
+                message.error("Unprocessable Entity: " + res.data.message);
+              } else {
+                if (res.satatus === 503) {
+                  message.warning("Server not Found: " + res.data.message);
+                } else {
+                  message.error(res.data.message);
+                }
+              }
+            }
+          }
+        }
+        return true;
+      })
+      .catch((error) => {
+        message.error("An error hsa occured");
+        return false;
+      });
   };
 
   const save = async (key) => {
@@ -93,6 +128,7 @@ const EditableTable = props => {
         newData.splice(index, 1, { ...item, ...row });
         props.setData(newData);
         setEditingKey("");
+        editAccount(key, item);
       } else {
         newData.push(row);
         props.setData(newData);
