@@ -521,6 +521,7 @@ export default class ManualPlanning extends Component {
       AOVisible: false,
       ATVisible: false,
       magnifyOrders: false,
+      magnifyTrucks: false,
       status: "",
       newOrder: {
         order_number: "",
@@ -636,6 +637,11 @@ export default class ManualPlanning extends Component {
       magnifyOrders: true,
     });
   };
+  magnifyTrucksModal = () => {
+    this.setState({
+      magnifyTrucks: true,
+    });
+  };
   handleOk = () => {
     this.setState({
       AOVisible: false,
@@ -649,10 +655,10 @@ export default class ManualPlanning extends Component {
     });
   };
   okMagnify = (e) => {
-    this.setState({ magnifyOrders: false });
+    this.setState({ magnifyOrders: false, magnifyTrucks:false });
   };
   cancelMagnify = (e) => {
-    this.setState({ magnifyOrders: false });
+    this.setState({ magnifyOrders: false, magnifyTrucks: false  });
   };
   truckRowColor = (e) => {
     if (e === "Regional") {
@@ -1223,13 +1229,15 @@ export default class ManualPlanning extends Component {
             ></EditableTable>
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
-            <Popconfirm title="Are you sure you want to delete the selected trucks？" okText="Yes" cancelText="No" onClick={() =>
+            <Popconfirm title="Are you sure you want to delete the selected trucks？" okText="Yes" cancelText="No"  onConfirm={() =>
                 this.deleteTruckById(this.state.selectedTrucksRowKeys)
               }>
               <Button>
                 Delete truck
               </Button>
             </Popconfirm>
+            &nbsp;&nbsp;
+            <Button onClick={this.magnifyTrucksModal}>Magnify</Button>
           </Col>
         </Row>
 
@@ -1269,24 +1277,57 @@ export default class ManualPlanning extends Component {
         >
           {this.state.magnifyOrders && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
-              <Table
-                bordered={true}
-                rowSelection={ordersRowSelection}
-                dataSource={this.state.data}
-                columns={this.state.columns}
-                scroll={{ x: "max-content", y: "50vh" }}
-                pagination={false}
-                onRow={(record) => ({
-                  onClick: () => {
-                    this.selectOrdersRow(record);
-                  },
-                })}
-              />
+              <EditableTable
+              rowSelection={ordersRowSelection}
+              dataSource={this.state.data}
+              columns={this.state.columns}
+              setData={this.setData}
+              onRow={(record) => ({
+                onClick: () => {
+                  this.selectOrdersRow(record);
+                },
+              })}
+            ></EditableTable>
               <Col span={12}>
                 <br />
                 <Button onClick={this.showOrdersModal}>Add order</Button>
                 &nbsp;&nbsp;
                 <Button>Delete order</Button>
+              </Col>
+            </Layout>
+          )}
+        </Modal>
+        <Modal
+          title="Truck List"
+          visible={this.state.magnifyTrucks}
+          onOk={this.okMagnify}
+          onCancel={this.cancelMagnify}
+          width={"100%"}
+          style={{ top: 20 }}
+        >
+          {this.state.magnifyTrucks && (
+            <Layout style={{ width: "100%", backgroundColor: "white" }}>
+              <EditableTable
+              rowSelection={trucksRowSelection}
+              dataSource={this.state.data2}
+              columns={this.state.columns2}
+              setData={this.setData2}
+              onRow={(record) => ({
+                onClick: () => {
+                  this.selectOrdersRow(record);
+                },
+              })}
+            ></EditableTable>
+              <Col span={12}>
+                <br />
+                <Button onClick={this.ShowTruckModal}>Add truck</Button>
+            <Popconfirm title="Are you sure you want to delete the selected trucks？" okText="Yes" cancelText="No"  onConfirm={() =>
+                this.deleteTruckById(this.state.selectedTrucksRowKeys)
+              }>
+              <Button>
+                Delete truck
+              </Button>
+            </Popconfirm>
               </Col>
             </Layout>
           )}
