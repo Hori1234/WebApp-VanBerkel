@@ -934,6 +934,43 @@ export default class ManualPlanning extends Component {
     );
   };
 
+  // Assigning , editing and Unassigning orders
+  assign_unassignOrder = (orderId, truckId) => {
+    return axios
+      .patch(`/api/orders/${orderId}`, {
+        truck_id: truckId,
+      })
+      .then((res) => {
+        if (res.status === 404) {
+          message.error(res.message);
+        } else {
+          if (res.status === 204) {
+            message.success("Account succesfully deleted");
+          } else {
+            if (res.status === 401) {
+              message.error("Unauthorized Action");
+            } else {
+              if (res.status === 200) {
+                message.success("Order succesfully assigned");
+              } else {
+                message.warning("Service unavailable");
+              }
+            }
+          }
+        }
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+  editOrder = () => {};
+
   render() {
     const showHideMenu = (
       <Menu>
@@ -1146,11 +1183,34 @@ export default class ManualPlanning extends Component {
           </Col>
           <Col span={3}>
             <Row>
-              <Button style={{ width: "100%" }}>Assign</Button>
+              <Button
+                style={{ width: "100%" }}
+                onClick={() => {
+                  var orderLength = this.state.selectedOrdersRowKeys.length;
+                  var truckLength = this.state.selectedTrucksRowKeys.length;
+                  this.assign_unassignOrder(
+                    this.state.selectedOrdersRowKeys[orderLength - 1],
+                    this.state.selectedTrucksRowKeys[truckLength - 1]
+                  );
+                }}
+              >
+                Assign
+              </Button>
             </Row>
             <br />
             <Row>
-              <Button style={{ width: "100%" }}>Unassign</Button>
+              <Button
+                style={{ width: "100%" }}
+                onClick={() => {
+                  var orderLength = this.state.selectedOrdersRowKeys.length;
+                  this.assign_unassignOrder(
+                    this.state.selectedOrdersRowKeys[orderLength - 1],
+                    0
+                  );
+                }}
+              >
+                Unassign
+              </Button>
             </Row>
             <br />
             <Row>
