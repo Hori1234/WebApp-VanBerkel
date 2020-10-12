@@ -320,6 +320,12 @@ export default class ManualPlanning extends Component {
           width: 150,
           editable: true,
         },
+          {
+          title: "Terminal",
+          dataIndex: "terminal",
+          width: 150,
+          editable: true,
+        },
         {
           title: "Terminal1",
           dataIndex: "terminal1",
@@ -389,6 +395,42 @@ export default class ManualPlanning extends Component {
         {
           title: "Departure_time",
           dataIndex: "departure_time",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "F",
+          dataIndex: "f",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "G",
+          dataIndex: "g",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "POF",
+          dataIndex: "pod",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Positie",
+          dataIndex: "positie",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Reference",
+          dataIndex: "reference",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Temperature",
+          dataIndex: "temperature",
           width: 150,
           editable: true,
         },
@@ -791,6 +833,7 @@ export default class ManualPlanning extends Component {
             status: res.data.orders[i]["Status"],
             ship_comp: res.data.orders[i]["Ship. comp."],
             tariff_type: res.data.orders[i]["Tariff type"],
+            terminal: res.data.orders[i]["Terminal"],
             terminal1: res.data.orders[i]["Terminal (1)"],
             time: res.data.orders[i]["Time"],
             time1: res.data.orders[i]["Time (1)"],
@@ -804,6 +847,13 @@ export default class ManualPlanning extends Component {
             weight: res.data.orders[i]["Weight"],
             departure_time: res.data.orders[i]["Departure time"],
             truck_id: res.data.orders[i]["Truck Id"],
+            f: res.data.orders[i]["F"],
+            g: res.data.orders[i]["G"],
+            pod: res.data.orders[i]["POD"],
+            positie: res.data.orders[i]["Positie"],
+            reference: res.data.orders[i]["Reference"],
+            temperature: res.data.orders[i]["Temperature °C"],
+
           };
           outarray.push(temp);
         }
