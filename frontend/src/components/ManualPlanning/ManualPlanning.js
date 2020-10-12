@@ -11,6 +11,7 @@ import {
   Dropdown,
   Modal,
   message,
+  Popconfirm
 } from "antd";
 import axios from "axios";
 import EditableTable from "./EditableTable";
@@ -168,7 +169,7 @@ export default class ManualPlanning extends Component {
           title: "Booking Nr",
           dataIndex: "bookingNr",
           sorter: (a, b) => a.bookingNr - b.bookingNr,
-          width: 110,
+          width: 150,
           editable: true,
         },
         {
@@ -176,7 +177,7 @@ export default class ManualPlanning extends Component {
           dataIndex: "city",
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.city.localeCompare(b.city),
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
@@ -184,211 +185,211 @@ export default class ManualPlanning extends Component {
           dataIndex: "inl_terminal",
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.inl_terminal.localeCompare(b.inl_terminal),
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Truck ID",
           dataIndex: "truckId",
-          width: 90,
+          width: 150,
           editable: true,
         },
         {
           title: "Delivery Deadline",
           dataIndex: "deliveryDeadline",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Process Time",
           dataIndex: "processTime",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Driving Time",
           dataIndex: "drivingTime",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Service Time",
           dataIndex: "serviceTime",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Closing",
           dataIndex: "closing",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Container",
           dataIndex: "container",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Date",
           dataIndex: "date",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Delay",
           dataIndex: "delay",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Gate",
           dataIndex: "gate",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Gate1",
           dataIndex: "gate1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Gross",
           dataIndex: "gross",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "inl_ter_1",
           dataIndex: "inl_ter_1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Invoice_reference",
           dataIndex: "invoice_reference",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "L_D",
           dataIndex: "l_D",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Max_departure",
           dataIndex: "max_departure",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Max_departure",
           dataIndex: "max_departure",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Pickup",
           dataIndex: "pickup",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Seal",
           dataIndex: "seal",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Status",
           dataIndex: "status",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Ship_comp",
           dataIndex: "ship_comp",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Tariff_type",
           dataIndex: "tariff_type",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Terminal1",
           dataIndex: "terminal1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Time",
           dataIndex: "time",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Time1",
           dataIndex: "time1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Time2",
           dataIndex: "time2",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Time3",
           dataIndex: "time3",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Truck1",
           dataIndex: "truck1",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Truck2",
           dataIndex: "truck2",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Truck_used",
           dataIndex: "truck_used",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Unit_type",
           dataIndex: "unit_type",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Voyage_inland_carrier",
           dataIndex: "voyage_inland_carrier",
-          width: 200,
+          width: 250,
           editable: true,
         },
         {
           title: "Weight",
           dataIndex: "weight",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
           title: "Departure_time",
           dataIndex: "departure_time",
-          width: 100,
+          width: 150,
           editable: true,
         },
       ],
@@ -1109,6 +1110,7 @@ export default class ManualPlanning extends Component {
               overlay={showHideMenu}
               onVisibleChange={this.changeVisibility}
               visible={this.state.isVisible}
+              style={{height:"50vh"}}
             >
               <Button>Show/Hide</Button>
             </Dropdown>
@@ -1134,13 +1136,13 @@ export default class ManualPlanning extends Component {
             ></EditableTable>
             <br />
             <Button onClick={() => this.showOrdersModal()}>Add order</Button>
-            <Button
-              onClick={() =>
+            <Popconfirm title="Are you sure you want to delete the selected orders？" okText="Yes" cancelText="No" onConfirm={() =>
                 this.deleteOrderById(this.state.selectedOrdersRowKeys)
-              }
-            >
-              Delete order
-            </Button>
+              }>
+              <Button>
+                Delete order
+              </Button>
+            </Popconfirm>
             &nbsp;&nbsp;
             <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
           </Col>
@@ -1171,13 +1173,13 @@ export default class ManualPlanning extends Component {
             ></EditableTable>
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
-            <Button
-              onClick={() =>
+            <Popconfirm title="Are you sure you want to delete the selected trucks？" okText="Yes" cancelText="No" onClick={() =>
                 this.deleteTruckById(this.state.selectedTrucksRowKeys)
-              }
-            >
-              Delete truck
-            </Button>
+              }>
+              <Button>
+                Delete truck
+              </Button>
+            </Popconfirm>
           </Col>
         </Row>
 
