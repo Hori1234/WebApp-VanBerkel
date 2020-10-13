@@ -1,5 +1,7 @@
 from backend.app import db
+from flask import current_app
 from sqlalchemy.sql import func
+from sqlalchemy.event import listens_for
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm.collections import attribute_mapped_collection
@@ -67,6 +69,26 @@ class Order(db.Model):
         self.process_time = process_time
         self.others = kwargs
 
+    @db.validates('inl_terminal')
+    def validate_terminal(self, key, value):
+        terminals = current_app.config['TERMINALS']
+        if value.upper() not in terminals:
+            raise ValueError(
+                f"Terminal base must be one of {', '.join(terminals[:-1])} "
+                f"or {terminals[-1]}"
+            )
+        return value.upper()
+
+    @db.validates('truck_type')
+    def validate_truck_type(self, key, value):
+        trucks = current_app.config['TRUCK_TYPES']
+        if value.lower() not in trucks:
+            raise ValueError(
+                f"Truck type must be one of {', '.join(trucks[:-1])} "
+                f"or {trucks[-1]}"
+            )
+        return value.lower()
+
     @hybrid_property
     def service_time(self):
         return 2*self.driving_time + self.process_time
@@ -74,6 +96,15 @@ class Order(db.Model):
     @hybrid_property
     def latest_dep_time(self):
         return self.delivery_deadline - self.driving_time
+
+
+@listens_for(Order.truck_id, 'set')
+def update_departure_time(target, value, oldvalue, initiator):
+    """
+    Sets Order.departure_time to null if truck_id was set to null.
+    """
+    if value is None and oldvalue is not None:
+        target.departure_time = None
 
 
 class OrderProperties(db.Model):

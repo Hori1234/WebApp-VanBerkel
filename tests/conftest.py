@@ -74,7 +74,7 @@ def setup_users(db):
     db.session.add(user)
     user1 = User(username='Twan van Broekhoven',
                  password='SomethingClever',
-                 role='administrator')
+                 role='view-only')
     db.session.add(user1)
     db.session.commit()
 
@@ -104,6 +104,10 @@ def login_user(client):
     client.post('/api/auth/login',
                 data=json.dumps(data),
                 content_type='application/json')
+
+    yield
+
+    client.post('/api/auth/logout')
 
 
 @pytest.fixture

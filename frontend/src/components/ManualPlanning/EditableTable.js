@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Table, Input, InputNumber, Popconfirm, Form } from "antd";
+import { Table, Input, InputNumber, Popconfirm, Form, message } from "antd";
+import axios from "axios";
 
 const EditableCell = ({
   editing,
@@ -20,12 +21,6 @@ const EditableCell = ({
           style={{
             margin: 0,
           }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
         >
           {inputNode}
         </Form.Item>
@@ -36,19 +31,49 @@ const EditableCell = ({
   );
 };
 
-const EditableTable = props => {
-    const [form] = Form.useForm();
-    const [editingKey, setEditingKey] = useState('');
-    const isEditing = (record) => record.key === editingKey;
+const EditableTable = (props) => {
+  const [form] = Form.useForm();
+  const [editingKey, setEditingKey] = useState("");
+  const isEditing = (record) => record.key === editingKey;
 
   const edit = (record) => {
     form.setFieldsValue({
       bookingNr: "",
-      address: "",
-      customer: "",
+      city: "",
+      inl_terminal: "",
       truckId: "",
       deliveryDeadline: "",
       processTime: "",
+      drivingTime: "",
+      serviceTime: "",
+      closing: "",
+      container: "",
+      date: "",
+      delay: "",
+      gate: "",
+      gate1: "",
+      gross: "",
+      inl_ter_1: "",
+      invoice_reference: "",
+      l_d: "",
+      max_departure: "",
+      pickup: "",
+      seal: "",
+      status: "",
+      ship_comp: "",
+      tariff_type: "",
+      terminal1: "",
+      time: "",
+      time1: "",
+      time2: "",
+      time3: "",
+      truck1: "",
+      truck2: "",
+      truck_used: "",
+      unit_type: "",
+      voyage_inland_carrier: "",
+      weight: "",
+      departure_time: "",
       ...record,
     });
     setEditingKey(record.key);
@@ -56,6 +81,40 @@ const EditableTable = props => {
 
   const cancel = () => {
     setEditingKey("");
+  };
+
+  const editAccount = (order_id, Data) => {
+    console.log(Data);
+    return axios
+      .patch(`/api/orders/${order_id}`, Data)
+      .then((res) => {
+        if (res.status === 200) {
+          message.success("Order updated succesfully");
+        } else {
+          if (res.status === 401) {
+            message.error("Bad request: " + res.message);
+          } else {
+            if (res.status === 404) {
+              message.error("Not Found: " + res.message);
+            } else {
+              if (res.status === 422) {
+                message.error("Unprocessable Entity: " + res.message);
+              } else {
+                if (res.satatus === 503) {
+                  message.warning("Server not Found: " + res.message);
+                } else {
+                  message.error(res.message);
+                }
+              }
+            }
+          }
+        }
+        return true;
+      })
+      .catch((error) => {
+        message.error("An error hsa occured");
+        return false;
+      });
   };
 
   const save = async (key) => {
@@ -69,6 +128,7 @@ const EditableTable = props => {
         newData.splice(index, 1, { ...item, ...row });
         props.setData(newData);
         setEditingKey("");
+        editAccount(key, newData[index]);
       } else {
         newData.push(row);
         props.setData(newData);

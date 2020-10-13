@@ -27,7 +27,8 @@ class Sheets(MethodView):
         try:
             missing_columns = None  # stores the missing columns of a parser
 
-            for Parser in (TruckAvailabilityParser, OrderListParser):
+            for Parser in (TruckAvailabilityParser,  # pragma: no branch
+                           OrderListParser):
                 parser = Parser(file_1)  # instantiate the parser
 
                 # Check if all required columns are in the excel sheet
@@ -51,7 +52,7 @@ class Sheets(MethodView):
                         # If there are less than 5 columns missing, we report
                         # the missing columns.
                         else:
-                            abort(422,
+                            abort(422,  # pragma: no branch
                                   errors={i: "Column is missing."
                                           for i in missing_columns},
                                   status="Unprocessable Entity"
@@ -63,7 +64,7 @@ class Sheets(MethodView):
 
                 # check if the unique columns contain duplicate values
                 if len(parser.check_unique_columns()) != 0:
-                    abort(422,
+                    abort(422,  # pragma: no branch
                           errors={i: "Column contains duplicate values."
                                   for i in parser.check_unique_columns()},
                           status="Unprocessable Entity"
@@ -87,13 +88,11 @@ class Sheets(MethodView):
         except ValidationError as e:
             # The data in the spreadsheet does not have the right type
             # or is missing
-            return abort(
+            abort(
                 422,
                 errors=e.normalized_messages(),
                 status="Unprocessable Entity"
             )
-
-        return '', 200
 
 
 @bp.route('/orders')

@@ -4,7 +4,6 @@ from backend.models.orders import Order, OrderSheet
 from backend.extensions import roles_required
 from .schemas import OrderSchema, OrderTableSchema
 from backend.app import db
-from sqlalchemy.exc import SQLAlchemyError
 from flask_smorest import abort
 
 # TODO: Write a method to do sheet ID or latest in a query class
@@ -40,8 +39,7 @@ class Orders(MethodView):
                     .first_or_404()
             else:
                 # Can't understand which sheet is requested
-                abort(404, message='Order sheet not found')
-                return
+                return abort(404, message='Order sheet not found')
         return order_sheet
 
     @roles_required('planner', 'administrator')
@@ -75,19 +73,24 @@ class Orders(MethodView):
                     .first_or_404()
             else:
                 # Can't understand which sheet is requested
-                abort(404, 'Order sheet not found')
-                return
+                return abort(404, 'Order sheet not found')
 
         # Filter any None value in the request
         order = {k: v for k, v in order.items() if v is not None}
 
         # Create a new order with all parameters
-        new_order = Order(**order)
+        try:
+            new_order = Order(**order)
 
-        # Add the order to the order sheet
-        order_sheet.add_row(new_order)
-        db.session.commit()
-        return new_order
+            # Add the order to the order sheet
+            order_sheet.add_row(new_order)
+            db.session.commit()
+            return new_order
+        except ValueError as e:
+            # Some values of the arguments are not allowed
+            abort(400,
+                  message=str(e),
+                  status="Bad Request")
 
 
 @bp.route('/<int:order_id>')
@@ -104,16 +107,12 @@ class OrderByID(MethodView):
 
         Required roles: planner, administrator
         """
-        try:
-            # try to get the order from the orders table
-            order = Order.query.get_or_404(
-                order_id,
-                description="Order not found")
-            return order
-        except SQLAlchemyError:
-            abort(503,
-                  message='Something went wrong on the server.',
-                  status='Service Unavailable')
+
+        # try to get the order from the orders table
+        order = Order.query.get_or_404(
+            order_id,
+            description="Order not found")
+        return order
 
     @roles_required('planner', 'administrator')
     @bp.response(code=204)
@@ -128,19 +127,15 @@ class OrderByID(MethodView):
 
         Required roles: planner, administrator
         """
-        try:
-            # try to get the order from the orders table
-            order = Order.query.get_or_404(
-                order_id,
-                description='Order not found')
-            # delete the order
-            db.session.delete(order)
-            db.session.commit()
-            return "", 204
-        except SQLAlchemyError:
-            abort(503,
-                  message='Something went wrong on the server.',
-                  status='Service Unavailable')
+
+        # try to get the order from the orders table
+        order = Order.query.get_or_404(
+            order_id,
+            description='Order not found')
+        # delete the order
+        db.session.delete(order)
+        db.session.commit()
+        return "", 204
 
     @roles_required('planner', 'administrator')
     @bp.arguments(OrderSchema(partial=True))
@@ -188,8 +183,3 @@ class OrderByID(MethodView):
                   message=str(e),
                   status="Bad Request"
                   )
-        except SQLAlchemyError:
-            # The database is unavailable
-            abort(503,
-                  message='Something went wrong on the server.',
-                  status='SERVICE UNAVAILABLE')
