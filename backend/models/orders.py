@@ -97,6 +97,12 @@ class Order(db.Model):
     def latest_dep_time(self):
         return self.delivery_deadline - self.driving_time
 
+    @hybrid_property
+    def end_time(self):
+        if self.departure_time:
+            return self.departure_time + self.service_time
+        return None
+
 
 @listens_for(Order.truck_id, 'set')
 def update_departure_time(target, value, oldvalue, initiator):

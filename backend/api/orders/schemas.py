@@ -39,3 +39,32 @@ class OrderTableSchema(ma.SQLAlchemySchema):
 
     class Meta:
         model = OrderSheet
+
+
+class TimeLineSchemaOthers(ma.Schema):
+    container_id = ma.String(default=None, attribute='Container')
+    address = ma.String(default=None, attribute='Address')
+    booking_id = ma.String(default=None, attribute='Booking')
+    client = ma.String(default=None, attribute='Client')
+    order_type = ma.String(default=None, attribute='truck type')
+
+
+class TimeLineSchema(ma.SQLAlchemySchema):
+
+    truck_id = ma.Integer()
+    departure_time = ma.Integer()
+    end_time = ma.Integer()
+    others = ma.Nested(TimeLineSchemaOthers)
+
+    class Meta:
+        model = OrderSheet
+
+    @post_dump
+    def flatten_others(self, obj, many, **kwargs):
+        """
+        Flattens the others field of an order
+        """
+        for k, v in obj['others'].items():
+            obj[k] = v
+        obj.pop('others')
+        return obj

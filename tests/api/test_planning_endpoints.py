@@ -152,6 +152,14 @@ def delete_truck(client, truck_id):
     """
     return client.delete(f'/api/trucks/{truck_id}')
 
+def get_timeline(client, sheet_id):
+    """
+    Gets the parameters to create a timeline of the orders assignment
+    :param client: the client to make the request
+    :param sheet_id: the id of the order sheet to make a timeline of
+    :return:
+    """
+    return client.get(f'/api/orders/timeline/{sheet_id}')
 
 # GET ORDER TESTS
 
@@ -753,3 +761,49 @@ def test_delete_then_post_order(client, db):
     order = orders.Order.query.get(data['order_number'])
     assert order.inl_terminal == 'ITV'
     assert order.process_time == 1
+
+# TEST GET TIMELINE
+
+
+@pytest.mark.parametrize('sheet_id', (2, 'latest'))
+def test_get_timeline(client, db, sheet_id):
+    """
+    Tests the get timeline endpoint with correct sheet id identifiers
+    """
+    # Assign truck to order
+    request = dict(
+        truck_id=1,
+        departure_time=400,
+        Address='testStreet',
+    )
+    request['truck type'] = 'port'
+
+    rv2 = patch_order(client, 135, **request)
+    assert rv2.status_code == 200
+
+    rv = get_timeline(client, sheet_id)
+    assert rv.status_code == 200
+    order = orders.Order.query.get(135)
+
+    data = rv.get_json()
+    expected = dict(
+        address=request['Address'],
+        booking_id='167506G',
+        client=None,
+        container_id='APHU 639108 5',
+        departure_time=request['departure_time'],
+        truck_id=request['truck_id'],
+        order_type=request['truck type'],
+        end_time=order.service_time + request['departure_time']
+    )
+    assert len(data) == 133
+    assert data[1] == expected
+
+
+@pytest.mark.parametrize('sheet_id', ('random', 3))
+def test_get_timeline_wrong_sheet(client, sheet_id):
+    """
+    Tests the get timeline endpoint with wrong sheet id identifiers
+    """
+    rv = get_timeline(client, sheet_id)
+    assert rv.status_code == 404
