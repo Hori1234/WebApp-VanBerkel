@@ -8,7 +8,7 @@ export default class AddOrdersLayout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bookingNumber: "",
+      Booking: "",
       inl: "",
       latestDepTime: "",
       truckType: "",
@@ -60,7 +60,7 @@ export default class AddOrdersLayout extends Component {
   getFormOrderData = () => {
     let temp = [];
     temp.push(
-      Number(this.state.bookingNumber),
+      Number(this.state.Booking),
       this.state.inl,
       Number(this.state.latestDepTime),
       this.state.truckType,
@@ -75,7 +75,7 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeBookingNumber = (event) => {
     this.setState({
-      bookingNumber: event.target.value,
+      Booking: event.target.value,
     });
   };
   handleChangeInl = (event) => {
@@ -341,7 +341,7 @@ export default class AddOrdersLayout extends Component {
               rules={[{ required: true }]}
             >
               <Input
-                value={this.state.bookingNumber}
+                value={this.state.Booking}
                 onChange={this.handleChangeBookingNumber}
               />
             </Form.Item>
