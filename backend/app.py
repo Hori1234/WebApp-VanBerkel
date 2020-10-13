@@ -5,7 +5,6 @@ from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
-import logging
 from backend.config import Config
 from backend.api import register_api, custom_name_resolver as name_resolver
 
@@ -50,11 +49,5 @@ def create_app(config=Config):
     @login.user_loader
     def user_loader(user_id):
         return User.query.get(user_id)
-
-    # setup logging based on environment
-    if app.config['ENV'] == "production":
-        logging.basicConfig(level=logging.INFO)
-    else:
-        logging.basicConfig(level=logging.DEBUG)
 
     return app

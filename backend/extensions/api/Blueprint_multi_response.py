@@ -11,7 +11,6 @@ from flask_smorest.utils import (
 )
 
 from flask_smorest import Blueprint as _Blueprint
-from flask_smorest.compat import MARSHMALLOW_VERSION_MAJOR
 
 
 class Blueprint(_Blueprint):
@@ -111,8 +110,6 @@ class Blueprint(_Blueprint):
                     result_dump = result_raw
                 else:
                     result_dump = schema.dump(result_raw)
-                    if MARSHMALLOW_VERSION_MAJOR < 3:
-                        result_dump = result_dump.data
 
                 # Store result in appcontext (may be used for ETag computation)
                 appcontext = get_appcontext()
@@ -127,14 +124,6 @@ class Blueprint(_Blueprint):
 
                 return resp
 
-            # Document pagination header if needed
-            if getattr(func, '_paginated', False) is True:
-                doc['responses'][code]['headers'] = {
-                    self.PAGINATION_HEADER_FIELD_NAME: (
-                        self.PAGINATION_HEADER_DOC
-                    )
-                }
-
             # Store doc in wrapper function
             # The deepcopy avoids modifying the wrapped function doc
             wrapper._apidoc = deepcopy(getattr(wrapper, '_apidoc', {}))
@@ -144,8 +133,13 @@ class Blueprint(_Blueprint):
             )
 
             # Document default error response if it's not already there
-            wrapper._apidoc['response']['responses']\
-                .setdefault('default', 'DEFAULT_ERROR')
+            if not alt_response:
+                wrapper._apidoc['response']['responses']['default'] = \
+                    'DEFAULT_ERROR'
+
+                # Indicate which code is the success status code
+                # Helps other decorators documenting success response
+                wrapper._apidoc['success_status_code'] = code
 
             return wrapper
 

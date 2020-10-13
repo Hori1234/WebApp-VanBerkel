@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_login import login_user, logout_user, current_user
 from sqlalchemy import func
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import IntegrityError
 from backend.app import db
 from backend.extensions import roles_required
 from flask_smorest import abort
@@ -107,11 +107,6 @@ class Users(MethodView):
             abort(400,
                   message='Username has already been taken.',
                   status='Bad Request')
-        except SQLAlchemyError:
-            # The database is unavailable
-            abort(503,
-                  message='Something went wrong on the server.',
-                  status='SERVICE UNAVAILABLE')
 
 
 @bp.route('/user/<int:user_id>')
@@ -159,11 +154,6 @@ class UserByID(MethodView):
             abort(400,
                   message='Username has already been taken.',
                   status='Bad Request')
-        except SQLAlchemyError:
-            # The database is unavailable
-            abort(503,
-                  message='Something went wrong on the server.',
-                  status='SERVICE UNAVAILABLE')
 
     @roles_required("administrator")
     @bp.response(code=204)
@@ -178,26 +168,20 @@ class UserByID(MethodView):
         status code 400 is returned.
         Required roles: Administrator
         """
-        try:
-            # Find the user with user_id or respond with a 404
-            user = User.query.get_or_404(user_id,
-                                         description='User not found.')
+        # Find the user with user_id or respond with a 404
+        user = User.query.get_or_404(user_id,
+                                     description='User not found.')
 
-            # The user cannot delete their own account
-            if user == current_user:
-                abort(400,
-                      message='You cannot delete your own account.',
-                      status='Bad Request')
+        # The user cannot delete their own account
+        if user == current_user:
+            abort(400,
+                  message='You cannot delete your own account.',
+                  status='Bad Request')
 
-            # Delete the user
-            db.session.delete(user)
-            db.session.commit()
-            return "", 204
-        except SQLAlchemyError:
-            # The database is unavailable
-            abort(503,
-                  message='Something went wrong on the server.',
-                  status='Service Unavailable')
+        # Delete the user
+        db.session.delete(user)
+        db.session.commit()
+        return "", 204
 
 
 @bp.route('/users')
