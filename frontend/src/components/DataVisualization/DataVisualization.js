@@ -28,11 +28,17 @@ export function downloadFile() {
 // var endTimesDummy = ['10:30', '12:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00'];
 // var destinationsDummy = ['Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven'];
 
-var truckIDsDummy = ['23', '23', '23', '234', '235'];
-var orderIDsDummy = ['124124', '124124', '124124', '236234592', '234623466'];
-var startTimesDummy = ['8:00', '10:30', '16:00', '12:00', '16:00'];
-var endTimesDummy = ['10:30', '12:00', '18:00', '18:00', '18:00', '18:00'];
-var destinationsDummy = ['Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven'];
+var truckIDsDummy = ["23", "23", "23", "234", "235"];
+var orderIDsDummy = ["124124", "124124", "124124", "236234592", "234623466"];
+var startTimesDummy = ["8:00", "10:30", "16:00", "12:00", "16:00"];
+var endTimesDummy = ["10:30", "12:00", "18:00", "18:00", "18:00", "18:00"];
+var destinationsDummy = [
+  "Eindhoven",
+  "Eindhoven",
+  "Eindhoven",
+  "Eindhoven",
+  "Eindhoven",
+];
 
 // creates the tooltip of an order
 export function createCustomHTMLTooltip(
@@ -103,16 +109,14 @@ export function createSingleDataInput(
 }
 
 //colour for a row available
-export function coloursAvailable(){
-  let blue = ["DodgerBlue","DeepSkyBlue"]
-  let red = ["FireBrick","DarkRed"]
-  let colours = [blue,red]
-  return colours
+export function coloursAvailable() {
+  let blue = ["DodgerBlue", "DeepSkyBlue"];
+  let red = ["FireBrick", "DarkRed"];
+  let colours = [blue, red];
+  return colours;
 }
 
-export function extractColours(){
-
-}
+export function extractColours() {}
 
 // create a list with all data points for the timeline
 export function createAllDataInput(
@@ -146,6 +150,58 @@ export function createAllDataInput(
 }
 
 export default class DataVisualization extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      truckOrderDetails: [],
+    };
+  }
+
+  componentDidMount() {
+    this.getTruckList("latest");
+  }
+
+  getTruckList = (value) => {
+    return axios
+      .get(`/api/trucks/sheet/${value}`)
+      .then((res) => {
+        var outarray = [];
+        for (var i = 1; i < res.data.trucks.length; i++) {
+          var temp = {
+            key: res.data.trucks[i]["s_number"],
+            truck_id: res.data.trucks[i]["truck_id"],
+            driver: res.data.trucks[i]["Driver"],
+            availability: res.data.trucks[i]["availability"],
+            starting: res.data.trucks[i]["starting_time"],
+            truck_type: res.data.trucks[i]["truck_type"],
+            terminal: res.data.trucks[i]["terminal"],
+            hierarchy: res.data.trucks[i]["hierarchy"],
+            use_cost: res.data.trucks[i]["use_cost"],
+            date: res.data.trucks[i]["date"],
+            owner: res.data.trucks[i]["Owner"],
+            remarks: res.data.trucks[i]["Remarks"],
+            business_type: res.data.trucks[i]["business_type"],
+          };
+          outarray.push(temp);
+        }
+        console.log(outarray);
+        this.setState((state) => ({
+          ...state,
+          truckOrderDetails: outarray,
+          status: "success",
+        }));
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+
   render() {
     return (
       <Layout
@@ -173,7 +229,7 @@ export default class DataVisualization extends Component {
               colorByRowLabel: false,
               allowHtml: true,
               avoidOverlappingGridLines: false,
-            }
+            },
           }}
           rootProps={{ "data-testid": "5" }}
         />

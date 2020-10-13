@@ -4,7 +4,6 @@ import {
   Button,
   Row,
   Col,
-  Table,
   Select,
   Menu,
   Checkbox,
@@ -21,141 +20,6 @@ import "./ManualPlanning.css";
 
 const { Option } = Select;
 
-var vPage_orders = 1;
-var vPage_trucks = 1;
-var vPage_size = 10;
-
-const dataITV = [
-  {
-    key: "1",
-    bookingNr: "923928012",
-    address: "Eindhoven",
-    customer: "ITV",
-    truckId: "",
-  },
-  {
-    key: "2",
-    bookingNr: "12392801",
-    address: "Amsterdam",
-    customer: "ITV",
-    truckId: "",
-  },
-  {
-    key: "3",
-    bookingNr: "23",
-    address: "Utrecht",
-    customer: "ITV",
-    truckId: "",
-  },
-  {
-    key: "4",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ITV",
-    truckId: "",
-  },
-  {
-    key: "5",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ITV",
-    truckId: "",
-  },
-  {
-    key: "6",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ITV",
-    truckId: "",
-  },
-  {
-    key: "7",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ITV",
-    truckId: "",
-  },
-  {
-    key: "8",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
-  {
-    key: "9",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
-];
-const dataKAT = [
-  {
-    key: "1",
-    bookingNr: "923928012",
-    address: "Eindhoven",
-    customer: "KAT",
-    truckId: "",
-  },
-  {
-    key: "2",
-    bookingNr: "12392801",
-    address: "Amsterdam",
-    customer: "KAT",
-    truckId: "",
-  },
-  {
-    key: "3",
-    bookingNr: "23",
-    address: "Utrecht",
-    customer: "KAT",
-    truckId: "",
-  },
-  {
-    key: "4",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "KAT",
-    truckId: "",
-  },
-  {
-    key: "5",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "KAT",
-    truckId: "",
-  },
-  {
-    key: "6",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "KAT",
-    truckId: "",
-  },
-  {
-    key: "7",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "KAT",
-    truckId: "",
-  },
-  {
-    key: "8",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
-  {
-    key: "9",
-    bookingNr: "23928012",
-    address: "Eindhoven",
-    customer: "ABC",
-    truckId: "",
-  },
-];
-
 export default class ManualPlanning extends Component {
   constructor(props) {
     super(props);
@@ -167,8 +31,8 @@ export default class ManualPlanning extends Component {
       columns: [
         {
           title: "Booking Nr",
-          dataIndex: "bookingNr",
-          sorter: (a, b) => a.bookingNr - b.bookingNr,
+          dataIndex: "Booking",
+          sorter: (a, b) => a.Booking - b.Booking,
           width: 150,
           editable: true,
         },
@@ -854,7 +718,7 @@ export default class ManualPlanning extends Component {
         for (var i = 1; i < res.data.orders.length; i++) {
           var temp = {
             key: res.data.orders[i]["order_number"],
-            bookingNr: res.data.orders[i]["Booking"],
+            Booking: res.data.orders[i]["Booking"],
             city: res.data.orders[i]["City"],
             inl_terminal: res.data.orders[i]["inl_terminal"],
             truckId: res.data.orders[i]["Truck (1)"],

@@ -128,7 +128,7 @@ const EditableTable = (props) => {
         newData.splice(index, 1, { ...item, ...row });
         props.setData(newData);
         setEditingKey("");
-        editAccount(key, item);
+        editAccount(key, newData[index]);
       } else {
         newData.push(row);
         props.setData(newData);
