@@ -10,7 +10,7 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
 
     latest_dep_time = ma.Integer()
     service_time = ma.Integer()
-    truck_id = ma.Integer()
+    truck_id = ma.Integer(allow_none=True)
     others = ma.Dict(dump_only=True)
 
     class Meta:

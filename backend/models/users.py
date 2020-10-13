@@ -56,19 +56,7 @@ class User(UserMixin, db.Model):
         :rtype: bool
         """
         encoded = b64encode(sha256(password.encode()).digest())
-        return bcrypt.checkpw(encoded, self._password)
-
-    @property
-    def is_view_only(self):
-        return self.role == 'view-only'
-
-    @property
-    def is_planner(self):
-        return self.role == 'planner'
-
-    @property
-    def is_administrator(self):
-        return self.role == 'administrator'
+        return bcrypt.checkpw(encoded, self.password)
 
 
 db.Index('ix_user_username', func.lower(User.username), unique=True)

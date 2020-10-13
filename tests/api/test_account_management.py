@@ -62,6 +62,9 @@ def get_user_list(client, page, per_page):
 
 
 def test_create_account(db, client):
+    """
+    Tests the intended use of the create account endpoint.
+    """
     rv = add_user(client,
                   username="Bernard",
                   password="wachtzin",
@@ -73,13 +76,19 @@ def test_create_account(db, client):
     assert data['role'] == "view-only"
     assert 'id' in data
 
-    # clean up user after the test
     user = User.query.get(3)
+    # make sure the user password is encrypted
+    assert user.password.decode('utf-8') != 'wachtzin'
+
+    # clean up user after the test
     db.session.delete(user)
     db.session.commit()
 
 
 def test_create_incomplete_account(client):
+    """
+    Tests the create account endpoint with incomplete information.
+    """
     rv = add_user(client,
                   username="Bernhardt",
                   role="planner")
@@ -89,6 +98,10 @@ def test_create_incomplete_account(client):
 
 
 def test_create_wrong_role(client):
+    """
+    Tests create account endpoint with a role that is not one of 'view-only',
+    'planner' or 'administrator'.
+    """
     rv = add_user(client,
                   username="morris",
                   password="Teststststs",
@@ -99,6 +112,10 @@ def test_create_wrong_role(client):
 
 
 def test_create_duplicate_user(client):
+    """
+    Tests create account endpoint with a user that already exists, with the
+    same username.
+    """
     rv = add_user(client,
                   username="Twan van Broekhoven",
                   password="irrelevant",
@@ -109,6 +126,9 @@ def test_create_duplicate_user(client):
 
 
 def test_change_information(client):
+    """
+    Tests the intended use of the edit account endpoint.
+    """
     rv = change_user_details(client, 2,
                              username="Broek van Twanhoven",
                              password="somethingdumb",
@@ -122,6 +142,10 @@ def test_change_information(client):
 
 
 def test_change_information_duplicate(client):
+    """
+    Tests the edit account endpoint but the name is the same as the one of the
+    other users.
+    """
     rv = change_user_details(client, 2,
                              username="Midas Bergveen")
 
@@ -129,6 +153,10 @@ def test_change_information_duplicate(client):
 
 
 def test_change_information_bad_role(client):
+    """
+    Tests the edit account endpoint with a role that is not one of 'view-only',
+    'planner' or 'administrator'.
+    """
     rv = change_user_details(client, 2,
                              role="the-worst")
 
@@ -136,6 +164,10 @@ def test_change_information_bad_role(client):
 
 
 def test_change_own_information(client):
+    """
+    Tests the edit account endpoint when the user tries to change his own
+    information or role.
+    """
     rv = change_user_details(client, 1,
                              username="Morris Roozen",
                              role="view-only")
@@ -144,6 +176,9 @@ def test_change_own_information(client):
 
 
 def test_change_non_existent_account(client):
+    """
+    Tests the edit account endpoint for changing an account that does not exist.
+    """
     rv = change_user_details(client, 300,
                              username="zeus the mighty")
 
@@ -151,6 +186,9 @@ def test_change_non_existent_account(client):
 
 
 def test_get_user_list(client):
+    """
+    Tests the intended use of the get user list endpoint.
+    """
     rv = get_user_list(client, 1, 10)
     data = rv.get_json()
 
@@ -160,12 +198,19 @@ def test_get_user_list(client):
 
 
 def test_get_too_many_users(client):
+    """
+    Tests the get user list endpoint for too many users, this many users do not
+    exist.
+    """
     rv = get_user_list(client, 2, 10)
 
     assert rv.status_code == 404
 
 
 def test_delete_account(db, client):
+    """
+    Tests the intended use of the delete account endpoint.
+    """
     rv = remove_user(client, 2)
 
     assert rv.status_code == 204
@@ -179,12 +224,19 @@ def test_delete_account(db, client):
 
 
 def test_delete_nonexistent_account(client):
+    """
+    Tests the delete account endpoint but for an account that does not exist.
+    """
     rv = remove_user(client, 300)
 
     assert rv.status_code == 404
 
 
 def test_delete_own_account(client):
+    """
+    Tests the delete account endpoint but for the account of the user trying
+    to delete the account.
+    """
     rv = remove_user(client, 1)
 
     assert rv.status_code == 400

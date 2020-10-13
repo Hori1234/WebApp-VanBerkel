@@ -1,9 +1,10 @@
-from backend.app import db
-from sqlalchemy.sql import func
 import datetime
+from flask import current_app
+from sqlalchemy.sql import func
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm.collections import attribute_mapped_collection
+from backend.app import db
 
 
 class TruckSheet(db.Model):
@@ -72,6 +73,26 @@ class Truck(db.Model):
         self.date = date
         self.starting_time = starting_time
         self.others = kwargs
+
+    @db.validates('terminal')
+    def validate_terminal(self, key, value):
+        terminals = current_app.config['TERMINALS']
+        if value.upper() not in terminals:
+            raise ValueError(
+                f"Terminal base must be one of {', '.join(terminals[:-1])} "
+                f"or {terminals[-1]}"
+            )
+        return value.upper()
+
+    @db.validates('truck_type')
+    def validate_truck_type(self, key, value):
+        trucks = current_app.config['TRUCK_TYPES']
+        if value.lower() not in trucks:
+            raise ValueError(
+                f"Truck type must be one of {', '.join(trucks[:-1])} "
+                f"or {trucks[-1]}"
+            )
+        return value.lower()
 
 
 class TruckProperties(db.Model):
