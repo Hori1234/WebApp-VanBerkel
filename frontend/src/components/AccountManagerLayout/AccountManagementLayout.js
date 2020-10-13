@@ -151,30 +151,6 @@ export default class AccountManagementLayout extends Component {
               </Button>
             </Layout>
           </Layout>
-          <Layout style={{ backgroundColor: "white", alignItems: "center" }}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Card style={{ width: "20vh" }}>
-                  <Statistic
-                    title="Active Users"
-                    value={this.state.data.length}
-                  />
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card style={{ marginLeft: 40, width: "20vh" }}>
-                  <Statistic
-                    title="Active"
-                    value={this.state.data.length / 100}
-                    precision={2}
-                    valueStyle={{ color: "#3f8600" }}
-                    prefix={<ArrowUpOutlined />}
-                    suffix="%"
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </Layout>
         </Layout>
         <Divider />
         <Layout
@@ -206,7 +182,11 @@ export default class AccountManagementLayout extends Component {
         <Modal
           title="Edit Account"
           style={{
-            width: "100vh",
+            position: "absolute",
+            top: "25%",
+            bottom: "25%",
+            left: "25%",
+            right: "25%",
             display: "flex",
             alignItems: "center",
             marginLeft: 280,

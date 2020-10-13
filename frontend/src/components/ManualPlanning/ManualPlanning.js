@@ -1115,7 +1115,7 @@ export default class ManualPlanning extends Component {
           </Col>
           <Col span={3} offset={13}>
             <Button onClick={() => window.open("/data")}>
-              Data visualization
+              Data visualisation
             </Button>
           </Col>
         </Row>

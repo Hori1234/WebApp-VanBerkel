@@ -25,8 +25,6 @@ export default class DeleteAccountConfirmationComponent extends Component {
         style={{
           alignItems: "center",
           display: "flex",
-          width: "30vh",
-          height: "2vh",
           backgroundColor: "white",
         }}
       >

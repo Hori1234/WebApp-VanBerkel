@@ -184,6 +184,7 @@ function NavigationLayout() {
             <Header style={{ backgroundColor: "white"}}>
               <Image
               src={require("../Images/van-berkel-logo-final.png")}
+              preview={false}
               />
             </Header>
             <Layout
