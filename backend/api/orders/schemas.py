@@ -8,7 +8,7 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
     Serializes the order table to JSON
     """
 
-    latest_dep_time = ma.Integer()
+    latest_dep_time = ma.Time()
     service_time = ma.Integer()
     truck_id = ma.Integer(allow_none=True)
     others = ma.Dict(dump_only=True)
@@ -52,8 +52,8 @@ class TimeLineSchemaOthers(ma.Schema):
 class TimeLineSchema(ma.SQLAlchemySchema):
 
     truck_id = ma.Integer()
-    departure_time = ma.Integer()
-    end_time = ma.Integer()
+    departure_time = ma.Time()
+    end_time = ma.Time()
     others = ma.Nested(TimeLineSchemaOthers)
 
     class Meta:

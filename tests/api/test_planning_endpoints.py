@@ -356,20 +356,20 @@ def test_patch_order_set_truck_id(client, db):
     time.
     """
     request = dict(
-        truck_id=1,
-        departure_time=600
+        truck_id=14,
+        departure_time='12:30'
     )
     rv = patch_order(client, 1, **request)
 
     # truck has been added
     assert rv.status_code == 200
-    assert rv.get_json()['truck_id'] == 1
-    assert rv.get_json()['departure_time'] == 600
+    assert rv.get_json()['truck_id'] == 14
+    assert rv.get_json()['departure_time'] == '12:30:00'
 
     order = orders.Order.query.get(1)
-    truck = trucks.Truck.query.get(1)
+    truck = trucks.Truck.query.get(14)
     # also been changed in the database
-    assert order.departure_time == 600
+    assert order.departure_time.strftime('%H:%M') == '12:30'
     assert order.truck == truck
 
     request2 = dict(
@@ -383,6 +383,48 @@ def test_patch_order_set_truck_id(client, db):
     assert rv2.get_json()['departure_time'] is None
     assert order.truck is None
     assert order.departure_time is None
+
+
+@pytest.mark.parametrize('departure_time', ('2:00', '23:59'))
+def test_patch_order_departure_time_invalid(client, departure_time):
+    """
+    Tests if an error response is given after setting the departure time
+    later than the latest departure time of the order or earlier than the
+    starting time of the assigned truck.
+    """
+    request = dict(
+        truck_id=14,
+        departure_time=departure_time,
+    )
+
+    rv2 = patch_order(client, 1, **request)
+
+    assert rv2.status_code == 400
+    assert 'message' in rv2.get_json()
+    message = rv2.get_json()['message']
+    assert departure_time in message
+    if departure_time == '2:00':
+        assert 'starting time' in message
+    else:
+        assert 'latest departure time' in message
+
+
+def test_patch_order_invalid_truck(client):
+    """
+    Tests if an error response is given after assigning a truck to an order
+    it cannot carry out.
+    """
+    request = dict(
+        truck_id=1,
+        departure_time='8:00'
+    )
+
+    rv2 = patch_order(client, 1, **request)
+
+    assert rv2.status_code == 400
+    assert 'message' in rv2.get_json()
+    assert 'terminal' in rv2.get_json()['message']
+    assert 'port' in rv2.get_json()['message']
 
 # PATCH TRUCK TESTS
 
@@ -452,7 +494,15 @@ def test_patch_truck_with_orders(client, db):
     order.
     """
     request = dict(
-        truck_type='port', orders=[1, 2]
+        truck_type='port',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=24,
+            departure_time='10:00'
+        )
+        ]
     )
     rv = patch_truck(client, 1, **request)
 
@@ -460,6 +510,8 @@ def test_patch_truck_with_orders(client, db):
 
     truck = trucks.Truck.query.get(1)
     assert truck.truck_type == 'port'
+    assert len(truck.orders) == 2
+    assert truck.orders[0].order_number == 1
 
 
 def test_patch_truck_with_wrong_orders(client, db):
@@ -467,7 +519,15 @@ def test_patch_truck_with_wrong_orders(client, db):
     Tests the patch truck endpoint with a wrongly associated order.
     """
     request = dict(
-        truck_type='port', orders=[1, 200000]
+        truck_type='port',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=1000,
+            departure_time='10:00'
+        )
+        ]
     )
     rv = patch_truck(client, 1, **request)
 
@@ -483,7 +543,7 @@ def test_post_order(client, db):
     """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2
     )
     rv = post_order(client, 1, **request)
@@ -499,7 +559,7 @@ def test_post_order_invalid_truck_type(client, db):
     """
     request = dict(
         inl_terminal='KAT', latest_dep_time=1000,
-        truck_type='TEST', hierarchy=3, delivery_deadline=1300,
+        truck_type='TEST', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=21
     )
     rv = post_order(client, 1, **request)
@@ -512,7 +572,7 @@ def test_post_order_invalid_terminal(client, db):
     """
     request = dict(
         inl_terminal='TEST', latest_dep_time=1000,
-        truck_type='Port', hierarchy=3, delivery_deadline=1300,
+        truck_type='Port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=21
     )
     rv = post_order(client, 1, **request)
@@ -525,7 +585,7 @@ def test_post_order_latest(client, db):
     """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2
     )
     rv = post_order(client, 'latest', **request)
@@ -542,7 +602,7 @@ def test_post_order_not_latest(client, db):
     """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2
     )
     rv = post_order(client, 'same dude', **request)
@@ -638,9 +698,17 @@ def test_post_truck_with_orders(client, db):
     """
     request = dict(
         truck_id='45-TBD-1', availability=True,
-        truck_type='terminal', business_type='ITV', terminal='ITV',
+        truck_type='port', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30', orders=[1, 2, 3]
+        starting_time='10:00',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=24,
+            departure_time='10:00'
+        )
+        ]
     )
     rv = post_truck(client, 1, **request)
 
@@ -656,7 +724,16 @@ def test_post_truck_with_wrong_orders(client, db):
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30', orders=[1, 2, 30000]
+        starting_time='15:30',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=10000,
+            departure_time='10:00'
+        )
+        ]
+
     )
     rv = post_truck(client, 1, **request)
 
@@ -726,9 +803,17 @@ def test_delete_then_post_truck(client, db):
     """
     request = dict(
         truck_id='45-TBD-1', availability=True,
-        truck_type='terminal', business_type='ITV', terminal='ITV',
+        truck_type='port', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30', orders=[1, 2, 3]
+        starting_time='10:00',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=24,
+            departure_time='10:00'
+        )
+        ]
     )
     rv = delete_truck(client, 1)
     assert rv.status_code == 204
@@ -748,7 +833,7 @@ def test_delete_then_post_order(client, db):
     """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2
     )
     rv = delete_order(client, 2)
@@ -772,32 +857,31 @@ def test_get_timeline(client, db, sheet_id):
     """
     # Assign truck to order
     request = dict(
-        truck_id=1,
-        departure_time=400,
-        Address='testStreet',
+        truck_id=14,
+        departure_time='08:00:00',
+        Address='testStreet'
     )
     request['truck type'] = 'port'
 
-    rv2 = patch_order(client, 135, **request)
+    rv2 = patch_order(client, 141, **request)
     assert rv2.status_code == 200
 
     rv = get_timeline(client, sheet_id)
     assert rv.status_code == 200
-    order = orders.Order.query.get(135)
 
     data = rv.get_json()
     expected = dict(
         address=request['Address'],
-        booking_id='167506G',
+        booking_id='167617B',
         client=None,
-        container_id='APHU 639108 5',
+        container_id='SEGU 628854 7',
         departure_time=request['departure_time'],
         truck_id=request['truck_id'],
         order_type=request['truck type'],
-        end_time=order.service_time + request['departure_time']
+        end_time="13:00:00"
     )
     assert len(data) == 133
-    assert data[1] == expected
+    assert data[7] == expected
 
 
 @pytest.mark.parametrize('sheet_id', ('random', 3))

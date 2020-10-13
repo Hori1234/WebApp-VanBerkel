@@ -93,7 +93,7 @@ class OrderListSchema(Schema):
     inl_terminal = String(data_key='Inl* ter*', required=True)
     truck_type = String(data_key='truck type', required=True)
     hierarchy = Float(data_key='Hierarchy', required=True)
-    delivery_deadline = Integer(data_key='Delivery Deadline', required=True)
+    delivery_deadline = Time(data_key='Delivery Deadline', required=True)
     driving_time = Integer(data_key='driving time', required=True)
     process_time = Integer(data_key='proces time', required=True)
 

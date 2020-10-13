@@ -28,6 +28,7 @@ def test_date_validation(input_value):
 
 
 @pytest.mark.parametrize('input_value', (time(hour=4, minute=20),
+                                         260,
                                          "4:20"))
 def test_time_validation(input_value):
     data = dict(
