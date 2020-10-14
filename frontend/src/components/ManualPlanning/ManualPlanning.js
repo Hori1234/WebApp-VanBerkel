@@ -736,7 +736,6 @@ export default class ManualPlanning extends Component {
         var outarray = [];
         for (var i = 1; i < res.data.orders.length; i++) {
           var temp = {
-            key: res.data.orders[i]["order_number"],
             "Container": res.data.orders[i]["Container"],
             "Unit type": res.data.orders[i]["Unit type"],
             "Booking": res.data.orders[i]["Booking"],
@@ -1284,21 +1283,6 @@ export default class ManualPlanning extends Component {
                   },
                 })}
               ></EditableTableOrder>
-              <Col span={12}>
-                <br />
-                <Button onClick={this.showOrdersModal}>Add order</Button>
-                &nbsp;&nbsp;
-                <Popconfirm
-                  title="Are you sure you want to delete the selected trucks？"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={() =>
-                    this.deleteOrderById(this.state.selectedOrdersRowKeys)
-                  }
-                >
-                  <Button>Delete Order</Button>
-                </Popconfirm>
-              </Col>
             </Layout>
           )}
         </Modal>
@@ -1323,20 +1307,6 @@ export default class ManualPlanning extends Component {
                   },
                 })}
               ></EditableTableTruck>
-              <Col span={12}>
-                <br />
-                <Button onClick={this.ShowTruckModal}>Add truck</Button>
-                <Popconfirm
-                  title="Are you sure you want to delete the selected trucks？"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={() =>
-                    this.deleteTruckById(this.state.selectedTrucksRowKeys)
-                  }
-                >
-                  <Button>Delete truck</Button>
-                </Popconfirm>
-              </Col>
             </Layout>
           )}
         </Modal>
