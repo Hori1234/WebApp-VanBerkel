@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SignInComponent should render the login page correctly 1`] = `
+exports[`SignInComponent shall render the login page correctly 1`] = `
 <Layout
   style={
     Object {
@@ -69,7 +69,7 @@ exports[`SignInComponent should render the login page correctly 1`] = `
         }
       }
     >
-      Fil the form in order to login
+      Fill the form to log in
     </Title>
   </Layout>
   <Layout

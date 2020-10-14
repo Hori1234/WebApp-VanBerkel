@@ -1,45 +1,63 @@
 import React, { Component } from "react";
-import { Form, Input, Typography, Row, Col } from "antd";
+import { Form, Input, Row, Col } from "antd";
 import "antd/dist/antd.css";
 
-const { Text } = Typography;
+//const { Text } = Typography;
 
 export default class AddTruckLayout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      truck_id: "",
-      truck_snumber: "",
-      availability: "",
-      truck_type: "",
-      terminal: "",
-      hierarchy: "",
-      use_cost: "",
-      starting_time: "",
-      date: "",
-      owner: "",
-      driver: "",
-      remarks: "",
-      business_type: "",
+      "truck_id": "",
+      "s_number": "",
+      "availability": "",
+      "truck_type": "",
+      "business_type": "",
+      "Driver": "",
+      "terminal": "",
+      "Owner": "",
+      "hierarchy": "",
+      "use_cost": "",
+      "date": "",
+      "starting_time": "",
+      "Remarks": ""   
     };
+  }
+  createTruckData = () => {
+    let data = {
+      "truck_id": this.state.truck_id,
+      "s_number": this.state.s_number,
+      "availability": this.state.availability,
+      "truck_type": this.state.truck_type,
+      "business_type": this.state.business_type,
+      "Driver": this.state.Driver,
+      "terminal": this.state.terminal,
+      "Owner": this.state.Owner,
+      "hierarchy": this.state.hierarchy,
+      "use_cost": this.state.use_cost,
+      "date": toString(this.state.date),
+      "starting_time": this.state.starting_time,
+      "Remarks": this.state.Remarks  
+    }
+    return data
   }
 
   getFormTruckData = () => {
     let temp = [];
     temp.push(
       this.state.truck_id,
-      this.state.truck_snumber,
       Boolean(this.state.availability),
       this.state.truck_type,
       this.state.terminal,
       Number(this.state.hierarchy),
       Number(this.state.use_cost),
-      this.state.starting_time,
+      this.state.starting,
       this.state.date,
       this.state.owner,
-      this.state.driver,
-      this.state.remarks,
-      this.state.business_type
+      this.state.Driver,
+      this.state.Remarks,
+      this.state.business_type,
+      this.state.s_number,
     );
     console.log(temp);
     return temp;
@@ -47,67 +65,67 @@ export default class AddTruckLayout extends Component {
 
   handleChangeTruckId = (event) => {
     this.setState({
-      truck_id: event.target.value,
+      "truck_id": event.target.value,
     });
   };
   handleChangeTruckSNumber = (event) => {
     this.setState({
-      truck_snumber: event.target.value,
+      "s_number": event.target.value,
     });
   };
   handleChangeAvailability = (event) => {
     this.setState({
-      availability: event.target.value,
+      "availability": event.target.value,
     });
   };
   handleChangeTruckType = (event) => {
     this.setState({
-      truck_type: event.target.value,
+      "truck_type": event.target.value,
     });
   };
   handleChangeHierarchy = (event) => {
     this.setState({
-      hierarchy: event.target.value,
+      "hierarchy": event.target.value,
     });
   };
   handleChangeTerminal = (event) => {
     this.setState({
-      terminal: event.target.value,
+      "terminal": event.target.value,
     });
   };
   handleChangeUseCost = (event) => {
     this.setState({
-      use_cost: event.target.value,
+      "use_cost": event.target.value,
     });
   };
   handleChangeStartingTime = (event) => {
     this.setState({
-      starting_time: event.target.value,
+      "starting_time": event.target.value,
     });
   };
   handleChangeDate = (event) => {
     this.setState({
-      date: event.target.value,
+      "date": event.target.value,
     });
   };
   handleChangeOwner = (event) => {
     this.setState({
-      owner: event.target.value,
+      "Owner": event.target.value,
     });
   };
   handleChangeDriver = (event) => {
     this.setState({
-      driver: event.target.value,
+      "Driver": event.target.value,
     });
   };
   handleChangeRemarks = (event) => {
     this.setState({
-      remarks: event.target.value,
+      "Remarks": event.target.value,
     });
   };
   handleChangeBusiness_type = (event) => {
     this.setState({
-      business_type: event.target.value,
+      "business_type": event.target.value,
     });
   };
 
@@ -127,16 +145,7 @@ export default class AddTruckLayout extends Component {
                 onChange={this.handleChangeTruckId}
               />
             </Form.Item>
-            <Form.Item
-              name={"truckSNo"}
-              label={"Truck S No:"}
-              rules={[{ required: true }]}
-            >
-              <Input
-                value={this.state.truck_snumber}
-                onChange={this.handleChangeTruckSNumber}
-              />
-            </Form.Item>
+
 
             <Form.Item
               name={"Availability"}
@@ -216,13 +225,13 @@ export default class AddTruckLayout extends Component {
             </Form.Item>
             <Form.Item name={"Driver"} label={"Driver:"}>
               <Input
-                value={this.state.driver}
+                value={this.state.Driver}
                 onChange={this.handleChangeDriver}
               />
             </Form.Item>
             <Form.Item name={"Remarks"} label={"Remarks:"}>
               <Input
-                value={this.state.remarks}
+                value={this.state.Remarks}
                 onChange={this.handleChangeRemarks}
               />
             </Form.Item>
@@ -230,6 +239,15 @@ export default class AddTruckLayout extends Component {
               <Input
                 value={this.state.business_type}
                 onChange={this.handleChangeBusiness_type}
+              />
+            </Form.Item>
+            <Form.Item
+              name={"truckSNo"}
+              label={"Truck S No:"}
+            >
+              <Input
+                value={this.state.s_number}
+                onChange={this.handleChangeTruckSNumber}
               />
             </Form.Item>
           </Col>

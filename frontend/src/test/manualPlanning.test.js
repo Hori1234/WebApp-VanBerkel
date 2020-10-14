@@ -6,7 +6,7 @@ const password = 'test';
 
 describe('React App', () => {
 
-  
+    /*
     it('shall succesfully magnify the orders', async () => {
 
         const browser = await puppeteer.launch({ 
@@ -34,16 +34,16 @@ describe('React App', () => {
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-12 > button:nth-child(5)')
         await page.waitFor(1500);
 
-        const elementStyle = await page.$eval('body > div:nth-child(7) > div > div.ant-modal-wrap', element => element);
+        const elementStyle = await page.$eval('#rcDialogTitle5', element => element);
 
         //expect(page.waitForSelector('body > div:nth-child(7) > div > div.ant-modal-wrap').style.toEqual(''));
         console.log(elementStyle);
 
         await browser.close();
 
-      }, 120000);
+      }, 120000);*/
 
-      
+      /*
       it('shall succesfully edit an order', async () => {
 
         const browser = await puppeteer.launch({ 
@@ -69,7 +69,7 @@ describe('React App', () => {
     
 
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-12 > div > div > div > div > div > div.ant-table-body > table > tbody > tr:nth-child(2) > td.ant-table-cell.ant-table-cell-fix-right.ant-table-cell-fix-right-first > a')
-        await page.waitFor(500);
+        await page.waitFor(1500);
 
         await page.type('#city', 'test');
         // await page.type('#bookingNr', 'test');
@@ -84,9 +84,9 @@ describe('React App', () => {
 
         await browser.close();
 
-      }, 120000);
+      }, 120000);*/
 
-      
+      /*
       it('shall succesfully add an entry in orders table', async () => {
 
         const browser = await puppeteer.launch({ 
@@ -133,7 +133,7 @@ describe('React App', () => {
         
         await browser.close();
 
-      }, 120000);
+      }, 120000);*/
 
       
       it('shall succesfully add an entry in truck table', async () => {
@@ -185,7 +185,7 @@ describe('React App', () => {
       }, 120000);
 
 
-
+      /*
       it('shall succesfully delete an item from order list table', async () => {
 
         const browser = await puppeteer.launch({ 
@@ -259,6 +259,6 @@ describe('React App', () => {
 
         await browser.close();
 
-      }, 120000);
+      }, 120000);*/
 
     });

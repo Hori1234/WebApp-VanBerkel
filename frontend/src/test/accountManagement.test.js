@@ -5,7 +5,7 @@ const password = 'test';
 
 describe('React App', () => {
 
-  
+    
     it('shall succesfully create an account', async () => {
 
         const browser = await puppeteer.launch({ 
@@ -40,7 +40,6 @@ describe('React App', () => {
         
         await page.waitFor(1000);
         await page.click('body > div:nth-child(9) > div > div > div > div.rc-virtual-list > div > div > div > div.ant-select-item.ant-select-item-option:nth-child(1) > div')
-
         await page.waitFor(2000);
 
         await page.click('#nest-messages > div:nth-child(5) > div > div > div > button');
@@ -51,7 +50,7 @@ describe('React App', () => {
         expect(ErrorMessage).toEqual(`Account created !`);
         await browser.close();
       }, 120000);
-
+      
 
       it('shall succesfully display error message on empty fields an account creation', async () => {
 
@@ -79,6 +78,7 @@ describe('React App', () => {
         
         await page.click('.ant-btn.ant-btn-primary');
 
+        await page.waitFor(1000);
 
         await page.click('#nest-messages > div:nth-child(5) > div > div > div > button');
 
@@ -89,7 +89,7 @@ describe('React App', () => {
         await browser.close();
       }, 120000);
 
-
+      
       it('shall succesfully edit an account', async () => {
 
         const browser = await puppeteer.launch({ 
@@ -124,6 +124,8 @@ describe('React App', () => {
         
         await page.waitFor(1000);
         await page.click('body > div:nth-child(9) > div > div > div > div.rc-virtual-list > div > div > div > div.ant-select-item.ant-select-item-option:nth-child(2) > div')
+
+
 
         await page.waitFor(2000);
 
@@ -203,10 +205,13 @@ describe('React App', () => {
         
         await page.click('#root > section > section > section > section > main > section > section > section:nth-child(3) > section > div > div > div > div > div > ul > li:nth-child(4) > div:nth-child(2) > button:nth-child(2)');
 
+        await page.waitFor(1000);
+        await page.click('body > div:nth-child(8) > div > div.ant-modal-wrap > div > div.ant-modal-content > div.ant-modal-footer > button.ant-btn.ant-btn-primary');
+  
         await page.waitForSelector('.ant-message-custom-content.ant-message-success');
         const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
 
-        expect(ErrorMessage).toEqual(`Account succesfully deleted`);
+        expect(ErrorMessage).toEqual(`Account successfully deleted`);
         await browser.close();
       }, 120000);
 

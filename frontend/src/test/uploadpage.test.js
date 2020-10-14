@@ -44,6 +44,8 @@ describe('React App', () => {
 
     expect(ErrorMessage).toEqual(`${fileToUpload} file upload failed.`);
 
+    await browser.close();
+
   }, 120000);
 
 
@@ -85,8 +87,9 @@ describe('React App', () => {
     const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success:nth-of-type(1)', element => element.textContent);
 
 
+    
     expect(ErrorMessage).toEqual(`${fileToUpload} file uploaded successfully.`);
-
+    await browser.close();
   }, 120000);
 });
 
