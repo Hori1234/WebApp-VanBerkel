@@ -61,7 +61,7 @@ export default class AddOrdersLayout extends Component {
 
   createOrderData = () => {
     let data = {
-      "Booking": Number(this.state.Booking),
+      "Booking": this.state.Booking,
       "inl_terminal": this.state.inl_terminal,
       "latest_dep_time": Number(this.state.latest_dep_time),
       "truck_type": this.state.truck_type,

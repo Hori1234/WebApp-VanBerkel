@@ -31,7 +31,7 @@ const EditableCell = ({
   );
 };
 
-const EditableTable = (props) => {
+const EditableTableOrder = (props) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record) => record.key === editingKey;
@@ -129,8 +129,6 @@ const EditableTable = (props) => {
         props.setData(newData);
         setEditingKey("");
         editAccount(key, newData[index]);
-        console.log(key)
-        console.log(newData[index])
       } else {
         newData.push(row);
         props.setData(newData);
@@ -214,4 +212,4 @@ const EditableTable = (props) => {
     </Form>
   );
 };
-export default EditableTable;
+export default EditableTableOrder;

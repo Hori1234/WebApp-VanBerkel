@@ -13,9 +13,10 @@ import {
   Popconfirm,
 } from "antd";
 import axios from "axios";
-import EditableTable from "./EditableTable";
+import EditableTableOrder from "./EditableTableOrder";
 import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
+import EditableTableTruck from "./EditableTableTruck";
 import "./ManualPlanning.css";
 
 const { Option } = Select;
@@ -326,84 +327,92 @@ export default class ManualPlanning extends Component {
       ],
       columns2: [
         {
-          title: "Truck_id",
-          dataIndex: "truck_id",
-          sortDirections: ["descend", "ascend"],
-          sorter: (a, b) => a.truck_id.localeCompare(b.truck_id),
-          width: 100,
-          editable: true,
+         title: "Truck ID",
+         dataIndex: "truck_id",
+         sortDirections: ["descend", "ascend"],
+         sorter: (a, b) => a.truck_id.localeCompare(b.truck_id),
+         width: 150,
+         editable: true,
         },
         {
-          title: "Driver",
-          dataIndex: "driver",
-          sortDirections: ["descend", "ascend"],
-          sorter: (a, b) => a.truckId.localeCompare(b.truckId),
-          width: 100,
-          editable: true,
+         title: "S Number",
+         dataIndex: "s_number",
+         sortDirections: ["descend", "ascend"],
+         sorter: (a, b) => a.truck_id.localeCompare(b.truck_id),
+         width: 150,
+         editable: true,
         },
         {
-          title: "Availability",
-          dataIndex: "availability",
-          sortDirections: ["descend", "ascend"],
-          sorter: (a, b) => a.truckId.localeCompare(b.truckId),
-          width: 100,
-          editable: true,
+         title: "Availability",
+         dataIndex: "availability",
+         sortDirections: ["descend", "ascend"],
+         sorter: (a, b) => a.truckId.localeCompare(b.truckId),
+         width: 150,
+         editable: true,
         },
+       {
+         title: "Truck type",
+         dataIndex: "truck_type",
+         width: 150,
+         editable: true,
+       },
+       {
+         title: "Business type",
+         dataIndex: "business_type",
+         width: 150,
+         editable: true,
+       },
         {
-          title: "Owner",
-          dataIndex: "owner",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Remarks",
-          dataIndex: "remarks",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Business_type",
-          dataIndex: "business_type",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Date",
-          dataIndex: "date",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Hierarchy",
-          dataIndex: "hierarchy",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Starting",
-          dataIndex: "starting",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Terminal",
-          dataIndex: "terminal",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Truck_type",
-          dataIndex: "truck_type",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Use_cost",
-          dataIndex: "use_cost",
-          width: 100,
-          editable: true,
-        },
-      ],
+         title: "Driver",
+         dataIndex: "Driver",
+         sortDirections: ["descend", "ascend"],
+         sorter: (a, b) => a.truckId.localeCompare(b.truckId),
+         width: 150,
+         editable: true,
+       },
+       {
+         title: "Terminal",
+         dataIndex: "terminal",
+         width: 150,
+         editable: true,
+       },
+       {
+         title: "Owner",
+         dataIndex: "Owner",
+         width: 150,
+         editable: true,
+       },
+       {
+         title: "Hierarchy",
+         dataIndex: "hierarchy",
+         width: 150,
+         editable: true,
+       },
+       {
+         title: "Use cost",
+         dataIndex: "use_cost",
+         width: 150,
+         editable: true,
+       },
+       {
+         title: "Date",
+         dataIndex: "date",
+         width: 150,
+         editable: true,
+       },
+       {
+         title: "Starting time",
+         dataIndex: "starting_time",
+         width: 150,
+         editable: true,
+       },
+       {
+         title: "Remarks",
+         dataIndex: "Remarks",
+         width: 150,
+         editable: true,
+       }
+     ],
       data: [],
       data2: [],
       startingColumns: [],
@@ -656,21 +665,12 @@ export default class ManualPlanning extends Component {
   //Adding the truck and the order
   addTruck = (value) => {
     this.getTruckInfo();
+    const data = this.refs.addTrucks.createTruckData()
     return axios
-      .post(`/api/trucks/sheet/${value}`, {
-        truck_id: this.state.newTruck.truck_id,
-        availability: false,
-        truck_type: this.state.newTruck.truck_type,
-        business_type: this.state.newTruck.use_cost,
-        terminal: this.state.newTruck.terminal,
-        hierarchy: 0,
-        use_cost: 0,
-        date: toString(this.state.newTruck.date),
-        starting_time: this.state.newTruck.starting_time,
-      })
+      .post(`/api/trucks/sheet/${value}`, data)
       .then((res) => {
         if (res.status === 200) {
-          message.success("Trcuk: " + "added succesfully");
+          message.success("Truck: " + "added succesfully");
         } else {
           if (res.status === 422) {
             message.success(res.message);
@@ -736,6 +736,7 @@ export default class ManualPlanning extends Component {
         var outarray = [];
         for (var i = 1; i < res.data.orders.length; i++) {
           var temp = {
+            key: res.data.orders[i]["order_number"],
             "Container": res.data.orders[i]["Container"],
             "Unit type": res.data.orders[i]["Unit type"],
             "Booking": res.data.orders[i]["Booking"],
@@ -813,18 +814,19 @@ export default class ManualPlanning extends Component {
         for (var i = 1; i < res.data.trucks.length; i++) {
           var temp = {
             key: res.data.trucks[i]["s_number"],
-            truck_id: res.data.trucks[i]["truck_id"],
-            driver: res.data.trucks[i]["Driver"],
-            availability: res.data.trucks[i]["availability"],
-            starting: res.data.trucks[i]["starting_time"],
-            truck_type: res.data.trucks[i]["truck_type"],
-            terminal: res.data.trucks[i]["terminal"],
-            hierarchy: res.data.trucks[i]["hierarchy"],
-            use_cost: res.data.trucks[i]["use_cost"],
-            date: res.data.trucks[i]["date"],
-            owner: res.data.trucks[i]["Owner"],
-            remarks: res.data.trucks[i]["Remarks"],
-            business_type: res.data.trucks[i]["business_type"],
+            "truck_id": res.data.trucks[i]["truck_id"],
+            "s_number": res.data.trucks[i]["s_number"],
+            "availability": res.data.trucks[i]["availability"],
+            "truck_type": res.data.trucks[i]["truck_type"],
+            "business_type": res.data.trucks[i]["business_type"],
+            "Driver": res.data.trucks[i]["Driver"],
+            "terminal": res.data.trucks[i]["terminal"],
+            "Owner": res.data.trucks[i]["Owner"],
+            "hierarchy": res.data.trucks[i]["hierarchy"],
+            "use_cost": res.data.trucks[i]["use_cost"],
+            "date": res.data.trucks[i]["date"],
+            "starting_time": res.data.trucks[i]["starting_time"],
+            "Remarks": res.data.trucks[i]["Remarks"],
           };
           outarray.push(temp);
         }
@@ -1142,7 +1144,7 @@ export default class ManualPlanning extends Component {
         </Row>
         <Row gutter={[24, 8]} justify="space-around" align="middle">
           <Col span={12}>
-            <EditableTable
+            <EditableTableOrder
               rowSelection={ordersRowSelection}
               dataSource={this.state.data}
               columns={this.state.columns}
@@ -1152,7 +1154,7 @@ export default class ManualPlanning extends Component {
                   this.selectOrdersRow(record);
                 },
               })}
-            ></EditableTable>
+            ></EditableTableOrder>
             <br />
             <Button onClick={() => this.showOrdersModal()}>Add order</Button>
             <Popconfirm
@@ -1205,7 +1207,7 @@ export default class ManualPlanning extends Component {
             </Row>
           </Col>
           <Col span={9}>
-            <EditableTable
+            <EditableTableTruck
               rowSelection={trucksRowSelection}
               dataSource={this.state.data2}
               columns={this.state.columns2}
@@ -1215,7 +1217,7 @@ export default class ManualPlanning extends Component {
                   this.selectOrdersRow(record);
                 },
               })}
-            ></EditableTable>
+            ></EditableTableTruck>
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
             <Popconfirm
@@ -1269,7 +1271,7 @@ export default class ManualPlanning extends Component {
         >
           {this.state.magnifyOrders && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
-              <EditableTable
+              <EditableTableOrder
                 rowSelection={ordersRowSelection}
                 dataSource={this.state.data}
                 columns={this.state.columns}
@@ -1279,7 +1281,7 @@ export default class ManualPlanning extends Component {
                     this.selectOrdersRow(record);
                   },
                 })}
-              ></EditableTable>
+              ></EditableTableOrder>
               <Col span={12}>
                 <br />
                 <Button onClick={this.showOrdersModal}>Add order</Button>
@@ -1308,7 +1310,7 @@ export default class ManualPlanning extends Component {
         >
           {this.state.magnifyTrucks && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
-              <EditableTable
+              <EditableTableTruck
                 rowSelection={trucksRowSelection}
                 dataSource={this.state.data2}
                 columns={this.state.columns2}
@@ -1318,7 +1320,7 @@ export default class ManualPlanning extends Component {
                     this.selectOrdersRow(record);
                   },
                 })}
-              ></EditableTable>
+              ></EditableTableTruck>
               <Col span={12}>
                 <br />
                 <Button onClick={this.ShowTruckModal}>Add truck</Button>
