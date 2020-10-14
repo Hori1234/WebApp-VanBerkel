@@ -159,28 +159,24 @@ export default class DataVisualization extends Component {
 
   componentDidMount() {
     this.getTruckList("latest");
+    console.log(this.state.truckOrderDetails);
   }
 
   getTruckList = (value) => {
     return axios
-      .get(`/api/trucks/sheet/${value}`)
+      .get(`/api/orders/timeline/${value}`)
       .then((res) => {
         var outarray = [];
-        for (var i = 1; i < res.data.trucks.length; i++) {
+        for (var i = 1; i < res.data.orders.length; i++) {
           var temp = {
-            key: res.data.trucks[i]["s_number"],
-            truck_id: res.data.trucks[i]["truck_id"],
-            driver: res.data.trucks[i]["Driver"],
-            availability: res.data.trucks[i]["availability"],
-            starting: res.data.trucks[i]["starting_time"],
-            truck_type: res.data.trucks[i]["truck_type"],
-            terminal: res.data.trucks[i]["terminal"],
-            hierarchy: res.data.trucks[i]["hierarchy"],
-            use_cost: res.data.trucks[i]["use_cost"],
-            date: res.data.trucks[i]["date"],
-            owner: res.data.trucks[i]["Owner"],
-            remarks: res.data.trucks[i]["Remarks"],
-            business_type: res.data.trucks[i]["business_type"],
+            truck_id: res.data["truck_id"],
+            container_id: res.data["others"]["container_id"],
+            address: res.data["others"]["address"],
+            booking_id: res.data["others"]["address"],
+            client: res.data["others"]["client"],
+            order_type: res.data["others"]["order_type"],
+            end_time: res.data["end_time"],
+            departure_time: res.data["departure_time"]
           };
           outarray.push(temp);
         }
