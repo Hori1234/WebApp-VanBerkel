@@ -90,7 +90,7 @@ def test_upload_orders_success(client):
     assert orders.OrderSheet.query.get(1)
 
     order = orders.Order.query.get(8)
-    assert order.latest_dep_time == 630
+    assert order.latest_dep_time.strftime('%H:%M') == '10:30'
     assert order.truck_type == 'port'
 
 

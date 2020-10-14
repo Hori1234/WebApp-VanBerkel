@@ -2,7 +2,7 @@ from flask.views import MethodView
 from . import bp
 from backend.models.orders import Order, OrderSheet
 from backend.extensions import roles_required
-from .schemas import OrderSchema, OrderTableSchema
+from .schemas import OrderSchema, OrderTableSchema, TimeLineSchema
 from backend.app import db
 from flask_smorest import abort
 
@@ -183,3 +183,30 @@ class OrderByID(MethodView):
                   message=str(e),
                   status="Bad Request"
                   )
+
+
+@bp.route('/timeline/<sheet_id_or_latest>')
+class DataVisualisation(MethodView):
+
+    @roles_required('planner', 'administrator')
+    @bp.response(TimeLineSchema(many=True))
+    @bp.alt_response('UNAUTHORIZED', code=401)
+    @bp.alt_response('NOT_FOUND', code=404)
+    def get(self, sheet_id_or_latest):
+        try:
+            # Try to parse the sheet_id to an int and get the order sheet
+            order_sheet = OrderSheet.query \
+                .get_or_404(int(sheet_id_or_latest),
+                            description="Order sheet not found")
+        except ValueError:
+            # The sheet_id is not an integer, so check if it is `latest`
+            if sheet_id_or_latest == 'latest':
+                # Get the most recently uploaded sheet
+                order_sheet = OrderSheet.query \
+                    .order_by(OrderSheet.upload_date.desc()) \
+                    .first_or_404()
+            else:
+                # Can't understand which sheet is requested
+                return abort(404, message='Order sheet not found')
+
+        return order_sheet.orders, 200

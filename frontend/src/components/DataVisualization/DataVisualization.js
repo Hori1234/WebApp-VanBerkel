@@ -29,7 +29,7 @@ export function downloadFile() {
 // var destinationsDummy = ['Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven'];
 
 var truckIDsDummy = ["23", "23", "23", "234", "235"];
-var orderIDsDummy = ["124124", "124124", "124124", "236234592", "234623466"];
+var orderIDsDummy = ["1", "2", "3", "4", "5"];
 var startTimesDummy = ["8:00", "10:30", "16:00", "12:00", "16:00"];
 var endTimesDummy = ["10:30", "12:00", "18:00", "18:00", "18:00", "18:00"];
 var destinationsDummy = [
@@ -129,7 +129,7 @@ export function createAllDataInput(
   let listLength = truckIDs.length;
   let listDataInputs = [
     [
-      { type: "string", id: "Room" },
+      { type: "string", id: "Truck" },
       { type: "string", id: "Name" },
       { type: "string", role: "tooltip", p: { html: true } },
       { type: "date", id: "Start" },
@@ -228,8 +228,8 @@ export default class DataVisualization extends Component {
             timeline: {
               colorByRowLabel: false,
               allowHtml: true,
-              avoidOverlappingGridLines: false,
             },
+            avoidOverlappingGridLines: false,
           }}
           rootProps={{ "data-testid": "5" }}
         />
