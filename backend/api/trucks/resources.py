@@ -72,7 +72,7 @@ class Trucks(MethodView):
 
         # store order numbers before creating the truck,
         # as we will be adding them later
-        order_numbers = truck.pop('orders', None)
+        orders = truck.pop('orders', None)
 
         # Filter any None values in the request
         truck = {k: v for k, v in truck.items() if v is not None}
@@ -80,22 +80,27 @@ class Trucks(MethodView):
         # Create a new truck with all parameters
         try:
             new_truck = Truck(**truck)
+
+            # Assign the orders to the truck
+            if orders is not None:
+                order_numbers = [order['order_number'] for order in orders]
+                departure_times = [order['departure_time'] for order in orders]
+                order_objects = Order.query \
+                    .filter(Order.order_number.in_(order_numbers)) \
+                    .all()
+                if len(order_objects) != len(order_numbers):
+                    abort(404,
+                          message='Not all orders were found!',
+                          status='Not Found')
+                for order, departure_time in zip(order_objects,
+                                                 departure_times):
+                    order.truck = new_truck
+                    order.departure_time = departure_time
         except ValueError as e:
             # Some values of the arguments are not allowed
             return abort(400,
                          message=str(e),
                          status="Bad Request")
-
-        # Assign the orders to the truck
-        if order_numbers is not None:
-            orders = Order.query \
-                .filter(Order.order_number.in_(order_numbers)) \
-                .all()
-            if len(orders) != len(order_numbers):
-                abort(404,
-                      message='Not all orders were found!',
-                      status='Not Found')
-            new_truck.orders = orders
 
         # Add the truck to the truck sheet
         truck_sheet.add_row(new_truck)
@@ -168,17 +173,8 @@ class TruckByID(MethodView):
                 truck_id,
                 description='Truck not found')
 
-            # Change orders assigned to truck
-            order_numbers = req.pop('orders', None)
-            if order_numbers is not None:
-                orders = Order.query\
-                    .filter(Order.order_number.in_(order_numbers))\
-                    .all()
-                if len(orders) != len(order_numbers):
-                    abort(404,
-                          message='Not all orders were found!',
-                          status='Not Found')
-                truck.orders = orders
+            # pop orders early to handle them manually
+            orders = req.pop('orders', None)
 
             # Iterate over the keys and values in the request
             for k, v in req.items():
@@ -195,6 +191,22 @@ class TruckByID(MethodView):
                         del truck.others[k]
                     elif v is not None:
                         truck.others[k] = v
+
+            # Change orders assigned to truck
+            if orders is not None:
+                order_numbers = [order['order_number'] for order in orders]
+                departure_times = [order['departure_time'] for order in orders]
+                order_objects = Order.query \
+                    .filter(Order.order_number.in_(order_numbers)) \
+                    .all()
+                if len(order_objects) != len(order_numbers):
+                    abort(404,
+                          message='Not all orders were found!',
+                          status='Not Found')
+                for order, departure_time in zip(order_objects,
+                                                 departure_times):
+                    order.truck = truck
+                    order.departure_time = departure_time
 
             db.session.commit()
             return truck, 200
