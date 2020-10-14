@@ -813,14 +813,9 @@ export default class ManualPlanning extends Component {
         var outarray = [];
         for (var i = 1; i < res.data.trucks.length; i++) {
           var temp = {
-<<<<<<< HEAD
-            "truck_id": res.data.trucks[i]["truck_id"],
-            "key": res.data.trucks[i]["s_number"],
-=======
             key: res.data.trucks[i]["s_number"],
             "truck_id": res.data.trucks[i]["truck_id"],
             "s_number": res.data.trucks[i]["s_number"],
->>>>>>> 204d43d61a939acc4565427c99b471e299409cee
             "availability": res.data.trucks[i]["availability"],
             "truck_type": res.data.trucks[i]["truck_type"],
             "business_type": res.data.trucks[i]["business_type"],
@@ -830,11 +825,7 @@ export default class ManualPlanning extends Component {
             "hierarchy": res.data.trucks[i]["hierarchy"],
             "use_cost": res.data.trucks[i]["use_cost"],
             "date": res.data.trucks[i]["date"],
-<<<<<<< HEAD
-            "starting": res.data.trucks[i]["starting"],
-=======
             "starting_time": res.data.trucks[i]["starting_time"],
->>>>>>> 204d43d61a939acc4565427c99b471e299409cee
             "Remarks": res.data.trucks[i]["Remarks"],
           };
           outarray.push(temp);
