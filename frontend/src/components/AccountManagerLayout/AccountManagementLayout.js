@@ -1,16 +1,12 @@
 import React, { Component } from "react";
 import {
-  Row,
-  Col,
-  Card,
-  Statistic,
   Divider,
   Button,
   Layout,
   Typography,
   Modal,
 } from "antd";
-import { UserAddOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import { UserAddOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import axios from "axios";
 
