@@ -494,7 +494,7 @@ export default class ManualPlanning extends Component {
   getItv = (e) => {
     let itvData = [];
     e.forEach((element) => {
-      if (element.inl_terminal == "ITV") {
+      if (element.inl_terminal === "ITV") {
         itvData.push(element);
       }
     });
@@ -503,7 +503,7 @@ export default class ManualPlanning extends Component {
   getKat = (e) => {
     let katData = [];
     e.forEach((element) => {
-      if (element.inl_terminal == "KAT") {
+      if (element.inl_terminal === "KAT") {
         katData.push(element);
       }
     });
@@ -670,7 +670,7 @@ export default class ManualPlanning extends Component {
       .post(`/api/trucks/sheet/${value}`, data)
       .then((res) => {
         if (res.status === 200) {
-          message.success("Truck: " + "added succesfully");
+          message.success("Truck: added succesfully");
         } else {
           if (res.status === 422) {
             message.success(res.message);

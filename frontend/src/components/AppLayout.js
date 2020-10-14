@@ -1,6 +1,6 @@
 import React from "react";
 import  NavigationLayoutFather from "./NavigationLayout/NavigationLayoutFather"
-import NavigationLayout from "./NavigationLayout/NavigationLayout";
+//import NavigationLayout from "./NavigationLayout/NavigationLayout";
 import SignInComponent from "./SignIn/SignInComponent";
 import { useAuth } from './contextConfig'
 

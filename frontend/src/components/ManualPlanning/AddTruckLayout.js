@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Form, Input, Typography, Row, Col } from "antd";
+import { Form, Input, Row, Col } from "antd";
 import "antd/dist/antd.css";
 
-const { Text } = Typography;
+//const { Text } = Typography;
 
 export default class AddTruckLayout extends Component {
   constructor(props) {
