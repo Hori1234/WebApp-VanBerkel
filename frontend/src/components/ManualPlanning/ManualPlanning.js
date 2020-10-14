@@ -566,6 +566,7 @@ export default class ManualPlanning extends Component {
       AOVisible: false,
       ATVisible: false,
     });
+    window.location.reload(false);
   };
   handleCancel = (e) => {
     this.setState({
@@ -1246,7 +1247,6 @@ export default class ManualPlanning extends Component {
           onCancel={this.handleCancel}
           onOk={() => {
             this.addOrder("latest");
-            window.location.reload(false);
           }}
         >
           {this.state.AOVisible && <AddOrdersLayout ref="addOrders" />}
