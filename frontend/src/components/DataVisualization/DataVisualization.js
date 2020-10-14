@@ -153,39 +153,38 @@ export default class DataVisualization extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      truckOrderDetails: [],
+      timelineDetails: [],
     };
   }
 
   componentDidMount() {
-    this.getTruckList("latest");
+    this.getTimeline("latest");
   }
 
-  getTimeline = (value) => {
-    return axios
+  getTimeline = async (value) => {
+    return await axios
       .get(`/api/orders/timeline/${value}`)
       .then((res) => {
         var outarray = [];
         for (var i = 1; i < res.data.length; i++) {
           var temp = {
             departure_time: res.data[i]["departure_time"],
-            booking_id: res.data[i]["others"]["booking_id"],
-            order_type: res.data[i]["others"]["order_type"],
-            address: res.data[i]["others"]["address"],
-            client: res.data[i]["others"]["client"],
-            container_id: res.data[i]["others"]["container_id"],
+            booking_id: res.data[i]["booking_id"],
+            order_type: res.data[i]["order_type"],
+            address: res.data[i]["address"],
+            client: res.data[i]["client"],
+            container_id: res.data[i]["container_id"],
             end_time: res.data[i]["end_time"],
             truck_id: res.data[i]["truck_id"],
           };
           outarray.push(temp);
         }
-        console.log(outarray);
+
         this.setState((state) => ({
           ...state,
-          truckOrderDetails: outarray,
+          timelineDetails: outarray,
           status: "success",
         }));
-        console.log(this.state.truckOrderDetails);
         return true;
       })
       .catch((error) => {
