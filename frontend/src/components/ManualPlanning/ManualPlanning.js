@@ -743,7 +743,7 @@ export default class ManualPlanning extends Component {
             "Terminal": res.data.orders[i]["Terminal"],
             "Truck": res.data.orders[i]["Truck"],
             "Pickup": res.data.orders[i]["Pickup"],
-            "order_number": res.data.orders[i]["order_number"],
+            "key": res.data.orders[i]["order_number"],
             "Status": res.data.orders[i]["Status"],
             "inl_terminal": res.data.orders[i]["inl_terminal"],
             "Gate": res.data.orders[i]["Gate"],
@@ -812,19 +812,19 @@ export default class ManualPlanning extends Component {
         var outarray = [];
         for (var i = 1; i < res.data.trucks.length; i++) {
           var temp = {
-            key: res.data.trucks[i]["s_number"],
-            truck_id: res.data.trucks[i]["truck_id"],
-            driver: res.data.trucks[i]["Driver"],
-            availability: res.data.trucks[i]["availability"],
-            starting: res.data.trucks[i]["starting_time"],
-            truck_type: res.data.trucks[i]["truck_type"],
-            terminal: res.data.trucks[i]["terminal"],
-            hierarchy: res.data.trucks[i]["hierarchy"],
-            use_cost: res.data.trucks[i]["use_cost"],
-            date: res.data.trucks[i]["date"],
-            owner: res.data.trucks[i]["Owner"],
-            remarks: res.data.trucks[i]["Remarks"],
-            business_type: res.data.trucks[i]["business_type"],
+            "truck_id": res.data.trucks[i]["truck_id"],
+            "key": res.data.trucks[i]["s_number"],
+            "availability": res.data.trucks[i]["availability"],
+            "truck_type": res.data.trucks[i]["truck_type"],
+            "business_type": res.data.trucks[i]["business_type"],
+            "Driver": res.data.trucks[i]["Driver"],
+            "terminal": res.data.trucks[i]["terminal"],
+            "Owner": res.data.trucks[i]["Owner"],
+            "hierarchy": res.data.trucks[i]["hierarchy"],
+            "use_cost": res.data.trucks[i]["use_cost"],
+            "date": res.data.trucks[i]["date"],
+            "starting": res.data.trucks[i]["starting"],
+            "Remarks": res.data.trucks[i]["Remarks"],
           };
           outarray.push(temp);
         }
@@ -1245,6 +1245,7 @@ export default class ManualPlanning extends Component {
           onCancel={this.handleCancel}
           onOk={() => {
             this.addOrder("latest");
+            window.location.reload(false);
           }}
         >
           {this.state.AOVisible && <AddOrdersLayout ref="addOrders" />}
@@ -1254,6 +1255,7 @@ export default class ManualPlanning extends Component {
           visible={this.state.ATVisible}
           onOk={() => {
             this.addTruck("latest");
+            window.location.reload(false);
           }}
           onCancel={this.handleCancel}
         >
