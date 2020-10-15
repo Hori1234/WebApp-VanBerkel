@@ -37,7 +37,13 @@ export default class AddTruckLayout extends Component {
       "starting_time": this.state.starting_time,
       "Remarks": this.state.Remarks  
     }
-    return data
+    let dataToSend = {};
+    for (var key of Object.keys(data)) {
+      if(data[key] != ''){
+        dataToSend[key] = data[key];
+      }
+    }
+    return dataToSend
   }
 
   getFormTruckData = () => {

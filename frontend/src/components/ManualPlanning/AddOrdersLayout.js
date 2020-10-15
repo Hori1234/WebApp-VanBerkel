@@ -110,7 +110,6 @@ export default class AddOrdersLayout extends Component {
         dataToSend[key] = data[key];
       }
     }
-    console.log(dataToSend)
     return dataToSend
   }
 
@@ -393,15 +392,6 @@ export default class AddOrdersLayout extends Component {
       >
         <Row gutter={[24, 8]}>
           <Col span={12}>
-          <Form.Item
-          name="Truck_id"
-          label="Truck_id:"
-            >
-              <Input
-                value={this.state.truck_id}
-                onChange={this.handleChangeTruck_id}
-              />
-            </Form.Item>
             <Form.Item
               name="Inl_terminal"
               label="Inl Terminal:"
@@ -421,15 +411,6 @@ export default class AddOrdersLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-             name="Departure_time"
-             label="Departure_time:"
-             >
-              <Input
-                value={this.state.departure_time}
-                onChange={this.handleChangeDeparture_time}
-              />
-            </Form.Item>
-            <Form.Item
               name="Hierarchy"
               label="Hierarchy:"
               rules={[{ required: true }]}
@@ -437,6 +418,15 @@ export default class AddOrdersLayout extends Component {
               <Input
                 value={this.state.hierarchy}
                 onChange={this.handleChangeHierarchy}
+              />
+            </Form.Item>
+            <Form.Item
+              name="Booking"
+              label="Booking:"
+            >
+              <Input
+                value={this.state.Booking}
+                onChange={this.handleChangeBooking}
               />
             </Form.Item>
             <Form.Item name="Container" label="Container:">
@@ -659,13 +649,23 @@ export default class AddOrdersLayout extends Component {
                 onChange={this.handleChangeReference}
               />
             </Form.Item>
+            
             <Form.Item
-              name="Booking"
-              label="Booking:"
+          name="Truck_id"
+          label="Truck_id:"
             >
               <Input
-                value={this.state.Booking}
-                onChange={this.handleChangeBooking}
+                value={this.state.truck_id}
+                onChange={this.handleChangeTruck_id}
+              />
+            </Form.Item>
+            <Form.Item
+             name="Departure_time"
+             label="Departure_time:"
+             >
+              <Input
+                value={this.state.departure_time}
+                onChange={this.handleChangeDeparture_time}
               />
             </Form.Item>
 
