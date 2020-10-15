@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from . import bp
 from backend.models.orders import Order, OrderSheet
-from backend.extensions import roles_required
+from backend.extensions import roles_required, unnest
 from .schemas import OrderSchema, OrderTableSchema, TimeLineSchema
 from backend.app import db
 from flask_smorest import abort
@@ -189,6 +189,11 @@ class OrderByID(MethodView):
                     # remove the key from the truck
                     if k in order.others and v is None:
                         del order.others[k]
+                    elif isinstance(v, dict):
+                        # Marshmallow parsed the value as a dictionary
+                        # so we have to revert it back
+                        new_k, new_v = unnest(req, k)
+                        order.others[new_k] = new_v
                     elif v is not None:
                         order.others[k] = v
 

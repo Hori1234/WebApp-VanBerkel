@@ -456,6 +456,29 @@ def test_patch_truck_computed_field(client):
     assert rv.status_code == 400
     assert 'service_time' in rv.get_json()['message']
 
+
+# TODO: UTP
+@pytest.mark.parametrize('key', ('Inl. terminal', 'Max. dep. time'))
+def test_patch_order_dot_seperated(client, db, key):
+    """
+    Tests if dot seperated keys are set correctly.
+    This is an issue with Marshmallow parsing, where request keys
+    with '.' are parsed as paths ({'1.2': '3'} -> {'1': {'2': '3'}})
+    """
+
+    request = dict()
+    request[key] = 'val'
+
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert key in data
+    assert data[key] == 'val'
+
+    order = orders.Order.query.get(1)
+    assert order.others[key] == 'val'
+
 # PATCH TRUCK TESTS
 
 
@@ -564,6 +587,7 @@ def test_patch_truck_with_wrong_orders(client, db):
     assert rv.status_code == 404
 
 
+# TODO: UTP
 def test_patch_truck_primary_key(client):
     """
     Tests an error response when trying to set the primary key
@@ -577,6 +601,29 @@ def test_patch_truck_primary_key(client):
 
     assert rv.status_code == 400
     assert 's_number' in rv.get_json()['message']
+
+
+# TODO: UTP
+@pytest.mark.parametrize('key', ('Inl. terminal', 'Max. dep. time'))
+def test_patch_truck_dot_seperated(client, db, key):
+    """
+    Tests if dot seperated keys are set correctly.
+    This is an issue with Marshmallow parsing, where request keys
+    with '.' are parsed as paths ({'1.2': '3'} -> {'1': {'2': '3'}})
+    """
+
+    request = dict()
+    request[key] = 'val'
+
+    rv = patch_truck(client, 1, **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert key in data
+    assert data[key] == 'val'
+
+    truck = trucks.Truck.query.get(1)
+    assert truck.others[key] == 'val'
 
 # POST ORDER TESTS
 
@@ -933,7 +980,7 @@ def test_get_timeline(client, db, sheet_id):
         end_time="13:00:00"
     )
     assert len(data) == 2
-    assert expected == data[0]
+    assert expected in data
 
 
 @pytest.mark.parametrize('sheet_id', ('random', 3))
