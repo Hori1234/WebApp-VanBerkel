@@ -26,14 +26,15 @@ export default class AddTruckLayout extends Component {
 
   getFormTruckData = () => {
     let temp = [];
+    var availability = this.state.availability === "true";
     temp.push(
       this.state.truck_id,
       this.state.truck_snumber,
-      Boolean(this.state.availability),
+      availability,
       this.state.truck_type,
       this.state.terminal,
-      Number(this.state.hierarchy),
-      Number(this.state.use_cost),
+      Integer(this.state.hierarchy),
+      parseFloat(this.state.use_cost),
       this.state.starting_time,
       this.state.date,
       this.state.owner,

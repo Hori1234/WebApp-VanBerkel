@@ -634,13 +634,13 @@ export default class ManualPlanning extends Component {
     return axios
       .post(`/api/trucks/sheet/${value}`, {
         truck_id: this.state.newTruck.truck_id,
-        availability: false,
+        availability: this.state.newTruck.availability,
         truck_type: this.state.newTruck.truck_type,
         business_type: this.state.newTruck.use_cost,
         terminal: this.state.newTruck.terminal,
-        hierarchy: 0,
-        use_cost: 0,
-        date: toString(this.state.newTruck.date),
+        hierarchy: this.state.newTruck.hierarchy,
+        use_cost: this.state.newTruck.use_cost,
+        date: this.state.newTruck.date,
         starting_time: this.state.newTruck.starting_time,
       })
       .then((res) => {
