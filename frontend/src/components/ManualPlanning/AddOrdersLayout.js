@@ -70,6 +70,7 @@ export default class AddOrdersLayout extends Component {
       "process_time": Number(this.state.process_time),
       "service_time": Number(this.state.service_time),
       "delivery_deadline": Number(this.state.delivery_deadline)
+
     }
     return data
   }
