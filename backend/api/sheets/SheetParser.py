@@ -242,7 +242,7 @@ class SheetParser(abc.ABC):
             else:
                 return cls.post_dataframe(raw_df)
 
-        df.drop(cls.ignored_columns, errors='ignore')
+        df.drop(cls.ignored_columns, errors='ignore', axis=1, inplace=True)
 
         # Rename duplicate rows
         seen = dict()
