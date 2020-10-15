@@ -768,6 +768,7 @@ export default class ManualPlanning extends Component {
             "Terminal": res.data.orders[i]["Terminal"],
             "Truck": res.data.orders[i]["Truck"],
             "Pickup": res.data.orders[i]["Pickup"],
+            "order_number": res.data.orders[i]["order_number"],
             "Status": res.data.orders[i]["Status"],
             "inl_terminal": res.data.orders[i]["inl_terminal"],
             "Gate": res.data.orders[i]["Gate"],

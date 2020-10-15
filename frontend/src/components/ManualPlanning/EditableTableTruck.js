@@ -38,42 +38,18 @@ const EditableTableTruck = (props) => {
 
   const edit = (record) => {
     form.setFieldsValue({
-      bookingNr: "",
-      city: "",
-      inl_terminal: "",
-      truckId: "",
-      deliveryDeadline: "",
-      processTime: "",
-      drivingTime: "",
-      serviceTime: "",
-      closing: "",
-      container: "",
-      date: "",
-      delay: "",
-      gate: "",
-      gate1: "",
-      gross: "",
-      inl_ter_1: "",
-      invoice_reference: "",
-      l_d: "",
-      max_departure: "",
-      pickup: "",
-      seal: "",
-      status: "",
-      ship_comp: "",
-      tariff_type: "",
-      terminal1: "",
-      time: "",
-      time1: "",
-      time2: "",
-      time3: "",
-      truck1: "",
-      truck2: "",
-      truck_used: "",
-      unit_type: "",
-      voyage_inland_carrier: "",
-      weight: "",
-      departure_time: "",
+      "truck_id": "",
+      "availability": "",
+      "truck_type": "",
+      "business_type": "",
+      "Driver": "",
+      "terminal": "",
+      "Owner": "",
+      "hierarchy": "",
+      "use_cost": "",
+      "date": "",
+      "starting_time": "",
+      "Remarks": "",
       ...record,
     });
     setEditingKey(record.key);
@@ -84,9 +60,10 @@ const EditableTableTruck = (props) => {
   };
 
   const editAccount = (order_id, Data) => {
-    console.log(Data);
+    const dataToPass = Data
+    delete dataToPass['s_number'];
     return axios
-      .patch(`/api/orders/${order_id}`, Data)
+      .patch(`/api/orders/${order_id}`, dataToPass)
       .then((res) => {
         if (res.status === 200) {
           message.success("Order updated succesfully");
@@ -128,6 +105,7 @@ const EditableTableTruck = (props) => {
         newData.splice(index, 1, { ...item, ...row });
         props.setData(newData);
         setEditingKey("");
+        const dataToPass = newData[index];
         editAccount(key, newData[index]);
       } else {
         newData.push(row);
