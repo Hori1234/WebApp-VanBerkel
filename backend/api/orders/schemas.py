@@ -46,7 +46,6 @@ class TimeLineSchemaOthers(ma.Schema):
     address = ma.String(default=None, attribute='Address')
     booking_id = ma.String(default=None, attribute='Booking')
     client = ma.String(default=None, attribute='Client')
-    order_type = ma.String(default=None, attribute='truck type')
 
 
 class TimeLineSchema(ma.SQLAlchemySchema):
@@ -55,6 +54,7 @@ class TimeLineSchema(ma.SQLAlchemySchema):
     departure_time = ma.Time()
     end_time = ma.Time()
     others = ma.Nested(TimeLineSchemaOthers)
+    order_type = ma.String(attribute='truck_type')
 
     class Meta:
         model = OrderSheet

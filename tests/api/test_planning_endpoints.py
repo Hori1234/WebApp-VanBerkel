@@ -426,6 +426,59 @@ def test_patch_order_invalid_truck(client):
     assert 'terminal' in rv2.get_json()['message']
     assert 'port' in rv2.get_json()['message']
 
+
+def test_patch_order_primary_key(client):
+    """
+    Tests for an error response when trying to set the primary key
+    """
+
+    request = dict(
+        order_number=14
+    )
+
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    assert 'order_number' in rv.get_json()['message']
+
+
+def test_patch_truck_computed_field(client):
+    """
+    Tests for an error response when trying to set a computed field
+    """
+
+    request = dict(
+        service_time=100
+    )
+
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    assert 'service_time' in rv.get_json()['message']
+
+
+# TODO: UTP
+@pytest.mark.parametrize('key', ('Inl. terminal', 'Max. dep. time'))
+def test_patch_order_dot_seperated(client, db, key):
+    """
+    Tests if dot seperated keys are set correctly.
+    This is an issue with Marshmallow parsing, where request keys
+    with '.' are parsed as paths ({'1.2': '3'} -> {'1': {'2': '3'}})
+    """
+
+    request = dict()
+    request[key] = 'val'
+
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert key in data
+    assert data[key] == 'val'
+
+    order = orders.Order.query.get(1)
+    assert order.others[key] == 'val'
+
 # PATCH TRUCK TESTS
 
 
@@ -533,6 +586,44 @@ def test_patch_truck_with_wrong_orders(client, db):
 
     assert rv.status_code == 404
 
+
+# TODO: UTP
+def test_patch_truck_primary_key(client):
+    """
+    Tests an error response when trying to set the primary key
+    """
+
+    request = dict(
+        s_number=14
+    )
+
+    rv = patch_truck(client, 1, **request)
+
+    assert rv.status_code == 400
+    assert 's_number' in rv.get_json()['message']
+
+
+# TODO: UTP
+@pytest.mark.parametrize('key', ('Inl. terminal', 'Max. dep. time'))
+def test_patch_truck_dot_seperated(client, db, key):
+    """
+    Tests if dot seperated keys are set correctly.
+    This is an issue with Marshmallow parsing, where request keys
+    with '.' are parsed as paths ({'1.2': '3'} -> {'1': {'2': '3'}})
+    """
+
+    request = dict()
+    request[key] = 'val'
+
+    rv = patch_truck(client, 1, **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert key in data
+    assert data[key] == 'val'
+
+    truck = trucks.Truck.query.get(1)
+    assert truck.others[key] == 'val'
 
 # POST ORDER TESTS
 
@@ -856,14 +947,22 @@ def test_get_timeline(client, db, sheet_id):
     Tests the get timeline endpoint with correct sheet id identifiers
     """
     # Assign truck to order
-    request = dict(
+    request1 = dict(
+        truck_id=15,
+        departure_time='08:00:00',
+        Address='testStreet'
+    )
+
+    rv3 = patch_order(client, 142, **request1)
+    assert rv3.status_code == 200
+
+    request2 = dict(
         truck_id=14,
         departure_time='08:00:00',
         Address='testStreet'
     )
-    request['truck type'] = 'port'
 
-    rv2 = patch_order(client, 141, **request)
+    rv2 = patch_order(client, 141, **request2)
     assert rv2.status_code == 200
 
     rv = get_timeline(client, sheet_id)
@@ -871,16 +970,16 @@ def test_get_timeline(client, db, sheet_id):
 
     data = rv.get_json()
     expected = dict(
-        address=request['Address'],
+        address=request2['Address'],
         booking_id='167617B',
         client=None,
         container_id='SEGU 628854 7',
-        departure_time=request['departure_time'],
-        truck_id=request['truck_id'],
-        order_type=request['truck type'],
+        departure_time=request2['departure_time'],
+        truck_id=request2['truck_id'],
+        order_type='port',
         end_time="13:00:00"
     )
-    assert len(data) == 133
+    assert len(data) == 2
     assert expected in data
 
 

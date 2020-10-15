@@ -147,12 +147,10 @@ class Order(db.Model):
 
     @hybrid_property
     def end_time(self):
-        if self.departure_time:
-            time_as_date = dt.datetime.combine(dt.date(1, 1, 1),
-                                               self.departure_time)
-            return (time_as_date +
-                    dt.timedelta(minutes=self.service_time)).time()
-        return None
+        time_as_date = dt.datetime.combine(dt.date(1, 1, 1),
+                                           self.departure_time)
+        return (time_as_date +
+                dt.timedelta(minutes=self.service_time)).time()
 
 
 @listens_for(Order.truck_id, 'set')
