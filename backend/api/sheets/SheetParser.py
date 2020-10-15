@@ -227,8 +227,29 @@ class SheetParser(abc.ABC):
         :return: A :class:`pandas.DataFrame` containing the data from `file`.
         :rtype: :class:`pandas.DataFrame`
         """
-        df = read_excel(file, usecols=lambda x: x not in cls.ignored_columns,
+        raw_df = read_excel(file,
+                        usecols=lambda x: x not in cls.ignored_columns,
                         *args, **kwargs)
+        if raw_df.columns.hasnans:
+            print(raw_df)
+            df = raw_df
+        else:
+            for i, row in raw_df.iterrows():
+                if row.notnull().all():
+                    df = raw_df.iloc[(i + 1):].reset_index(drop=True)
+                    df.columns = list(raw_df.iloc[i])
+                    break
+        seen = dict()
+        new_columns = []
+
+        for c in df.columns:
+            if c in seen:
+                seen[c] += 1
+                new_columns.append(f'{c} ({seen[c]})')
+            else:
+                seen[c] = 0
+                new_columns.append(c)
+        df.columns = new_columns
         return cls.post_dataframe(df)
 
     @staticmethod
@@ -291,7 +312,7 @@ class OrderListParser(SheetParser):
 
     def __init__(self, file):
         super().__init__(file, converters={'Delivery Deadline':
-                                           self.round_float_to_int})
+                                               self.round_float_to_int})
 
     @staticmethod
     def round_float_to_int(x):
