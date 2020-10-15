@@ -35,7 +35,7 @@ export default class AddTruckLayout extends Component {
       "Owner": this.state.Owner,
       "hierarchy": this.state.hierarchy,
       "use_cost": this.state.use_cost,
-      "date": toString(this.state.date),
+      "date": this.state.date,
       "starting_time": this.state.starting_time,
       "Remarks": this.state.Remarks  
     }

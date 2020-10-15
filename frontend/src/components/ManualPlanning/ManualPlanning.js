@@ -566,7 +566,6 @@ export default class ManualPlanning extends Component {
       AOVisible: false,
       ATVisible: false,
     });
-    window.location.reload(false);
   };
   handleCancel = (e) => {
     this.setState({
@@ -737,6 +736,7 @@ export default class ManualPlanning extends Component {
         var outarray = [];
         for (var i = 1; i < res.data.orders.length; i++) {
           var temp = {
+            key: res.data.orders[i]["order_number"],
             "Container": res.data.orders[i]["Container"],
             "Unit type": res.data.orders[i]["Unit type"],
             "Booking": res.data.orders[i]["Booking"],
@@ -744,7 +744,6 @@ export default class ManualPlanning extends Component {
             "Terminal": res.data.orders[i]["Terminal"],
             "Truck": res.data.orders[i]["Truck"],
             "Pickup": res.data.orders[i]["Pickup"],
-            "key": res.data.orders[i]["order_number"],
             "Status": res.data.orders[i]["Status"],
             "inl_terminal": res.data.orders[i]["inl_terminal"],
             "Gate": res.data.orders[i]["Gate"],
@@ -1256,7 +1255,6 @@ export default class ManualPlanning extends Component {
           visible={this.state.ATVisible}
           onOk={() => {
             this.addTruck("latest");
-            window.location.reload(false);
           }}
           onCancel={this.handleCancel}
         >
