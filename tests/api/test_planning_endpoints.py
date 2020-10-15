@@ -152,6 +152,7 @@ def delete_truck(client, truck_id):
     """
     return client.delete(f'/api/trucks/{truck_id}')
 
+
 def get_timeline(client, sheet_id):
     """
     Gets the parameters to create a timeline of the orders assignment
@@ -699,6 +700,29 @@ def test_post_order_not_latest(client, db):
     rv = post_order(client, 'same dude', **request)
 
     assert rv.status_code == 404
+
+
+# TODO: UTP
+def test_post_order_with_truck_id(client, db):
+    """
+    Tests post order with a truck ID and departure time.
+    """
+    request = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
+        driving_time=10, process_time=1, service_time=2,
+        truck_id=14, departure_time='14:00'
+    )
+    rv = post_order(client, 1, **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert data['truck_id'] == 14
+    assert data['departure_time'] == '14:00:00'
+
+    order = orders.Order.query.get(data['order_number'])
+    assert order.truck_id == 14
+    assert order.departure_time.strftime('%H:%M') == '14:00'
 
 # POST TRUCK TESTS
 
