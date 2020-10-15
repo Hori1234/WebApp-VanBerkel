@@ -9,7 +9,6 @@ export default class AddTruckLayout extends Component {
     super(props);
     this.state = {
       "truck_id": "",
-      "s_number": "",
       "availability": "",
       "truck_type": "",
       "business_type": "",
@@ -26,7 +25,6 @@ export default class AddTruckLayout extends Component {
   createTruckData = () => {
     let data = {
       "truck_id": this.state.truck_id,
-      "s_number": this.state.s_number,
       "availability": this.state.availability,
       "truck_type": this.state.truck_type,
       "business_type": this.state.business_type,
@@ -57,7 +55,6 @@ export default class AddTruckLayout extends Component {
       this.state.Driver,
       this.state.Remarks,
       this.state.business_type,
-      this.state.s_number,
     );
     console.log(temp);
     return temp;
@@ -66,11 +63,6 @@ export default class AddTruckLayout extends Component {
   handleChangeTruckId = (event) => {
     this.setState({
       "truck_id": event.target.value,
-    });
-  };
-  handleChangeTruckSNumber = (event) => {
-    this.setState({
-      "s_number": event.target.value,
     });
   };
   handleChangeAvailability = (event) => {
@@ -239,15 +231,6 @@ export default class AddTruckLayout extends Component {
               <Input
                 value={this.state.business_type}
                 onChange={this.handleChangeBusiness_type}
-              />
-            </Form.Item>
-            <Form.Item
-              name={"truckSNo"}
-              label={"Truck S No:"}
-            >
-              <Input
-                value={this.state.s_number}
-                onChange={this.handleChangeTruckSNumber}
               />
             </Form.Item>
           </Col>
