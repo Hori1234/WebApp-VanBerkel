@@ -1025,7 +1025,7 @@ export default class ManualPlanning extends Component {
 
   render() {
     const showHideMenu = (
-      <Menu>
+      <Menu Scrollable style={{ maxHeight: "50vh", overflowY: "scroll"}}>
         <Menu.ItemGroup title="Columns">
           <Menu.Item key="Container">
             <Checkbox id="Container" onChange={this.filterColumns} defaultChecked>
@@ -1442,10 +1442,11 @@ export default class ManualPlanning extends Component {
           </Col>
           <Col span={2} offset={12}>
             <Dropdown
+              Scrollable
               overlay={showHideTruckMenu}
               onVisibleChange={this.changeTruckVisibility}
               visible={this.state.isTruckVisible}
-              style={{ height: "50vh" }}
+              style={{ maxHeight: "50px" }}
             >
               <Button>Show/Hide</Button>
             </Dropdown>
