@@ -823,6 +823,30 @@ def test_post_order_with_departure_time_without_truck_id(client, db):
     assert 'truck S number' in data['message']
     assert 'departure time' in data['message']
 
+
+# TODO: UTP
+@pytest.mark.parametrize('key', ('Inl. terminal', 'Max. dep. time'))
+def test_post_order_dot_seperated(client, db, key):
+    """
+    Tests if dot seperated keys are set correctly.
+    This is an issue with Marshmallow parsing, where request keys
+    with '.' are parsed as paths ({'1.2': '3'} -> {'1': {'2': '3'}})
+    """
+
+    request = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
+        driving_time=10, process_time=1, service_time=2
+    )
+    request[key] = 'val'
+
+    rv = post_order(client, 1, **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert key in data
+    assert data[key] == 'val'
+
 # POST TRUCK TESTS
 
 
@@ -953,6 +977,30 @@ def test_post_truck_with_wrong_orders(client, db):
 
     assert rv.status_code == 404
 
+
+# TODO: UTP
+@pytest.mark.parametrize('key', ('Inl. terminal', 'Max. dep. time'))
+def test_post_truck_dot_seperated(client, db, key):
+    """
+    Tests if dot seperated keys are set correctly.
+    This is an issue with Marshmallow parsing, where request keys
+    with '.' are parsed as paths ({'1.2': '3'} -> {'1': {'2': '3'}})
+    """
+
+    request = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30'
+    )
+    request[key] = 'val'
+
+    rv = post_truck(client, 1, **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert key in data
+    assert data[key] == 'val'
 
 # DELETE ORDER TESTS
 
