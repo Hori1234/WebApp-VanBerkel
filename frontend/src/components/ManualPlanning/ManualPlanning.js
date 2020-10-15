@@ -28,7 +28,9 @@ export default class ManualPlanning extends Component {
       selectedOrdersRowKeys: [],
       selectedTrucksRowKeys: [],
       columnFilter: [],
+      columnTruckFilter: [],
       isVisible: false,
+      isTruckVisible:false,
       columns: [
         {
           title: "Container",
@@ -416,6 +418,7 @@ export default class ManualPlanning extends Component {
       data: [],
       data2: [],
       startingColumns: [],
+      startingTruckColumns: [],
       AOVisible: false,
       ATVisible: false,
       magnifyOrders: false,
@@ -454,6 +457,7 @@ export default class ManualPlanning extends Component {
 
   componentDidMount() {
     this.setState({ startingColumns: this.state.columns });
+    this.setState({ startingTruckColumns: this.state.columns2 });
     this.getOrderList("latest");
     this.getTruckList("latest");
   }
@@ -465,6 +469,9 @@ export default class ManualPlanning extends Component {
   };
   changeVisibility = (isTrue) => {
     this.setState({ isVisible: isTrue });
+  };
+  changeTruckVisibility = (isTrue) => {
+    this.setState({ isTruckVisible: isTrue });
   };
   filterColumns = (e) => {
     var columnFilter = this.state.columnFilter;
@@ -482,6 +489,23 @@ export default class ManualPlanning extends Component {
       });
     this.setState({ columns: final, columnFilter: columnFilter });
   };
+  filterTruckColumns = (e) => {
+    var columnTruckFilter = this.state.columnTruckFilter;
+    if (e.target.checked) {
+      columnTruckFilter = columnTruckFilter.filter((current) => {
+        return current !== e.target.id;
+      });
+    } else if (!e.target.checked) {
+      columnTruckFilter.push(e.target.id);
+    }
+    var final = this.state.startingTruckColumns;
+    for (let i = 0; i < columnTruckFilter.length; i++)
+      final = final.filter((current) => {
+        return current.dataIndex !== columnTruckFilter[i];
+      });
+    this.setState({ columns2: final, columnFilter: columnTruckFilter });
+  };
+
   changeDataOrders = (d) => {
     if (d === "Both") {
       this.setState({ data: this.state.originalOrders });
@@ -741,13 +765,14 @@ export default class ManualPlanning extends Component {
             "Unit type": res.data.orders[i]["Unit type"],
             Booking: res.data.orders[i]["Booking"],
             "Ship. comp.": res.data.orders[i]["Ship. comp."],
-            Terminal: res.data.orders[i]["Terminal"],
-            Truck: res.data.orders[i]["Truck"],
-            Pickup: res.data.orders[i]["Pickup"],
-            Status: res.data.orders[i]["Status"],
-            inl_terminal: res.data.orders[i]["inl_terminal"],
-            Gate: res.data.orders[i]["Gate"],
-            Time: res.data.orders[i]["Time"],
+            "Terminal": res.data.orders[i]["Terminal"],
+            "Truck": res.data.orders[i]["Truck"],
+            "Pickup": res.data.orders[i]["Pickup"],
+            "order_number": res.data.orders[i]["order_number"],
+            "Status": res.data.orders[i]["Status"],
+            "inl_terminal": res.data.orders[i]["inl_terminal"],
+            "Gate": res.data.orders[i]["Gate"],
+            "Time": res.data.orders[i]["Time"],
             "Max. departure": res.data.orders[i]["Max. departure"],
             "Time (1)": res.data.orders[i]["Time (1)"],
             latest_dep_time: res.data.orders[i]["latest_dep_time"],
@@ -959,145 +984,381 @@ export default class ManualPlanning extends Component {
     const showHideMenu = (
       <Menu>
         <Menu.ItemGroup title="Columns">
-          <Menu.Item key="cityMenu">
-            <Checkbox id="city" onChange={this.filterColumns} defaultChecked>
-              city
+          <Menu.Item key="Container">
+            <Checkbox id="Container" onChange={this.filterColumns} defaultChecked>
+              Container
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="inl_terminalMenu">
+          <Menu.Item key="Unit type">
             <Checkbox
-              id="inl_terminal"
+              id="Unit type"
               onChange={this.filterColumns}
               defaultChecked
             >
-              inl_terminal
+              Unit type
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="truckIdMenu">
-            <Checkbox id="truckId" onChange={this.filterColumns} defaultChecked>
-              Truck ID
+          <Menu.Item key="Ship. comp.">
+            <Checkbox id="Ship. comp." onChange={this.filterColumns} defaultChecked>
+              Ship. comp.
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="deliveryDeadline">
+          <Menu.Item key="Terminal">
             <Checkbox
-              id="deliveryDeadline"
+              id="Terminal"
               onChange={this.filterColumns}
               defaultChecked
             >
-              Delivery Deadline
+              Terminal
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="processTime">
+          <Menu.Item key="Truck">
             <Checkbox
-              id="processTime"
+              id="Truck"
               onChange={this.filterColumns}
               defaultChecked
             >
-              Process Time
+              Truck
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="drivingTime">
+          <Menu.Item key="Pickup">
             <Checkbox
-              id="drivingTime"
+              id="Pickup"
               onChange={this.filterColumns}
               defaultChecked
             >
-              drivingTime
+              Pickup
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="serviceTime">
+          <Menu.Item key="Status">
             <Checkbox
-              id="serviceTime"
+              id="Status"
               onChange={this.filterColumns}
               defaultChecked
             >
-              serviceTime
+              Status
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="closing">
-            <Checkbox id="closing" onChange={this.filterColumns} defaultChecked>
-              closing
+          <Menu.Item key="Gate">
+            <Checkbox id="Gate" onChange={this.filterColumns} defaultChecked>
+              Gate
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="container">
+          <Menu.Item key="Time">
             <Checkbox
-              id="container"
+              id="Time"
               onChange={this.filterColumns}
               defaultChecked
             >
-              container
+              Time
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Max. departure">
+            <Checkbox id="Max. departure" onChange={this.filterColumns} defaultChecked>
+              Max. departure
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Time (1)">
+            <Checkbox id="Time (1)" onChange={this.filterColumns} defaultChecked>
+              Time (1)
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Truck Used">
+            <Checkbox id="Truck Used" onChange={this.filterColumns} defaultChecked>
+              Truck Used
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="City">
+            <Checkbox id="City" onChange={this.filterColumns} defaultChecked>
+              City
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="L/D">
+            <Checkbox id="L/D" onChange={this.filterColumns} defaultChecked>
+              L/D
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Date">
+            <Checkbox
+              id="Date"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Date
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Time (2)">
+            <Checkbox id="Time (2)" onChange={this.filterColumns} defaultChecked>
+              Time (2)
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Reference">
+            <Checkbox
+              id="Reference"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Reference
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Truck (1)">
+            <Checkbox id="Truck (1)" onChange={this.filterColumns} defaultChecked>
+              Truck (1)
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Gate (1)">
+            <Checkbox id="Gate (1)" onChange={this.filterColumns} defaultChecked>
+              Gate (1)
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Time(3)">
+            <Checkbox id="Time (3)" onChange={this.filterColumns} defaultChecked>
+              Time (3)
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Inl. ter. (1)">
+            <Checkbox
+              id="Inl. ter. (1)"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Inl. ter. (1)
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Gross (kgs)">
+            <Checkbox
+              id="Gross (kgs)"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Gross (kgs)
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Temperature °C">
+            <Checkbox
+              id="Temperature °C"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Temperature °C
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Seal">
+            <Checkbox
+              id="Seal"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Seal
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Truck (2)">
+            <Checkbox
+              id="Truck (2)"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Truck (2)
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Voyage/inland carrier">
+            <Checkbox
+              id="Voyage/inland carrier"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Voyage/inland carrier
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Terminal (1)">
+            <Checkbox
+              id="Terminal (1)"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Terminal (1)
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Closing">
+            <Checkbox
+              id="Closing"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Closing
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="POD">
+            <Checkbox
+              id="POD"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              POD
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Invoice reference">
+            <Checkbox
+              id="Invoice reference"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Invoice reference
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Tariff type">
+            <Checkbox
+              id="Tariff type"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Tariff type
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="G">
+            <Checkbox
+              id="G"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              G
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="F">
+            <Checkbox
+              id="F"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              F
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Positie">
+            <Checkbox
+              id="Positie"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Positie
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Delay">
+            <Checkbox
+              id="Delay"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Delay
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Weight">
+            <Checkbox
+              id="Weight"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Weight
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="departure_time">
+            <Checkbox
+              id="departure_time"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              departure_time
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="truck_id">
+            <Checkbox
+              id="truck_id"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              truck_id
+            </Checkbox>
+          </Menu.Item>
+        </Menu.ItemGroup>
+      </Menu>
+    );
+    const showHideTruckMenu = (
+      <Menu>
+        <Menu.ItemGroup title="truck_id">
+          <Menu.Item key="truck_id">
+            <Checkbox id="truck_id" onChange={this.filterTruckColumns} defaultChecked>
+              truck_id
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="s_number">
+            <Checkbox
+              id="s_number"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
+              s_number
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="availability">
+            <Checkbox id="availability" onChange={this.filterTruckColumns} defaultChecked>
+              availability
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="truck_type">
+            <Checkbox id="truck_type" onChange={this.filterTruckColumns} defaultChecked>
+              truck_type
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="business_type">
+            <Checkbox id="business_type" onChange={this.filterTruckColumns} defaultChecked>
+              business_type
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Driver">
+            <Checkbox id="Driver" onChange={this.filterTruckColumns} defaultChecked>
+              Driver
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="terminal">
+            <Checkbox id="terminal" onChange={this.filterTruckColumns} defaultChecked>
+              terminal
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="Owner">
+            <Checkbox
+              id="Owner"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
+              Owner
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="hierarchy">
+            <Checkbox id="hierarchy" onChange={this.filterTruckColumns} defaultChecked>
+              hierarchy
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="use_cost">
+            <Checkbox
+              id="use_cost"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
+              use_cost
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="date">
-            <Checkbox id="date" onChange={this.filterColumns} defaultChecked>
+            <Checkbox id="date" onChange={this.filterTruckColumns} defaultChecked>
               date
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="delay">
-            <Checkbox id="delay" onChange={this.filterColumns} defaultChecked>
-              delay
+          <Menu.Item key="starting_time">
+            <Checkbox id="starting_time" onChange={this.filterTruckColumns} defaultChecked>
+              starting_time
             </Checkbox>
           </Menu.Item>
-          <Menu.Item key="gate">
-            <Checkbox id="gate" onChange={this.filterColumns} defaultChecked>
-              gate
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="gate1">
-            <Checkbox id="gate1" onChange={this.filterColumns} defaultChecked>
-              gate1
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="gross">
-            <Checkbox id="gross" onChange={this.filterColumns} defaultChecked>
-              gross
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="inl_ter_1">
-            <Checkbox
-              id="inl_ter_1"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
-              inl_ter_1
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="l_d">
-            <Checkbox id="l_d" onChange={this.filterColumns} defaultChecked>
-              l_d
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="max_departure">
-            <Checkbox
-              id="max_departure"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
-              max_departure
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="pickup">
-            <Checkbox id="pickup" onChange={this.filterColumns} defaultChecked>
-              pickup
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="seal">
-            <Checkbox id="seal" onChange={this.filterColumns} defaultChecked>
-              seal
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="status">
-            <Checkbox id="status" onChange={this.filterColumns} defaultChecked>
-              status
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="ship_comp">
-            <Checkbox
-              id="ship_comp"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
-              ship_comp
+          <Menu.Item key="Remarks">
+            <Checkbox id="Remarks" onChange={this.filterTruckColumns} defaultChecked>
+              Remarks
             </Checkbox>
           </Menu.Item>
         </Menu.ItemGroup>
@@ -1136,7 +1397,17 @@ export default class ManualPlanning extends Component {
               <Button>Show/Hide</Button>
             </Dropdown>
           </Col>
-          <Col span={3} offset={13}>
+          <Col span={2} offset={12}>
+            <Dropdown
+              overlay={showHideTruckMenu}
+              onVisibleChange={this.changeTruckVisibility}
+              visible={this.state.isTruckVisible}
+              style={{ height: "50vh" }}
+            >
+              <Button>Show/Hide</Button>
+            </Dropdown>
+          </Col>
+          <Col span={2} >
             <Button onClick={() => window.open("/data")}>
               Data visualization
             </Button>

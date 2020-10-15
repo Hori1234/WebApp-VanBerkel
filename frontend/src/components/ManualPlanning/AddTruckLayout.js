@@ -8,39 +8,37 @@ export default class AddTruckLayout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      truck_id: "",
-      s_number: "",
-      availability: "",
-      truck_type: "",
-      business_type: "",
-      Driver: "",
-      terminal: "",
-      Owner: "",
-      hierarchy: "",
-      use_cost: "",
-      date: "",
-      starting_time: "",
-      Remarks: "",
+      "truck_id": "",
+      "availability": "",
+      "truck_type": "",
+      "business_type": "",
+      "Driver": "",
+      "terminal": "",
+      "Owner": "",
+      "hierarchy": "",
+      "use_cost": "",
+      "date": "",
+      "starting_time": "",
+      "Remarks": ""   
     };
   }
   createTruckData = () => {
     let data = {
-      truck_id: this.state.truck_id,
-      s_number: this.state.s_number,
-      availability: this.state.availability,
-      truck_type: this.state.truck_type,
-      business_type: this.state.business_type,
-      Driver: this.state.Driver,
-      terminal: this.state.terminal,
-      Owner: this.state.Owner,
-      hierarchy: this.state.hierarchy,
-      use_cost: this.state.use_cost,
-      date: this.state.date,
-      starting_time: this.state.starting_time,
-      Remarks: this.state.Remarks,
-    };
-    return data;
-  };
+      "truck_id": this.state.truck_id,
+      "availability": this.state.availability,
+      "truck_type": this.state.truck_type,
+      "business_type": this.state.business_type,
+      "Driver": this.state.Driver,
+      "terminal": this.state.terminal,
+      "Owner": this.state.Owner,
+      "hierarchy": this.state.hierarchy,
+      "use_cost": this.state.use_cost,
+      "date": this.state.date,
+      "starting_time": this.state.starting_time,
+      "Remarks": this.state.Remarks  
+    }
+    return data
+  }
 
   getFormTruckData = () => {
     let temp = [];
@@ -58,7 +56,6 @@ export default class AddTruckLayout extends Component {
       this.state.Driver,
       this.state.Remarks,
       this.state.business_type,
-      this.state.s_number
     );
     console.log(temp);
     return temp;
@@ -67,11 +64,6 @@ export default class AddTruckLayout extends Component {
   handleChangeTruckId = (event) => {
     this.setState({
       truck_id: event.target.value,
-    });
-  };
-  handleChangeTruckSNumber = (event) => {
-    this.setState({
-      s_number: event.target.value,
     });
   };
   handleChangeAvailability = (event) => {
@@ -239,12 +231,6 @@ export default class AddTruckLayout extends Component {
               <Input
                 value={this.state.business_type}
                 onChange={this.handleChangeBusiness_type}
-              />
-            </Form.Item>
-            <Form.Item name={"truckSNo"} label={"Truck S No:"}>
-              <Input
-                value={this.state.s_number}
-                onChange={this.handleChangeTruckSNumber}
               />
             </Form.Item>
           </Col>
