@@ -77,6 +77,14 @@ class Trucks(MethodView):
         # Filter any None values in the request
         truck = {k: v for k, v in truck.items() if v is not None}
 
+        # Marshmallow might parse the value as a dictionary
+        # so we have to revert it back
+        for k, v in truck.items():
+            if isinstance(v, dict):
+                new_k, new_v = unnest(truck, k)
+                truck[new_k] = new_v
+                truck.pop(k)
+
         # Create a new truck with all parameters
         try:
             new_truck = Truck(**truck)
