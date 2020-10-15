@@ -32,10 +32,12 @@ var truckIDsDummy = ["23", "23", "23", "234", "235"];
 var orderIDsDummy = ["1", "2", "3", "4", "5"];
 var startTimesDummy = ["8:00", "10:30", "16:00", "12:00", "16:00"];
 var endTimesDummy = ["10:30", "12:00", "18:00", "18:00", "18:00", "18:00"];
-var destinationsDummy = [ "Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven"];
-var orderTypesDummy = [ "Port", "Port", "Port", "Port", "Port"];
-var clientsDummy = [ "Hans", "Janna", "Surgei", "Rick", "Sander"];
-var containersDummy = [ "1A", "1B", "1C", "1D", "1E"];
+var destinationsDummy = ["Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven"];
+var orderTypesDummy = ["Port", "Port", "Port", "Port", "Port"];
+var clientsDummy = ["Hans", "Janna", "Surgei", "Rick", "Sander"];
+var containersDummy = ["1A", "1B", "1C", "1D", "1E"];
+
+
 
 // creates the tooltip of an order
 export function createCustomHTMLTooltip(
@@ -93,10 +95,11 @@ export function calculateDuration(startTime, endTime) {
 
 //create javascript data object
 export function createDataTime(time) {
-  let index = time.indexOf(":");
-  let hours = time.substr(0, index);
-  let minutes = time.substr(index + 1);
-  return new Date(0, 0, 0, hours, minutes, 0);
+  //let index = time.indexOf(":");
+  //let hours = time.substr(0, index);
+  //let minutes = time.substr(index + 1);
+  const arrayTime = time.split(":");
+  return new Date(0, 0, 0, arrayTime[0], arrayTime[1], 0);
 }
 
 // create single data input for timeline
@@ -112,8 +115,8 @@ export function createSingleDataInput(
 ) {
   let duration = calculateDuration(startTime, endTime);
   return [
-    truckID,
-    +orderID,
+    truckID.toString(),
+    orderID,
     createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination, orderType, client, container),
     createDataTime(startTime),
     createDataTime(endTime),
@@ -139,6 +142,7 @@ export function createAllDataInput(
   clients,
   containers
 ) {
+  console.log(orderIDs);
   let listLength = truckIDs.length;
   let listDataInputs = [
     [
@@ -161,6 +165,8 @@ export function createAllDataInput(
       containers[i]
     );
     listDataInputs.push(tempList);
+    console.log(listDataInputs);
+    console.log(orderIDs[0]);
   }
   return listDataInputs;
 }
@@ -170,6 +176,7 @@ export default class DataVisualization extends Component {
     super(props);
     this.state = {
       timelineDetails: [],
+      status: "loading"
     };
   }
 
@@ -177,7 +184,28 @@ export default class DataVisualization extends Component {
     this.getTimeline("latest");
   }
 
-  createArrays() {
+  getTimeline = async (value) => {
+    return await axios
+      .get(`/api/orders/timeline/${value}`)
+      .then((res) => {
+        this.setState((state) => ({
+          ...state,
+          timelineDetails: res.data,
+          status: "success",
+        }));
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+
+  createArrays = () => {
     let address = [];
     let bookingID = [];
     let client = [];
@@ -196,13 +224,13 @@ export default class DataVisualization extends Component {
         address.push(element.address);
       }
       if (element.booking_id == null) {
-        bookingID.push("unknown client");
+        bookingID.push("unknown booking order");
       }
       else {
         bookingID.push(element.booking_id);
       }
       if (element.client == null) {
-        client.push("unknown booking order");
+        client.push("unknown client");
       }
       else {
         client.push(element.client);
@@ -246,48 +274,13 @@ export default class DataVisualization extends Component {
     console.log(endTime);
     console.log(orderType);
     console.log(truckID);
-
-    return (truckID, containerID, departureTime, endTime, address)
+    return createAllDataInput(truckID, bookingID, departureTime, endTime, address, orderType, client, containerID);
   }
-
-  getTimeline = async (value) => {
-    return await axios
-      .get(`/api/orders/timeline/${value}`)
-      .then((res) => {
-        var outarray = [];
-        for (var i = 1; i < res.data.length; i++) {
-          var temp = {
-            departure_time: res.data[i]["departure_time"],
-            booking_id: res.data[i]["booking_id"],
-            order_type: res.data[i]["order_type"],
-            address: res.data[i]["address"],
-            client: res.data[i]["client"],
-            container_id: res.data[i]["container_id"],
-            end_time: res.data[i]["end_time"],
-            truck_id: res.data[i]["truck_id"],
-          };
-          outarray.push(temp);
-        }
-
-        this.setState((state) => ({
-          ...state,
-          timelineDetails: outarray,
-          status: "success",
-        }));
-        return true;
-      })
-      .catch((error) => {
-        this.setState((state) => ({
-          ...state,
-          status: "error",
-          error: error,
-        }));
-        return false;
-      });
-  };
 
   render() {
     return (
+      
+      this.state.status == "loading" ? "loading...":
       <Layout
         style={{
           display: "flex",
@@ -301,8 +294,8 @@ export default class DataVisualization extends Component {
           height={"100%"}
           chartType="Timeline"
           loader={<div>Loading Chart</div>}
-          data={// createAllDataInput(this.createArrays)
-            createAllDataInput(truckIDsDummy,orderIDsDummy,startTimesDummy,endTimesDummy,destinationsDummy,orderTypesDummy,clientsDummy,containersDummy)
+          data={ this.createArrays()
+            //createAllDataInput(truckIDsDummy, orderIDsDummy, startTimesDummy, endTimesDummy, destinationsDummy, orderTypesDummy, clientsDummy, containersDummy)
           }
           options={{
             timeline: {
@@ -326,7 +319,7 @@ export default class DataVisualization extends Component {
             </Button>
           </Col>
           <Col span={4} offset={14}>
-            <Button type="primary" size={"large"} style={{ width: "100%" }} onClick={console.log(this.state.timelineDetails)}>
+            <Button type="primary" size={"large"} style={{ width: "100%" }} onClick={this.createArrays}>
               Publish
             </Button>
           </Col>
