@@ -75,13 +75,16 @@ class Trucks(MethodView):
         orders = truck.pop('orders', None)
 
         # Filter any None values in the request
-        truck = {k: v for k, v in truck.items() if v is not None}
+        truck_not_null = {k: v for k, v in truck.items() if v is not None}
 
         # Marshmallow might parse the value as a dictionary
         # so we have to revert it back
-        for k, v in truck.items():
+
+        truck = truck_not_null.copy()
+
+        for k, v in truck_not_null.items():
             if isinstance(v, dict):
-                new_k, new_v = unnest(truck, k)
+                new_k, new_v = unnest(truck_not_null, k)
                 truck[new_k] = new_v
                 truck.pop(k)
 
