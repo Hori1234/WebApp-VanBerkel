@@ -32,13 +32,10 @@ var truckIDsDummy = ["23", "23", "23", "234", "235"];
 var orderIDsDummy = ["1", "2", "3", "4", "5"];
 var startTimesDummy = ["8:00", "10:30", "16:00", "12:00", "16:00"];
 var endTimesDummy = ["10:30", "12:00", "18:00", "18:00", "18:00", "18:00"];
-var destinationsDummy = [
-  "Eindhoven",
-  "Eindhoven",
-  "Eindhoven",
-  "Eindhoven",
-  "Eindhoven",
-];
+var destinationsDummy = [ "Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven"];
+var orderTypesDummy = [ "Port", "Port", "Port", "Port", "Port"];
+var clientsDummy = [ "Hans", "Janna", "Surgei", "Rick", "Sander"];
+var containersDummy = [ "1A", "1B", "1C", "1D", "1E"];
 
 // creates the tooltip of an order
 export function createCustomHTMLTooltip(
@@ -46,7 +43,10 @@ export function createCustomHTMLTooltip(
   startTime,
   endTime,
   duration,
-  destination
+  destination,
+  orderType,
+  client,
+  container
 ) {
   return (
     '<ul class="flex-container">' +
@@ -64,6 +64,15 @@ export function createCustomHTMLTooltip(
     "</li>" +
     '<li class="flex-item"><b>Destination: </b>' +
     destination +
+    "</li>" +
+    '<li class="flex-item"><b>Order Type: </b>' +
+    orderType +
+    "</li>" +
+    '<li class="flex-item"><b>Customer: </b>' +
+    client +
+    "</li>" +
+    '<li class="flex-item"><b>Container ID: </b>' +
+    container +
     "</li>" +
     "</ul>"
   );
@@ -96,13 +105,16 @@ export function createSingleDataInput(
   orderID,
   startTime,
   endTime,
-  destination
+  destination,
+  orderType,
+  client,
+  container
 ) {
   let duration = calculateDuration(startTime, endTime);
   return [
     truckID,
     +orderID,
-    createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination),
+    createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination, orderType, client, container),
     createDataTime(startTime),
     createDataTime(endTime),
   ];
@@ -116,15 +128,16 @@ export function coloursAvailable() {
   return colours;
 }
 
-export function extractColours() {}
-
 // create a list with all data points for the timeline
 export function createAllDataInput(
   truckIDs,
   orderIDs,
   startTimes,
   endTimes,
-  destinations
+  destinations,
+  orderTypes,
+  clients,
+  containers
 ) {
   let listLength = truckIDs.length;
   let listDataInputs = [
@@ -142,7 +155,10 @@ export function createAllDataInput(
       orderIDs[i],
       startTimes[i],
       endTimes[i],
-      destinations[i]
+      destinations[i],
+      orderTypes[i],
+      clients[i],
+      containers[i]
     );
     listDataInputs.push(tempList);
   }
@@ -159,6 +175,79 @@ export default class DataVisualization extends Component {
 
   componentDidMount() {
     this.getTimeline("latest");
+  }
+
+  createArrays() {
+    let address = [];
+    let bookingID = [];
+    let client = [];
+    let containerID = [];
+    let departureTime = [];
+    let endTime = [];
+    let orderType = [];
+    let truckID = [];
+
+    const property = this.state.timelineDetails;
+    console.log(property);
+    property.forEach((element) => {
+      if (element.address == null) {
+        address.push("unknown destination");
+      } else {
+        address.push(element.address);
+      }
+      if (element.booking_id == null) {
+        bookingID.push("unknown client");
+      }
+      else {
+        bookingID.push(element.booking_id);
+      }
+      if (element.client == null) {
+        client.push("unknown booking order");
+      }
+      else {
+        client.push(element.client);
+      }
+      if (element.container_id == null) {
+        containerID.push("unknown");
+      }
+      else {
+        containerID.push(element.container_id);
+      }
+      if (element.departure_time == null) {
+        departureTime.push("0:01");
+      }
+      else {
+        departureTime.push(element.departure_time);
+      }
+      if (element.end_time == null) {
+        endTime.push("23:59");
+      }
+      else {
+        endTime.push(element.end_time);
+      }
+      if (element.order_type == null) {
+        orderType.push("No type");
+      }
+      else {
+        orderType.push(element.order_type);
+      }
+      if (element.truck_id == null) {
+        truckID.push("No truck");
+      }
+      else {
+        truckID.push(element.truck_id);
+      }
+    })
+    console.log(address);
+    console.log(bookingID);
+    console.log(client);
+    console.log(containerID);
+    console.log(departureTime);
+    console.log(endTime);
+    console.log(orderType);
+    console.log(truckID);
+
+    return (truckID, containerID, departureTime, endTime, address)
   }
 
   getTimeline = async (value) => {
@@ -212,13 +301,9 @@ export default class DataVisualization extends Component {
           height={"100%"}
           chartType="Timeline"
           loader={<div>Loading Chart</div>}
-          data={createAllDataInput(
-            truckIDsDummy,
-            orderIDsDummy,
-            startTimesDummy,
-            endTimesDummy,
-            destinationsDummy
-          )}
+          data={// createAllDataInput(this.createArrays)
+            createAllDataInput(truckIDsDummy,orderIDsDummy,startTimesDummy,endTimesDummy,destinationsDummy,orderTypesDummy,clientsDummy,containersDummy)
+          }
           options={{
             timeline: {
               colorByRowLabel: false,
@@ -241,7 +326,7 @@ export default class DataVisualization extends Component {
             </Button>
           </Col>
           <Col span={4} offset={14}>
-            <Button type="primary" size={"large"} style={{ width: "100%" }}>
+            <Button type="primary" size={"large"} style={{ width: "100%" }} onClick={this.createArrays()}>
               Publish
             </Button>
           </Col>
