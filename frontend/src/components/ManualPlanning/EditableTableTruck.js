@@ -59,11 +59,9 @@ const EditableTableTruck = (props) => {
     setEditingKey("");
   };
 
-  const editAccount = (order_id, Data) => {
-    const dataToPass = Data
-    delete dataToPass['s_number'];
+  const editAccount = (truck_id, Data) => {
     return axios
-      .patch(`/api/orders/${order_id}`, dataToPass)
+      .patch(`/api/trucks/${truck_id}`, Data)
       .then((res) => {
         if (res.status === 200) {
           message.success("Order updated succesfully");
@@ -105,7 +103,6 @@ const EditableTableTruck = (props) => {
         newData.splice(index, 1, { ...item, ...row });
         props.setData(newData);
         setEditingKey("");
-        const dataToPass = newData[index];
         editAccount(key, newData[index]);
       } else {
         newData.push(row);

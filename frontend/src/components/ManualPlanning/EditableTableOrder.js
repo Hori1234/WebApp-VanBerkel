@@ -96,9 +96,6 @@ const EditableTableOrder = (props) => {
   };
 
   const editAccount = (order_id, Data) => {
-    delete Data['service_time'];
-    delete Data['latest_dep_time'];
-    delete Data['order_number'];
     return axios
       .patch(`/api/orders/${order_id}`, Data)
       .then((res) => {
