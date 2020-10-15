@@ -459,6 +459,67 @@ def test_patch_truck_computed_field(client):
 
 
 # TODO: UTP
+def test_patch_order_with_truck_id_without_departure_time(client):
+    """
+    Tests patch order with a truck ID and departure time.
+    """
+    request = dict(
+        truck_id=14
+    )
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    data = rv.get_json()
+    assert 'truck S number' in data['message']
+    assert 'departure time' in data['message']
+
+
+# TODO: UTP
+def test_patch_order_with_departure_time_without_truck_id(client):
+    """
+    Tests patch order with a truck ID and departure time.
+    """
+    request = dict(
+        departure_time='12:00'
+    )
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    data = rv.get_json()
+    assert 'truck S number' in data['message']
+    assert 'departure time' in data['message']
+
+
+# TODO: UTP
+def test_patch_order_with_departure_time_truck_set(client, db):
+    """
+    Tests if the departure time can be set if the truck is already set
+    """
+    request1 = dict(
+        truck_id=14,
+        departure_time='12:00'
+    )
+
+    rv1 = patch_order(client, 1, **request1)
+
+    assert rv1.status_code == 200
+
+    request2 = dict(
+        departure_time='10:00'
+    )
+
+    rv2 = patch_order(client, 1, **request2)
+
+    assert rv2.status_code == 200
+    data = rv2.get_json()
+    assert data['departure_time'] == '10:00:00'
+
+    order = orders.Order.query.get(1)
+    assert order.truck_id == 14
+    assert order.departure_time.strftime('%H:%M') == '10:00'
+
+
+# TODO: UTP
 @pytest.mark.parametrize('key', ('Inl. terminal', 'Max. dep. time'))
 def test_patch_order_dot_seperated(client, db, key):
     """
@@ -723,6 +784,44 @@ def test_post_order_with_truck_id(client, db):
     order = orders.Order.query.get(data['order_number'])
     assert order.truck_id == 14
     assert order.departure_time.strftime('%H:%M') == '14:00'
+
+
+# TODO: UTP
+def test_post_order_with_truck_id_without_departure_time(client, db):
+    """
+    Tests post order with a truck ID and departure time.
+    """
+    request = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
+        driving_time=10, process_time=1, service_time=2,
+        truck_id=14
+    )
+    rv = post_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    data = rv.get_json()
+    assert 'truck S number' in data['message']
+    assert 'departure time' in data['message']
+
+
+# TODO: UTP
+def test_post_order_with_departure_time_without_truck_id(client, db):
+    """
+    Tests post order with a truck ID and departure time.
+    """
+    request = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
+        driving_time=10, process_time=1, service_time=2,
+        departure_time='14:00'
+    )
+    rv = post_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    data = rv.get_json()
+    assert 'truck S number' in data['message']
+    assert 'departure time' in data['message']
 
 # POST TRUCK TESTS
 

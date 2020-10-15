@@ -75,6 +75,14 @@ class Orders(MethodView):
                 # Can't understand which sheet is requested
                 return abort(404, 'Order sheet not found')
 
+        # Check that when truck_id is set, departure_time also is set
+        if ('truck_id' in order) ^ ('departure_time' in order):
+            return abort(
+                400,
+                message='When assigning a truck, both the truck S number and '
+                        'the departure time need to given.'
+            )
+
         # Filter any None value in the request
         order = {k: v for k, v in order.items() if v is not None}
 
@@ -165,6 +173,20 @@ class OrderByID(MethodView):
                     400,
                     message='Cannot set field "order_number"',
                     status="Bad Request"
+                )
+
+            # Check that when truck_id is set, departure_time also is set
+            # Also, only departure time can be changed when truck has been
+            # set
+            if ('truck_id' in req and 'departure_time' not in req and
+                req['truck_id'] is not None) or \
+                    ('truck_id' not in req and
+                     'departure_time' in req and
+                     order.truck is None):
+                return abort(
+                    400,
+                    message='When assigning a truck, both the truck S number '
+                            'and the departure time need to given.'
                 )
 
             # Iterate over the keys and values in the request
