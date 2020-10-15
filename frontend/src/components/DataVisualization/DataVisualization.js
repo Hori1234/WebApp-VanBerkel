@@ -326,7 +326,7 @@ export default class DataVisualization extends Component {
             </Button>
           </Col>
           <Col span={4} offset={14}>
-            <Button type="primary" size={"large"} style={{ width: "100%" }} onClick={this.createArrays()}>
+            <Button type="primary" size={"large"} style={{ width: "100%" }} onClick={console.log(this.state.timelineDetails)}>
               Publish
             </Button>
           </Col>
