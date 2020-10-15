@@ -5,7 +5,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 
-import {withRouter , useLocation, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {withRouter , useLocation, Switch, Route, Link } from "react-router-dom";
 
 import Home from "../Home/Home";
 import UploadButton from "../UploadButton/UploadButton";
@@ -184,6 +184,7 @@ function NavigationLayout() {
             <Header style={{ backgroundColor: "white"}}>
               <Image
               src={require("../Images/van-berkel-logo-final.png")}
+              preview={false}
               />
             </Header>
             <Layout

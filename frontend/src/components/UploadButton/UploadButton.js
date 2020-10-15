@@ -7,10 +7,9 @@ import {
   Card,
   Layout,
   Typography,
-  Divider,
   Image,
 } from "antd";
-import { InboxOutlined, FileExcelOutlined } from "@ant-design/icons";
+import { InboxOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 
 const { Dragger } = Upload;

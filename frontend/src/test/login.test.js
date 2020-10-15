@@ -22,8 +22,8 @@ describe('React App', () => {
     await page.waitForSelector('.ant-message-custom-content.ant-message-info');
     const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-info', element => element.textContent);
 
-    expect(ErrorMessage).toEqual('account not valid');
-
+    expect(ErrorMessage).toEqual('Account not valid');
+    await browser.close();
   }, 120000);
 
   it('shall redirect to correct page on successful login', async () => {
@@ -42,7 +42,7 @@ describe('React App', () => {
     await page.click('.ant-btn-primary');
 
     await page.waitForSelector('.ant-layout-sider');
-
+    await browser.close();
 
   }, 120000);
 });

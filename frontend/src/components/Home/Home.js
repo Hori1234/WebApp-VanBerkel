@@ -13,7 +13,7 @@ export default class Home extends Component {
         return (
             <AuthContext.Consumer>
                 {(context) => (
-                    <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", width: "100%", justifyConten: "space-around", backgroundColor: "white" }}>
+                    <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", justifyConten: "space-around", backgroundColor: "white" }}>
                         <Layout style={{ alignItems: "flex-start", display: "flex", justifyContent: "space-around", marginBottom: 50, marginRight: 100, backgroundColor: "white", marginLeft: 30 }}>
 
                             <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>

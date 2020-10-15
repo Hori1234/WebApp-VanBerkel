@@ -13,9 +13,10 @@ import {
   Popconfirm,
 } from "antd";
 import axios from "axios";
-import EditableTable from "./EditableTable";
+import EditableTableOrder from "./EditableTableOrder";
 import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
+import EditableTableTruck from "./EditableTableTruck";
 import "./ManualPlanning.css";
 
 const { Option } = Select;
@@ -30,290 +31,315 @@ export default class ManualPlanning extends Component {
       isVisible: false,
       columns: [
         {
-          title: "Booking Nr",
+          title: "Container",
+          dataIndex: "Container",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Unit type",
+          dataIndex: "Unit type",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Booking",
           dataIndex: "Booking",
           sorter: (a, b) => a.Booking - b.Booking,
           width: 150,
           editable: true,
         },
         {
-          title: "City",
-          dataIndex: "city",
-          sortDirections: ["descend", "ascend"],
-          sorter: (a, b) => a.city.localeCompare(b.city),
+          title: "Ship. comp.",
+          dataIndex: "Ship. comp.",
           width: 150,
           editable: true,
         },
         {
-          title: "Inl_Terminal",
+          title: "Terminal",
+          dataIndex: "Terminal",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Truck",
+          dataIndex: "Truck",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Pickup",
+          dataIndex: "Pickup",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Order Number",
+          dataIndex: "order_number",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Status",
+          dataIndex: "Status",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Inl. Terminal",
           dataIndex: "inl_terminal",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Gate",
+          dataIndex: "Gate",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Time",
+          dataIndex: "Time",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Max. departure",
+          dataIndex: "Max. departure",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Time (1)",
+          dataIndex: "Time (1)",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Latest departure time",
+          dataIndex: "latest_dep_time",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Truck Used",
+          dataIndex: "Truck Used",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Truck Type",
+          dataIndex: "truck_type",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Hierarchy",
+          dataIndex: "hierarchy",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "City",
+          dataIndex: "City",
+          sortDirections: ["descend", "ascend"],
+          sorter: (a, b) => a.City.localeCompare(b.City),
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "L/D",
+          dataIndex: "L/D",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Date",
+          dataIndex: "Date",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Time (2)",
+          dataIndex: "Time (2)",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Delivery Deadline",
+          dataIndex: "delivery_deadline",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Driving time",
+          dataIndex: "driving_time",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Process time",
+          dataIndex: "process_time",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Service time",
+          dataIndex: "service_time",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Reference",
+          dataIndex: "Reference",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Truck (1)",
+          dataIndex: "Truck (1)",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Gate (1)",
+          dataIndex: "Gate (1)",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Time (3)",
+          dataIndex: "Time (3)",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Inl. ter. (1)",
+          dataIndex: "Inl. ter. (1)",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Gross (kgs)",
+          dataIndex: "Gross (kgs)",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Temperature °C",
+          dataIndex: "Temperature °C",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Seal",
+          dataIndex: "Seal",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Truck (2)",
+          dataIndex: "Truck (2)",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Voyage/inland carrier",
+          dataIndex: "Voyage/inland carrier",
+          width: 250,
+          editable: true,
+        },
+        {
+          title: "Terminal (1)",
+          dataIndex: "Terminal (1)",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Closing",
+          dataIndex: "Closing",
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.inl_terminal.localeCompare(b.inl_terminal),
           width: 150,
           editable: true,
         },
         {
-          title: "Truck ID",
-          dataIndex: "truckId",
+          title: "POD",
+          dataIndex: "POD",
           width: 150,
           editable: true,
         },
         {
-          title: "Delivery Deadline",
-          dataIndex: "deliveryDeadline",
+          title: "Invoice reference",
+          dataIndex: "Invoice reference",
           width: 150,
           editable: true,
         },
         {
-          title: "Process Time",
-          dataIndex: "processTime",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Driving Time",
-          dataIndex: "drivingTime",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Service Time",
-          dataIndex: "serviceTime",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Closing",
-          dataIndex: "closing",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Container",
-          dataIndex: "container",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Date",
-          dataIndex: "date",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Delay",
-          dataIndex: "delay",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Gate",
-          dataIndex: "gate",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Gate1",
-          dataIndex: "gate1",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Gross",
-          dataIndex: "gross",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "inl_ter_1",
-          dataIndex: "inl_ter_1",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Invoice_reference",
-          dataIndex: "invoice_reference",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "L_D",
-          dataIndex: "l_D",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Max_departure",
-          dataIndex: "max_departure",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Max_departure",
-          dataIndex: "max_departure",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Pickup",
-          dataIndex: "pickup",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Seal",
-          dataIndex: "seal",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Status",
-          dataIndex: "status",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Ship_comp",
-          dataIndex: "ship_comp",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Tariff_type",
-          dataIndex: "tariff_type",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Terminal",
-          dataIndex: "terminal",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Terminal1",
-          dataIndex: "terminal1",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Time",
-          dataIndex: "time",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Time1",
-          dataIndex: "time1",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Time2",
-          dataIndex: "time2",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Time3",
-          dataIndex: "time3",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Truck1",
-          dataIndex: "truck1",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Truck2",
-          dataIndex: "truck2",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Truck_used",
-          dataIndex: "truck_used",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Unit_type",
-          dataIndex: "unit_type",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Voyage_inland_carrier",
-          dataIndex: "voyage_inland_carrier",
-          width: 250,
-          editable: true,
-        },
-        {
-          title: "Weight",
-          dataIndex: "weight",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Departure_time",
-          dataIndex: "departure_time",
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "F",
-          dataIndex: "f",
+          title: "Tariff type",
+          dataIndex: "Tariff type",
           width: 150,
           editable: true,
         },
         {
           title: "G",
-          dataIndex: "g",
+          dataIndex: "G",
           width: 150,
           editable: true,
         },
         {
-          title: "POF",
-          dataIndex: "pod",
+          title: "F",
+          dataIndex: "F",
           width: 150,
           editable: true,
         },
         {
           title: "Positie",
-          dataIndex: "positie",
+          dataIndex: "Positie",
           width: 150,
           editable: true,
         },
         {
-          title: "Reference",
-          dataIndex: "reference",
+          title: "Delay",
+          dataIndex: "Delay",
+          width: 150,
+          editable: true,
+        },
+
+        {
+          title: "Weight",
+          dataIndex: "Weight",
           width: 150,
           editable: true,
         },
         {
-          title: "Temperature",
-          dataIndex: "temperature",
+          title: "Truck ID",
+          dataIndex: "truck_id",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Departure time",
+          dataIndex: "departure_time",
           width: 150,
           editable: true,
         },
       ],
       columns2: [
         {
-          title: "Truck_id",
+          title: "Truck ID",
           dataIndex: "truck_id",
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.truck_id.localeCompare(b.truck_id),
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
-          title: "Driver",
-          dataIndex: "driver",
+          title: "S Number",
+          dataIndex: "s_number",
           sortDirections: ["descend", "ascend"],
-          sorter: (a, b) => a.truckId.localeCompare(b.truckId),
-          width: 100,
+          sorter: (a, b) => a.truck_id.localeCompare(b.truck_id),
+          width: 150,
           editable: true,
         },
         {
@@ -321,61 +347,69 @@ export default class ManualPlanning extends Component {
           dataIndex: "availability",
           sortDirections: ["descend", "ascend"],
           sorter: (a, b) => a.truckId.localeCompare(b.truckId),
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
-          title: "Owner",
-          dataIndex: "owner",
-          width: 100,
+          title: "Truck type",
+          dataIndex: "truck_type",
+          width: 150,
           editable: true,
         },
         {
-          title: "Remarks",
-          dataIndex: "remarks",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Business_type",
+          title: "Business type",
           dataIndex: "business_type",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
-          title: "Date",
-          dataIndex: "date",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Hierarchy",
-          dataIndex: "hierarchy",
-          width: 100,
-          editable: true,
-        },
-        {
-          title: "Starting",
-          dataIndex: "starting",
-          width: 100,
+          title: "Driver",
+          dataIndex: "Driver",
+          sortDirections: ["descend", "ascend"],
+          sorter: (a, b) => a.truckId.localeCompare(b.truckId),
+          width: 150,
           editable: true,
         },
         {
           title: "Terminal",
           dataIndex: "terminal",
-          width: 100,
+          width: 150,
           editable: true,
         },
         {
-          title: "Truck_type",
-          dataIndex: "truck_type",
-          width: 100,
+          title: "Owner",
+          dataIndex: "Owner",
+          width: 150,
           editable: true,
         },
         {
-          title: "Use_cost",
+          title: "Hierarchy",
+          dataIndex: "hierarchy",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Use cost",
           dataIndex: "use_cost",
-          width: 100,
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Date",
+          dataIndex: "date",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Starting time",
+          dataIndex: "starting_time",
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "Remarks",
+          dataIndex: "Remarks",
+          width: 150,
           editable: true,
         },
       ],
@@ -460,7 +494,7 @@ export default class ManualPlanning extends Component {
   getItv = (e) => {
     let itvData = [];
     e.forEach((element) => {
-      if (element.inl_terminal == "ITV") {
+      if (element.inl_terminal === "ITV") {
         itvData.push(element);
       }
     });
@@ -469,7 +503,7 @@ export default class ManualPlanning extends Component {
   getKat = (e) => {
     let katData = [];
     e.forEach((element) => {
-      if (element.inl_terminal == "KAT") {
+      if (element.inl_terminal === "KAT") {
         katData.push(element);
       }
     });
@@ -631,21 +665,12 @@ export default class ManualPlanning extends Component {
   //Adding the truck and the order
   addTruck = (value) => {
     this.getTruckInfo();
+    const data = this.refs.addTrucks.createTruckData();
     return axios
-      .post(`/api/trucks/sheet/${value}`, {
-        truck_id: this.state.newTruck.truck_id,
-        availability: this.state.newTruck.availability,
-        truck_type: this.state.newTruck.truck_type,
-        business_type: this.state.newTruck.use_cost,
-        terminal: this.state.newTruck.terminal,
-        hierarchy: this.state.newTruck.hierarchy,
-        use_cost: this.state.newTruck.use_cost,
-        date: this.state.newTruck.date,
-        starting_time: this.state.newTruck.starting_time,
-      })
+      .post(`/api/trucks/sheet/${value}`, data)
       .then((res) => {
         if (res.status === 200) {
-          message.success("Trcuk: " + "added succesfully");
+          message.success("Truck: added succesfully");
         } else {
           if (res.status === 422) {
             message.success(res.message);
@@ -665,15 +690,9 @@ export default class ManualPlanning extends Component {
   };
   addOrder = (value) => {
     this.getOrderInfo();
+    const data = this.refs.addOrders.createOrderData();
     return axios
-      .post(`/api/orders/sheet/${value}`, {
-        inl_terminal: this.state.newOrder.inl,
-        truck_type: this.state.newOrder.truck_type,
-        hierarchy: 0,
-        delivery_deadline: 0,
-        driving_time: 0,
-        process_time: 0,
-      })
+      .post(`/api/orders/sheet/${value}`, data)
       .then((res) => {
         if (res.status === 200) {
           message.success(
@@ -718,50 +737,54 @@ export default class ManualPlanning extends Component {
         for (var i = 1; i < res.data.orders.length; i++) {
           var temp = {
             key: res.data.orders[i]["order_number"],
+            Container: res.data.orders[i]["Container"],
+            "Unit type": res.data.orders[i]["Unit type"],
             Booking: res.data.orders[i]["Booking"],
-            city: res.data.orders[i]["City"],
+            "Ship. comp.": res.data.orders[i]["Ship. comp."],
+            Terminal: res.data.orders[i]["Terminal"],
+            Truck: res.data.orders[i]["Truck"],
+            Pickup: res.data.orders[i]["Pickup"],
+            Status: res.data.orders[i]["Status"],
             inl_terminal: res.data.orders[i]["inl_terminal"],
-            truckId: res.data.orders[i]["Truck (1)"],
-            deliveryDeadline: res.data.orders[i]["delivery_deadline"],
-            processTime: res.data.orders[i]["process_time"],
-            drivingTime: res.data.orders[i]["driving_time"],
-            serviceTime: res.data.orders[i]["service_time"],
-            closing: res.data.orders[i]["Closing"],
-            container: res.data.orders[i]["Container"],
-            date: res.data.orders[i]["Date"],
-            delay: res.data.orders[i]["Delay"],
-            gate: res.data.orders[i]["Gate"],
-            gate1: res.data.orders[i]["Gate (1)"],
-            gross: res.data.orders[i]["Gross (kgs)"],
-            inl_ter_1: res.data.orders[i]["Inl. ter. (1)"],
-            invoice_reference: res.data.orders[i]["Invoice reference"],
-            l_d: res.data.orders[i]["L/D"],
-            max_departure: res.data.orders[i]["Max. departure"],
-            pickup: res.data.orders[i]["Pickup"],
-            seal: res.data.orders[i]["Seal"],
-            status: res.data.orders[i]["Status"],
-            ship_comp: res.data.orders[i]["Ship. comp."],
-            tariff_type: res.data.orders[i]["Tariff type"],
-            terminal: res.data.orders[i]["Terminal"],
-            terminal1: res.data.orders[i]["Terminal (1)"],
-            time: res.data.orders[i]["Time"],
-            time1: res.data.orders[i]["Time (1)"],
-            time2: res.data.orders[i]["Time (2)"],
-            time3: res.data.orders[i]["Time (3)"],
-            truck1: res.data.orders[i]["Truck (1)"],
-            truck2: res.data.orders[i]["Truck (2)"],
-            truck_used: res.data.orders[i]["Truck Used"],
-            unit_type: res.data.orders[i]["Unit type"],
-            voyage_inland_carrier: res.data.orders[i]["Voyage/inland carrier"],
-            weight: res.data.orders[i]["Weight"],
-            departure_time: res.data.orders[i]["Departure time"],
-            truck_id: res.data.orders[i]["Truck Id"],
-            f: res.data.orders[i]["F"],
-            g: res.data.orders[i]["G"],
-            pod: res.data.orders[i]["POD"],
-            positie: res.data.orders[i]["Positie"],
-            reference: res.data.orders[i]["Reference"],
-            temperature: res.data.orders[i]["Temperature °C"],
+            Gate: res.data.orders[i]["Gate"],
+            Time: res.data.orders[i]["Time"],
+            "Max. departure": res.data.orders[i]["Max. departure"],
+            "Time (1)": res.data.orders[i]["Time (1)"],
+            latest_dep_time: res.data.orders[i]["latest_dep_time"],
+            "Truck Used": res.data.orders[i]["Truck Used"],
+            truck_type: res.data.orders[i]["truck_type"],
+            hierarchy: res.data.orders[i]["hierarchy"],
+            City: res.data.orders[i]["City"],
+            "L/D": res.data.orders[i]["L/D"],
+            Date: res.data.orders[i]["Date"],
+            "Time (2)": res.data.orders[i]["Time (2)"],
+            delivery_deadline: res.data.orders[i]["delivery_deadline"],
+            driving_time: res.data.orders[i]["driving_time"],
+            process_time: res.data.orders[i]["process_time"],
+            service_time: res.data.orders[i]["service_time"],
+            Reference: res.data.orders[i]["Reference"],
+            "Truck (1)": res.data.orders[i]["Truck (1)"],
+            "Gate (1)": res.data.orders[i]["Gate (1)"],
+            "Time (3)": res.data.orders[i]["Time (3)"],
+            "Inl. ter. (1)": res.data.orders[i]["Inl. ter. (1)"],
+            "Gross (kgs)": res.data.orders[i]["Gross (kgs)"],
+            "Temperature °C": res.data.orders[i]["Temperature °C"],
+            Seal: res.data.orders[i]["Seal"],
+            "Truck (2)": res.data.orders[i]["Truck (2)"],
+            "Voyage/inland carrier":
+              res.data.orders[i]["Voyage/inland carrier"],
+            "Terminal (1)": res.data.orders[i]["Terminal (1)"],
+            Closing: res.data.orders[i]["Closing"],
+            POD: res.data.orders[i]["POD"],
+            "Invoice reference": res.data.orders[i]["Invoice reference"],
+            "Tariff type": res.data.orders[i]["Tariff type"],
+            G: res.data.orders[i]["G"],
+            F: res.data.orders[i]["F"],
+            Positie: res.data.orders[i]["Positie"],
+            Delay: res.data.orders[i]["Delay"],
+            Weight: res.data.orders[i]["Weight"],
+            departure_time: res.data.orders[i]["departure_time"],
+            truck_id: res.data.orders[i]["truck_id"],
           };
           outarray.push(temp);
         }
@@ -792,17 +815,18 @@ export default class ManualPlanning extends Component {
           var temp = {
             key: res.data.trucks[i]["s_number"],
             truck_id: res.data.trucks[i]["truck_id"],
-            driver: res.data.trucks[i]["Driver"],
+            s_number: res.data.trucks[i]["s_number"],
             availability: res.data.trucks[i]["availability"],
-            starting: res.data.trucks[i]["starting_time"],
             truck_type: res.data.trucks[i]["truck_type"],
+            business_type: res.data.trucks[i]["business_type"],
+            Driver: res.data.trucks[i]["Driver"],
             terminal: res.data.trucks[i]["terminal"],
+            Owner: res.data.trucks[i]["Owner"],
             hierarchy: res.data.trucks[i]["hierarchy"],
             use_cost: res.data.trucks[i]["use_cost"],
             date: res.data.trucks[i]["date"],
-            owner: res.data.trucks[i]["Owner"],
-            remarks: res.data.trucks[i]["Remarks"],
-            business_type: res.data.trucks[i]["business_type"],
+            starting_time: res.data.trucks[i]["starting_time"],
+            Remarks: res.data.trucks[i]["Remarks"],
           };
           outarray.push(temp);
         }
@@ -1120,7 +1144,7 @@ export default class ManualPlanning extends Component {
         </Row>
         <Row gutter={[24, 8]} justify="space-around" align="middle">
           <Col span={12}>
-            <EditableTable
+            <EditableTableOrder
               rowSelection={ordersRowSelection}
               dataSource={this.state.data}
               columns={this.state.columns}
@@ -1130,7 +1154,7 @@ export default class ManualPlanning extends Component {
                   this.selectOrdersRow(record);
                 },
               })}
-            ></EditableTable>
+            ></EditableTableOrder>
             <br />
             <Button onClick={() => this.showOrdersModal()}>Add order</Button>
             <Popconfirm
@@ -1183,7 +1207,7 @@ export default class ManualPlanning extends Component {
             </Row>
           </Col>
           <Col span={9}>
-            <EditableTable
+            <EditableTableTruck
               rowSelection={trucksRowSelection}
               dataSource={this.state.data2}
               columns={this.state.columns2}
@@ -1193,7 +1217,7 @@ export default class ManualPlanning extends Component {
                   this.selectOrdersRow(record);
                 },
               })}
-            ></EditableTable>
+            ></EditableTableTruck>
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
             <Popconfirm
@@ -1247,7 +1271,7 @@ export default class ManualPlanning extends Component {
         >
           {this.state.magnifyOrders && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
-              <EditableTable
+              <EditableTableOrder
                 rowSelection={ordersRowSelection}
                 dataSource={this.state.data}
                 columns={this.state.columns}
@@ -1257,22 +1281,7 @@ export default class ManualPlanning extends Component {
                     this.selectOrdersRow(record);
                   },
                 })}
-              ></EditableTable>
-              <Col span={12}>
-                <br />
-                <Button onClick={this.showOrdersModal}>Add order</Button>
-                &nbsp;&nbsp;
-                <Popconfirm
-                  title="Are you sure you want to delete the selected trucks？"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={() =>
-                    this.deleteOrderById(this.state.selectedOrdersRowKeys)
-                  }
-                >
-                  <Button>Delete Order</Button>
-                </Popconfirm>
-              </Col>
+              ></EditableTableOrder>
             </Layout>
           )}
         </Modal>
@@ -1286,7 +1295,7 @@ export default class ManualPlanning extends Component {
         >
           {this.state.magnifyTrucks && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
-              <EditableTable
+              <EditableTableTruck
                 rowSelection={trucksRowSelection}
                 dataSource={this.state.data2}
                 columns={this.state.columns2}
@@ -1296,21 +1305,7 @@ export default class ManualPlanning extends Component {
                     this.selectOrdersRow(record);
                   },
                 })}
-              ></EditableTable>
-              <Col span={12}>
-                <br />
-                <Button onClick={this.ShowTruckModal}>Add truck</Button>
-                <Popconfirm
-                  title="Are you sure you want to delete the selected trucks？"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={() =>
-                    this.deleteTruckById(this.state.selectedTrucksRowKeys)
-                  }
-                >
-                  <Button>Delete truck</Button>
-                </Popconfirm>
-              </Col>
+              ></EditableTableTruck>
             </Layout>
           )}
         </Modal>

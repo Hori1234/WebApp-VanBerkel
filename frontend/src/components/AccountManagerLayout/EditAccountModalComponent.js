@@ -86,8 +86,6 @@ export default class CreateAccountsComponent extends Component {
         style={{
           alignItems: "center",
           display: "flex",
-          width: "120vh",
-          height: "70vh",
           backgroundColor: "white",
         }}
       >

@@ -198,6 +198,7 @@ export default class CreateAccountsComponent extends Component {
                       this.state.role
                     );
                     this.props.modalHandleOk();
+                    window.location.reload(false);
                     message.success("Account created !");
                   }
                 }}
