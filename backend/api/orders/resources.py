@@ -84,13 +84,16 @@ class Orders(MethodView):
             )
 
         # Filter any None value in the request
-        order = {k: v for k, v in order.items() if v is not None}
+        order_not_null = {k: v for k, v in order.items() if v is not None}
 
         # Marshmallow might parse the value as a dictionary
         # so we have to revert it back
-        for k, v in order.items():
+
+        order = order_not_null.copy()
+
+        for k, v in order_not_null.items():
             if isinstance(v, dict):
-                new_k, new_v = unnest(order, k)
+                new_k, new_v = unnest(order_not_null, k)
                 order[new_k] = new_v
                 order.pop(k)
 
