@@ -159,12 +159,29 @@ class OrderByID(MethodView):
                 order_id,
                 description='Order not found')
 
+            # Make sure the primary key is not changed
+            if 'order_number' in req:
+                abort(
+                    400,
+                    message='Cannot set field "order_number"',
+                    status="Bad Request"
+                )
+
             # Iterate over the keys and values in the request
             for k, v in req.items():
                 if k != "others" and hasattr(order, k):
                     # If the key has a column (except 'others')
                     # in the database, change it
-                    setattr(order, k, v)
+                    try:
+                        setattr(order, k, v)
+                    except AttributeError:
+                        db.session.rollback()
+                        abort(
+                            400,
+                            message=f'Cannot set field "{k}", '
+                            f'as it is inferred from other columns',
+                            status="Bad Request"
+                        )
                 else:
                     # If the key doesn't have column,
                     # place it in the other columns
@@ -209,4 +226,10 @@ class DataVisualisation(MethodView):
                 # Can't understand which sheet is requested
                 return abort(404, message='Order sheet not found')
 
-        return order_sheet.orders, 200
+        orders = Order.query \
+            .filter(Order.sheet_id == order_sheet.id) \
+            .filter(Order.truck_id.isnot(None)) \
+            .filter(Order.departure_time.isnot(None)) \
+            .all()
+
+        return orders, 200

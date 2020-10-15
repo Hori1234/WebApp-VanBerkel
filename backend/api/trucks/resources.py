@@ -173,8 +173,16 @@ class TruckByID(MethodView):
                 truck_id,
                 description='Truck not found')
 
-            # pop orders early to handle them manually
+            # Pop orders early to handle them manually
             orders = req.pop('orders', None)
+
+            # Make sure the primary key is not changed
+            if 's_number' in req:
+                abort(
+                    400,
+                    message='Cannot set field "s_number"',
+                    status="Bad Request"
+                )
 
             # Iterate over the keys and values in the request
             for k, v in req.items():
