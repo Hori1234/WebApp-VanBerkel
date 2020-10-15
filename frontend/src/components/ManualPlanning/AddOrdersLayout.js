@@ -104,7 +104,14 @@ export default class AddOrdersLayout extends Component {
       "departure_time":  this.state.departure_time,
       "truck_id":  this.state.truck_id,
     }
-    return data
+    let dataToSend = {};
+    for (var key of Object.keys(data)) {
+      if(data[key] != ''){
+        dataToSend[key] = data[key];
+      }
+    }
+    console.log(dataToSend)
+    return dataToSend
   }
 
   getFormOrderData = () => {
@@ -191,7 +198,7 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeGate1 = (event) => {
     this.setState({
-      "Gate1": event.target.value,
+      "Gate (1)": event.target.value,
     });
   };
   handleChangeGross = (event) => {
@@ -251,7 +258,7 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeTerminal1 = (event) => {
     this.setState({
-      "Terminal1": event.target.value,
+      "Terminal (1)": event.target.value,
     });
   };
   handleChangeTime = (event) => {
@@ -261,17 +268,17 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeTime1 = (event) => {
     this.setState({
-      "Time1": event.target.value,
+      "Time (1)": event.target.value,
     });
   };
   handleChangeTime2 = (event) => {
     this.setState({
-      "Time2": event.target.value,
+      "Time (2)": event.target.value,
     });
   };
   handleChangeTime3 = (event) => {
     this.setState({
-      "Time3": event.target.value,
+      "Time (3)": event.target.value,
     });
   };
   handleChangeTruck = (event) => {
@@ -281,17 +288,17 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeTruck1 = (event) => {
     this.setState({
-      "Truck1": event.target.value,
+      "Truck (1)": event.target.value,
     });
   };
   handleChangeTruck2 = (event) => {
     this.setState({
-      "Truck2": event.target.value,
+      "Truck (2)": event.target.value,
     });
   };
   handleChangeTruck3 = (event) => {
     this.setState({
-      "Truck3": event.target.value,
+      "Truck (3)": event.target.value,
     });
   };
   handleChangeTruck_used = (event) => {
@@ -301,7 +308,7 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeUnit_type = (event) => {
     this.setState({
-      "Unit_Type": event.target.value,
+      "Unit type": event.target.value,
     });
   };
   handleChangeVoyage_inland_carrier = (event) => {
@@ -389,7 +396,6 @@ export default class AddOrdersLayout extends Component {
           <Form.Item
           name="Truck_id"
           label="Truck_id:"
-          rules={[{ required: true }]}
             >
               <Input
                 value={this.state.truck_id}
@@ -417,7 +423,7 @@ export default class AddOrdersLayout extends Component {
             <Form.Item
              name="Departure_time"
              label="Departure_time:"
-             rules={[{ required: true }]}>
+             >
               <Input
                 value={this.state.departure_time}
                 onChange={this.handleChangeDeparture_time}

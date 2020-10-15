@@ -103,7 +103,13 @@ const EditableTableTruck = (props) => {
         newData.splice(index, 1, { ...item, ...row });
         props.setData(newData);
         setEditingKey("");
-        editAccount(key, newData[index]);
+        let dataToSend = {};
+        for (var val of Object.keys(newData[index])) {
+          if(val !="s_number" && val!= "key"){
+            dataToSend[val] = newData[index][val];
+          }
+        }
+        editAccount(key, dataToSend);
       } else {
         newData.push(row);
         props.setData(newData);

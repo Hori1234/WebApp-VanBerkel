@@ -139,7 +139,13 @@ const EditableTableOrder = (props) => {
         newData.splice(index, 1, { ...item, ...row });
         props.setData(newData);
         setEditingKey("");
-        editAccount(key, newData[index]);
+        let dataToSend = {};
+        for (var val of Object.keys(newData[index])) {
+          if(val !="service_time" && val !="order_number" && val !="latest_dep_time" && val != "key"){
+            dataToSend[val] = newData[index][val];
+          }
+        }
+        editAccount(key, dataToSend);
       } else {
         newData.push(row);
         props.setData(newData);
