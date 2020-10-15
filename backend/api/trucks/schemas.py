@@ -1,5 +1,6 @@
 from backend.app import ma
 from marshmallow import INCLUDE, post_dump
+from backend.api.orders.schemas import OrderSchema
 from backend.models.trucks import Truck, TruckSheet
 
 
@@ -8,7 +9,10 @@ class TruckSchema(ma.SQLAlchemyAutoSchema):
     Serializes the order table to JSON
     """
 
-    orders = ma.List(ma.Integer, load_only=True)
+    orders = ma.Nested(OrderSchema,
+                       many=True,
+                       only=('order_number', 'departure_time'),
+                       load_only=True)
     others = ma.Dict(dump_only=True)
 
     class Meta:

@@ -152,6 +152,14 @@ def delete_truck(client, truck_id):
     """
     return client.delete(f'/api/trucks/{truck_id}')
 
+def get_timeline(client, sheet_id):
+    """
+    Gets the parameters to create a timeline of the orders assignment
+    :param client: the client to make the request
+    :param sheet_id: the id of the order sheet to make a timeline of
+    :return:
+    """
+    return client.get(f'/api/orders/timeline/{sheet_id}')
 
 # GET ORDER TESTS
 
@@ -348,20 +356,20 @@ def test_patch_order_set_truck_id(client, db):
     time.
     """
     request = dict(
-        truck_id=1,
-        departure_time=600
+        truck_id=14,
+        departure_time='12:30'
     )
     rv = patch_order(client, 1, **request)
 
     # truck has been added
     assert rv.status_code == 200
-    assert rv.get_json()['truck_id'] == 1
-    assert rv.get_json()['departure_time'] == 600
+    assert rv.get_json()['truck_id'] == 14
+    assert rv.get_json()['departure_time'] == '12:30:00'
 
     order = orders.Order.query.get(1)
-    truck = trucks.Truck.query.get(1)
+    truck = trucks.Truck.query.get(14)
     # also been changed in the database
-    assert order.departure_time == 600
+    assert order.departure_time.strftime('%H:%M') == '12:30'
     assert order.truck == truck
 
     request2 = dict(
@@ -375,6 +383,101 @@ def test_patch_order_set_truck_id(client, db):
     assert rv2.get_json()['departure_time'] is None
     assert order.truck is None
     assert order.departure_time is None
+
+
+@pytest.mark.parametrize('departure_time', ('2:00', '23:59'))
+def test_patch_order_departure_time_invalid(client, departure_time):
+    """
+    Tests if an error response is given after setting the departure time
+    later than the latest departure time of the order or earlier than the
+    starting time of the assigned truck.
+    """
+    request = dict(
+        truck_id=14,
+        departure_time=departure_time,
+    )
+
+    rv2 = patch_order(client, 1, **request)
+
+    assert rv2.status_code == 400
+    assert 'message' in rv2.get_json()
+    message = rv2.get_json()['message']
+    assert departure_time in message
+    if departure_time == '2:00':
+        assert 'starting time' in message
+    else:
+        assert 'latest departure time' in message
+
+
+def test_patch_order_invalid_truck(client):
+    """
+    Tests if an error response is given after assigning a truck to an order
+    it cannot carry out.
+    """
+    request = dict(
+        truck_id=1,
+        departure_time='8:00'
+    )
+
+    rv2 = patch_order(client, 1, **request)
+
+    assert rv2.status_code == 400
+    assert 'message' in rv2.get_json()
+    assert 'terminal' in rv2.get_json()['message']
+    assert 'port' in rv2.get_json()['message']
+
+
+def test_patch_order_primary_key(client):
+    """
+    Tests for an error response when trying to set the primary key
+    """
+
+    request = dict(
+        order_number=14
+    )
+
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    assert 'order_number' in rv.get_json()['message']
+
+
+def test_patch_truck_computed_field(client):
+    """
+    Tests for an error response when trying to set a computed field
+    """
+
+    request = dict(
+        service_time=100
+    )
+
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    assert 'service_time' in rv.get_json()['message']
+
+
+# TODO: UTP
+@pytest.mark.parametrize('key', ('Inl. terminal', 'Max. dep. time'))
+def test_patch_order_dot_seperated(client, db, key):
+    """
+    Tests if dot seperated keys are set correctly.
+    This is an issue with Marshmallow parsing, where request keys
+    with '.' are parsed as paths ({'1.2': '3'} -> {'1': {'2': '3'}})
+    """
+
+    request = dict()
+    request[key] = 'val'
+
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert key in data
+    assert data[key] == 'val'
+
+    order = orders.Order.query.get(1)
+    assert order.others[key] == 'val'
 
 # PATCH TRUCK TESTS
 
@@ -444,7 +547,15 @@ def test_patch_truck_with_orders(client, db):
     order.
     """
     request = dict(
-        truck_type='port', orders=[1, 2]
+        truck_type='port',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=24,
+            departure_time='10:00'
+        )
+        ]
     )
     rv = patch_truck(client, 1, **request)
 
@@ -452,6 +563,8 @@ def test_patch_truck_with_orders(client, db):
 
     truck = trucks.Truck.query.get(1)
     assert truck.truck_type == 'port'
+    assert len(truck.orders) == 2
+    assert truck.orders[0].order_number == 1
 
 
 def test_patch_truck_with_wrong_orders(client, db):
@@ -459,12 +572,58 @@ def test_patch_truck_with_wrong_orders(client, db):
     Tests the patch truck endpoint with a wrongly associated order.
     """
     request = dict(
-        truck_type='port', orders=[1, 200000]
+        truck_type='port',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=1000,
+            departure_time='10:00'
+        )
+        ]
     )
     rv = patch_truck(client, 1, **request)
 
     assert rv.status_code == 404
 
+
+# TODO: UTP
+def test_patch_truck_primary_key(client):
+    """
+    Tests an error response when trying to set the primary key
+    """
+
+    request = dict(
+        s_number=14
+    )
+
+    rv = patch_truck(client, 1, **request)
+
+    assert rv.status_code == 400
+    assert 's_number' in rv.get_json()['message']
+
+
+# TODO: UTP
+@pytest.mark.parametrize('key', ('Inl. terminal', 'Max. dep. time'))
+def test_patch_truck_dot_seperated(client, db, key):
+    """
+    Tests if dot seperated keys are set correctly.
+    This is an issue with Marshmallow parsing, where request keys
+    with '.' are parsed as paths ({'1.2': '3'} -> {'1': {'2': '3'}})
+    """
+
+    request = dict()
+    request[key] = 'val'
+
+    rv = patch_truck(client, 1, **request)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert key in data
+    assert data[key] == 'val'
+
+    truck = trucks.Truck.query.get(1)
+    assert truck.others[key] == 'val'
 
 # POST ORDER TESTS
 
@@ -475,7 +634,7 @@ def test_post_order(client, db):
     """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2
     )
     rv = post_order(client, 1, **request)
@@ -491,7 +650,7 @@ def test_post_order_invalid_truck_type(client, db):
     """
     request = dict(
         inl_terminal='KAT', latest_dep_time=1000,
-        truck_type='TEST', hierarchy=3, delivery_deadline=1300,
+        truck_type='TEST', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=21
     )
     rv = post_order(client, 1, **request)
@@ -504,7 +663,7 @@ def test_post_order_invalid_terminal(client, db):
     """
     request = dict(
         inl_terminal='TEST', latest_dep_time=1000,
-        truck_type='Port', hierarchy=3, delivery_deadline=1300,
+        truck_type='Port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=21
     )
     rv = post_order(client, 1, **request)
@@ -517,7 +676,7 @@ def test_post_order_latest(client, db):
     """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2
     )
     rv = post_order(client, 'latest', **request)
@@ -534,7 +693,7 @@ def test_post_order_not_latest(client, db):
     """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2
     )
     rv = post_order(client, 'same dude', **request)
@@ -630,9 +789,17 @@ def test_post_truck_with_orders(client, db):
     """
     request = dict(
         truck_id='45-TBD-1', availability=True,
-        truck_type='terminal', business_type='ITV', terminal='ITV',
+        truck_type='port', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30', orders=[1, 2, 3]
+        starting_time='10:00',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=24,
+            departure_time='10:00'
+        )
+        ]
     )
     rv = post_truck(client, 1, **request)
 
@@ -648,7 +815,16 @@ def test_post_truck_with_wrong_orders(client, db):
         truck_id='45-TBD-1', availability=True,
         truck_type='terminal', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30', orders=[1, 2, 30000]
+        starting_time='15:30',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=10000,
+            departure_time='10:00'
+        )
+        ]
+
     )
     rv = post_truck(client, 1, **request)
 
@@ -718,9 +894,17 @@ def test_delete_then_post_truck(client, db):
     """
     request = dict(
         truck_id='45-TBD-1', availability=True,
-        truck_type='terminal', business_type='ITV', terminal='ITV',
+        truck_type='port', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='15:30', orders=[1, 2, 3]
+        starting_time='10:00',
+        orders=[dict(
+            order_number=1,
+            departure_time='12:30'
+        ), dict(
+            order_number=24,
+            departure_time='10:00'
+        )
+        ]
     )
     rv = delete_truck(client, 1)
     assert rv.status_code == 204
@@ -740,7 +924,7 @@ def test_delete_then_post_order(client, db):
     """
     request = dict(
         inl_terminal='ITV', latest_dep_time=1000,
-        truck_type='port', hierarchy=3, delivery_deadline=1300,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2
     )
     rv = delete_order(client, 2)
@@ -753,3 +937,56 @@ def test_delete_then_post_order(client, db):
     order = orders.Order.query.get(data['order_number'])
     assert order.inl_terminal == 'ITV'
     assert order.process_time == 1
+
+# TEST GET TIMELINE
+
+
+@pytest.mark.parametrize('sheet_id', (2, 'latest'))
+def test_get_timeline(client, db, sheet_id):
+    """
+    Tests the get timeline endpoint with correct sheet id identifiers
+    """
+    # Assign truck to order
+    request1 = dict(
+        truck_id=15,
+        departure_time='08:00:00',
+        Address='testStreet'
+    )
+
+    rv3 = patch_order(client, 142, **request1)
+    assert rv3.status_code == 200
+
+    request2 = dict(
+        truck_id=14,
+        departure_time='08:00:00',
+        Address='testStreet'
+    )
+
+    rv2 = patch_order(client, 141, **request2)
+    assert rv2.status_code == 200
+
+    rv = get_timeline(client, sheet_id)
+    assert rv.status_code == 200
+
+    data = rv.get_json()
+    expected = dict(
+        address=request2['Address'],
+        booking_id='167617B',
+        client=None,
+        container_id='SEGU 628854 7',
+        departure_time=request2['departure_time'],
+        truck_id=request2['truck_id'],
+        order_type='port',
+        end_time="13:00:00"
+    )
+    assert len(data) == 2
+    assert expected in data
+
+
+@pytest.mark.parametrize('sheet_id', ('random', 3))
+def test_get_timeline_wrong_sheet(client, sheet_id):
+    """
+    Tests the get timeline endpoint with wrong sheet id identifiers
+    """
+    rv = get_timeline(client, sheet_id)
+    assert rv.status_code == 404

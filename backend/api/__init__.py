@@ -55,7 +55,12 @@ def custom_name_resolver(schema):
     """
     # Get an instance of the schema
     schema_instance = common.resolve_schema_instance(schema)
-    prefix = "Partial-" if schema_instance.partial else ""
+    if schema_instance.partial:
+        prefix = "Patch-"
+    elif schema_instance.only:
+        prefix = "Partial-"
+    else:
+        prefix = ""
 
     # Get the class of the instance
     schema_cls = common.resolve_schema_cls(schema)
