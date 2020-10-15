@@ -228,10 +228,10 @@ class SheetParser(abc.ABC):
         :rtype: :class:`pandas.DataFrame`
         """
         raw_df = read_excel(file,
-                        usecols=lambda x: x not in cls.ignored_columns,
-                        *args, **kwargs)
-        if raw_df.columns.hasnans:
-            print(raw_df)
+                            *args, **kwargs)
+
+        # Find the header row
+        if not raw_df.columns.str.contains('Unnamed').all():
             df = raw_df
         else:
             for i, row in raw_df.iterrows():
@@ -239,6 +239,12 @@ class SheetParser(abc.ABC):
                     df = raw_df.iloc[(i + 1):].reset_index(drop=True)
                     df.columns = list(raw_df.iloc[i])
                     break
+            else:
+                return cls.post_dataframe(raw_df)
+
+        df.drop(cls.ignored_columns, errors='ignore')
+
+        # Rename duplicate rows
         seen = dict()
         new_columns = []
 
@@ -311,29 +317,10 @@ class OrderListParser(SheetParser):
     row_table = Order
 
     def __init__(self, file):
-        super().__init__(file, converters={'Delivery Deadline':
-                                               self.round_float_to_int})
-
-    @staticmethod
-    def round_float_to_int(x):
-        """
-        Rounds a float to an integer if x is a float
-        :param x: number to round
-        :type x: float
-        :return: number
-        :rtype: int
-        """
-        if isinstance(x, float):
-            return round(x)
-        return x
+        super().__init__(file)
 
     @staticmethod
     def post_dataframe(dataframe):
-        # Change duplicate column names to read more easily
-        # Example: 'Truck.1' is changed to 'Truck (1)'
-        dataframe.columns = [re.sub(r'[.](\d+)', r' (\g<1>)', i)
-                             for i in dataframe.columns]
-
         # Replace '.' with another character, as Marshmallow thinks that
         # a key, value item 'a.b': 'c' means {'a': {'b': 'c'}}
         dataframe.columns = [re.sub(r'[.]', '*', i) for i in dataframe.columns]
