@@ -968,7 +968,6 @@ export default class ManualPlanning extends Component {
             "Unit type": res.data.orders[i]["Unit type"],
             Booking: res.data.orders[i]["Booking"],
             "Ship. comp.": res.data.orders[i]["Ship. comp."],
-<<<<<<< HEAD
             Terminal: res.data.orders[i]["Terminal"],
             Truck: res.data.orders[i]["Truck"],
             Pickup: res.data.orders[i]["Pickup"],
@@ -977,16 +976,6 @@ export default class ManualPlanning extends Component {
             inl_terminal: res.data.orders[i]["inl_terminal"],
             Gate: res.data.orders[i]["Gate"],
             Time: res.data.orders[i]["Time"],
-=======
-            "Terminal": res.data.orders[i]["Terminal"],
-            "Truck": res.data.orders[i]["Truck"],
-            "Pickup": res.data.orders[i]["Pickup"],
-            "order_number": res.data.orders[i]["order_number"],
-            "Status": res.data.orders[i]["Status"],
-            "inl_terminal": res.data.orders[i]["inl_terminal"],
-            "Gate": res.data.orders[i]["Gate"],
-            "Time": res.data.orders[i]["Time"],
->>>>>>> bf4331bd8c0bba228d2a0870ef3c0718fff9372d
             "Max. departure": res.data.orders[i]["Max. departure"],
             "Time (1)": res.data.orders[i]["Time (1)"],
             latest_dep_time: res.data.orders[i]["latest_dep_time"],
