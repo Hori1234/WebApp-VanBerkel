@@ -29,6 +29,7 @@ class Sheets(MethodView):
 
             for Parser in (TruckAvailabilityParser,  # pragma: no branch
                            OrderListParser):
+
                 parser = Parser(file_1)  # instantiate the parser
 
                 # Check if all required columns are in the excel sheet

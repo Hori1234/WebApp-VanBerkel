@@ -227,8 +227,35 @@ class SheetParser(abc.ABC):
         :return: A :class:`pandas.DataFrame` containing the data from `file`.
         :rtype: :class:`pandas.DataFrame`
         """
-        df = read_excel(file, usecols=lambda x: x not in cls.ignored_columns,
-                        *args, **kwargs)
+        raw_df = read_excel(file,
+                            *args, **kwargs)
+
+        # Find the header row
+        if not raw_df.columns.str.contains('Unnamed').all():
+            df = raw_df
+        else:
+            for i, row in raw_df.iterrows():
+                if row.notnull().all():
+                    df = raw_df.iloc[(i + 1):].reset_index(drop=True)
+                    df.columns = list(raw_df.iloc[i])
+                    break
+            else:
+                return cls.post_dataframe(raw_df)
+
+        df.drop(cls.ignored_columns, errors='ignore', axis=1, inplace=True)
+
+        # Rename duplicate rows
+        seen = dict()
+        new_columns = []
+
+        for c in df.columns:
+            if c in seen:
+                seen[c] += 1
+                new_columns.append(f'{c} ({seen[c]})')
+            else:
+                seen[c] = 0
+                new_columns.append(c)
+        df.columns = new_columns
         return cls.post_dataframe(df)
 
     @staticmethod
@@ -290,29 +317,10 @@ class OrderListParser(SheetParser):
     row_table = Order
 
     def __init__(self, file):
-        super().__init__(file, converters={'Delivery Deadline':
-                                           self.round_float_to_int})
-
-    @staticmethod
-    def round_float_to_int(x):
-        """
-        Rounds a float to an integer if x is a float
-        :param x: number to round
-        :type x: float
-        :return: number
-        :rtype: int
-        """
-        if isinstance(x, float):
-            return round(x)
-        return x
+        super().__init__(file)
 
     @staticmethod
     def post_dataframe(dataframe):
-        # Change duplicate column names to read more easily
-        # Example: 'Truck.1' is changed to 'Truck (1)'
-        dataframe.columns = [re.sub(r'[.](\d+)', r' (\g<1>)', i)
-                             for i in dataframe.columns]
-
         # Replace '.' with another character, as Marshmallow thinks that
         # a key, value item 'a.b': 'c' means {'a': {'b': 'c'}}
         dataframe.columns = [re.sub(r'[.]', '*', i) for i in dataframe.columns]
