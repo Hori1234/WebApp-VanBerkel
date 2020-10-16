@@ -1186,30 +1186,45 @@ export default class ManualPlanning extends Component {
   };
 
   // Assigning , editing and Unassigning orders
-  assign_unassignOrder = (orderId, truckId, dpt) => {
+  assign_unassignOrder = (orderId, truckId, dpt, assigning) => {
     return axios
       .patch(`/api/orders/${orderId}`, {
         truck_id: truckId,
         departure_time: dpt,
       })
       .then((res) => {
-        if (res.status === 404) {
-          message.error(res.message);
+        if (assigning === false) {
+          if (res.status === 200) {
+            message.success("Truck succesfully unassigned");
+          }
         } else {
-          if (res.status === 204) {
-            message.success("Account succesfully deleted");
+          if (res.status === 404) {
+            message.error(res.message);
           } else {
-            if (res.status === 401) {
-              message.error("Unauthorized Action");
+            if (res.status === 200) {
+              message.success("Order succesfully assigned");
             } else {
-              if (res.status === 200) {
-                message.success("Order succesfully assigned");
+              if (res.satatus === 400) {
+                message.error("Bad Request" + res.message);
               } else {
-                message.warning("Service unavailable");
+                if (res.status === 401) {
+                  message.error("Unauthorized" + res.message);
+                } else {
+                  if (res.status === 404) {
+                    message.error("Not found" + res.message);
+                  } else {
+                    if (res.status === 422) {
+                      message.error("Unprocessable Entity" + res.message);
+                    } else {
+                      message.warning("Service unavailable");
+                    }
+                  }
+                }
               }
             }
           }
         }
+
         return true;
       })
       .catch((error) => {
