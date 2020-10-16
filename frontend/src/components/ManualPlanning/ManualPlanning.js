@@ -10,6 +10,7 @@ import {
   Checkbox,
   Dropdown,
   Modal,
+  Form,
   message,
   Popconfirm,
 } from "antd";
@@ -19,7 +20,6 @@ import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
 import EditableTableTruck from "./EditableTableTruck";
 import "./ManualPlanning.css";
-import Form from "antd/lib/form/Form";
 
 const { Option } = Select;
 
@@ -778,7 +778,7 @@ export default class ManualPlanning extends Component {
     console.log("trucks", selectedTrucksRowKeys);
   };
 
-  ShowAssignModal = () => {
+  showAssignModal = () => {
     this.setState({
       AssignModal: true,
     });
@@ -813,6 +813,7 @@ export default class ManualPlanning extends Component {
     this.setState({
       AOVisible: false,
       ATVisible: false,
+      AssignModal: false,
     });
   };
   okMagnify = (e) => {
@@ -1163,10 +1164,11 @@ export default class ManualPlanning extends Component {
   };
 
   // Assigning , editing and Unassigning orders
-  assign_unassignOrder = (orderId, truckId) => {
+  assign_unassignOrder = (orderId, truckId, dpt) => {
     return axios
       .patch(`/api/orders/${orderId}`, {
         truck_id: truckId,
+        departure_time: dpt,
       })
       .then((res) => {
         if (res.status === 404) {
@@ -1689,7 +1691,7 @@ export default class ManualPlanning extends Component {
             <Row>
               <Button
                 style={{ width: "100%" }}
-                onClick={() => this.ShowAssignModal()}
+                onClick={() => this.showAssignModal()}
               >
                 Assign
               </Button>
@@ -1768,8 +1770,10 @@ export default class ManualPlanning extends Component {
             var truckLength = this.state.selectedTrucksRowKeys.length;
             this.assign_unassignOrder(
               this.state.selectedOrdersRowKeys[orderLength - 1],
-              this.state.selectedTrucksRowKeys[truckLength - 1]
+              this.state.selectedTrucksRowKeys[truckLength - 1],
+              this.state.departure_time
             );
+            this.handleCancel();
           }}
           onCancel={this.handleCancel}
         >
@@ -1793,7 +1797,7 @@ export default class ManualPlanning extends Component {
           title="Add Truck"
           visible={this.state.ATVisible}
           onOk={() => {
-            this.assign_unassignOrder("latest");
+            this.ShowTruckModal();
           }}
           onCancel={this.handleCancel}
         >
