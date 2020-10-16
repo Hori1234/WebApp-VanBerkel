@@ -659,6 +659,7 @@ export default class ManualPlanning extends Component {
       },
       temp: [],
       originalOrders: [],
+      originalTrucks: []
     };
   }
 
@@ -720,14 +721,34 @@ export default class ManualPlanning extends Component {
 
   changeDataOrders = (d) => {
     if (d === "Both") {
-      this.setState({ data: this.state.originalOrders });
+      this.setState({ data: this.state.originalOrders, data2:this.state.originalTrucks });
     } else if (d === "ITV") {
-      this.getItv(this.state.originalOrders);
+      this.getItvOrder(this.state.originalOrders);
+      this.getItvTruck(this.state.originalTrucks);
     } else if (d === "KAT") {
-      this.getKat(this.state.originalOrders);
+      this.getKatOrder(this.state.originalOrders);
+      this.getKatTruck(this.state.originalTrucks);
     }
   };
-  getItv = (e) => {
+  getItvTruck = (e) => {
+    let itvDataTruck = [];
+    e.forEach((element) => {
+      if (element.terminal === "ITV") {
+        itvDataTruck.push(element);
+      }
+    });
+    this.setState({ data2: itvDataTruck });
+  };
+  getKatTruck = (e) => {
+    let katDataTruck = [];
+    e.forEach((element) => {
+      if (element.terminal === "KAT") {
+        katDataTruck.push(element);
+      }
+    });
+    this.setState({ data2: katDataTruck });
+  };
+  getItvOrder = (e) => {
     let itvData = [];
     e.forEach((element) => {
       if (element.inl_terminal === "ITV") {
@@ -736,7 +757,7 @@ export default class ManualPlanning extends Component {
     });
     this.setState({ data: itvData });
   };
-  getKat = (e) => {
+  getKatOrder = (e) => {
     let katData = [];
     e.forEach((element) => {
       if (element.inl_terminal === "KAT") {
@@ -919,6 +940,7 @@ export default class ManualPlanning extends Component {
             message.success(res.message);
           }
         }
+        this.getTruckList("latest");
         this.handleOk();
         return true;
       })
@@ -938,12 +960,7 @@ export default class ManualPlanning extends Component {
       .post(`/api/orders/sheet/${value}`, data)
       .then((res) => {
         if (res.status === 200) {
-          message.success(
-            "Order: " +
-              res.data["inl_terminal"] +
-              res.data["truck_type"] +
-              "added succesfully"
-          );
+          message.success("Order:  added succesfully");
         } else {
           if (res.status === 401) {
             message.error("Unauthorized: " + res.message);
@@ -960,6 +977,7 @@ export default class ManualPlanning extends Component {
           }
         }
         this.handleOk();
+        this.getOrderList("latest");
         return true;
       })
       .catch((error) => {
@@ -1079,6 +1097,7 @@ export default class ManualPlanning extends Component {
         this.setState((state) => ({
           ...state,
           data2: outarray,
+          originalTrucks: outarray,
           status: "success",
         }));
         return true;

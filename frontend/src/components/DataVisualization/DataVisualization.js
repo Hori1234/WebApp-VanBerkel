@@ -21,21 +21,15 @@ export function downloadFile() {
   });
 }
 
-//Dummy list data
-// var truckIDsDummy = ['23', '23', '23', '234', '235', '1', '2', '3', '4', '5', '6', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '6'];
-// var orderIDsDummy = ['124124', '124124', '124124', '236234592', '234623466', '2', '2', '2', '2', '2', '2', '2', '7', '7', '7', '7', '7', '7', '7', '7', '7', '6'];
-// var startTimesDummy = ['8:00', '10:30', '16:00', '12:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00'];
-// var endTimesDummy = ['10:30', '12:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00'];
-// var destinationsDummy = ['Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven'];
 
-var truckIDsDummy = ["23", "23", "23", "234", "235"];
-var orderIDsDummy = ["1", "2", "3", "4", "5"];
-var startTimesDummy = ["8:00", "10:30", "16:00", "12:00", "16:00"];
-var endTimesDummy = ["10:30", "12:00", "18:00", "18:00", "18:00", "18:00"];
-var destinationsDummy = ["Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven"];
-var orderTypesDummy = ["Port", "Port", "Port", "Port", "Port"];
-var clientsDummy = ["Hans", "Janna", "Surgei", "Rick", "Sander"];
-var containersDummy = ["1A", "1B", "1C", "1D", "1E"];
+// var truckIDsDummy = ["23", "23", "23", "234", "235"];
+// var orderIDsDummy = ["1", "2", "3", "4", "5"];
+// var startTimesDummy = ["8:00", "10:30", "16:00", "12:00", "16:00"];
+// var endTimesDummy = ["10:30", "12:00", "18:00", "18:00", "18:00", "18:00"];
+// var destinationsDummy = ["Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven"];
+// var orderTypesDummy = ["Port", "Port", "Port", "Port", "Port"];
+// var clientsDummy = ["Hans", "Janna", "Surgei", "Rick", "Sander"];
+// var containersDummy = ["1A", "1B", "1C", "1D", "1E"];
 
 
 
@@ -142,7 +136,6 @@ export function createAllDataInput(
   clients,
   containers
 ) {
-  console.log(orderIDs);
   let listLength = truckIDs.length;
   let listDataInputs = [
     [
@@ -165,8 +158,6 @@ export function createAllDataInput(
       containers[i]
     );
     listDataInputs.push(tempList);
-    console.log(listDataInputs);
-    console.log(orderIDs[0]);
   }
   return listDataInputs;
 }
@@ -216,7 +207,6 @@ export default class DataVisualization extends Component {
     let truckID = [];
 
     const property = this.state.timelineDetails;
-    console.log(property);
     property.forEach((element) => {
       if (element.address == null) {
         address.push("unknown destination");
@@ -266,27 +256,19 @@ export default class DataVisualization extends Component {
         truckID.push(element.truck_id);
       }
     })
-    console.log(address);
-    console.log(bookingID);
-    console.log(client);
-    console.log(containerID);
-    console.log(departureTime);
-    console.log(endTime);
-    console.log(orderType);
-    console.log(truckID);
     return createAllDataInput(truckID, bookingID, departureTime, endTime, address, orderType, client, containerID);
   }
 
   render() {
     return (
       
-      this.state.status == "loading" ? "loading...":
+      this.state.status === "loading" ? "loading...":
       <Layout
         style={{
           display: "flex",
           height: "100%",
           width: "100%",
-          background: "white",
+          background: "white"
         }}
       >
         <Chart
