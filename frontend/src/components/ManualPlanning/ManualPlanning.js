@@ -1742,7 +1742,8 @@ export default class ManualPlanning extends Component {
                   this.assign_unassignOrder(
                     this.state.selectedOrdersRowKeys[orderLength - 1],
                     null,
-                    null
+                    null,
+                    false
                   );
                 }}
               >
@@ -1809,7 +1810,8 @@ export default class ManualPlanning extends Component {
             this.assign_unassignOrder(
               this.state.selectedOrdersRowKeys[orderLength - 1],
               this.state.selectedTrucksRowKeys[truckLength - 1],
-              this.state.departure_time
+              this.state.departure_time,
+              true
             );
             this.handleCancel();
           }}
