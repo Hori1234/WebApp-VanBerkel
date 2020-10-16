@@ -233,7 +233,11 @@ export default class AddTruckLayout extends Component {
                 onChange={this.handleChangeRemarks}
               />
             </Form.Item>
-            <Form.Item name={"businessType"} label={"Business_type:"}>
+            <Form.Item
+              name={"businessType"}
+              label={"Business_type:"}
+              rules={[{ required: true }]}
+            >
               <Input
                 value={this.state.business_type}
                 onChange={this.handleChangeBusiness_type}

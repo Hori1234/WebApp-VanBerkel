@@ -6,9 +6,11 @@ import {
   Col,
   Select,
   Menu,
+  Input,
   Checkbox,
   Dropdown,
   Modal,
+  Form,
   message,
   Popconfirm,
 } from "antd";
@@ -31,6 +33,7 @@ export default class ManualPlanning extends Component {
       columnTruckFilter: [],
       isVisible: false,
       isTruckVisible: false,
+      departure_time: "",
       columns: [
         {
           title: "Container",
@@ -624,6 +627,7 @@ export default class ManualPlanning extends Component {
       startingTruckColumns: [],
       AOVisible: false,
       ATVisible: false,
+      AssignModal: false,
       magnifyOrders: false,
       magnifyTrucks: false,
       status: "",
@@ -659,6 +663,11 @@ export default class ManualPlanning extends Component {
     };
   }
 
+  handleChangeDepartureTime = (event) => {
+    this.setState({
+      departure_time: event.target.value,
+    });
+  };
   componentDidMount() {
     this.setState({ startingColumns: this.state.columns });
     this.setState({ startingTruckColumns: this.state.columns2 });
@@ -789,6 +798,12 @@ export default class ManualPlanning extends Component {
     this.setState({ selectedTrucksRowKeys });
     console.log("trucks", selectedTrucksRowKeys);
   };
+
+  showAssignModal = () => {
+    this.setState({
+      AssignModal: true,
+    });
+  };
   ShowTruckModal = () => {
     this.setState({
       ATVisible: true,
@@ -819,6 +834,7 @@ export default class ManualPlanning extends Component {
     this.setState({
       AOVisible: false,
       ATVisible: false,
+      AssignModal: false,
     });
   };
   okMagnify = (e) => {
@@ -1076,6 +1092,7 @@ export default class ManualPlanning extends Component {
           };
           outarray.push(temp);
         }
+
         console.log(outarray);
         this.setState((state) => ({
           ...state,
@@ -1166,10 +1183,11 @@ export default class ManualPlanning extends Component {
   };
 
   // Assigning , editing and Unassigning orders
-  assign_unassignOrder = (orderId, truckId) => {
+  assign_unassignOrder = (orderId, truckId, dpt) => {
     return axios
       .patch(`/api/orders/${orderId}`, {
         truck_id: truckId,
+        departure_time: dpt,
       })
       .then((res) => {
         if (res.status === 404) {
@@ -1692,14 +1710,7 @@ export default class ManualPlanning extends Component {
             <Row>
               <Button
                 style={{ width: "100%" }}
-                onClick={() => {
-                  var orderLength = this.state.selectedOrdersRowKeys.length;
-                  var truckLength = this.state.selectedTrucksRowKeys.length;
-                  this.assign_unassignOrder(
-                    this.state.selectedOrdersRowKeys[orderLength - 1],
-                    this.state.selectedTrucksRowKeys[truckLength - 1]
-                  );
-                }}
+                onClick={() => this.showAssignModal()}
               >
                 Assign
               </Button>
@@ -1769,11 +1780,43 @@ export default class ManualPlanning extends Component {
         >
           {this.state.AOVisible && <AddOrdersLayout ref="addOrders" />}
         </Modal>
+
+        <Modal
+          title="Add departure time"
+          visible={this.state.AssignModal}
+          onOk={() => {
+            var orderLength = this.state.selectedOrdersRowKeys.length;
+            var truckLength = this.state.selectedTrucksRowKeys.length;
+            this.assign_unassignOrder(
+              this.state.selectedOrdersRowKeys[orderLength - 1],
+              this.state.selectedTrucksRowKeys[truckLength - 1],
+              this.state.departure_time
+            );
+            this.handleCancel();
+          }}
+          onCancel={this.handleCancel}
+        >
+          {this.state.AssignModal && (
+            <Form>
+              <Form.Item
+                name={"Departure Time"}
+                label={"Departure Time:"}
+                rules={[{ required: true }]}
+              >
+                <Input
+                  value={this.state.departure_time}
+                  onChange={this.handleChangeDepartureTime}
+                />
+              </Form.Item>
+            </Form>
+          )}
+        </Modal>
+
         <Modal
           title="Add Truck"
           visible={this.state.ATVisible}
           onOk={() => {
-            this.addTruck("latest");
+            this.ShowTruckModal();
           }}
           onCancel={this.handleCancel}
         >
