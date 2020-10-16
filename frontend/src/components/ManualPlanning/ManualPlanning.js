@@ -802,7 +802,7 @@ export default class ManualPlanning extends Component {
       .get(`/api/orders/sheet/${value}`)
       .then((res) => {
         var outarray = [];
-        for (var i = 1; i < res.data.orders.length; i++) {
+        for (var i = 0; i < res.data.orders.length; i++) {
           var temp = {
             key: res.data.orders[i]["order_number"],
             "Container": res.data.orders[i]["Container"],
@@ -879,7 +879,7 @@ export default class ManualPlanning extends Component {
       .get(`/api/trucks/sheet/${value}`)
       .then((res) => {
         var outarray = [];
-        for (var i = 1; i < res.data.trucks.length; i++) {
+        for (var i = 0; i < res.data.trucks.length; i++) {
           var temp = {
             key: res.data.trucks[i]["s_number"],
             "truck_id": res.data.trucks[i]["truck_id"],
