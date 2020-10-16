@@ -907,6 +907,7 @@ export default class ManualPlanning extends Component {
             }
           }
         }
+        this.getTruckList("latest");
         return true;
       })
       .catch((error) => {
@@ -1816,7 +1817,7 @@ export default class ManualPlanning extends Component {
           title="Add Truck"
           visible={this.state.ATVisible}
           onOk={() => {
-            this.ShowTruckModal();
+            this.addTruck('latest');
           }}
           onCancel={this.handleCancel}
         >
