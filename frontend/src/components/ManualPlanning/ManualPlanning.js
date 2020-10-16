@@ -1837,7 +1837,7 @@ export default class ManualPlanning extends Component {
           title="Add Truck"
           visible={this.state.ATVisible}
           onOk={() => {
-            this.ShowTruckModal();
+            this.addTruck("latest");
           }}
           onCancel={this.handleCancel}
         >
