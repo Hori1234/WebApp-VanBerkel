@@ -933,7 +933,7 @@ def test_get_timeline(client, db, sheet_id):
         end_time="13:00:00"
     )
     assert len(data) == 2
-    assert expected == data[0]
+    assert expected in data
 
 
 @pytest.mark.parametrize('sheet_id', ('random', 3))
