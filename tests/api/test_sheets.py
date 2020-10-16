@@ -1,33 +1,21 @@
 import pytest
-import json
-from backend.models.users import User
+import datetime
+from pathlib import Path
+
+from backend.models import trucks
+from backend.models import orders
 
 
 @pytest.fixture(autouse=True)
-def setup_db(db, client):
+def setup_db(setup_users, login_user, create_db_without_users):
     """
-    Setup the database for the current test.
-
-    After the test has been run, the database is rolled back.
-
-    :param `SQLAlchemy` db: The ORM for this test.
-    :param client: The test client for this test
+    Run the fixtures needed for this module.
     """
-    user = User(username='Midas Bergveen',
-                password='w8woord',
-                role='planner')
-    db.session.add(user)
-    db.session.commit()
+    pass
 
-    data = dict(
-        username=user.username,
-        password='w8woord',
-        remember=True
-    )
 
-    client.post('/api/auth/login',
-                data=json.dumps(data),
-                content_type='application/json')
+def get_file_path(file):
+    return Path(__file__).parent / 'data' / file
 
 
 def upload_one_sheet(client, file):
@@ -48,13 +36,48 @@ def upload_one_sheet(client, file):
                        data=data)
 
 
-def test_upload_ta_success(client):
+def get_order_sheet(client, page=1, page_size=10):
+    """
+    retrieves all uploaded order sheets
+    :param client: the client to make the request
+    :param page: page of the request
+    :param page_size: number of items per page
+    :return: a list of all order sheets in the database
+    """
+    pagination_params = dict(
+        page=page,
+        page_size=page_size
+    )
+    return client.get('/api/sheets/orders', query_string=pagination_params)
+
+
+def get_truck_sheet(client, page=1, page_size=10):
+    """
+    retrieves all uploaded truck sheets
+    :param client: the client to make the request
+    :param page: page of the request
+    :param page_size: number of items per page
+    :return: a list of all order sheets in the database
+    """
+    pagination_params = dict(
+        page=page,
+        page_size=page_size
+    )
+    return client.get('/api/sheets/trucks', query_string=pagination_params)
+
+
+def test_upload_ta_success(client, db):
     """
     Test just a truck availability sheet
     """
     rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_test.xlsx')
+                          get_file_path('truck_availability_test.xlsx'))
     assert rv.status_code == 200
+    assert trucks.TruckSheet.query.get(1)
+
+    truck = trucks.Truck.query.get(5)
+    assert truck.truck_type == 'regional'
+    assert truck.terminal == 'ITV'
 
 
 def test_upload_orders_success(client):
@@ -62,8 +85,14 @@ def test_upload_orders_success(client):
     Test just an order sheet
     """
     rv = upload_one_sheet(client,
-                          './tests/data/order_sheet_test.xlsx')
+                          get_file_path('order_sheet_test.xlsx'))
+
     assert rv.status_code == 200
+    assert orders.OrderSheet.query.get(1)
+
+    order = orders.Order.query.get(8)
+    assert order.latest_dep_time.strftime('%H:%M') == '10:30'
+    assert order.truck_type == 'port'
 
 
 def test_upload_ta_missing_column(client):
@@ -71,7 +100,7 @@ def test_upload_ta_missing_column(client):
     Test a single truck availability sheet with a missing column
     """
     rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_missing_column.xlsx')
+                          get_file_path('truck_availability_missing_column.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the columns are missing
@@ -81,8 +110,8 @@ def test_upload_ta_duplicates_in_columns(client):
     """
     Test a single truck availability sheet with duplicates in columns
     """
-    rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_duplicate_columns.xlsx')
+    rv = upload_one_sheet(
+        client, get_file_path('truck_availability_duplicate_columns.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the columns contain duplicates
@@ -93,7 +122,7 @@ def test_upload_ta_missing_values(client):
     Test a single truck availability sheet with missing values
     """
     rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_missing_values.xlsx')
+                          get_file_path('truck_availability_missing_values.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the columns have missing data
@@ -103,8 +132,8 @@ def test_upload_ta_data_validation_terminal(client):
     """
     Test a single truck availability sheet with incorrect terminals
     """
-    rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_wrong_terminals.xlsx')
+    rv = upload_one_sheet(
+        client, get_file_path('truck_availability_wrong_terminals.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the column contained incorrect values
@@ -114,8 +143,8 @@ def test_upload_ta_data_validation_trucktype(client):
     """
     Test a single truck availability sheet with incorrect truck types
     """
-    rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_wrong_trucktype.xlsx')
+    rv = upload_one_sheet(
+        client, get_file_path('truck_availability_wrong_trucktype.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the column contained incorrect values
@@ -126,7 +155,7 @@ def test_upload_ta_data_validation_datetime(client):
     Test a single truck availability sheet with incorrect dates
     """
     rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_wrong_dates.xlsx')
+                          get_file_path('truck_availability_wrong_dates.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the column contained incorrect values
@@ -137,7 +166,7 @@ def test_upload_ta_data_validation_numbers(client):
     Test a single truck availability sheet with incorrect numbers
     """
     rv = upload_one_sheet(client,
-                          './tests/data/truck_availability_wrong_numbers.xlsx')
+                          get_file_path('truck_availability_wrong_numbers.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the column contained incorrect values
@@ -148,7 +177,7 @@ def test_upload_order_column_missing(client):
     Test a single order sheet with missing columns
     """
     rv = upload_one_sheet(client,
-                          './tests/data/order_sheet_missing_column.xlsx')
+                          get_file_path('order_sheet_missing_column.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the column was missing
@@ -159,20 +188,10 @@ def test_upload_order_missing_values(client):
     Test a single order sheet with missing values
     """
     rv = upload_one_sheet(client,
-                          './tests/data/order_sheet_missing_values.xlsx')
+                          get_file_path('order_sheet_missing_values.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the values were missing
-
-
-def test_upload_order_duplicate_values(client):
-    """
-    Test a single order sheet with duplicate values
-    """
-    rv = upload_one_sheet(client,
-                          './tests/data/order_sheet_duplicate_values.xlsx')
-
-    assert rv.status_code == 422
 
 
 def test_upload_order_data_validation_terminal(client):
@@ -180,7 +199,7 @@ def test_upload_order_data_validation_terminal(client):
     Test a single order sheet with incorrect terminals
     """
     rv = upload_one_sheet(client,
-                          './tests/data/order_sheet_wrong_terminals.xlsx')
+                          get_file_path('order_sheet_wrong_terminals.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the values were wrong
@@ -191,7 +210,7 @@ def test_upload_order_data_validation_trucktype(client):
     Test a single order sheet with incorrect truck types
     """
     rv = upload_one_sheet(client,
-                          './tests/data/order_sheet_wrong_trucktype.xlsx')
+                          get_file_path('order_sheet_wrong_trucktype.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the values were wrong
@@ -202,7 +221,7 @@ def test_upload_order_data_validation_numbers(client):
     Test a single order sheet with incorrect numbers
     """
     rv = upload_one_sheet(client,
-                          './tests/data/order_sheet_wrong_numbers.xlsx')
+                          get_file_path('order_sheet_wrong_numbers.xlsx'))
 
     assert rv.status_code == 422
     # something to assert that the values were wrong
@@ -213,7 +232,7 @@ def test_upload_one_but_it_is_a_pdf(client):
     Test a single upload with a pdf instead of a sheet
     """
     rv = upload_one_sheet(client,
-                          './tests/data/not_a_spreadsheet.pdf')
+                          get_file_path('not_a_spreadsheet.pdf'))
 
     assert rv.status_code == 400
     # something to assert that this is not a spreadsheet
@@ -224,9 +243,48 @@ def test_upload_one_but_it_is_not_right(client):
     Test a single upload with something that is neither
     """
     rv = upload_one_sheet(client,
-                          './tests/data/stardew valley.xlsx')
+                          get_file_path('stardew valley.xlsx'))
 
     assert rv.status_code == 400
     # something to assert that it's not one of the sheets
 
 
+# GET ORDER SHEETS TESTS
+
+
+def test_get_order_sheets(client, db):
+    """
+    Test getting order sheets
+    """
+    for i in range(2):
+        upload_one_sheet(client,
+                         get_file_path('order_sheet_test.xlsx'))
+
+    orders.OrderSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
+
+    rv = get_order_sheet(client, page=2, page_size=1)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert len(data) == 1
+    assert data[0]['id'] == 1
+
+
+# GET TRUCK SHEETS TESTS
+
+def test_get_truck_sheets(client, db):
+    """
+    Test getting truck sheets
+    """
+    for i in range(2):
+        upload_one_sheet(client,
+                         get_file_path('truck_availability_test.xlsx'))
+
+    trucks.TruckSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
+
+    rv = get_truck_sheet(client, page=2, page_size=1)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert len(data) == 1
+    assert data[0]['id'] == 1

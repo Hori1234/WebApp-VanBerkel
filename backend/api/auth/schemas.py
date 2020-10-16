@@ -38,20 +38,3 @@ class AccountInfo(ma.SQLAlchemySchema):
     class Meta:
         model = User
         ordered = True
-
-
-class AccountChange(ma.SQLAlchemySchema):
-    """
-    Account parameters for changing an account.
-    """
-
-    username = ma.auto_field(description="The username of the user",
-                             required=False)
-    password = ma.String(description="The password of the user",
-                         required=False)
-    role = ma.auto_field(description="The role of the user",
-                         required=False)
-
-    class Meta:
-        model = User
-        ordered = True

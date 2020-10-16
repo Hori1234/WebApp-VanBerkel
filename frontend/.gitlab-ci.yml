@@ -3,6 +3,8 @@ image: node:latest
 
 # Cache node_modules for future jobs
 cache:
+  untracked: true
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - frontend/node_modules/
 
@@ -21,22 +23,23 @@ stages:
 frontend-build:
   stage: Build
   script:
-    - npm install
-  artifacts:
-    paths:
-      - frontend/node_modules/
+    - npm ci
 
 # Check style of the code
 frontend-lint:
   stage: Linter
   needs: [frontend-build]
+  dependencies:
+    - frontend-build
   script:
     - npm run lint
 
 # Run tests
 frontend-test:
   stage: Tests
-  needs: [frontend-lint]
+  needs: [frontend-build, frontend-lint]
+  dependencies:
+    - frontend-build
   script:
     - npm test -- --coverage --watchAll=false
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/

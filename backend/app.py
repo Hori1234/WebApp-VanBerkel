@@ -1,15 +1,21 @@
 from flask import Flask
 from flask_smorest import Api
+from apispec.ext.marshmallow import MarshmallowPlugin
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
-import logging
 from backend.config import Config
-from backend.api import register_api
+from backend.api import register_api, custom_name_resolver as name_resolver
 
 db = SQLAlchemy()
-api = Api()
+api = Api(
+    spec_kwargs={
+        'marshmallow_plugin': MarshmallowPlugin(
+            schema_name_resolver=name_resolver
+        )
+    }
+)
 ma = Marshmallow()
 login = LoginManager()
 migrate = Migrate()
@@ -19,8 +25,10 @@ def create_app(config=Config):
     """
     Initializes the Flask app and Flask plugins.
 
-    :param Config config: configuration for the flask application
-    :returns Flask App: Flask application
+    :param config: configuration for the flask application
+    :type config: :class:`Config`
+    :returns App: Flask application
+    :rtype: :class:`Flask`
     """
     # Initialise app and configuration
     app = Flask(__name__)
@@ -41,11 +49,5 @@ def create_app(config=Config):
     @login.user_loader
     def user_loader(user_id):
         return User.query.get(user_id)
-
-    # setup logging based on environment
-    if app.config['ENV'] == "production":
-        logging.basicConfig(level=logging.INFO)
-    else:
-        logging.basicConfig(level=logging.DEBUG)
 
     return app
