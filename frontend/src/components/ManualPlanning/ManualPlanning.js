@@ -659,7 +659,7 @@ export default class ManualPlanning extends Component {
       },
       temp: [],
       originalOrders: [],
-      originalTrucks: []
+      originalTrucks: [],
     };
   }
 
@@ -721,7 +721,10 @@ export default class ManualPlanning extends Component {
 
   changeDataOrders = (d) => {
     if (d === "Both") {
-      this.setState({ data: this.state.originalOrders, data2:this.state.originalTrucks });
+      this.setState({
+        data: this.state.originalOrders,
+        data2: this.state.originalTrucks,
+      });
     } else if (d === "ITV") {
       this.getItvOrder(this.state.originalOrders);
       this.getItvTruck(this.state.originalTrucks);
@@ -1723,7 +1726,8 @@ export default class ManualPlanning extends Component {
                   var orderLength = this.state.selectedOrdersRowKeys.length;
                   this.assign_unassignOrder(
                     this.state.selectedOrdersRowKeys[orderLength - 1],
-                    0
+                    null,
+                    null
                   );
                 }}
               >
