@@ -136,7 +136,6 @@ export function createAllDataInput(
   clients,
   containers
 ) {
-  console.log(orderIDs);
   let listLength = truckIDs.length;
   let listDataInputs = [
     [
@@ -159,8 +158,6 @@ export function createAllDataInput(
       containers[i]
     );
     listDataInputs.push(tempList);
-    console.log(listDataInputs);
-    console.log(orderIDs[0]);
   }
   return listDataInputs;
 }
@@ -210,7 +207,6 @@ export default class DataVisualization extends Component {
     let truckID = [];
 
     const property = this.state.timelineDetails;
-    console.log(property);
     property.forEach((element) => {
       if (element.address == null) {
         address.push("unknown destination");
@@ -260,14 +256,6 @@ export default class DataVisualization extends Component {
         truckID.push(element.truck_id);
       }
     })
-    console.log(address);
-    console.log(bookingID);
-    console.log(client);
-    console.log(containerID);
-    console.log(departureTime);
-    console.log(endTime);
-    console.log(orderType);
-    console.log(truckID);
     return createAllDataInput(truckID, bookingID, departureTime, endTime, address, orderType, client, containerID);
   }
 
