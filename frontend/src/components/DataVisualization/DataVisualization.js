@@ -21,24 +21,17 @@ export function downloadFile() {
   });
 }
 
-//Dummy list data
-// var truckIDsDummy = ['23', '23', '23', '234', '235', '1', '2', '3', '4', '5', '6', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '6'];
-// var orderIDsDummy = ['124124', '124124', '124124', '236234592', '234623466', '2', '2', '2', '2', '2', '2', '2', '7', '7', '7', '7', '7', '7', '7', '7', '7', '6'];
-// var startTimesDummy = ['8:00', '10:30', '16:00', '12:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00', '16:00'];
-// var endTimesDummy = ['10:30', '12:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00', '18:00'];
-// var destinationsDummy = ['Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven', 'Eindhoven'];
 
-var truckIDsDummy = ["23", "23", "23", "234", "235"];
-var orderIDsDummy = ["124124", "124124", "124124", "236234592", "234623466"];
-var startTimesDummy = ["8:00", "10:30", "16:00", "12:00", "16:00"];
-var endTimesDummy = ["10:30", "12:00", "18:00", "18:00", "18:00", "18:00"];
-var destinationsDummy = [
-  "Eindhoven",
-  "Eindhoven",
-  "Eindhoven",
-  "Eindhoven",
-  "Eindhoven",
-];
+// var truckIDsDummy = ["23", "23", "23", "234", "235"];
+// var orderIDsDummy = ["1", "2", "3", "4", "5"];
+// var startTimesDummy = ["8:00", "10:30", "16:00", "12:00", "16:00"];
+// var endTimesDummy = ["10:30", "12:00", "18:00", "18:00", "18:00", "18:00"];
+// var destinationsDummy = ["Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven", "Eindhoven"];
+// var orderTypesDummy = ["Port", "Port", "Port", "Port", "Port"];
+// var clientsDummy = ["Hans", "Janna", "Surgei", "Rick", "Sander"];
+// var containersDummy = ["1A", "1B", "1C", "1D", "1E"];
+
+
 
 // creates the tooltip of an order
 export function createCustomHTMLTooltip(
@@ -46,7 +39,10 @@ export function createCustomHTMLTooltip(
   startTime,
   endTime,
   duration,
-  destination
+  destination,
+  orderType,
+  client,
+  container
 ) {
   return (
     '<ul class="flex-container">' +
@@ -64,6 +60,15 @@ export function createCustomHTMLTooltip(
     "</li>" +
     '<li class="flex-item"><b>Destination: </b>' +
     destination +
+    "</li>" +
+    '<li class="flex-item"><b>Order Type: </b>' +
+    orderType +
+    "</li>" +
+    '<li class="flex-item"><b>Customer: </b>' +
+    client +
+    "</li>" +
+    '<li class="flex-item"><b>Container ID: </b>' +
+    container +
     "</li>" +
     "</ul>"
   );
@@ -84,10 +89,11 @@ export function calculateDuration(startTime, endTime) {
 
 //create javascript data object
 export function createDataTime(time) {
-  let index = time.indexOf(":");
-  let hours = time.substr(0, index);
-  let minutes = time.substr(index + 1);
-  return new Date(0, 0, 0, hours, minutes, 0);
+  //let index = time.indexOf(":");
+  //let hours = time.substr(0, index);
+  //let minutes = time.substr(index + 1);
+  const arrayTime = time.split(":");
+  return new Date(0, 0, 0, arrayTime[0], arrayTime[1], 0);
 }
 
 // create single data input for timeline
@@ -96,13 +102,16 @@ export function createSingleDataInput(
   orderID,
   startTime,
   endTime,
-  destination
+  destination,
+  orderType,
+  client,
+  container
 ) {
   let duration = calculateDuration(startTime, endTime);
   return [
-    truckID,
-    +orderID,
-    createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination),
+    truckID.toString(),
+    orderID,
+    createCustomHTMLTooltip(orderID, startTime, endTime, duration, destination, orderType, client, container),
     createDataTime(startTime),
     createDataTime(endTime),
   ];
@@ -116,20 +125,21 @@ export function coloursAvailable() {
   return colours;
 }
 
-export function extractColours() {}
-
 // create a list with all data points for the timeline
 export function createAllDataInput(
   truckIDs,
   orderIDs,
   startTimes,
   endTimes,
-  destinations
+  destinations,
+  orderTypes,
+  clients,
+  containers
 ) {
   let listLength = truckIDs.length;
   let listDataInputs = [
     [
-      { type: "string", id: "Room" },
+      { type: "string", id: "Truck" },
       { type: "string", id: "Name" },
       { type: "string", role: "tooltip", p: { html: true } },
       { type: "date", id: "Start" },
@@ -142,7 +152,10 @@ export function createAllDataInput(
       orderIDs[i],
       startTimes[i],
       endTimes[i],
-      destinations[i]
+      destinations[i],
+      orderTypes[i],
+      clients[i],
+      containers[i]
     );
     listDataInputs.push(tempList);
   }
@@ -153,41 +166,22 @@ export default class DataVisualization extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      truckOrderDetails: [],
+      timelineDetails: [],
+      status: "loading"
     };
   }
 
   componentDidMount() {
-    this.getTruckList("latest");
+    this.getTimeline("latest");
   }
 
-  getTruckList = (value) => {
-    return axios
-      .get(`/api/trucks/sheet/${value}`)
+  getTimeline = async (value) => {
+    return await axios
+      .get(`/api/orders/timeline/${value}`)
       .then((res) => {
-        var outarray = [];
-        for (var i = 1; i < res.data.trucks.length; i++) {
-          var temp = {
-            key: res.data.trucks[i]["s_number"],
-            truck_id: res.data.trucks[i]["truck_id"],
-            driver: res.data.trucks[i]["Driver"],
-            availability: res.data.trucks[i]["availability"],
-            starting: res.data.trucks[i]["starting_time"],
-            truck_type: res.data.trucks[i]["truck_type"],
-            terminal: res.data.trucks[i]["terminal"],
-            hierarchy: res.data.trucks[i]["hierarchy"],
-            use_cost: res.data.trucks[i]["use_cost"],
-            date: res.data.trucks[i]["date"],
-            owner: res.data.trucks[i]["Owner"],
-            remarks: res.data.trucks[i]["Remarks"],
-            business_type: res.data.trucks[i]["business_type"],
-          };
-          outarray.push(temp);
-        }
-        console.log(outarray);
         this.setState((state) => ({
           ...state,
-          truckOrderDetails: outarray,
+          timelineDetails: res.data,
           status: "success",
         }));
         return true;
@@ -202,14 +196,79 @@ export default class DataVisualization extends Component {
       });
   };
 
+  createArrays = () => {
+    let address = [];
+    let bookingID = [];
+    let client = [];
+    let containerID = [];
+    let departureTime = [];
+    let endTime = [];
+    let orderType = [];
+    let truckID = [];
+
+    const property = this.state.timelineDetails;
+    property.forEach((element) => {
+      if (element.address == null) {
+        address.push("unknown destination");
+      } else {
+        address.push(element.address);
+      }
+      if (element.booking_id == null) {
+        bookingID.push("unknown booking order");
+      }
+      else {
+        bookingID.push(element.booking_id);
+      }
+      if (element.client == null) {
+        client.push("unknown client");
+      }
+      else {
+        client.push(element.client);
+      }
+      if (element.container_id == null) {
+        containerID.push("unknown");
+      }
+      else {
+        containerID.push(element.container_id);
+      }
+      if (element.departure_time == null) {
+        departureTime.push("0:01");
+      }
+      else {
+        departureTime.push(element.departure_time);
+      }
+      if (element.end_time == null) {
+        endTime.push("23:59");
+      }
+      else {
+        endTime.push(element.end_time);
+      }
+      if (element.order_type == null) {
+        orderType.push("No type");
+      }
+      else {
+        orderType.push(element.order_type);
+      }
+      if (element.truck_id == null) {
+        truckID.push("No truck");
+      }
+      else {
+        truckID.push(element.truck_id);
+      }
+    })
+    return createAllDataInput(truckID, bookingID, departureTime, endTime, address, orderType, client, containerID);
+  }
+
   render() {
     return (
+      
+      this.state.status === "loading" ? "loading...":
       <Layout
         style={{
           display: "flex",
           height: "100%",
           width: "100%",
-          background: "white",
+          background: "white"
         }}
       >
         <Chart
@@ -217,19 +276,15 @@ export default class DataVisualization extends Component {
           height={"100%"}
           chartType="Timeline"
           loader={<div>Loading Chart</div>}
-          data={createAllDataInput(
-            truckIDsDummy,
-            orderIDsDummy,
-            startTimesDummy,
-            endTimesDummy,
-            destinationsDummy
-          )}
+          data={ this.createArrays()
+            //createAllDataInput(truckIDsDummy, orderIDsDummy, startTimesDummy, endTimesDummy, destinationsDummy, orderTypesDummy, clientsDummy, containersDummy)
+          }
           options={{
             timeline: {
               colorByRowLabel: false,
               allowHtml: true,
-              avoidOverlappingGridLines: false,
             },
+            avoidOverlappingGridLines: false,
           }}
           rootProps={{ "data-testid": "5" }}
         />
@@ -246,7 +301,7 @@ export default class DataVisualization extends Component {
             </Button>
           </Col>
           <Col span={4} offset={14}>
-            <Button type="primary" size={"large"} style={{ width: "100%" }}>
+            <Button type="primary" size={"large"} style={{ width: "100%" }} onClick={this.createArrays}>
               Publish
             </Button>
           </Col>

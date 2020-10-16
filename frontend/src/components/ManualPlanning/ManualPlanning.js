@@ -30,26 +30,35 @@ export default class ManualPlanning extends Component {
       columnFilter: [],
       columnTruckFilter: [],
       isVisible: false,
-      isTruckVisible:false,
+      isTruckVisible: false,
       columns: [
         {
           title: "Container",
           dataIndex: "Container",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Container || "|||").toUpperCase().localeCompare((b.Container || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a.Container || "|||")
+              .toUpperCase()
+              .localeCompare((b.Container || "|||").toUpperCase()),
         },
         {
           title: "Unit type",
           dataIndex: "Unit type",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Unit type"] || "|||").toUpperCase().localeCompare((b["Unit type"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Unit type"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Unit type"] || "|||").toUpperCase()),
         },
         {
           title: "Booking",
           dataIndex: "Booking",
-          sorter:(a,b) => (a.Booking || "|||").toUpperCase().localeCompare((b.Booking || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a.Booking || "|||")
+              .toUpperCase()
+              .localeCompare((b.Booking || "|||").toUpperCase()),
           width: 150,
           editable: true,
         },
@@ -58,105 +67,146 @@ export default class ManualPlanning extends Component {
           dataIndex: "Ship. comp.",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Ship. comp."] || "|||").toUpperCase().localeCompare((b["Ship. comp."] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Ship. comp."] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Ship. comp."] || "|||").toUpperCase()),
         },
         {
           title: "Terminal",
           dataIndex: "Terminal",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Terminal || "|||").toUpperCase().localeCompare((b.Terminal || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a.Terminal || "|||")
+              .toUpperCase()
+              .localeCompare((b.Terminal || "|||").toUpperCase()),
         },
         {
           title: "Truck",
           dataIndex: "Truck",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Truck || "|||").toUpperCase().localeCompare((b.Truck || "|||").toUpperCase())
-
+          sorter: (a, b) =>
+            (a.Truck || "|||")
+              .toUpperCase()
+              .localeCompare((b.Truck || "|||").toUpperCase()),
         },
         {
           title: "Pickup",
           dataIndex: "Pickup",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Pickup|| "|||").toUpperCase().localeCompare((b.Pickup || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Pickup || "|||")
+              .toUpperCase()
+              .localeCompare((b.Pickup || "|||").toUpperCase()),
         },
         {
           title: "Status",
           dataIndex: "Status",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Status || "|||").toUpperCase().localeCompare((b.Status || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Status || "|||")
+              .toUpperCase()
+              .localeCompare((b.Status || "|||").toUpperCase()),
         },
         {
           title: "Inl. Terminal",
           dataIndex: "inl_terminal",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.inl_terminal || "|||").toUpperCase().localeCompare((b.inl_terminal || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.inl_terminal || "|||")
+              .toUpperCase()
+              .localeCompare((b.inl_terminal || "|||").toUpperCase()),
         },
         {
           title: "Gate",
           dataIndex: "Gate",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Gate || "|||").toUpperCase().localeCompare((b.Gate || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Gate || "|||")
+              .toUpperCase()
+              .localeCompare((b.Gate || "|||").toUpperCase()),
         },
         {
           title: "Time",
           dataIndex: "Time",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Gate || "|||").toUpperCase().localeCompare((b.Gate || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Gate || "|||")
+              .toUpperCase()
+              .localeCompare((b.Gate || "|||").toUpperCase()),
         },
         {
           title: "Max. departure",
           dataIndex: "Max. departure",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Max. departure"] || "|||").toUpperCase().localeCompare((b["Max. departure"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Max. departure"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Max. departure"] || "|||").toUpperCase()),
         },
         {
           title: "Time (1)",
           dataIndex: "Time (1)",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Time (1)"] || "|||").toUpperCase().localeCompare((b["Time (1)"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Time (1)"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Time (1)"] || "|||").toUpperCase()),
         },
         {
           title: "Latest departure time",
           dataIndex: "latest_dep_time",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.latest_dep_time || "|||").toUpperCase().localeCompare((b.latest_dep_time || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.latest_dep_time || "|||")
+              .toUpperCase()
+              .localeCompare((b.latest_dep_time || "|||").toUpperCase()),
         },
         {
           title: "Truck Used",
           dataIndex: "Truck Used",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Truck Used"] || "|||").toUpperCase().localeCompare((b["Truck Used"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Truck Used"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Truck Used"] || "|||").toUpperCase()),
         },
         {
           title: "Truck Type",
           dataIndex: "truck_type",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.truck_type || "|||").toUpperCase().localeCompare((b.truck_type || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.truck_type || "|||")
+              .toUpperCase()
+              .localeCompare((b.truck_type || "|||").toUpperCase()),
         },
         {
           title: "Hierarchy",
           dataIndex: "hierarchy",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.hierarchy || "|||") - ((b.hierarchy || "|||"))
+          sorter: (a, b) => (a.hierarchy || "|||") - (b.hierarchy || "|||"),
         },
         {
           title: "City",
           dataIndex: "City",
           sortDirections: ["descend", "ascend"],
-          sorter:(a,b) => (a.City || "|||").toUpperCase().localeCompare((b.City || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a.City || "|||")
+              .toUpperCase()
+              .localeCompare((b.City || "|||").toUpperCase()),
           width: 150,
           editable: true,
         },
@@ -165,126 +215,174 @@ export default class ManualPlanning extends Component {
           dataIndex: "L/D",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["L/D"] || "|||").toUpperCase().localeCompare((b["L/D"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["L/D"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["L/D"] || "|||").toUpperCase()),
         },
         {
           title: "Date",
           dataIndex: "Date",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Date || "|||").toUpperCase().localeCompare((b.Date || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Date || "|||")
+              .toUpperCase()
+              .localeCompare((b.Date || "|||").toUpperCase()),
         },
         {
           title: "Time (2)",
           dataIndex: "Time (2)",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Time (2)"] || "|||").toUpperCase().localeCompare((b["Time (2)"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Time (2)"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Time (2)"] || "|||").toUpperCase()),
         },
         {
           title: "Delivery Deadline",
           dataIndex: "delivery_deadline",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.delivery_deadline || "|||").toUpperCase().localeCompare((b.delivery_deadline || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.delivery_deadline || "|||")
+              .toUpperCase()
+              .localeCompare((b.delivery_deadline || "|||").toUpperCase()),
         },
         {
           title: "Driving time",
           dataIndex: "driving_time",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.driving_time || "|||") - ((b.driving_time || "|||"))
+          sorter: (a, b) =>
+            (a.driving_time || "|||") - (b.driving_time || "|||"),
         },
         {
           title: "Process time",
           dataIndex: "process_time",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.process_time || "|||") - ((b.process_time || "|||"))
+          sorter: (a, b) =>
+            (a.process_time || "|||") - (b.process_time || "|||"),
         },
         {
           title: "Service time",
           dataIndex: "service_time",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.service_time || "|||") - ((b.service_time || "|||"))
+          sorter: (a, b) =>
+            (a.service_time || "|||") - (b.service_time || "|||"),
         },
         {
           title: "Reference",
           dataIndex: "Reference",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Reference || "|||").toUpperCase().localeCompare((b.Reference || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Reference || "|||")
+              .toUpperCase()
+              .localeCompare((b.Reference || "|||").toUpperCase()),
         },
         {
           title: "Truck (1)",
           dataIndex: "Truck (1)",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Truck (1)"] || "|||").toUpperCase().localeCompare((b["Truck (1)"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Truck (1)"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Truck (1)"] || "|||").toUpperCase()),
         },
         {
           title: "Gate (1)",
           dataIndex: "Gate (1)",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Gate (1)"] || "|||").toUpperCase().localeCompare((b["Gate (1)"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Gate (1)"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Gate (1)"] || "|||").toUpperCase()),
         },
         {
           title: "Time (3)",
           dataIndex: "Time (3)",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Time (3)"] || "|||").toUpperCase().localeCompare((b["Time (3)"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Time (3)"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Time (3)"] || "|||").toUpperCase()),
         },
         {
           title: "Inl. ter. (1)",
           dataIndex: "Inl. ter. (1)",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Inl. ter. (1)"] || "|||").toUpperCase().localeCompare((b["Inl. ter. (1)"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Inl. ter. (1)"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Inl. ter. (1)"] || "|||").toUpperCase()),
         },
         {
           title: "Gross (kgs)",
           dataIndex: "Gross (kgs)",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Gross (kgs)"] || "|||") - (b["Gross (kgs)"] || "|||"),
+          sorter: (a, b) =>
+            (a["Gross (kgs)"] || "|||") - (b["Gross (kgs)"] || "|||"),
         },
         {
           title: "Temperature °C",
           dataIndex: "Temperature °C",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Temperature °C"] || "|||").toUpperCase().localeCompare((b["Temperature °C"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Temperature °C"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Temperature °C"] || "|||").toUpperCase()),
         },
         {
           title: "Seal",
           dataIndex: "Seal",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Seal || "|||").toUpperCase().localeCompare((b.Seal || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Seal || "|||")
+              .toUpperCase()
+              .localeCompare((b.Seal || "|||").toUpperCase()),
         },
         {
           title: "Truck (2)",
           dataIndex: "Truck (2)",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Truck (2)"] || "|||").toUpperCase().localeCompare((b["Truck (2)"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Truck (2)"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Truck (2)"] || "|||").toUpperCase()),
         },
         {
           title: "Voyage/inland carrier",
           dataIndex: "Voyage/inland carrier",
           width: 250,
           editable: true,
-          sorter:(a,b) => (a["Voyage/inland carrier"] || "|||").toUpperCase().localeCompare((b["Voyage/inland carrier"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Voyage/inland carrier"] || "|||")
+              .toUpperCase()
+              .localeCompare(
+                (b["Voyage/inland carrier"] || "|||").toUpperCase()
+              ),
         },
         {
           title: "Terminal (1)",
           dataIndex: "Terminal (1)",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Terminal (1)"] || "|||").toUpperCase().localeCompare((b["Terminal (1)"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Terminal (1)"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Terminal (1)"] || "|||").toUpperCase()),
         },
         {
           title: "Closing",
@@ -292,56 +390,78 @@ export default class ManualPlanning extends Component {
           sortDirections: ["descend", "ascend"],
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Closing || "|||").toUpperCase().localeCompare((b.Closing || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Closing || "|||")
+              .toUpperCase()
+              .localeCompare((b.Closing || "|||").toUpperCase()),
         },
         {
           title: "POD",
           dataIndex: "POD",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.POD || "|||").toUpperCase().localeCompare((b.POD || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.POD || "|||")
+              .toUpperCase()
+              .localeCompare((b.POD || "|||").toUpperCase()),
         },
         {
           title: "Invoice reference",
           dataIndex: "Invoice reference",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Invoice reference"] || "|||") - (b["Terminal (1)"] || "|||"),
+          sorter: (a, b) =>
+            (a["Invoice reference"] || "|||") - (b["Terminal (1)"] || "|||"),
         },
         {
           title: "Tariff type",
           dataIndex: "Tariff type",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a["Tariff type"] || "|||").toUpperCase().localeCompare((b["Tariff type"] || "|||").toUpperCase()),
+          sorter: (a, b) =>
+            (a["Tariff type"] || "|||")
+              .toUpperCase()
+              .localeCompare((b["Tariff type"] || "|||").toUpperCase()),
         },
         {
           title: "G",
           dataIndex: "G",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.G || "|||").toUpperCase().localeCompare((b.G || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.G || "|||")
+              .toUpperCase()
+              .localeCompare((b.G || "|||").toUpperCase()),
         },
         {
           title: "F",
           dataIndex: "F",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.F || "|||").toUpperCase().localeCompare((b.F || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.F || "|||")
+              .toUpperCase()
+              .localeCompare((b.F || "|||").toUpperCase()),
         },
         {
           title: "Positie",
           dataIndex: "Positie",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Positie || "|||").toUpperCase().localeCompare((b.Positie || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Positie || "|||")
+              .toUpperCase()
+              .localeCompare((b.Positie || "|||").toUpperCase()),
         },
         {
           title: "Delay",
           dataIndex: "Delay",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Delay || "|||").toUpperCase().localeCompare((b.Delay || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Delay || "|||")
+              .toUpperCase()
+              .localeCompare((b.Delay || "|||").toUpperCase()),
         },
 
         {
@@ -349,116 +469,155 @@ export default class ManualPlanning extends Component {
           dataIndex: "Weight",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.Weight || "|||").toUpperCase().localeCompare((b.Weight || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.Weight || "|||")
+              .toUpperCase()
+              .localeCompare((b.Weight || "|||").toUpperCase()),
         },
         {
           title: "Truck ID",
           dataIndex: "truck_id",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.truck_id || "|||").toUpperCase().localeCompare((b.truck_id || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.truck_id || "|||")
+              .toUpperCase()
+              .localeCompare((b.truck_id || "|||").toUpperCase()),
         },
         {
           title: "Departure time",
           dataIndex: "departure_time",
           width: 150,
           editable: true,
-          sorter:(a,b) => (a.departure_time || "|||").toUpperCase().localeCompare((b.departure_time || "|||").toUpperCase())
+          sorter: (a, b) =>
+            (a.departure_time || "|||")
+              .toUpperCase()
+              .localeCompare((b.departure_time || "|||").toUpperCase()),
         },
       ],
       columns2: [
         {
-         title: "Truck ID",
-         dataIndex: "truck_id",
-         sorter: (a, b) => (a.truck_id || "|||").toUpperCase().localeCompare((b.truck_id || "|||").toUpperCase()),
-         width: 150,
-         editable: true,
+          title: "Truck ID",
+          dataIndex: "truck_id",
+          sorter: (a, b) =>
+            (a.truck_id || "|||")
+              .toUpperCase()
+              .localeCompare((b.truck_id || "|||").toUpperCase()),
+          width: 150,
+          editable: true,
         },
         {
-         title: "S Number",
-         dataIndex: "s_number",
-         sorter: (a, b) => (a.s_number || "|||")-((b.s_number || "|||")),
-         width: 150,
-         editable: true,
+          title: "S Number",
+          dataIndex: "s_number",
+          sorter: (a, b) => (a.s_number || "|||") - (b.s_number || "|||"),
+          width: 150,
+          editable: true,
         },
         {
-         title: "Availability",
-         dataIndex: "availability",
-         sorter: (a,b) => (a.availability || "|||").toUpperCase().localeCompare((b.availability || "|||").toUpperCase()),
-         width: 150,
-         editable: true,
+          title: "Availability",
+          dataIndex: "availability",
+          sorter: (a, b) =>
+            (a.availability || "|||")
+              .toUpperCase()
+              .localeCompare((b.availability || "|||").toUpperCase()),
+          width: 150,
+          editable: true,
         },
-       {
-         title: "Truck type",
-         dataIndex: "truck_type",
-         width: 150,
-         editable: true,
-         sorter: (a,b) => (a.truck_type || "|||").toUpperCase().localeCompare((b.truck_type || "|||").toUpperCase()),
-       },
-       {
-         title: "Business type",
-         dataIndex: "business_type",
-         width: 150,
-         editable: true,
-         sorter: (a,b) => (a.business_type || "|||").toUpperCase().localeCompare((b.business_type || "|||").toUpperCase()),
-       },
         {
-         title: "Driver",
-         dataIndex: "Driver",
-         width: 150,
-         editable: true,
-          sorter: (a,b) => (a.Driver || "|||").toUpperCase().localeCompare((b.Driver || "|||").toUpperCase()),
-       },
-       {
-         title: "Terminal",
-         dataIndex: "terminal",
-         width: 150,
-         editable: true,
-         sorter: (a,b) => (a.terminal || "|||").toUpperCase().localeCompare((b.terminal || "|||").toUpperCase()),
-       },
-       {
-         title: "Owner",
-         dataIndex: "Owner",
-         width: 150,
-         editable: true,
-         sorter: (a,b) => (a.Owner || "|||").toUpperCase().localeCompare((b.Owner || "|||").toUpperCase()),
-       },
-       {
-         title: "Hierarchy",
-         dataIndex: "hierarchy",
-         width: 150,
-         editable: true,
-         sorter: (a,b) => (a.hierarchy || "|||")-((b.hierarchy || "|||")),
-       },
-       {
-         title: "Use cost",
-         dataIndex: "use_cost",
-         width: 150,
-         editable: true,
-         sorter: (a,b) => (a.use_cost || "|||")-((b.use_cost || "|||")),
-       },
-       {
-         title: "Date",
-         dataIndex: "date",
-         width: 150,
-         editable: true,
-         sorter: (a,b) => (a.date || "|||").toUpperCase().localeCompare((b.date || "|||").toUpperCase()),
-       },
-       {
-         title: "Starting time",
-         dataIndex: "starting_time",
-         width: 150,
-         editable: true,
-         sorter: (a,b) => (a.starting_time || "|||").toUpperCase().localeCompare((b.starting_time || "|||").toUpperCase()),
-       },
-       {
-         title: "Remarks",
-         dataIndex: "Remarks",
-         width: 150,
-         editable: true,
-         sorter: (a,b) => (a.Remarks || "|||").toUpperCase().localeCompare((b.Remarks || "|||").toUpperCase()),
-       }
-     ],
+          title: "Truck type",
+          dataIndex: "truck_type",
+          width: 150,
+          editable: true,
+          sorter: (a, b) =>
+            (a.truck_type || "|||")
+              .toUpperCase()
+              .localeCompare((b.truck_type || "|||").toUpperCase()),
+        },
+        {
+          title: "Business type",
+          dataIndex: "business_type",
+          width: 150,
+          editable: true,
+          sorter: (a, b) =>
+            (a.business_type || "|||")
+              .toUpperCase()
+              .localeCompare((b.business_type || "|||").toUpperCase()),
+        },
+        {
+          title: "Driver",
+          dataIndex: "Driver",
+          width: 150,
+          editable: true,
+          sorter: (a, b) =>
+            (a.Driver || "|||")
+              .toUpperCase()
+              .localeCompare((b.Driver || "|||").toUpperCase()),
+        },
+        {
+          title: "Terminal",
+          dataIndex: "terminal",
+          width: 150,
+          editable: true,
+          sorter: (a, b) =>
+            (a.terminal || "|||")
+              .toUpperCase()
+              .localeCompare((b.terminal || "|||").toUpperCase()),
+        },
+        {
+          title: "Owner",
+          dataIndex: "Owner",
+          width: 150,
+          editable: true,
+          sorter: (a, b) =>
+            (a.Owner || "|||")
+              .toUpperCase()
+              .localeCompare((b.Owner || "|||").toUpperCase()),
+        },
+        {
+          title: "Hierarchy",
+          dataIndex: "hierarchy",
+          width: 150,
+          editable: true,
+          sorter: (a, b) => (a.hierarchy || "|||") - (b.hierarchy || "|||"),
+        },
+        {
+          title: "Use cost",
+          dataIndex: "use_cost",
+          width: 150,
+          editable: true,
+          sorter: (a, b) => (a.use_cost || "|||") - (b.use_cost || "|||"),
+        },
+        {
+          title: "Date",
+          dataIndex: "date",
+          width: 150,
+          editable: true,
+          sorter: (a, b) =>
+            (a.date || "|||")
+              .toUpperCase()
+              .localeCompare((b.date || "|||").toUpperCase()),
+        },
+        {
+          title: "Starting time",
+          dataIndex: "starting_time",
+          width: 150,
+          editable: true,
+          sorter: (a, b) =>
+            (a.starting_time || "|||")
+              .toUpperCase()
+              .localeCompare((b.starting_time || "|||").toUpperCase()),
+        },
+        {
+          title: "Remarks",
+          dataIndex: "Remarks",
+          width: 150,
+          editable: true,
+          sorter: (a, b) =>
+            (a.Remarks || "|||")
+              .toUpperCase()
+              .localeCompare((b.Remarks || "|||").toUpperCase()),
+        },
+      ],
       data: [],
       data2: [],
       startingColumns: [],
@@ -754,7 +913,7 @@ export default class ManualPlanning extends Component {
   //Adding the truck and the order
   addTruck = (value) => {
     this.getTruckInfo();
-    const data = this.refs.addTrucks.createTruckData()
+    const data = this.refs.addTrucks.createTruckData();
     return axios
       .post(`/api/trucks/sheet/${value}`, data)
       .then((res) => {
@@ -780,7 +939,7 @@ export default class ManualPlanning extends Component {
   };
   addOrder = (value) => {
     this.getOrderInfo();
-    const data = this.refs.addOrders.createOrderData()
+    const data = this.refs.addOrders.createOrderData();
     return axios
       .post(`/api/orders/sheet/${value}`, data)
       .then((res) => {
@@ -823,54 +982,55 @@ export default class ManualPlanning extends Component {
         for (var i = 0; i < res.data.orders.length; i++) {
           var temp = {
             key: res.data.orders[i]["order_number"],
-            "Container": res.data.orders[i]["Container"],
+            Container: res.data.orders[i]["Container"],
             "Unit type": res.data.orders[i]["Unit type"],
-            "Booking": res.data.orders[i]["Booking"],
+            Booking: res.data.orders[i]["Booking"],
             "Ship. comp.": res.data.orders[i]["Ship. comp."],
-            "Terminal": res.data.orders[i]["Terminal"],
-            "Truck": res.data.orders[i]["Truck"],
-            "Pickup": res.data.orders[i]["Pickup"],
-            "order_number": res.data.orders[i]["order_number"],
-            "Status": res.data.orders[i]["Status"],
-            "inl_terminal": res.data.orders[i]["inl_terminal"],
-            "Gate": res.data.orders[i]["Gate"],
-            "Time": res.data.orders[i]["Time"],
+            Terminal: res.data.orders[i]["Terminal"],
+            Truck: res.data.orders[i]["Truck"],
+            Pickup: res.data.orders[i]["Pickup"],
+            order_number: res.data.orders[i]["order_number"],
+            Status: res.data.orders[i]["Status"],
+            inl_terminal: res.data.orders[i]["inl_terminal"],
+            Gate: res.data.orders[i]["Gate"],
+            Time: res.data.orders[i]["Time"],
             "Max. departure": res.data.orders[i]["Max. departure"],
             "Time (1)": res.data.orders[i]["Time (1)"],
-            "latest_dep_time": res.data.orders[i]["latest_dep_time"],
+            latest_dep_time: res.data.orders[i]["latest_dep_time"],
             "Truck Used": res.data.orders[i]["Truck Used"],
-            "truck_type": res.data.orders[i]["truck_type"],
-	          "hierarchy": res.data.orders[i]["hierarchy"],
-            "City": res.data.orders[i]["City"],
+            truck_type: res.data.orders[i]["truck_type"],
+            hierarchy: res.data.orders[i]["hierarchy"],
+            City: res.data.orders[i]["City"],
             "L/D": res.data.orders[i]["L/D"],
-            "Date": res.data.orders[i]["Date"],
+            Date: res.data.orders[i]["Date"],
             "Time (2)": res.data.orders[i]["Time (2)"],
-	          "delivery_deadline": res.data.orders[i]["delivery_deadline"],
-            "driving_time": res.data.orders[i]["driving_time"],
-            "process_time": res.data.orders[i]["process_time"],
-            "service_time": res.data.orders[i]["service_time"],
-            "Reference": res.data.orders[i]["Reference"],
+            delivery_deadline: res.data.orders[i]["delivery_deadline"],
+            driving_time: res.data.orders[i]["driving_time"],
+            process_time: res.data.orders[i]["process_time"],
+            service_time: res.data.orders[i]["service_time"],
+            Reference: res.data.orders[i]["Reference"],
             "Truck (1)": res.data.orders[i]["Truck (1)"],
             "Gate (1)": res.data.orders[i]["Gate (1)"],
             "Time (3)": res.data.orders[i]["Time (3)"],
             "Inl. ter. (1)": res.data.orders[i]["Inl. ter. (1)"],
             "Gross (kgs)": res.data.orders[i]["Gross (kgs)"],
             "Temperature °C": res.data.orders[i]["Temperature °C"],
-            "Seal": res.data.orders[i]["Seal"],
+            Seal: res.data.orders[i]["Seal"],
             "Truck (2)": res.data.orders[i]["Truck (2)"],
-            "Voyage/inland carrier": res.data.orders[i]["Voyage/inland carrier"],
+            "Voyage/inland carrier":
+              res.data.orders[i]["Voyage/inland carrier"],
             "Terminal (1)": res.data.orders[i]["Terminal (1)"],
-            "Closing": res.data.orders[i]["Closing"],
-            "POD": res.data.orders[i]["POD"],
+            Closing: res.data.orders[i]["Closing"],
+            POD: res.data.orders[i]["POD"],
             "Invoice reference": res.data.orders[i]["Invoice reference"],
             "Tariff type": res.data.orders[i]["Tariff type"],
-            "G": res.data.orders[i]["G"],
-            "F": res.data.orders[i]["F"],
-            "Positie": res.data.orders[i]["Positie"],
-            "Delay": res.data.orders[i]["Delay"],
-            "Weight": res.data.orders[i]["Weight"],
-            "departure_time": res.data.orders[i]["departure_time"],
-            "truck_id": res.data.orders[i]["truck_id"]
+            G: res.data.orders[i]["G"],
+            F: res.data.orders[i]["F"],
+            Positie: res.data.orders[i]["Positie"],
+            Delay: res.data.orders[i]["Delay"],
+            Weight: res.data.orders[i]["Weight"],
+            departure_time: res.data.orders[i]["departure_time"],
+            truck_id: res.data.orders[i]["truck_id"],
           };
           outarray.push(temp);
         }
@@ -900,19 +1060,19 @@ export default class ManualPlanning extends Component {
         for (var i = 0; i < res.data.trucks.length; i++) {
           var temp = {
             key: res.data.trucks[i]["s_number"],
-            "truck_id": res.data.trucks[i]["truck_id"],
-            "s_number": res.data.trucks[i]["s_number"],
-            "availability": res.data.trucks[i]["availability"],
-            "truck_type": res.data.trucks[i]["truck_type"],
-            "business_type": res.data.trucks[i]["business_type"],
-            "Driver": res.data.trucks[i]["Driver"],
-            "terminal": res.data.trucks[i]["terminal"],
-            "Owner": res.data.trucks[i]["Owner"],
-            "hierarchy": res.data.trucks[i]["hierarchy"],
-            "use_cost": res.data.trucks[i]["use_cost"],
-            "date": res.data.trucks[i]["date"],
-            "starting_time": res.data.trucks[i]["starting_time"],
-            "Remarks": res.data.trucks[i]["Remarks"],
+            truck_id: res.data.trucks[i]["truck_id"],
+            s_number: res.data.trucks[i]["s_number"],
+            availability: res.data.trucks[i]["availability"],
+            truck_type: res.data.trucks[i]["truck_type"],
+            business_type: res.data.trucks[i]["business_type"],
+            Driver: res.data.trucks[i]["Driver"],
+            terminal: res.data.trucks[i]["terminal"],
+            Owner: res.data.trucks[i]["Owner"],
+            hierarchy: res.data.trucks[i]["hierarchy"],
+            use_cost: res.data.trucks[i]["use_cost"],
+            date: res.data.trucks[i]["date"],
+            starting_time: res.data.trucks[i]["starting_time"],
+            Remarks: res.data.trucks[i]["Remarks"],
           };
           outarray.push(temp);
         }
@@ -1044,10 +1204,14 @@ export default class ManualPlanning extends Component {
 
   render() {
     const showHideMenu = (
-      <Menu Scrollable style={{ maxHeight: "50vh", overflowY: "scroll"}}>
+      <Menu Scrollable style={{ maxHeight: "50vh", overflowY: "scroll" }}>
         <Menu.ItemGroup title="Columns">
           <Menu.Item key="Container">
-            <Checkbox id="Container" onChange={this.filterColumns} defaultChecked>
+            <Checkbox
+              id="Container"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
               Container
             </Checkbox>
           </Menu.Item>
@@ -1061,7 +1225,11 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Ship. comp.">
-            <Checkbox id="Ship. comp." onChange={this.filterColumns} defaultChecked>
+            <Checkbox
+              id="Ship. comp."
+              onChange={this.filterColumns}
+              defaultChecked
+            >
               Ship. comp.
             </Checkbox>
           </Menu.Item>
@@ -1075,29 +1243,17 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Truck">
-            <Checkbox
-              id="Truck"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Truck" onChange={this.filterColumns} defaultChecked>
               Truck
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Pickup">
-            <Checkbox
-              id="Pickup"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Pickup" onChange={this.filterColumns} defaultChecked>
               Pickup
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Status">
-            <Checkbox
-              id="Status"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Status" onChange={this.filterColumns} defaultChecked>
               Status
             </Checkbox>
           </Menu.Item>
@@ -1107,26 +1263,34 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Time">
-            <Checkbox
-              id="Time"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Time" onChange={this.filterColumns} defaultChecked>
               Time
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Max. departure">
-            <Checkbox id="Max. departure" onChange={this.filterColumns} defaultChecked>
+            <Checkbox
+              id="Max. departure"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
               Max. departure
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Time (1)">
-            <Checkbox id="Time (1)" onChange={this.filterColumns} defaultChecked>
+            <Checkbox
+              id="Time (1)"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
               Time (1)
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Truck Used">
-            <Checkbox id="Truck Used" onChange={this.filterColumns} defaultChecked>
+            <Checkbox
+              id="Truck Used"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
               Truck Used
             </Checkbox>
           </Menu.Item>
@@ -1141,16 +1305,16 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Date">
-            <Checkbox
-              id="Date"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Date" onChange={this.filterColumns} defaultChecked>
               Date
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Time (2)">
-            <Checkbox id="Time (2)" onChange={this.filterColumns} defaultChecked>
+            <Checkbox
+              id="Time (2)"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
               Time (2)
             </Checkbox>
           </Menu.Item>
@@ -1164,17 +1328,29 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Truck (1)">
-            <Checkbox id="Truck (1)" onChange={this.filterColumns} defaultChecked>
+            <Checkbox
+              id="Truck (1)"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
               Truck (1)
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Gate (1)">
-            <Checkbox id="Gate (1)" onChange={this.filterColumns} defaultChecked>
+            <Checkbox
+              id="Gate (1)"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
               Gate (1)
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Time(3)">
-            <Checkbox id="Time (3)" onChange={this.filterColumns} defaultChecked>
+            <Checkbox
+              id="Time (3)"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
               Time (3)
             </Checkbox>
           </Menu.Item>
@@ -1206,11 +1382,7 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Seal">
-            <Checkbox
-              id="Seal"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Seal" onChange={this.filterColumns} defaultChecked>
               Seal
             </Checkbox>
           </Menu.Item>
@@ -1242,20 +1414,12 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Closing">
-            <Checkbox
-              id="Closing"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Closing" onChange={this.filterColumns} defaultChecked>
               Closing
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="POD">
-            <Checkbox
-              id="POD"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="POD" onChange={this.filterColumns} defaultChecked>
               POD
             </Checkbox>
           </Menu.Item>
@@ -1278,47 +1442,27 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="G">
-            <Checkbox
-              id="G"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="G" onChange={this.filterColumns} defaultChecked>
               G
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="F">
-            <Checkbox
-              id="F"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="F" onChange={this.filterColumns} defaultChecked>
               F
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Positie">
-            <Checkbox
-              id="Positie"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Positie" onChange={this.filterColumns} defaultChecked>
               Positie
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Delay">
-            <Checkbox
-              id="Delay"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Delay" onChange={this.filterColumns} defaultChecked>
               Delay
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Weight">
-            <Checkbox
-              id="Weight"
-              onChange={this.filterColumns}
-              defaultChecked
-            >
+            <Checkbox id="Weight" onChange={this.filterColumns} defaultChecked>
               Weight
             </Checkbox>
           </Menu.Item>
@@ -1347,7 +1491,11 @@ export default class ManualPlanning extends Component {
       <Menu>
         <Menu.ItemGroup title="truck_id">
           <Menu.Item key="truck_id">
-            <Checkbox id="truck_id" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="truck_id"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               truck_id
             </Checkbox>
           </Menu.Item>
@@ -1361,27 +1509,47 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="availability">
-            <Checkbox id="availability" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="availability"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               availability
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="truck_type">
-            <Checkbox id="truck_type" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="truck_type"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               truck_type
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="business_type">
-            <Checkbox id="business_type" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="business_type"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               business_type
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Driver">
-            <Checkbox id="Driver" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="Driver"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               Driver
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="terminal">
-            <Checkbox id="terminal" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="terminal"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               terminal
             </Checkbox>
           </Menu.Item>
@@ -1395,7 +1563,11 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="hierarchy">
-            <Checkbox id="hierarchy" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="hierarchy"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               hierarchy
             </Checkbox>
           </Menu.Item>
@@ -1409,17 +1581,29 @@ export default class ManualPlanning extends Component {
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="date">
-            <Checkbox id="date" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="date"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               date
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="starting_time">
-            <Checkbox id="starting_time" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="starting_time"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               starting_time
             </Checkbox>
           </Menu.Item>
           <Menu.Item key="Remarks">
-            <Checkbox id="Remarks" onChange={this.filterTruckColumns} defaultChecked>
+            <Checkbox
+              id="Remarks"
+              onChange={this.filterTruckColumns}
+              defaultChecked
+            >
               Remarks
             </Checkbox>
           </Menu.Item>
@@ -1470,7 +1654,7 @@ export default class ManualPlanning extends Component {
               <Button>Show/Hide</Button>
             </Dropdown>
           </Col>
-          <Col span={2} >
+          <Col span={2}>
             <Button onClick={() => window.open("/data")}>
               Data visualization
             </Button>
