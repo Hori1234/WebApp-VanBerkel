@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from . import bp
 from backend.models.orders import Order, OrderSheet
-from backend.extensions import roles_required
+from backend.extensions import roles_required, unnest
 from .schemas import OrderSchema, OrderTableSchema, TimeLineSchema
 from backend.app import db
 from flask_smorest import abort
@@ -75,8 +75,27 @@ class Orders(MethodView):
                 # Can't understand which sheet is requested
                 return abort(404, 'Order sheet not found')
 
+        # Check that when truck_id is set, departure_time also is set
+        if ('truck_id' in order) ^ ('departure_time' in order):
+            return abort(
+                400,
+                message='When assigning a truck, both the truck S number and '
+                        'the departure time need to given.'
+            )
+
         # Filter any None value in the request
-        order = {k: v for k, v in order.items() if v is not None}
+        order_not_null = {k: v for k, v in order.items() if v is not None}
+
+        # Marshmallow might parse the value as a dictionary
+        # so we have to revert it back
+
+        order = order_not_null.copy()
+
+        for k, v in order_not_null.items():
+            if isinstance(v, dict):
+                new_k, new_v = unnest(order_not_null, k)
+                order[new_k] = new_v
+                order.pop(k)
 
         # Create a new order with all parameters
         try:
@@ -159,12 +178,43 @@ class OrderByID(MethodView):
                 order_id,
                 description='Order not found')
 
+            # Make sure the primary key is not changed
+            if 'order_number' in req:
+                abort(
+                    400,
+                    message='Cannot set field "order_number"',
+                    status="Bad Request"
+                )
+
+            # Check that when truck_id is set, departure_time also is set
+            # Also, only departure time can be changed when truck has been
+            # set
+            if ('truck_id' in req and 'departure_time' not in req and
+                req['truck_id'] is not None) or \
+                    ('truck_id' not in req and
+                     'departure_time' in req and
+                     order.truck is None):
+                return abort(
+                    400,
+                    message='When assigning a truck, both the truck S number '
+                            'and the departure time need to given.'
+                )
+
             # Iterate over the keys and values in the request
             for k, v in req.items():
                 if k != "others" and hasattr(order, k):
                     # If the key has a column (except 'others')
                     # in the database, change it
-                    setattr(order, k, v)
+                    try:
+                        setattr(order, k, v)
+                    except AttributeError:
+                        db.session.rollback()
+                        abort(
+                            400,
+                            message=f'Cannot set field "{k}", '
+                            f'as it is inferred from other columns',
+                            status="Bad Request"
+                        )
                 else:
                     # If the key doesn't have column,
                     # place it in the other columns
@@ -172,6 +222,11 @@ class OrderByID(MethodView):
                     # remove the key from the truck
                     if k in order.others and v is None:
                         del order.others[k]
+                    elif isinstance(v, dict):
+                        # Marshmallow parsed the value as a dictionary
+                        # so we have to revert it back
+                        new_k, new_v = unnest(req, k)
+                        order.others[new_k] = new_v
                     elif v is not None:
                         order.others[k] = v
 
@@ -209,4 +264,10 @@ class DataVisualisation(MethodView):
                 # Can't understand which sheet is requested
                 return abort(404, message='Order sheet not found')
 
-        return order_sheet.orders, 200
+        orders = Order.query \
+            .filter(Order.sheet_id == order_sheet.id) \
+            .filter(Order.truck_id.isnot(None)) \
+            .filter(Order.departure_time.isnot(None)) \
+            .all()
+
+        return orders, 200

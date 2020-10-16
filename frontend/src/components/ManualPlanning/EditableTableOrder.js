@@ -38,42 +38,54 @@ const EditableTableOrder = (props) => {
 
   const edit = (record) => {
     form.setFieldsValue({
-      bookingNr: "",
-      city: "",
-      inl_terminal: "",
-      truckId: "",
-      deliveryDeadline: "",
-      processTime: "",
-      drivingTime: "",
-      serviceTime: "",
-      closing: "",
-      container: "",
-      date: "",
-      delay: "",
-      gate: "",
-      gate1: "",
-      gross: "",
-      inl_ter_1: "",
-      invoice_reference: "",
-      l_d: "",
-      max_departure: "",
-      pickup: "",
-      seal: "",
-      status: "",
-      ship_comp: "",
-      tariff_type: "",
-      terminal1: "",
-      time: "",
-      time1: "",
-      time2: "",
-      time3: "",
-      truck1: "",
-      truck2: "",
-      truck_used: "",
-      unit_type: "",
-      voyage_inland_carrier: "",
-      weight: "",
-      departure_time: "",
+      "Container": "",
+      "Unit type": "",
+      "Booking": "",
+      "Ship. comp.": "",
+      "Terminal": "",
+      "Truck": "",
+      "Pickup": "",
+      "order_number": "",
+      "Status": "",
+      "inl_terminal": "",
+      "Gate": "",
+      "Time": "",
+      "Max. departure": "",
+      "Time (1)": "",
+      "latest_dep_time": "",
+      "Truck Used": "",
+      "truck_type": "",
+      "hierarchy" : "",
+      "City": "",
+      "L/D": "",
+      "Date": "",
+      "Time (2)": "",
+      "delivery_deadline": "",
+      "driving_time": "",
+      "process_time": "",
+      "service_time": "",
+      "Reference": "",
+      "Truck (1)": "",
+      "Gate (1)": "",
+      "Time (3)": "",     
+      "Inl. ter. (1)": "",
+      "Gross (kgs)": "",
+      "Temperature °C": "",
+      "Seal": "",
+      "Truck (2)": "",
+      "Voyage/inland carrier": "",
+      "Terminal (1)": "",
+      "Closing": "",
+      "POD": "",
+      "Invoice reference": "",
+      "Tariff type": "",
+      "G": "",
+      "F": "",
+      "Positie": "",
+      "Delay": "",
+      "Weight": "",
+      "departure_time": "",  
+      "truck_id": "",
       ...record,
     });
     setEditingKey(record.key);
@@ -84,7 +96,6 @@ const EditableTableOrder = (props) => {
   };
 
   const editAccount = (order_id, Data) => {
-    console.log(Data);
     return axios
       .patch(`/api/orders/${order_id}`, Data)
       .then((res) => {
@@ -128,7 +139,13 @@ const EditableTableOrder = (props) => {
         newData.splice(index, 1, { ...item, ...row });
         props.setData(newData);
         setEditingKey("");
-        editAccount(key, newData[index]);
+        let dataToSend = {};
+        for (var val of Object.keys(newData[index])) {
+          if(val !="service_time" && val !="order_number" && val !="latest_dep_time" && val != "key"){
+            dataToSend[val] = newData[index][val];
+          }
+        }
+        editAccount(key, dataToSend);
       } else {
         newData.push(row);
         props.setData(newData);

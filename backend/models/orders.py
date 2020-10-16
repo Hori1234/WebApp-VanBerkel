@@ -61,15 +61,17 @@ class Order(db.Model):
     def __init__(self, inl_terminal: str, truck_type: str, hierarchy: float,
                  delivery_deadline: dt.time, driving_time: int,
                  process_time: int, sheet_id: int = None,
-                 truck_id: int = None, **kwargs):
+                 truck_id: int = None, departure_time: dt.time = None,
+                 **kwargs):
         self.id = sheet_id
         self.inl_terminal = inl_terminal
         self.truck_type = truck_type
-        self.truck_id = truck_id
         self.hierarchy = hierarchy
         self.delivery_deadline = delivery_deadline
         self.driving_time = driving_time
         self.process_time = process_time
+        self.truck_id = truck_id
+        self.departure_time = departure_time
         self.others = kwargs
 
     @db.validates('inl_terminal')
@@ -102,10 +104,14 @@ class Order(db.Model):
                 f'{self.latest_dep_time.strftime("%H:%M")}, the truck cannot '
                 f'depart at {value.strftime("%H:%M")}.'
             )
-        if value < self.truck.starting_time:
+        if self.truck is None:
+            truck = Truck.query.get_or_404(self.truck_id)
+        else:
+            truck = self.truck
+        if value < truck.starting_time:
             raise ValueError(
                 f'The truck\'s starting time is '
-                f'{self.truck.starting_time.strftime("%H:%M")}, which is later'
+                f'{truck.starting_time.strftime("%H:%M")}, which is later'
                 f' than the set departure time {value.strftime("%H:%M")}.'
             )
         return value
@@ -147,12 +153,10 @@ class Order(db.Model):
 
     @hybrid_property
     def end_time(self):
-        if self.departure_time:
-            time_as_date = dt.datetime.combine(dt.date(1, 1, 1),
-                                               self.departure_time)
-            return (time_as_date +
-                    dt.timedelta(minutes=self.service_time)).time()
-        return None
+        time_as_date = dt.datetime.combine(dt.date(1, 1, 1),
+                                           self.departure_time)
+        return (time_as_date +
+                dt.timedelta(minutes=self.service_time)).time()
 
 
 @listens_for(Order.truck_id, 'set')

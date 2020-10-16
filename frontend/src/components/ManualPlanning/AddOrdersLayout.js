@@ -15,14 +15,12 @@ export default class AddOrdersLayout extends Component {
       "Terminal": "",
       "Truck": "",
       "Pickup": "",
-      "order_number": "",
       "Status": "",
       "inl_terminal": "",
       "Gate": "",
       "Time": "",
       "Max. departure": "",
       "Time (1)": "",
-      "latest_dep_time": "",
       "Truck Used": "",
       "truck_type": "",
       "hierarchy" : "",
@@ -33,7 +31,6 @@ export default class AddOrdersLayout extends Component {
       "delivery_deadline": "",
       "driving_time": "",
       "process_time": "",
-      "service_time": "",
       "Reference": "",
       "Truck (1)": "",
       "Gate (1)": "",
@@ -61,17 +58,59 @@ export default class AddOrdersLayout extends Component {
 
   createOrderData = () => {
     let data = {
-      "Booking": this.state.Booking,
-      "inl_terminal": this.state.inl_terminal,
-      "latest_dep_time": Number(this.state.latest_dep_time),
-      "truck_type": this.state.truck_type,
-      "hierarchy": Number(this.state.hierarchy),
-      "driving_time": Number(this.state.driving_time),
-      "process_time": Number(this.state.process_time),
-      "service_time": Number(this.state.service_time),
-      "delivery_deadline": Number(this.state.delivery_deadline)
+      "Container": this.state.Container,
+      "Unit type":  this.state["Unit type"],
+      "Booking":  this.state.Booking,
+      "Ship. comp.":  this.state["Ship. comp."],
+      "Terminal":  this.state.Terminal,
+      "Truck":  this.state.Truck,
+      "Pickup":  this.state.Pickup,
+      "Status": this.state.Status,
+      "inl_terminal":  this.state.inl_terminal,
+      "Gate":  this.state.Gate,
+      "Time":  this.state.Time,
+      "Max. departure": this.state["Max. departure"],
+      "Time (1)":  this.state["Time (1)"],
+      "Truck Used":  this.state["Truck Used"],
+      "truck_type":  this.state.truck_type,
+      "hierarchy" : this.state.hierarchy,
+      "City":  this.state.City,
+      "L/D":  this.state["L/D"],
+      "Date":  this.state.Date,
+      "Time (2)":  this.state["Time (2)"],
+      "delivery_deadline":  this.state.delivery_deadline,
+      "driving_time":  this.state.driving_time,
+      "process_time":  this.state.process_time,
+      "Reference":  this.state.Reference,
+      "Truck (1)":  this.state["Truck (1)"],
+      "Gate (1)":  this.state["Gate (1)"],
+      "Time (3)":  this.state["Time (3)"],
+      "Inl. ter. (1)":  this.state["Inl. ter. (1)"],
+      "Gross (kgs)":  this.state["Gross (kgs)"],
+      "Temperature °C":  this.state["Temperature °C"],
+      "Seal":  this.state.Seal,
+      "Truck (2)":  this.state["Truck (2)"],
+      "Voyage/inland carrier":  this.state["Voyage/inland carrier"],
+      "Terminal (1)":  this.state["Terminal (1)"],
+      "Closing":  this.state.Closing,
+      "POD":  this.state.POD,
+      "Invoice reference":  this.state["Invoice reference"],
+      "Tariff type":  this.state["Tariff type"],
+      "G":  this.state.G,
+      "F":  this.state.F,
+      "Positie":  this.state.Positie,
+      "Delay":  this.state.Delay,
+      "Weight":  this.state.Weight,
+      "departure_time":  this.state.departure_time,
+      "truck_id":  this.state.truck_id,
     }
-    return data
+    let dataToSend = {};
+    for (var key of Object.keys(data)) {
+      if(data[key] != ''){
+        dataToSend[key] = data[key];
+      }
+    }
+    return dataToSend
   }
 
   getFormOrderData = () => {
@@ -100,11 +139,7 @@ export default class AddOrdersLayout extends Component {
       "inl_terminal": event.target.value,
     });
   };
-  handleChangeLatestDepTime = (event) => {
-    this.setState({
-      "latest_dep_time": event.target.value,
-    });
-  };
+
   handleChangeTruckType = (event) => {
     this.setState({
       "truck_type": event.target.value,
@@ -128,11 +163,6 @@ export default class AddOrdersLayout extends Component {
   handleChangeProcessTime = (event) => {
     this.setState({
       "process_time": event.target.value,
-    });
-  };
-  handleChangeServiceTime = (event) => {
-    this.setState({
-      "service_time": event.target.value,
     });
   };
   handleChangeCity = (event) => {
@@ -167,7 +197,7 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeGate1 = (event) => {
     this.setState({
-      "Gate1": event.target.value,
+      "Gate (1)": event.target.value,
     });
   };
   handleChangeGross = (event) => {
@@ -227,7 +257,7 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeTerminal1 = (event) => {
     this.setState({
-      "Terminal1": event.target.value,
+      "Terminal (1)": event.target.value,
     });
   };
   handleChangeTime = (event) => {
@@ -237,17 +267,17 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeTime1 = (event) => {
     this.setState({
-      "Time1": event.target.value,
+      "Time (1)": event.target.value,
     });
   };
   handleChangeTime2 = (event) => {
     this.setState({
-      "Time2": event.target.value,
+      "Time (2)": event.target.value,
     });
   };
   handleChangeTime3 = (event) => {
     this.setState({
-      "Time3": event.target.value,
+      "Time (3)": event.target.value,
     });
   };
   handleChangeTruck = (event) => {
@@ -257,17 +287,17 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeTruck1 = (event) => {
     this.setState({
-      "Truck1": event.target.value,
+      "Truck (1)": event.target.value,
     });
   };
   handleChangeTruck2 = (event) => {
     this.setState({
-      "Truck2": event.target.value,
+      "Truck (2)": event.target.value,
     });
   };
   handleChangeTruck3 = (event) => {
     this.setState({
-      "Truck3": event.target.value,
+      "Truck (3)": event.target.value,
     });
   };
   handleChangeTruck_used = (event) => {
@@ -277,7 +307,7 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeUnit_type = (event) => {
     this.setState({
-      "Unit_Type": event.target.value,
+      "Unit type": event.target.value,
     });
   };
   handleChangeVoyage_inland_carrier = (event) => {
@@ -363,32 +393,13 @@ export default class AddOrdersLayout extends Component {
         <Row gutter={[24, 8]}>
           <Col span={12}>
             <Form.Item
-              name="Booking"
-              label="Booking:"
-              rules={[{ required: true }]}
-            >
-              <Input
-                value={this.state.Booking}
-                onChange={this.handleChangeBooking}
-              />
-            </Form.Item>
-            <Form.Item
               name="Inl_terminal"
               label="Inl Terminal:"
               rules={[{ required: true }]}
             >
               <Input value={this.state.inl} onChange={this.handleChangeInl} />
             </Form.Item>
-            <Form.Item
-              name="latestDepTime"
-              label="Latest Dep Time:"
-              rules={[{ required: true }]}
-            >
-              <Input
-                value={this.state.latest_dep_time}
-                onChange={this.handleChangeLatestDepTime}
-              />
-            </Form.Item>
+
             <Form.Item
               name="Truck Type"
               label="Truck Type:"
@@ -407,6 +418,15 @@ export default class AddOrdersLayout extends Component {
               <Input
                 value={this.state.hierarchy}
                 onChange={this.handleChangeHierarchy}
+              />
+            </Form.Item>
+            <Form.Item
+              name="Booking"
+              label="Booking:"
+            >
+              <Input
+                value={this.state.Booking}
+                onChange={this.handleChangeBooking}
               />
             </Form.Item>
             <Form.Item name="Container" label="Container:">
@@ -524,16 +544,7 @@ export default class AddOrdersLayout extends Component {
                 onChange={this.handleChangeProcessTime}
               />
             </Form.Item>
-            <Form.Item
-              name="serviceTime"
-              label="Service Time:"
-              rules={[{ required: true }]}
-            >
-              <Input
-                value={this.state.service_time}
-                onChange={this.handleChangeServiceTime}
-              />
-            </Form.Item>
+
             <Form.Item
               name="deliveryDeadline"
               label="Delivery Deadline:"
@@ -616,12 +627,7 @@ export default class AddOrdersLayout extends Component {
                 onChange={this.handleChangeWeight}
               />
             </Form.Item>
-            <Form.Item name="Departure_time" label="Departure_time:">
-              <Input
-                value={this.state.departure_time}
-                onChange={this.handleChangeDeparture_time}
-              />
-            </Form.Item>
+
             <Form.Item name="F" label="F:">
               <Input value={this.state.F} onChange={this.handleChangeF} />
             </Form.Item>
@@ -643,12 +649,26 @@ export default class AddOrdersLayout extends Component {
                 onChange={this.handleChangeReference}
               />
             </Form.Item>
-            <Form.Item name="Truck_id" label="Truck_id:">
+            
+            <Form.Item
+          name="Truck_id"
+          label="Truck_id:"
+            >
               <Input
                 value={this.state.truck_id}
                 onChange={this.handleChangeTruck_id}
               />
             </Form.Item>
+            <Form.Item
+             name="Departure_time"
+             label="Departure_time:"
+             >
+              <Input
+                value={this.state.departure_time}
+                onChange={this.handleChangeDeparture_time}
+              />
+            </Form.Item>
+
           </Col>
         </Row>
       </Form>

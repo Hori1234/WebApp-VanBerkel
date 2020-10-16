@@ -38,42 +38,18 @@ const EditableTableTruck = (props) => {
 
   const edit = (record) => {
     form.setFieldsValue({
-      bookingNr: "",
-      city: "",
-      inl_terminal: "",
-      truckId: "",
-      deliveryDeadline: "",
-      processTime: "",
-      drivingTime: "",
-      serviceTime: "",
-      closing: "",
-      container: "",
-      date: "",
-      delay: "",
-      gate: "",
-      gate1: "",
-      gross: "",
-      inl_ter_1: "",
-      invoice_reference: "",
-      l_d: "",
-      max_departure: "",
-      pickup: "",
-      seal: "",
-      status: "",
-      ship_comp: "",
-      tariff_type: "",
-      terminal1: "",
-      time: "",
-      time1: "",
-      time2: "",
-      time3: "",
-      truck1: "",
-      truck2: "",
-      truck_used: "",
-      unit_type: "",
-      voyage_inland_carrier: "",
-      weight: "",
-      departure_time: "",
+      "truck_id": "",
+      "availability": "",
+      "truck_type": "",
+      "business_type": "",
+      "Driver": "",
+      "terminal": "",
+      "Owner": "",
+      "hierarchy": "",
+      "use_cost": "",
+      "date": "",
+      "starting_time": "",
+      "Remarks": "",
       ...record,
     });
     setEditingKey(record.key);
@@ -83,10 +59,9 @@ const EditableTableTruck = (props) => {
     setEditingKey("");
   };
 
-  const editAccount = (order_id, Data) => {
-    console.log(Data);
+  const editAccount = (truck_id, Data) => {
     return axios
-      .patch(`/api/orders/${order_id}`, Data)
+      .patch(`/api/trucks/${truck_id}`, Data)
       .then((res) => {
         if (res.status === 200) {
           message.success("Order updated succesfully");
@@ -128,7 +103,13 @@ const EditableTableTruck = (props) => {
         newData.splice(index, 1, { ...item, ...row });
         props.setData(newData);
         setEditingKey("");
-        editAccount(key, newData[index]);
+        let dataToSend = {};
+        for (var val of Object.keys(newData[index])) {
+          if(val !="s_number" && val!= "key"){
+            dataToSend[val] = newData[index][val];
+          }
+        }
+        editAccount(key, dataToSend);
       } else {
         newData.push(row);
         props.setData(newData);

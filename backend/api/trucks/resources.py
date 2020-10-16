@@ -2,7 +2,7 @@ from flask.views import MethodView
 from . import bp
 from backend.models.orders import Order
 from backend.models.trucks import Truck, TruckSheet
-from backend.extensions import roles_required
+from backend.extensions import roles_required, unnest
 from .schemas import TruckSchema, TruckTableSchema
 from backend.app import db
 from flask_smorest import abort
@@ -75,7 +75,18 @@ class Trucks(MethodView):
         orders = truck.pop('orders', None)
 
         # Filter any None values in the request
-        truck = {k: v for k, v in truck.items() if v is not None}
+        truck_not_null = {k: v for k, v in truck.items() if v is not None}
+
+        # Marshmallow might parse the value as a dictionary
+        # so we have to revert it back
+
+        truck = truck_not_null.copy()
+
+        for k, v in truck_not_null.items():
+            if isinstance(v, dict):
+                new_k, new_v = unnest(truck_not_null, k)
+                truck[new_k] = new_v
+                truck.pop(k)
 
         # Create a new truck with all parameters
         try:
@@ -173,8 +184,16 @@ class TruckByID(MethodView):
                 truck_id,
                 description='Truck not found')
 
-            # pop orders early to handle them manually
+            # Pop orders early to handle them manually
             orders = req.pop('orders', None)
+
+            # Make sure the primary key is not changed
+            if 's_number' in req:
+                abort(
+                    400,
+                    message='Cannot set field "s_number"',
+                    status="Bad Request"
+                )
 
             # Iterate over the keys and values in the request
             for k, v in req.items():
@@ -189,6 +208,11 @@ class TruckByID(MethodView):
                     # remove the key from the truck
                     if k in truck.others and v is None:
                         del truck.others[k]
+                    elif isinstance(v, dict):
+                        # Marshmallow parsed the value as a dictionary
+                        # so we have to revert it back
+                        new_k, new_v = unnest(req, k)
+                        truck.others[new_k] = new_v
                     elif v is not None:
                         truck.others[k] = v
 
