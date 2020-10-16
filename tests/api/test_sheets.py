@@ -86,6 +86,7 @@ def test_upload_orders_success(client):
     """
     rv = upload_one_sheet(client,
                           get_file_path('order_sheet_test.xlsx'))
+
     assert rv.status_code == 200
     assert orders.OrderSheet.query.get(1)
 
