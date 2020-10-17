@@ -67,11 +67,15 @@ describe('React App', () => {
         const currentPage = page.url();
         expect(currentPage).toEqual('http://localhost:3000/planning');
     
-
+        await page.waitFor(500);
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-12 > div > div > div > div > div > div.ant-table-body > table > tbody > tr:nth-child(2) > td.ant-table-cell.ant-table-cell-fix-right.ant-table-cell-fix-right-first > a')
-        await page.waitFor(1500);
+        await page.waitFor(1000);
 
-        await page.type('#city', 'test');
+        await page.click('#Booking');
+        await page.evaluate( () => document.getElementById("Booking").value = '');
+        
+
+        await page.type('#Booking', '167506H');
         // await page.type('#bookingNr', 'test');
         // await page.type('#customer', 'test');
         // await page.type('#truckId', 'test');
@@ -79,9 +83,14 @@ describe('React App', () => {
         // await page.type('#processTime', 'test');
         // await page.type('#drivingTime', 'test');
         // await page.type('#serviceTime', 'test');
-        
-        await page.waitFor(2000);
 
+        await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-12 > div > div > div > div > div > div.ant-table-body > table > tbody > tr:nth-child(2) > td.ant-table-cell.ant-table-cell-fix-right.ant-table-cell-fix-right-first > span > a:nth-child(1)');
+        
+        await page.waitForSelector('.ant-message-custom-content.ant-message-success');
+        const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
+
+        expect(ErrorMessage).toEqual('Order updated succesfully');
+        
         await browser.close();
 
       }, 120000);*/
@@ -114,28 +123,26 @@ describe('React App', () => {
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-12 > button:nth-child(3)');
         await page.waitFor(500);
 
-        await page.type('#nest-messages_bookingNumber', 'test');
+        //id with space, incorrect values in boxes
         await page.type('#nest-messages_Inl_terminal', 'test');
-        await page.type('#nest-messages_latestDepTime', 'test');  
-        await page.type('#nest-messages_truckType', 'test');
+        //await page.type("nest-messages_truck Type", 'test');
         await page.type('#nest-messages_Hierarchy', 'test');
         await page.type('#nest-messages_drivingTime', 'test');
         await page.type('#nest-messages_processTime', 'test');
-        await page.type('#nest-messages_serviceTime', 'test');
         await page.type('#nest-messages_deliveryDeadline', 'test');
 
-        await page.click('.ant-modal-footer > button:nth-child(2)');
+        //await page.click('.ant-modal-footer > button:nth-child(2)');
         
-        await page.waitForSelector('.ant-message-custom-content.ant-message-success');
-        const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
+        //await page.waitForSelector('.ant-message-custom-content.ant-message-success');
+        //const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
 
-        expect(ErrorMessage).toEqual('Order: added succesfully');
+        //expect(ErrorMessage).toEqual('Order: added succesfully');
         
         await browser.close();
 
       }, 120000);*/
 
-      
+      /*
       it('shall succesfully add an entry in truck table', async () => {
 
         const browser = await puppeteer.launch({ 
@@ -164,7 +171,6 @@ describe('React App', () => {
         await page.waitFor(500);
 
         await page.type('#truckID', 'test');
-        await page.type('#truckSNo', 'test');
         await page.type('#Availability', 'test');
         await page.type('#truckType', 'test');
         await page.type('#Terminal', 'test');
@@ -182,10 +188,10 @@ describe('React App', () => {
 
         await browser.close();
 
-      }, 120000);
+      }, 120000);*/
 
 
-      /*
+      
       it('shall succesfully delete an item from order list table', async () => {
 
         const browser = await puppeteer.launch({ 
@@ -209,7 +215,6 @@ describe('React App', () => {
         const currentPage = page.url();
         expect(currentPage).toEqual('http://localhost:3000/planning');
     
-        //to be changed
         //await page.click('.ant-table-tbody:nth-child(2) > input.ant-checkbox');
 
 
@@ -223,7 +228,7 @@ describe('React App', () => {
 
       }, 120000);
 
-      
+      /*
       it('shall succesfully delete an item from truck availability table', async () => {
 
         const browser = await puppeteer.launch({ 
