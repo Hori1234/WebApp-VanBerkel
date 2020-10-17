@@ -167,25 +167,26 @@ const EditableTableOrder = (props) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
-            <p
+            <a
+              href='#'
               onClick={() => save(record.key)}
               style={{
                 marginRight: 8,
               }}
             >
               Save
-            </p>
+            </a>
             <Popconfirm
               title="Are you sure you want to cancel?"
               onConfirm={cancel}
             >
-              <p>Cancel</p>
+              <a href='#'>Cancel</a>
             </Popconfirm>
           </span>
         ) : (
-            <p disabled={editingKey !== ""} onClick={() => edit(record)}>
+            <a href='#' disabled={editingKey !== ""} onClick={() => edit(record)}>
               Edit
-            </p>
+            </a>
           );
       },
     },
