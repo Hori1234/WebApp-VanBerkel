@@ -132,7 +132,7 @@ const EditableTableTruck = (props) => {
         return editable ? (
           <span>
             <a
-              href='#'
+              href='#Container'
               onClick={() => save(record.key)}
               style={{
                 marginRight: 8,
@@ -144,11 +144,11 @@ const EditableTableTruck = (props) => {
               title="Are you sure you want to cancel?"
               onConfirm={cancel}
             >
-              <a href='#'>Cancel</a>
+              <a href='#Container'>Cancel</a>
             </Popconfirm>
           </span>
         ) : (
-            <a href='#' disabled={editingKey !== ""} onClick={() => edit(record)}>
+            <a href='#Container' disabled={editingKey !== ""} onClick={() => edit(record)}>
               Edit
             </a>
           );
