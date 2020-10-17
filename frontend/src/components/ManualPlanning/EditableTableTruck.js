@@ -25,8 +25,8 @@ const EditableCell = ({
           {inputNode}
         </Form.Item>
       ) : (
-        children
-      )}
+          children
+        )}
     </td>
   );
 };
@@ -105,7 +105,7 @@ const EditableTableTruck = (props) => {
         setEditingKey("");
         let dataToSend = {};
         for (var val of Object.keys(newData[index])) {
-          if(val !="s_number" && val!= "key"){
+          if (val !== "s_number" && val !== "key") {
             dataToSend[val] = newData[index][val];
           }
         }
@@ -131,27 +131,26 @@ const EditableTableTruck = (props) => {
         const editable = isEditing(record);
         return editable ? (
           <span>
-            <a
-              href="javascript:;"
+            <p
               onClick={() => save(record.key)}
               style={{
                 marginRight: 8,
               }}
             >
               Save
-            </a>
+            </p>
             <Popconfirm
               title="Are you sure you want to cancel?"
               onConfirm={cancel}
             >
-              <a>Cancel</a>
+              <p>Cancel</p>
             </Popconfirm>
           </span>
         ) : (
-          <a disabled={editingKey !== ""} onClick={() => edit(record)}>
-            Edit
-          </a>
-        );
+            <p disabled={editingKey !== ""} onClick={() => edit(record)}>
+              Edit
+            </p>
+          );
       },
     },
   ];
