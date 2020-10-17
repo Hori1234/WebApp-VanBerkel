@@ -2,9 +2,9 @@
 import {
     calculateDuration,
     createDataTime,
-    createCustomHTMLTooltip,
-    createSingleDataInput,
-    createAllDataInput
+    // createCustomHTMLTooltip,
+    // createSingleDataInput,
+    // createAllDataInput
 }
     from './DataVisualization'
 
@@ -67,7 +67,7 @@ describe("Create duration function", () => {
         expect(calculateDuration(input1, input2)).toEqual(output);
     });
 });
-
+/*
 describe("Create tooltip function", () => {
     test("it should give correct tooltip given the correct parameters ", () => {
         const input1 = "345";
@@ -184,5 +184,5 @@ describe("Create all data point function", () => {
             new Date(0,0,0,14,0,0)]]
         expect(createAllDataInput(input1, input2, input3, input4, input5)).toEqual(output);
     });
-});
+});*/
 
