@@ -60,18 +60,8 @@ export default class EditAccountComponent extends Component {
     return axios
       .delete(`/api/auth/user/${value}`)
       .then((res) => {
-        if (res.status === 404) {
-          message.error(res.message);
-        } else {
-          if (res.status === 204) {
-            message.success("Account successfully deleted");
-          } else {
-            if (res.status === 401) {
-              message.error("Unauthorized Action");
-            } else {
-              message.error("Service Unavailable");
-            }
-          }
+        if (res.status === 204) {
+          message.success("Account successfully deleted");
         }
         return true;
       })
@@ -81,6 +71,15 @@ export default class EditAccountComponent extends Component {
           status: "error",
           error: error,
         }));
+        if (error.response.status === 404) {
+          message.error(error.response.data.message);
+        } else {
+          if (error.response.status === 401) {
+            message.error("Unauthorized Action");
+          } else {
+            message.error("Service Unavailable");
+          }
+        }
         return false;
       });
   };
@@ -131,7 +130,7 @@ export default class EditAccountComponent extends Component {
     this.setState({
       DAVisible: false,
     });
-    this.deleteItemById(id)
+    this.deleteItemById(id);
   };
 
   render() {
@@ -186,7 +185,6 @@ export default class EditAccountComponent extends Component {
                     >
                       Delete Account
                     </Button>
-                    
                   </div>
                 </List.Item>
               )}
@@ -215,9 +213,7 @@ export default class EditAccountComponent extends Component {
           onCancel={this.handleCancel}
           onOk={() => this.handleDelete(this.state.item)}
         >
-          {this.state.DAVisible && (
-            <DeleteAccountConfirmationComponent />
-          )}
+          {this.state.DAVisible && <DeleteAccountConfirmationComponent />}
         </Modal>
       </Layout>
     );

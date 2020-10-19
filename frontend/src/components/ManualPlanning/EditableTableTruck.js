@@ -25,8 +25,8 @@ const EditableCell = ({
           {inputNode}
         </Form.Item>
       ) : (
-          children
-        )}
+        children
+      )}
     </td>
   );
 };
@@ -38,18 +38,18 @@ const EditableTableTruck = (props) => {
 
   const edit = (record) => {
     form.setFieldsValue({
-      "truck_id": "",
-      "availability": "",
-      "truck_type": "",
-      "business_type": "",
-      "Driver": "",
-      "terminal": "",
-      "Owner": "",
-      "hierarchy": "",
-      "use_cost": "",
-      "date": "",
-      "starting_time": "",
-      "Remarks": "",
+      truck_id: "",
+      availability: "",
+      truck_type: "",
+      business_type: "",
+      Driver: "",
+      terminal: "",
+      Owner: "",
+      hierarchy: "",
+      use_cost: "",
+      date: "",
+      starting_time: "",
+      Remarks: "",
       ...record,
     });
     setEditingKey(record.key);
@@ -67,18 +67,18 @@ const EditableTableTruck = (props) => {
           message.success("Order updated succesfully");
         } else {
           if (res.status === 401) {
-            message.error("Bad request: " + res.message);
+            message.error("Bad request: " + res.data.message);
           } else {
             if (res.status === 404) {
-              message.error("Not Found: " + res.message);
+              message.error("Not Found: " + res.data.message);
             } else {
               if (res.status === 422) {
-                message.error("Unprocessable Entity: " + res.message);
+                message.error("Unprocessable Entity: " + res.data.message);
               } else {
                 if (res.satatus === 503) {
-                  message.warning("Server not Found: " + res.message);
+                  message.warning("Server not Found: " + res.data.message);
                 } else {
-                  message.error(res.message);
+                  message.error(res.data.message);
                 }
               }
             }
@@ -132,7 +132,7 @@ const EditableTableTruck = (props) => {
         return editable ? (
           <span>
             <a
-              href='#Container'
+              href="#Container"
               onClick={() => save(record.key)}
               style={{
                 marginRight: 8,
@@ -144,14 +144,18 @@ const EditableTableTruck = (props) => {
               title="Are you sure you want to cancel?"
               onConfirm={cancel}
             >
-              <a href='#Container'>Cancel</a>
+              <a href="#Container">Cancel</a>
             </Popconfirm>
           </span>
         ) : (
-            <a href='#Container' disabled={editingKey !== ""} onClick={() => edit(record)}>
-              Edit
-            </a>
-          );
+          <a
+            href="#Container"
+            disabled={editingKey !== ""}
+            onClick={() => edit(record)}
+          >
+            Edit
+          </a>
+        );
       },
     },
   ];
