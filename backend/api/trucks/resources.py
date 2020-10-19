@@ -1,16 +1,19 @@
 from flask.views import MethodView
+from flask_login import current_user
+from flask_smorest import abort
 from . import bp
 from backend.models.orders import Order
 from backend.models.trucks import Truck, TruckSheet
+from backend.models.planning import Planning
 from backend.extensions import roles_required, unnest
 from .schemas import TruckSchema, TruckTableSchema
 from backend.app import db
-from flask_smorest import abort
 
 
 @bp.route('/sheet/<sheet_id_or_latest>')
 class Trucks(MethodView):
-    @roles_required('planner', 'administrator')
+
+    @roles_required('view-only', 'planner', 'administrator')
     @bp.response(TruckTableSchema)
     @bp.alt_response('NOT_FOUND', code=404)
     def get(self, sheet_id_or_latest):
@@ -27,13 +30,22 @@ class Trucks(MethodView):
             truck_sheet = TruckSheet.query\
                 .get_or_404(int(sheet_id_or_latest),
                             description='Truck sheet not found')
+
+            if current_user.role == 'view-only' and \
+                    truck_sheet.planning is None:
+                return abort(404,
+                             message='Truck sheet not found')
         except ValueError:
             # The sheet_id is not an integer, so check if it is `latest`
             if sheet_id_or_latest == 'latest':
                 # Get the most recently uploaded sheet
-                truck_sheet = TruckSheet.query\
-                    .order_by(TruckSheet.upload_date.desc())\
-                    .first_or_404()
+                truck_sheet_query = TruckSheet.query\
+                    .order_by(TruckSheet.upload_date.desc())
+
+                if current_user.role == 'view-only':
+                    truck_sheet_query = truck_sheet_query.join(Planning)
+
+                truck_sheet = truck_sheet_query.first_or_404()
             else:
                 # Can't understand which sheet is requested
                 return abort(404, message='Truck sheet not found')
@@ -69,6 +81,12 @@ class Trucks(MethodView):
             else:
                 # Can't understand which sheet is requested
                 return abort(404, message='Truck sheet not found')
+
+        # Published plannings cannot be changed
+        if truck_sheet.planning is not None:
+            return abort(400,
+                         message='Truck sheet has already been used in a '
+                                 'planning, cannot add a truck to it.')
 
         # store order numbers before creating the truck,
         # as we will be adding them later
@@ -156,6 +174,13 @@ class TruckByID(MethodView):
         truck = Truck.query.get_or_404(
             truck_id,
             description='Truck not found')
+
+        # Published plannings cannot be changed
+        if truck.truck_sheet.planning is not None:
+            return abort(400,
+                         message='Truck sheet has already been used in a '
+                                 'planning, cannot remove a truck from it.')
+
         db.session.delete(truck)
         db.session.commit()
         return "", 204
@@ -183,6 +208,11 @@ class TruckByID(MethodView):
             truck = Truck.query.get_or_404(
                 truck_id,
                 description='Truck not found')
+
+            if truck.truck_sheet.planning is not None:
+                return abort(400,
+                             message='Truck sheet has already been used in a '
+                                     'planning, cannot change a truck from it.')
 
             # Pop orders early to handle them manually
             orders = req.pop('orders', None)
