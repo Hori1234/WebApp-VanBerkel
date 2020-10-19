@@ -23,7 +23,7 @@ export default class AddOrdersLayout extends Component {
       "Time (1)": "",
       "Truck Used": "",
       "truck_type": "",
-      "hierarchy" : "",
+      "hierarchy": "",
       "City": "",
       "L/D": "",
       "Date": "",
@@ -34,7 +34,7 @@ export default class AddOrdersLayout extends Component {
       "Reference": "",
       "Truck (1)": "",
       "Gate (1)": "",
-      "Time (3)": "",     
+      "Time (3)": "",
       "Inl. ter. (1)": "",
       "Gross (kgs)": "",
       "Temperature °C": "",
@@ -51,7 +51,7 @@ export default class AddOrdersLayout extends Component {
       "Positie": "",
       "Delay": "",
       "Weight": "",
-      "departure_time": "",  
+      "departure_time": "",
       "truck_id": "",
     };
   }
@@ -59,54 +59,54 @@ export default class AddOrdersLayout extends Component {
   createOrderData = () => {
     let data = {
       "Container": this.state.Container,
-      "Unit type":  this.state["Unit type"],
-      "Booking":  this.state.Booking,
-      "Ship. comp.":  this.state["Ship. comp."],
-      "Terminal":  this.state.Terminal,
-      "Truck":  this.state.Truck,
-      "Pickup":  this.state.Pickup,
+      "Unit type": this.state["Unit type"],
+      "Booking": this.state.Booking,
+      "Ship. comp.": this.state["Ship. comp."],
+      "Terminal": this.state.Terminal,
+      "Truck": this.state.Truck,
+      "Pickup": this.state.Pickup,
       "Status": this.state.Status,
-      "inl_terminal":  this.state.inl_terminal,
-      "Gate":  this.state.Gate,
-      "Time":  this.state.Time,
+      "inl_terminal": this.state.inl_terminal,
+      "Gate": this.state.Gate,
+      "Time": this.state.Time,
       "Max. departure": this.state["Max. departure"],
-      "Time (1)":  this.state["Time (1)"],
-      "Truck Used":  this.state["Truck Used"],
-      "truck_type":  this.state.truck_type,
-      "hierarchy" : this.state.hierarchy,
-      "City":  this.state.City,
-      "L/D":  this.state["L/D"],
-      "Date":  this.state.Date,
-      "Time (2)":  this.state["Time (2)"],
-      "delivery_deadline":  this.state.delivery_deadline,
-      "driving_time":  this.state.driving_time,
-      "process_time":  this.state.process_time,
-      "Reference":  this.state.Reference,
-      "Truck (1)":  this.state["Truck (1)"],
-      "Gate (1)":  this.state["Gate (1)"],
-      "Time (3)":  this.state["Time (3)"],
-      "Inl. ter. (1)":  this.state["Inl. ter. (1)"],
-      "Gross (kgs)":  this.state["Gross (kgs)"],
-      "Temperature °C":  this.state["Temperature °C"],
-      "Seal":  this.state.Seal,
-      "Truck (2)":  this.state["Truck (2)"],
-      "Voyage/inland carrier":  this.state["Voyage/inland carrier"],
-      "Terminal (1)":  this.state["Terminal (1)"],
-      "Closing":  this.state.Closing,
-      "POD":  this.state.POD,
-      "Invoice reference":  this.state["Invoice reference"],
-      "Tariff type":  this.state["Tariff type"],
-      "G":  this.state.G,
-      "F":  this.state.F,
-      "Positie":  this.state.Positie,
-      "Delay":  this.state.Delay,
-      "Weight":  this.state.Weight,
-      "departure_time":  this.state.departure_time,
-      "truck_id":  this.state.truck_id,
+      "Time (1)": this.state["Time (1)"],
+      "Truck Used": this.state["Truck Used"],
+      "truck_type": this.state.truck_type,
+      "hierarchy": this.state.hierarchy,
+      "City": this.state.City,
+      "L/D": this.state["L/D"],
+      "Date": this.state.Date,
+      "Time (2)": this.state["Time (2)"],
+      "delivery_deadline": this.state.delivery_deadline,
+      "driving_time": this.state.driving_time,
+      "process_time": this.state.process_time,
+      "Reference": this.state.Reference,
+      "Truck (1)": this.state["Truck (1)"],
+      "Gate (1)": this.state["Gate (1)"],
+      "Time (3)": this.state["Time (3)"],
+      "Inl. ter. (1)": this.state["Inl. ter. (1)"],
+      "Gross (kgs)": this.state["Gross (kgs)"],
+      "Temperature °C": this.state["Temperature °C"],
+      "Seal": this.state.Seal,
+      "Truck (2)": this.state["Truck (2)"],
+      "Voyage/inland carrier": this.state["Voyage/inland carrier"],
+      "Terminal (1)": this.state["Terminal (1)"],
+      "Closing": this.state.Closing,
+      "POD": this.state.POD,
+      "Invoice reference": this.state["Invoice reference"],
+      "Tariff type": this.state["Tariff type"],
+      "G": this.state.G,
+      "F": this.state.F,
+      "Positie": this.state.Positie,
+      "Delay": this.state.Delay,
+      "Weight": this.state.Weight,
+      "departure_time": this.state.departure_time,
+      "truck_id": this.state.truck_id,
     }
     let dataToSend = {};
     for (var key of Object.keys(data)) {
-      if(data[key] != ''){
+      if (data[key] !== '') {
         dataToSend[key] = data[key];
       }
     }
@@ -237,7 +237,7 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangeStatus = (event) => {
     this.setState({
-      "Status" : event.target.value,
+      "Status": event.target.value,
     });
   };
   handleChangeShip_comp = (event) => {
@@ -347,7 +347,7 @@ export default class AddOrdersLayout extends Component {
   };
   handleChangePositie = (event) => {
     this.setState({
-     "Positie": event.target.value,
+      "Positie": event.target.value,
     });
   };
   handleChangeReference = (event) => {
@@ -373,13 +373,13 @@ export default class AddOrdersLayout extends Component {
 
   render() {
     const validateMessages = {
-      required: "${label} is required!",
+      required: "label is required!",
       types: {
-        email: "${label} is not validate email!",
-        number: "${label} is not a validate number!",
+        email: "label is not validate email!",
+        number: "label is not a validate number!",
       },
       number: {
-        range: "${label} must be between ${min} and ${max}",
+        range: "label must be between min and max",
       },
     };
     return (
@@ -649,10 +649,10 @@ export default class AddOrdersLayout extends Component {
                 onChange={this.handleChangeReference}
               />
             </Form.Item>
-            
+
             <Form.Item
-          name="Truck_id"
-          label="Truck_id:"
+              name="Truck_id"
+              label="Truck_id:"
             >
               <Input
                 value={this.state.truck_id}
@@ -660,9 +660,9 @@ export default class AddOrdersLayout extends Component {
               />
             </Form.Item>
             <Form.Item
-             name="Departure_time"
-             label="Departure_time:"
-             >
+              name="Departure_time"
+              label="Departure_time:"
+            >
               <Input
                 value={this.state.departure_time}
                 onChange={this.handleChangeDeparture_time}

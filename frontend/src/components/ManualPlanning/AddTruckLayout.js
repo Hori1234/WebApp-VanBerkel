@@ -39,7 +39,7 @@ export default class AddTruckLayout extends Component {
     };
     let dataToSend = {};
     for (var key of Object.keys(data)) {
-      if (data[key] != "") {
+      if (data[key] !== "") {
         dataToSend[key] = data[key];
       }
     }
@@ -48,7 +48,7 @@ export default class AddTruckLayout extends Component {
 
   getFormTruckData = () => {
     let temp = [];
-    var availability = this.state.availability === "true";
+    //var availability = this.state.availability === "true";
     temp.push(
       this.state.truck_id,
       Boolean(this.state.availability),

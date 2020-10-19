@@ -105,7 +105,7 @@ const EditableTableTruck = (props) => {
         setEditingKey("");
         let dataToSend = {};
         for (var val of Object.keys(newData[index])) {
-          if (val != "s_number" && val != "key") {
+          if (val !== "s_number" && val !== "key") {
             dataToSend[val] = newData[index][val];
           }
         }
@@ -132,7 +132,7 @@ const EditableTableTruck = (props) => {
         return editable ? (
           <span>
             <a
-              href="javascript:;"
+              href="#Container"
               onClick={() => save(record.key)}
               style={{
                 marginRight: 8,
@@ -144,11 +144,15 @@ const EditableTableTruck = (props) => {
               title="Are you sure you want to cancel?"
               onConfirm={cancel}
             >
-              <a>Cancel</a>
+              <a href="#Container">Cancel</a>
             </Popconfirm>
           </span>
         ) : (
-          <a disabled={editingKey !== ""} onClick={() => edit(record)}>
+          <a
+            href="#Container"
+            disabled={editingKey !== ""}
+            onClick={() => edit(record)}
+          >
             Edit
           </a>
         );

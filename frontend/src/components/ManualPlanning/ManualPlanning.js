@@ -892,6 +892,7 @@ export default class ManualPlanning extends Component {
       const filteredData = this.state.data.filter((item) => item.id !== id);
       this.setState({ data: filteredData });
     });
+    this.getOrderList("latest");
   };
   deleteTruck = (value) => {
     return axios
@@ -927,6 +928,7 @@ export default class ManualPlanning extends Component {
       const filteredData = this.state.data2.filter((item) => item.id !== id);
       this.setState({ data2: filteredData });
     });
+    this.getTruckList("latest");
   };
 
   //Adding the truck and the order
