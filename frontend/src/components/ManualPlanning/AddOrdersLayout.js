@@ -401,7 +401,7 @@ export default class AddOrdersLayout extends Component {
             </Form.Item>
 
             <Form.Item
-              name="Truck Type"
+              name="truckType"
               label="Truck Type:"
               rules={[{ required: true }]}
             >
