@@ -897,18 +897,8 @@ export default class ManualPlanning extends Component {
     return axios
       .delete(`/api/trucks/${value}`)
       .then((res) => {
-        if (res.status === 404) {
-          message.error(res.message);
-        } else {
-          if (res.status === 204) {
-            message.success("Truck succesfully deleted");
-          } else {
-            if (res.status === 401) {
-              message.error("Unauthorized Action");
-            } else {
-              message.error("Service Unavailable");
-            }
-          }
+        if (res.status === 204) {
+          message.success("Truck succesfully deleted");
         }
         return true;
       })
@@ -918,6 +908,14 @@ export default class ManualPlanning extends Component {
           status: "error",
           error: error,
         }));
+        if (error.response.status === 404) {
+          message.error("Not Found: " + error.response.data.message);
+        }
+        if (error.response.status === 401) {
+          message.error("Unauthorized Action: " + error.response.data.message);
+        } else {
+          message.error("Service Unavailable: " + error.response.data.message);
+        }
         return false;
       });
   };
