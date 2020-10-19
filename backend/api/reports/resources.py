@@ -3,10 +3,9 @@ from flask.views import MethodView
 from sqlalchemy import func, and_
 from . import bp
 from openpyxl import Workbook
+from openpyxl.styles import PatternFill, Font
 import time
 from backend.app import db
-from backend.api.orders.schemas import OrderSchema
-from backend.models.trucks import Truck, TruckSheet
 from backend.models.orders import Order, OrderSheet
 from backend.extensions import roles_required
 
@@ -59,7 +58,8 @@ class FirstRides(MethodView):
 
         book = Workbook()
         sheet = book.active
-        now = time.strftime("%x")
+        now = time.strftime("%d %b %Y %X")
+        now_save = time.strftime("%Y-%m-%d-%H-%M-%S")
 
         sheet['A1'] = now
         sheet['C4'] = 'Sno'
@@ -75,6 +75,43 @@ class FirstRides(MethodView):
         sheet['M4'] = 'Container Type'
         sheet['N4'] = 'Shipping company'
         sheet['O4'] = 'Remarks'
+
+        yellowFill = PatternFill(start_color='FCE205',
+                                 end_color='FFD300',
+                                 fill_type='solid')
+        sheet['C4'].fill = yellowFill
+        sheet['D4'].fill = yellowFill
+        sheet['E4'].fill = yellowFill
+        sheet['F4'].fill = yellowFill
+        sheet['G4'].fill = yellowFill
+        sheet['H4'].fill = yellowFill
+        sheet['I4'].fill = yellowFill
+        sheet['J4'].fill = yellowFill
+        sheet['K4'].fill = yellowFill
+        sheet['L4'].fill = yellowFill
+        sheet['M4'].fill = yellowFill
+        sheet['N4'].fill = yellowFill
+        sheet['O4'].fill = yellowFill
+
+        sheet['C4'].font = Font(bold=True)
+        sheet['D4'].font = Font(bold=True)
+        sheet['E4'].font = Font(bold=True)
+        sheet['F4'].font = Font(bold=True)
+        sheet['G4'].font = Font(bold=True)
+        sheet['H4'].font = Font(bold=True)
+        sheet['I4'].font = Font(bold=True)
+        sheet['J4'].font = Font(bold=True)
+        sheet['K4'].font = Font(bold=True)
+        sheet['L4'].font = Font(bold=True)
+        sheet['M4'].font = Font(bold=True)
+        sheet['N4'].font = Font(bold=True)
+        sheet['O4'].font = Font(bold=True)
+
+        sheet.column_dimensions['D'].width = 20
+        sheet.column_dimensions['H'].width = 15
+        sheet.column_dimensions['I'].width = 15
+        sheet.column_dimensions['N'].width = 20
+        sheet.column_dimensions['O'].width = 40
 
         count = 4
         for order in first_orders:
@@ -107,5 +144,5 @@ class FirstRides(MethodView):
             sheet.cell(row=count, column=15).value = \
                 order.truck.others.get('Remarks', '')  # remarks
 
-        book.save(filename='first-rides.xlsx')
+        book.save(filename='first-rides-' + now_save + '.xlsx')
         return '', 200
