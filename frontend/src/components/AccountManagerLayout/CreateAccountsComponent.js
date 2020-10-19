@@ -102,40 +102,32 @@ export default class CreateAccountsComponent extends Component {
       <Layout
         style={{
           alignItems: "center",
-          display: "flex",
-          width: "120vh",
-          height: "70vh",
+          width: "70vh",
+          height: "50vh",
           backgroundColor: "white",
         }}
       >
-        <Layout style={{ backgroundColor: "white" }}>
+        <Layout
+          style={{
+            flexDirection: "row",
+            backgroundColor: "white",
+          }}
+        >
+          <UserAddOutlined style={{ fontSize: 50 }} />
           <Layout
             style={{
-              flexDirection: "row",
-              display: "flex",
-              marginTop: 90,
               backgroundColor: "white",
             }}
           >
-            <UserAddOutlined style={{ fontSize: 50, marginLeft: -10 }} />
-            <Layout
-              style={{
-                display: "flex",
-                width: "100%",
-                marginRight: -10,
-                backgroundColor: "white",
-              }}
-            >
-              <Title style={{ fontSize: 16 }}>Welcome </Title>
-              <Text style={{ fontSize: 14 }}>
-                Complete the following form in order to add a new user. Every
-                field is required to be filled.
-              </Text>
-            </Layout>
+            <Title style={{ fontSize: 16 }}>Welcome </Title>
+            <Text style={{ fontSize: 14 }}>
+              Complete the following form in order to add a new user. Every
+              field is required to be filled.
+            </Text>
           </Layout>
-          <Divider style={{ marginTop: -170 }}></Divider>
         </Layout>
-        <Layout style={{ marginTop: 20, backgroundColor: "white" }}>
+        <Divider style={{backgroundColor: "white"}}></Divider>
+        <Layout style={{ backgroundColor: "white" }}>
           <Form
             {...layout}
             name="nest-messages"
@@ -170,7 +162,7 @@ export default class CreateAccountsComponent extends Component {
               rules={[{ type: "string", min: 0, max: 99, required: true }]}
             >
               <Select
-                placeholder="Select a option and change input text above"
+                placeholder="Select an option"
                 onChange={this.handleChangeRole}
                 allowClear
               >
