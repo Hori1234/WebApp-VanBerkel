@@ -60,18 +60,8 @@ export default class EditAccountComponent extends Component {
     return axios
       .delete(`/api/auth/user/${value}`)
       .then((res) => {
-        if (res.status === 404) {
-          message.error(res.data.message);
-        } else {
-          if (res.status === 204) {
-            message.success("Account successfully deleted");
-          } else {
-            if (res.status === 401) {
-              message.error("Unauthorized Action");
-            } else {
-              message.error("Service Unavailable");
-            }
-          }
+        if (res.status === 204) {
+          message.success("Account successfully deleted");
         }
         return true;
       })
@@ -81,6 +71,15 @@ export default class EditAccountComponent extends Component {
           status: "error",
           error: error,
         }));
+        if (error.response.status === 404) {
+          message.error(error.response.data.message);
+        } else {
+          if (error.response.status === 401) {
+            message.error("Unauthorized Action");
+          } else {
+            message.error("Service Unavailable");
+          }
+        }
         return false;
       });
   };
