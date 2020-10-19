@@ -179,7 +179,7 @@ class TruckByID(MethodView):
         if truck.truck_sheet.planning is not None:
             return abort(400,
                          message='Truck sheet has already been used in a '
-                                 'planning, cannot remove a truck from it.')
+                                 'planning, cannot delete a truck from it.')
 
         db.session.delete(truck)
         db.session.commit()
@@ -212,7 +212,8 @@ class TruckByID(MethodView):
             if truck.truck_sheet.planning is not None:
                 return abort(400,
                              message='Truck sheet has already been used in a '
-                                     'planning, cannot change a truck from it.')
+                                     'planning, cannot change a truck '
+                                     'from it.')
 
             # Pop orders early to handle them manually
             orders = req.pop('orders', None)

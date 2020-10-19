@@ -29,7 +29,7 @@ class Planning(db.Model):
     user = db.relationship(User,
                            backref=db.backref('plannings'))
 
-    def __init__(self, order_sheet_id, truck_sheet_id, user_id):
-        self.order_sheet_id = order_sheet_id
+    def __init__(self, truck_sheet_id, order_sheet_id,  user_id):
         self.truck_sheet_id = truck_sheet_id
+        self.order_sheet_id = order_sheet_id
         self.user_id = user_id

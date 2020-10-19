@@ -1,7 +1,6 @@
 from flask.views import MethodView
 from flask_smorest import abort
 from flask_login import current_user
-from sqlalchemy.exc import SQLAlchemyError
 from . import bp
 from .schemas import PlanningSchema
 from backend.app import db
@@ -16,8 +15,21 @@ class Plannings(MethodView):
 
     @roles_required('view-only', 'planner', 'administrator')
     @bp.response(PlanningSchema(many=True))
-    def get(self):
-        return Planning.query.order_by(Planning.published_on.desc()).all()
+    @bp.paginate()
+    def get(self, pagination_parameters):
+        # Get a list of plannings according to the page
+        # and page_size parameters
+        pagination = Planning.query. \
+            order_by(Planning.published_on.desc()). \
+            paginate(
+                page=pagination_parameters.page,
+                per_page=pagination_parameters.page_size)
+
+        # Set the total number of plannings
+        # for the X-Pagination header in the response
+        pagination_parameters.item_count = pagination.total
+
+        return pagination.items
 
 
 @bp.route('/<truck_sheet_id>/<order_sheet_id>')
@@ -53,7 +65,7 @@ class PlanningByID(MethodView):
 
         return Planning.query.get_or_404((truck_sheet.id, order_sheet.id))
 
-    @roles_required('view-only', 'planner', 'administrator')
+    @roles_required('planner', 'administrator')
     @bp.response(PlanningSchema)
     @bp.alt_response('BAD_REQUEST', code=400)
     @bp.alt_response('NOT_FOUND', code=404)
@@ -80,17 +92,15 @@ class PlanningByID(MethodView):
                     .order_by(OrderSheet.upload_date.desc()) \
                     .first_or_404()
             else:
-                return abort(404, message='Truck sheet not found')
+                return abort(404, message='Order sheet not found')
 
         if truck_sheet.planning is None and order_sheet.planning is None:
-            try:
-                planning = Planning(truck_sheet.id,
-                                    order_sheet.id,
-                                    current_user.id)
-                db.session.add(planning)
-                db.session.commit()
-                return planning
-            except SQLAlchemyError:
-                return abort(400,
-                             message='Truck sheet or order sheet is already '
-                                     'used in a published planning')
+            planning = Planning(truck_sheet.id,
+                                order_sheet.id,
+                                current_user.id)
+            db.session.add(planning)
+            db.session.commit()
+            return planning
+        abort(400,
+              message='Truck sheet or order sheet is already '
+                      'used in a published planning')
