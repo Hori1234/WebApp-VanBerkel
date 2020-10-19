@@ -272,7 +272,7 @@ describe('React App', () => {
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-12 > button:nth-child(4)');
         
         await page.waitFor(500);
-        await page.click('body > div:nth-child(7) > div > div > div > div.ant-popover-inner > div > div.ant-popover-buttons > button.ant-btn.ant-btn-primary.ant-btn-sm > span');
+        await page.click('body > div:nth-child(8) > div > div > div > div.ant-popover-inner > div > div.ant-popover-buttons > button.ant-btn.ant-btn-primary.ant-btn-sm > span');
         
         await page.waitForSelector('.ant-message-custom-content.ant-message-success');
         const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
@@ -313,7 +313,7 @@ describe('React App', () => {
 
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-9 > button:nth-child(4) > span');
         await page.waitFor(1000);
-        await page.click('body > div:nth-child(7) > div > div > div > div.ant-popover-inner > div > div.ant-popover-buttons > button.ant-btn.ant-btn-primary.ant-btn-sm');
+        await page.click('body > div:nth-child(8) > div > div > div > div.ant-popover-inner > div > div.ant-popover-buttons > button.ant-btn.ant-btn-primary.ant-btn-sm');
 
 
         await page.waitForSelector('.ant-message-custom-content.ant-message-success');
