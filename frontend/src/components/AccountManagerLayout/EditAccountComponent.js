@@ -61,7 +61,7 @@ export default class EditAccountComponent extends Component {
       .delete(`/api/auth/user/${value}`)
       .then((res) => {
         if (res.status === 404) {
-          message.error(res.message);
+          message.error(res.data.message);
         } else {
           if (res.status === 204) {
             message.success("Account successfully deleted");
@@ -131,7 +131,7 @@ export default class EditAccountComponent extends Component {
     this.setState({
       DAVisible: false,
     });
-    this.deleteItemById(id)
+    this.deleteItemById(id);
   };
 
   render() {
@@ -186,7 +186,6 @@ export default class EditAccountComponent extends Component {
                     >
                       Delete Account
                     </Button>
-                    
                   </div>
                 </List.Item>
               )}
@@ -215,9 +214,7 @@ export default class EditAccountComponent extends Component {
           onCancel={this.handleCancel}
           onOk={() => this.handleDelete(this.state.item)}
         >
-          {this.state.DAVisible && (
-            <DeleteAccountConfirmationComponent />
-          )}
+          {this.state.DAVisible && <DeleteAccountConfirmationComponent />}
         </Modal>
       </Layout>
     );

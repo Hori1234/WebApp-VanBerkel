@@ -940,7 +940,7 @@ export default class ManualPlanning extends Component {
           message.success("Truck: added succesfully");
         } else {
           if (res.status === 422) {
-            message.success(res.message);
+            message.success(res.data.message);
           }
         }
         this.getTruckList("latest");
@@ -962,19 +962,19 @@ export default class ManualPlanning extends Component {
     return axios
       .post(`/api/orders/sheet/${value}`, data)
       .then((res) => {
-        if (res.status === 200) {
+        if (res.data.status === 200) {
           message.success("Order:  added succesfully");
         } else {
-          if (res.status === 401) {
-            message.error("Unauthorized: " + res.message);
+          if (res.data.status === 401) {
+            message.error("Unauthorized: " + res.data.message);
           } else {
-            if (res.status === 404) {
-              message.error("Not Found: " + res.message);
+            if (res.data.status === 404) {
+              message.error("Not Found: " + res.data.message);
             } else {
-              if (res.status === 422) {
-                message.error("	Unprocessable Entity: " + res.message);
+              if (res.data.status === 422) {
+                message.error("	Unprocessable Entity: " + res.data.message);
               } else {
-                message.error(res.message);
+                message.error(res.data.message);
               }
             }
           }
@@ -1199,22 +1199,22 @@ export default class ManualPlanning extends Component {
           }
         } else {
           if (res.status === 404) {
-            message.error(res.message);
+            message.error(res.data.message);
           } else {
             if (res.status === 200) {
               message.success("Order succesfully assigned");
             } else {
               if (res.satatus === 400) {
-                message.error("Bad Request" + res.message);
+                message.error("Bad Request" + res.data.message);
               } else {
                 if (res.status === 401) {
-                  message.error("Unauthorized" + res.message);
+                  message.error("Unauthorized" + res.data.message);
                 } else {
                   if (res.status === 404) {
-                    message.error("Not found" + res.message);
+                    message.error("Not found" + res.data.message);
                   } else {
                     if (res.status === 422) {
-                      message.error("Unprocessable Entity" + res.message);
+                      message.error("Unprocessable Entity" + res.data.message);
                     } else {
                       message.warning("Service unavailable");
                     }
@@ -1236,7 +1236,6 @@ export default class ManualPlanning extends Component {
         return false;
       });
   };
-  editOrder = () => {};
 
   render() {
     const showHideMenu = (
