@@ -97,10 +97,10 @@ export default function SignInComponent() {
           backgroundColor: "white",
         }}
       >
-        <Title style={{ marginLeft: -280 }} level={5.2}>
+        <Title style={{ alignItems: "center" }} level={5.2}>
           Sign In
         </Title>
-        <Title style={{ marginLeft: -190 }} level={5}>
+        <Title style={{ alignItems: "center" }} level={5}>
           Fill the form to log in
         </Title>
       </Layout>

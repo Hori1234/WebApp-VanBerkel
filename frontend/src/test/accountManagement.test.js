@@ -39,7 +39,7 @@ describe('React App', () => {
         await page.click('.ant-select.ant-select-single.ant-select-allow-clear.ant-select-show-arrow');
         
         await page.waitFor(1000);
-        await page.click('body > div:nth-child(8) > div > div > div > div.rc-virtual-list > div > div > div > div.ant-select-item.ant-select-item-option:nth-child(1) > div')
+        await page.click('body > div:nth-child(8) > div > div > div > div.rc-virtual-list > div > div > div > div.ant-select-item.ant-select-item-option:nth-child(1) > div');
         
         await page.waitFor(2000);
 
