@@ -12,7 +12,6 @@ import {
 } from "antd";
 import axios from "axios";
 import EditableTableOrder from "../ManualPlanning/EditableTableOrder";
-import EditableTableTruck from "../ManualPlanning/EditableTableTruck";
 import "../ManualPlanning/ManualPlanning.css";
 
 const { Option } = Select;
@@ -22,7 +21,7 @@ export default class ManualPlanning extends Component {
     super(props);
     this.state = {
       selectedOrdersRowKeys: [],
-      selectedTrucksRowKeys: [],
+      selectedPlanningsRowKeys: [],
       columnFilter: [],
       columnTruckFilter: [],
       isVisible: false,
@@ -494,185 +493,68 @@ export default class ManualPlanning extends Component {
       ],
       columns2: [
         {
-          title: "Truck ID",
-          dataIndex: "truck_id",
-          sorter: (a, b) =>
-            (a.truck_id || "|||")
-              .toUpperCase()
-              .localeCompare((b.truck_id || "|||").toUpperCase()),
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "S Number",
-          dataIndex: "s_number",
-          sorter: (a, b) => (a.s_number || "|||") - (b.s_number || "|||"),
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Availability",
-          dataIndex: "availability",
-          sorter: (a, b) =>
-            (a.availability || "|||")
-              .toUpperCase()
-              .localeCompare((b.availability || "|||").toUpperCase()),
-          width: 150,
-          editable: true,
-        },
-        {
-          title: "Truck type",
-          dataIndex: "truck_type",
+          title: "Order_ID",
+          dataIndex: "order_sheet_id",
           width: 150,
           editable: true,
           sorter: (a, b) =>
-            (a.truck_type || "|||")
+            (a.order_sheet_id || "|||")
               .toUpperCase()
-              .localeCompare((b.truck_type || "|||").toUpperCase()),
+              .localeCompare((b.order_sheet_id || "|||").toUpperCase()),
         },
         {
-          title: "Business type",
-          dataIndex: "business_type",
+          title: "Published On",
+          dataIndex: "published_on",
           width: 150,
           editable: true,
           sorter: (a, b) =>
-            (a.business_type || "|||")
+            (a.published_on || "|||")
               .toUpperCase()
-              .localeCompare((b.business_type || "|||").toUpperCase()),
+              .localeCompare((b.published_on || "|||").toUpperCase()),
         },
         {
-          title: "Driver",
-          dataIndex: "Driver",
+          title: "Truck Sheet Id",
+          dataIndex: "truck_sheet_id",
+          sorter: (a, b) =>
+            (a.truck_sheet_id || "|||")
+              .toUpperCase()
+              .localeCompare((b.truck_sheet_id || "|||").toUpperCase()),
+          width: 150,
+          editable: true,
+        },
+        {
+          title: "User Id",
+          dataIndex: "user_id",
           width: 150,
           editable: true,
           sorter: (a, b) =>
-            (a.Driver || "|||")
+            (a.user_id || "|||")
               .toUpperCase()
-              .localeCompare((b.Driver || "|||").toUpperCase()),
-        },
-        {
-          title: "Terminal",
-          dataIndex: "terminal",
-          width: 150,
-          editable: true,
-          sorter: (a, b) =>
-            (a.terminal || "|||")
-              .toUpperCase()
-              .localeCompare((b.terminal || "|||").toUpperCase()),
-        },
-        {
-          title: "Owner",
-          dataIndex: "Owner",
-          width: 150,
-          editable: true,
-          sorter: (a, b) =>
-            (a.Owner || "|||")
-              .toUpperCase()
-              .localeCompare((b.Owner || "|||").toUpperCase()),
-        },
-        {
-          title: "Hierarchy",
-          dataIndex: "hierarchy",
-          width: 150,
-          editable: true,
-          sorter: (a, b) => (a.hierarchy || "|||") - (b.hierarchy || "|||"),
-        },
-        {
-          title: "Use cost",
-          dataIndex: "use_cost",
-          width: 150,
-          editable: true,
-          sorter: (a, b) => (a.use_cost || "|||") - (b.use_cost || "|||"),
-        },
-        {
-          title: "Date",
-          dataIndex: "date",
-          width: 150,
-          editable: true,
-          sorter: (a, b) =>
-            (a.date || "|||")
-              .toUpperCase()
-              .localeCompare((b.date || "|||").toUpperCase()),
-        },
-        {
-          title: "Starting time",
-          dataIndex: "starting_time",
-          width: 150,
-          editable: true,
-          sorter: (a, b) =>
-            (a.starting_time || "|||")
-              .toUpperCase()
-              .localeCompare((b.starting_time || "|||").toUpperCase()),
-        },
-        {
-          title: "Remarks",
-          dataIndex: "Remarks",
-          width: 150,
-          editable: true,
-          sorter: (a, b) =>
-            (a.Remarks || "|||")
-              .toUpperCase()
-              .localeCompare((b.Remarks || "|||").toUpperCase()),
+              .localeCompare((b.user_id || "|||").toUpperCase()),
         },
       ],
       data: [],
       data2: [],
+      data3: [],
       startingColumns: [],
       startingTruckColumns: [],
-      AOVisible: false,
-      ATVisible: false,
-      AssignModal: false,
       magnifyOrders: false,
-      magnifyTrucks: false,
+      magnifyPlannings: false,
       status: "",
-      newOrder: {
-        order_number: "",
-        inl: "",
-        latest_dept_time: "",
-        truck_type: "",
-        hierarchy: "",
-        delivery_deadline: "",
-        driving_time: "",
-        process_time: "",
-        service_time: "",
-      },
-      newTruck: {
-        truck_id: "",
-        truck_snumber: "",
-        availability: "",
-        truck_type: "",
-        terminal: "",
-        hierarchy: "",
-        use_cost: "",
-        starting: "",
-        date: "",
-        owner: "",
-        driver: "",
-        remarks: "",
-        business_type: "",
-      },
       temp: [],
       originalOrders: [],
       originalTrucks: [],
     };
   }
 
-  handleChangeDepartureTime = (event) => {
-    this.setState({
-      departure_time: event.target.value,
-    });
-  };
   componentDidMount() {
     this.setState({ startingColumns: this.state.columns });
     this.setState({ startingTruckColumns: this.state.columns2 });
-    this.getOrderList("latest");
+    //this.getOrderList("latest");
+    this.getPlanning("latest", "latest");
+    this.getPlanningList(1, 10);
   }
-  setData = (e) => {
-    this.setState({ data: e });
-  };
-  setData2 = (e) => {
-    this.setState({ data2: e });
-  };
+
   changeVisibility = (isTrue) => {
     this.setState({ isVisible: isTrue });
   };
@@ -778,48 +660,36 @@ export default class ManualPlanning extends Component {
     this.setState({ selectedOrdersRowKeys });
     console.log("orders", selectedOrdersRowKeys);
   };
-  selectTrucksRow = (record) => {
-    const selectedTrucksRowKeys = [...this.state.selectedTrucksRowKeys];
-    if (selectedTrucksRowKeys.indexOf(record.key) >= 0) {
-      selectedTrucksRowKeys.splice(
-        selectedTrucksRowKeys.indexOf(record.key),
+
+  selectPlanningsRow = (record) => {
+    const selectedPlanningsRowKeys = [...this.state.selectedPlanningsRowKeys];
+    if (selectedPlanningsRowKeys.indexOf(record.order_sheet_id) >= 0) {
+      selectedPlanningsRowKeys.splice(
+        selectedPlanningsRowKeys.indexOf(record.order_sheet_id),
         1
       );
     } else {
-      selectedTrucksRowKeys.push(record.key);
+      selectedPlanningsRowKeys.push(record.order_sheet_id);
     }
-    this.setState({ selectedTrucksRowKeys });
+    this.setState({ selectedPlanningsRowKeys });
   };
-  onSelectedTrucksRowKeysChange = (selectedTrucksRowKeys) => {
-    this.setState({ selectedTrucksRowKeys });
-    console.log("trucks", selectedTrucksRowKeys);
+  onSelectedTrucksRowKeysChange = (selectedPlanningsRowKeys) => {
+    this.setState({ selectedPlanningsRowKeys });
+    console.log("trucks", selectedPlanningsRowKeys);
   };
 
-  showAssignModal = () => {
-    this.setState({
-      AssignModal: true,
-    });
-  };
-  ShowTruckModal = () => {
-    this.setState({
-      ATVisible: true,
-    });
-  };
-  showOrdersModal = () => {
-    this.setState({
-      AOVisible: true,
-    });
-  };
   magnifyOrdersModal = () => {
     this.setState({
       magnifyOrders: true,
     });
   };
-  magnifyTrucksModal = () => {
+
+  magnifyPlanningsModal = () => {
     this.setState({
-      magnifyTrucks: true,
+      magnifyPlannings: true,
     });
   };
+
   handleOk = () => {
     this.setState({
       AOVisible: false,
@@ -834,10 +704,13 @@ export default class ManualPlanning extends Component {
     });
   };
   okMagnify = (e) => {
-    this.setState({ magnifyOrders: false, magnifyTrucks: false });
+    this.setState({ magnifyOrders: false, magnifyPlannings: false });
+  };
+  okPlanningSelected = (e) => {
+    this.getOrderList(2);
   };
   cancelMagnify = (e) => {
-    this.setState({ magnifyOrders: false, magnifyTrucks: false });
+    this.setState({ magnifyOrders: false, magnifyPlannings: false });
   };
   truckRowColor = (e) => {
     if (e === "Regional") {
@@ -850,7 +723,77 @@ export default class ManualPlanning extends Component {
   };
 
   //API Calls ============================================================>
+  getPlanningList = async (vPage, VPageSize) => {
+    return axios
+      .get(`/api/plannings/`, {
+        params: {
+          page: vPage,
+          page_size: VPageSize,
+        },
+      })
+      .then((res) => {
+        var outarray = [];
+        for (var i = 0; i < res.data.length; i++) {
+          var temp = {
+            order_sheet_id: res.data[i]["order_sheet_id"],
+            published_on: res.data[i]["published_on"],
+            truck_sheet_id: res.data[i]["truck_sheet_id"],
+            user_id: res.data[i]["user_id"],
+          };
+          outarray.push(temp);
+        }
 
+        this.setState((state) => ({
+          ...state,
+          data2: outarray,
+          originalOrders: outarray,
+          status: "success",
+        }));
+        console.log(this.state.data2);
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+  getPlanning = async (tid, oid) => {
+    return axios
+      .get(`/api/plannings/${tid}/${oid}`)
+      .then((res) => {
+        var outarray = [];
+        for (var i = 0; i < res.data.orders.length; i++) {
+          var temp = {
+            order_sheet_id: res.data[i]["order_sheet_id"],
+            published_on: res.data[i]["published_on"],
+            truck_sheet_id: res.data[i]["truck_sheet_id"],
+            user_id: res.data[i]["user_id"],
+          };
+          outarray.push(temp);
+        }
+
+        this.setState((state) => ({
+          ...state,
+          data2: outarray,
+          originalOrders: outarray,
+          status: "success",
+        }));
+        console.log(this.state.data2);
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
   getOrderList = async (value) => {
     return axios
       .get(`/api/orders/sheet/${value}`)
@@ -1217,15 +1160,17 @@ export default class ManualPlanning extends Component {
     );
 
     const { selectedOrdersRowKeys } = this.state;
-    const { selectedTrucksRowKeys } = this.state;
+    const { selectedPlanningsRowKeys } = this.state;
+
     const ordersRowSelection = {
       selectedOrdersRowKeys,
       onChange: this.onSelectedOrdersRowKeysChange,
     };
-    const trucksRowSelection = {
-      selectedTrucksRowKeys,
+    const planningRowSelection = {
+      selectedPlanningsRowKeys,
       onChange: this.onSelectedTrucksRowKeysChange,
     };
+
     return (
       <Layout style={{ width: "100%", backgroundColor: "white" }}>
         <Row gutter={[0, 10]}>
@@ -1260,7 +1205,6 @@ export default class ManualPlanning extends Component {
               rowSelection={ordersRowSelection}
               dataSource={this.state.data}
               columns={this.state.columns}
-              setData={this.setData}
               onRow={(record) => ({
                 onClick: () => {
                   this.selectOrdersRow(record);
@@ -1268,8 +1212,9 @@ export default class ManualPlanning extends Component {
               })}
             ></EditableTableOrder>
             <br />
-
             <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
+            &nbsp;
+            <Button onClick={this.magnifyPlanningsModal}>Plannings</Button>
           </Col>
         </Row>
 
@@ -1297,27 +1242,27 @@ export default class ManualPlanning extends Component {
             </Layout>
           )}
         </Modal>
+
         <Modal
-          title="Truck List"
-          visible={this.state.magnifyTrucks}
-          onOk={this.okMagnify}
+          title="Planning List"
+          visible={this.state.magnifyPlannings}
+          onOk={this.okPlanningSelected}
           onCancel={this.cancelMagnify}
           width={"100%"}
           style={{ top: 20 }}
         >
-          {this.state.magnifyTrucks && (
+          {this.state.magnifyPlannings && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
-              <EditableTableTruck
-                rowSelection={trucksRowSelection}
+              <EditableTableOrder
+                rowSelection={planningRowSelection}
                 dataSource={this.state.data2}
                 columns={this.state.columns2}
-                setData={this.setData2}
                 onRow={(record) => ({
                   onClick: () => {
-                    this.selectOrdersRow(record);
+                    this.selectPlanningsRow(record);
                   },
                 })}
-              ></EditableTableTruck>
+              ></EditableTableOrder>
             </Layout>
           )}
         </Modal>
