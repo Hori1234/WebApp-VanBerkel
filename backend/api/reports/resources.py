@@ -1,3 +1,4 @@
+from flask import safe_join, send_file
 from flask_smorest import abort
 from flask.views import MethodView
 from sqlalchemy import func, and_
@@ -21,7 +22,6 @@ class FirstRides(MethodView):
         In case 'sheet_id_or_latest is 'latest', the most recently uploaded
         order sheet will be used.
         """
-        print('fuck')
         try:
             # Try to parse the sheet_id to an int and get the order sheet
             order_sheet = OrderSheet.query \
@@ -53,8 +53,6 @@ class FirstRides(MethodView):
                 Order.departure_time == subq.c.mintime
             )
         ).all()
-
-        print(first_orders)
 
         book = Workbook()
         sheet = book.active
@@ -144,5 +142,17 @@ class FirstRides(MethodView):
             sheet.cell(row=count, column=15).value = \
                 order.truck.others.get('Remarks', '')  # remarks
 
-        book.save(filename='first-rides-' + now_save + '.xlsx')
+        filename = 'first-rides-' + now_save + '.xlsx'
+        book.save(filename=filename)
+        safe_path = safe_join('/bestanden/1-SEP TRUCK/sep-2021_q1-group-2/',
+                              filename)
+        try:
+            return send_file(
+                safe_path,
+                attachment_filename=filename,
+                as_attachment=True
+            )
+        except FileNotFoundError:
+            abort(404)
+
         return '', 200

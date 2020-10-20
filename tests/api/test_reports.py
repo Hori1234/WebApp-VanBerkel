@@ -69,7 +69,6 @@ def setup_db(setup_users, login_user, create_db_without_users, client):
 
 
 def get_first_rides(client, sheet_id_or_latest):
-    print('que?')
     return client.get(f'api/reports/firstrides/{sheet_id_or_latest}')
 
 
@@ -85,5 +84,4 @@ def get_full_assignment(client, sheet_id_or_latest):
 
 def test_get_first_rides(client, db):
     rv = get_first_rides(client, 'latest')
-    print('what')
     assert rv.status_code == 200
