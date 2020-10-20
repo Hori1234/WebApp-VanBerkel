@@ -9,7 +9,6 @@ import {
   Checkbox,
   Dropdown,
   Modal,
-  message,
 } from "antd";
 import axios from "axios";
 import EditableTableOrder from "../ManualPlanning/EditableTableOrder";
@@ -667,7 +666,6 @@ export default class ManualPlanning extends Component {
     this.setState({ startingColumns: this.state.columns });
     this.setState({ startingTruckColumns: this.state.columns2 });
     this.getOrderList("latest");
-    this.getTruckList("latest");
   }
   setData = (e) => {
     this.setState({ data: e });
@@ -853,156 +851,6 @@ export default class ManualPlanning extends Component {
 
   //API Calls ============================================================>
 
-  deleteOrder = (value) => {
-    return axios
-      .delete(`/api/orders/${value}`)
-      .then((res) => {
-        if (res.status === 204) {
-          message.success("Order succesfully deleted");
-        }
-        return true;
-      })
-      .catch((error) => {
-        this.setState((state) => ({
-          ...state,
-          status: "error",
-          error: error,
-        }));
-        if (error.response.status === 404) {
-          message.error("Not Found: " + error.response.data.message);
-        } else {
-          if (error.response.status === 401) {
-            message.error(
-              "Unauthorized Action: " + error.response.data.message
-            );
-          } else {
-            message.error(
-              "Service Unavailable: " + error.response.data.message
-            );
-          }
-        }
-        return false;
-      });
-  };
-  deleteOrderById = (info) => {
-    info.forEach((id) => {
-      this.deleteOrder(id);
-      const filteredData = this.state.data.filter((item) => item.id !== id);
-      this.setState({ data: filteredData });
-    });
-    this.getOrderList("latest");
-  };
-  deleteTruck = (value) => {
-    return axios
-      .delete(`/api/trucks/${value}`)
-      .then((res) => {
-        if (res.status === 204) {
-          message.success("Truck succesfully deleted");
-        }
-        return true;
-      })
-      .catch((error) => {
-        this.setState((state) => ({
-          ...state,
-          status: "error",
-          error: error,
-        }));
-        if (error.response.status === 404) {
-          message.error("Not Found: " + error.response.data.message);
-        }
-        if (error.response.status === 401) {
-          message.error("Unauthorized Action: " + error.response.data.message);
-        } else {
-          message.error("Service Unavailable: " + error.response.data.message);
-        }
-        return false;
-      });
-  };
-  deleteTruckById = (data) => {
-    data.forEach((id) => {
-      this.deleteTruck(id);
-      const filteredData = this.state.data2.filter((item) => item.id !== id);
-      this.setState({ data2: filteredData });
-    });
-    this.getTruckList("latest");
-  };
-
-  //Adding the truck and the order
-  addTruck = (value) => {
-    this.getTruckInfo();
-    const data = this.refs.addTrucks.createTruckData();
-    return axios
-      .post(`/api/trucks/sheet/${value}`, data)
-      .then((res) => {
-        if (res.status === 200) {
-          message.success("Truck: added succesfully");
-        }
-        this.getTruckList("latest");
-        this.handleOk();
-        return true;
-      })
-      .catch((error) => {
-        this.setState((state) => ({
-          ...state,
-          status: "error",
-          error: error,
-        }));
-        if (error.response.status === 401) {
-          message.error("Unauthorized: " + error.response.data.message);
-        } else {
-          if (error.response.status === 404) {
-            message.error("Not Found: " + error.response.data.message);
-          } else {
-            if (error.response.status === 422) {
-              message.error(
-                "	Unprocessable Entity: " + error.response.data.message
-              );
-            } else {
-              message.error(error.response.data.message);
-            }
-          }
-        }
-        return false;
-      });
-  };
-  addOrder = (value) => {
-    this.getOrderInfo();
-    const data = this.refs.addOrders.createOrderData();
-    return axios
-      .post(`/api/orders/sheet/${value}`, data)
-      .then((res) => {
-        if (res.status === 200) {
-          message.success("Order:  added succesfully");
-        }
-        this.handleOk();
-        this.getOrderList("latest");
-        return true;
-      })
-      .catch((error) => {
-        this.setState((state) => ({
-          ...state,
-          status: "error",
-          error: error,
-        }));
-        if (error.response.status === 401) {
-          message.error("Unauthorized: " + error.response.data.message);
-        } else {
-          if (error.response.status === 404) {
-            message.error("Not Found: " + error.response.data.message);
-          } else {
-            if (error.response.status === 422) {
-              message.error(
-                "	Unprocessable Entity: " + error.response.data.message
-              );
-            } else {
-              message.error(error.response.data.message);
-            }
-          }
-        }
-        return false;
-      });
-  };
-
   getOrderList = async (value) => {
     return axios
       .get(`/api/orders/sheet/${value}`)
@@ -1078,163 +926,6 @@ export default class ManualPlanning extends Component {
           status: "error",
           error: error,
         }));
-        return false;
-      });
-  };
-  getTruckList = async (value) => {
-    return axios
-      .get(`/api/trucks/sheet/${value}`)
-      .then((res) => {
-        var outarray = [];
-        for (var i = 0; i < res.data.trucks.length; i++) {
-          var temp = {
-            key: res.data.trucks[i]["s_number"],
-            truck_id: res.data.trucks[i]["truck_id"],
-            s_number: res.data.trucks[i]["s_number"],
-            availability: res.data.trucks[i]["availability"],
-            truck_type: res.data.trucks[i]["truck_type"],
-            business_type: res.data.trucks[i]["business_type"],
-            Driver: res.data.trucks[i]["Driver"],
-            terminal: res.data.trucks[i]["terminal"],
-            Owner: res.data.trucks[i]["Owner"],
-            hierarchy: res.data.trucks[i]["hierarchy"],
-            use_cost: res.data.trucks[i]["use_cost"],
-            date: res.data.trucks[i]["date"],
-            starting_time: res.data.trucks[i]["starting_time"],
-            Remarks: res.data.trucks[i]["Remarks"],
-          };
-          outarray.push(temp);
-        }
-
-        console.log(outarray);
-        this.setState((state) => ({
-          ...state,
-          data2: outarray,
-          originalTrucks: outarray,
-          status: "success",
-        }));
-        return true;
-      })
-      .catch((error) => {
-        this.setState((state) => ({
-          ...state,
-          status: "error",
-          error: error,
-        }));
-        return false;
-      });
-  };
-
-  //setting the new orders and the new truck
-  setNewOrder = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
-    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
-    this.setState((prevState) => {
-      let newOrder = Object.assign({}, prevState.newOrder); // creating copy of state variable newOrder
-      newOrder.order_number = vON;
-      newOrder.inl = vInl;
-      newOrder.latest_dept_time = vLDT;
-      newOrder.truck_type = vTT;
-      newOrder.hierarchy = vH;
-      newOrder.delivery_deadline = vDD;
-      newOrder.driving_time = vDT;
-      newOrder.process_time = vPT;
-      newOrder.service_time = vST;
-      return { newOrder }; // return new object newOrder object
-    });
-    console.log(this.state.newOrder);
-  };
-  setNewTruck = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
-    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
-    this.setState((prevState) => {
-      let newTruck = Object.assign({}, prevState.newTruck); // creating copy of state variable newOrder
-      newTruck.truck_id = vON;
-      newTruck.truck_snumber = vInl;
-      newTruck.availability = vLDT;
-      newTruck.truck_type = vTT;
-      newTruck.hierarchy = vH;
-      newTruck.terminal = vDD;
-      newTruck.use_cost = vDT;
-      newTruck.starting_time = vPT;
-      newTruck.date = vST;
-      return { newTruck }; // return new object newOrder object
-    });
-    console.log(this.state.newTruck);
-  };
-
-  //Getting the new order's and new truck's information from their modals
-  getOrderInfo = () => {
-    var temp = [];
-    temp = this.refs.addOrders.getFormOrderData();
-    console.log(temp);
-    this.setNewOrder(
-      temp[0],
-      temp[1],
-      temp[2],
-      temp[3],
-      temp[4],
-      temp[5],
-      temp[6],
-      temp[7],
-      temp[8]
-    );
-  };
-  getTruckInfo = () => {
-    var temp = [];
-    temp = this.refs.addTrucks.getFormTruckData();
-    console.log(temp);
-    this.setNewTruck(
-      temp[0],
-      temp[1],
-      temp[2],
-      temp[3],
-      temp[4],
-      temp[5],
-      temp[6],
-      temp[7],
-      temp[8]
-    );
-  };
-
-  // Assigning , editing and Unassigning orders
-  assign_unassignOrder = (orderId, truckId, dpt, assigning) => {
-    return axios
-      .patch(`/api/orders/${orderId}`, {
-        truck_id: truckId,
-        departure_time: dpt,
-      })
-      .then((res) => {
-        if (assigning === false) {
-          if (res.status === 200) {
-            message.success("Truck succesfully unassigned");
-          }
-        } else {
-          console.log(res.status);
-          if (res.status === 200) {
-            message.success("Order succesfully assigned");
-          }
-        }
-
-        return true;
-      })
-      .catch((error) => {
-        this.setState((state) => ({
-          ...state,
-          status: "error",
-          error: error,
-        }));
-        if (error.response.status === 400) {
-          console.log("======================");
-          message.warning("Bad Request: " + error.response.data.message);
-        }
-        if (error.response.status === 401) {
-          message.error("Unauthorized: " + error.response.data.message);
-        }
-        if (error.response.status === 404) {
-          message.error("Not found: " + error.response.data.message);
-        }
-        if (error.response.status === 422) {
-          message.error("Unprocessable Entity: " + error.response.data.message);
-        }
         return false;
       });
   };
@@ -1524,129 +1215,7 @@ export default class ManualPlanning extends Component {
         </Menu.ItemGroup>
       </Menu>
     );
-    const showHideTruckMenu = (
-      <Menu>
-        <Menu.ItemGroup title="truck_id">
-          <Menu.Item key="truck_id">
-            <Checkbox
-              id="truck_id"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              truck_id
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="s_number">
-            <Checkbox
-              id="s_number"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              s_number
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="availability">
-            <Checkbox
-              id="availability"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              availability
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="truck_type">
-            <Checkbox
-              id="truck_type"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              truck_type
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="business_type">
-            <Checkbox
-              id="business_type"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              business_type
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="Driver">
-            <Checkbox
-              id="Driver"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              Driver
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="terminal">
-            <Checkbox
-              id="terminal"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              terminal
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="Owner">
-            <Checkbox
-              id="Owner"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              Owner
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="hierarchy">
-            <Checkbox
-              id="hierarchy"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              hierarchy
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="use_cost">
-            <Checkbox
-              id="use_cost"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              use_cost
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="date">
-            <Checkbox
-              id="date"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              date
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="starting_time">
-            <Checkbox
-              id="starting_time"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              starting_time
-            </Checkbox>
-          </Menu.Item>
-          <Menu.Item key="Remarks">
-            <Checkbox
-              id="Remarks"
-              onChange={this.filterTruckColumns}
-              defaultChecked
-            >
-              Remarks
-            </Checkbox>
-          </Menu.Item>
-        </Menu.ItemGroup>
-      </Menu>
-    );
+
     const { selectedOrdersRowKeys } = this.state;
     const { selectedTrucksRowKeys } = this.state;
     const ordersRowSelection = {
@@ -1660,7 +1229,7 @@ export default class ManualPlanning extends Component {
     return (
       <Layout style={{ width: "100%", backgroundColor: "white" }}>
         <Row gutter={[0, 10]}>
-          <Col span={8}>
+          <Col span={12}>
             <Select
               defaultValue="Both"
               onChange={this.changeDataOrders}
@@ -1679,26 +1248,14 @@ export default class ManualPlanning extends Component {
             >
               <Button>Show/Hide</Button>
             </Dropdown>
-          </Col>
-          <Col span={2} offset={12}>
-            <Dropdown
-              Scrollable
-              overlay={showHideTruckMenu}
-              onVisibleChange={this.changeTruckVisibility}
-              visible={this.state.isTruckVisible}
-              style={{ maxHeight: "50px" }}
-            >
-              <Button>Show/Hide</Button>
-            </Dropdown>
-          </Col>
-          <Col span={2}>
+            &nbsp;
             <Button onClick={() => window.open("/data")}>
               Data visualization
             </Button>
           </Col>
         </Row>
         <Row gutter={[24, 8]} justify="space-around" align="middle">
-          <Col span={12}>
+          <Col span={24}>
             <EditableTableOrder
               rowSelection={ordersRowSelection}
               dataSource={this.state.data}
@@ -1713,23 +1270,6 @@ export default class ManualPlanning extends Component {
             <br />
 
             <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
-          </Col>
-
-          <Col span={9}>
-            <EditableTableTruck
-              rowSelection={trucksRowSelection}
-              dataSource={this.state.data2}
-              columns={this.state.columns2}
-              setData={this.setData2}
-              onRow={(record) => ({
-                onClick: () => {
-                  this.selectOrdersRow(record);
-                },
-              })}
-            ></EditableTableTruck>
-            <br />
-            &nbsp;&nbsp;
-            <Button onClick={this.magnifyTrucksModal}>Magnify</Button>
           </Col>
         </Row>
 
