@@ -20,6 +20,7 @@ import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
 import EditableTableTruck from "./EditableTableTruck";
 import "./ManualPlanning.css";
+import { getKeyThenIncreaseKey } from "antd/lib/message";
 
 const { Option } = Select;
 
@@ -1220,7 +1221,8 @@ export default class ManualPlanning extends Component {
             message.success("Order succesfully assigned");
           }
         }
-
+        this.getOrderList("latest");
+        this.getTruckList("latest");
         return true;
       })
       .catch((error) => {
@@ -1834,6 +1836,7 @@ export default class ManualPlanning extends Component {
                     null,
                     false
                   );
+                  
                 }}
               >
                 Unassign
