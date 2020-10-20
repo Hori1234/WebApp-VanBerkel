@@ -18,6 +18,7 @@ def register_api(api):
     from .orders import bp as orders_bp
     from .trucks import bp as trucks_bp
     from .plannings import bp as plannings_bp
+    from .reports import bp as reports_bp
 
     # register all blueprints
     api.register_blueprint(auth_bp, url_prefix='/api/auth/')
@@ -25,6 +26,7 @@ def register_api(api):
     api.register_blueprint(orders_bp, url_prefix='/api/orders/')
     api.register_blueprint(trucks_bp, url_prefix='/api/trucks/')
     api.register_blueprint(plannings_bp, url_prefix='/api/plannings/')
+    api.register_blueprint(reports_bp, url_prefix='/api/reports/')
 
     # document security scheme of the API (for the OpenAPI 3.0+ spec)
     api.spec.components.security_scheme(
