@@ -847,11 +847,12 @@ export default class ManualPlanning extends Component {
     this.setState({ magnifyOrders: false, magnifyTrucks: false });
   };
   truckRowColor = (e) => {
-    if (e === "Regional") {
+    console.log(e)
+    if (e === "regional") {
       return "table-row-regional";
-    } else if (e === "Terminal") {
+    } else if (e === "terminal") {
       return "table-row-terminal";
-    } else if (e === "Port") {
+    } else if (e === "port") {
       return "table-row-port";
     }
   };
@@ -1846,6 +1847,7 @@ export default class ManualPlanning extends Component {
           <Col span={9}>
             <EditableTableTruck
               rowSelection={trucksRowSelection}
+              rowClassName={(record, index) => this.truckRowColor(record.truck_type)}
               dataSource={this.state.data2}
               columns={this.state.columns2}
               setData={this.setData2}
