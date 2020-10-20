@@ -82,8 +82,9 @@ export default class CreateAccountsComponent extends Component {
       );
     };
     return (
-      <Layout
+      <Layout Scrollable
         style={{
+          overflowY: "scroll",
           alignItems: "center",
           display: "flex",
           backgroundColor: "white",
@@ -109,8 +110,7 @@ export default class CreateAccountsComponent extends Component {
             >
               <Title style={{ fontSize: 16 }}>Welcome </Title>
               <Text style={{ fontSize: 14 }}>
-                Change the following fields to update the new user
-                information.
+                Change the following fields to update the new user information.
               </Text>
             </Layout>
           </Layout>
@@ -212,7 +212,7 @@ export default class CreateAccountsComponent extends Component {
                     this.props.modalHandleOk();
                     message.success("Account updated succesfully");
                   } else {
-                    message.error("Fill all the empty fields");
+                    message.warning("Fill all the empty fields");
                   }
                 }}
               >

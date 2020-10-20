@@ -25,8 +25,8 @@ const EditableCell = ({
           {inputNode}
         </Form.Item>
       ) : (
-        children
-      )}
+          children
+        )}
     </td>
   );
 };
@@ -55,7 +55,7 @@ const EditableTableOrder = (props) => {
       "latest_dep_time": "",
       "Truck Used": "",
       "truck_type": "",
-      "hierarchy" : "",
+      "hierarchy": "",
       "City": "",
       "L/D": "",
       "Date": "",
@@ -67,7 +67,7 @@ const EditableTableOrder = (props) => {
       "Reference": "",
       "Truck (1)": "",
       "Gate (1)": "",
-      "Time (3)": "",     
+      "Time (3)": "",
       "Inl. ter. (1)": "",
       "Gross (kgs)": "",
       "Temperature °C": "",
@@ -84,7 +84,7 @@ const EditableTableOrder = (props) => {
       "Positie": "",
       "Delay": "",
       "Weight": "",
-      "departure_time": "",  
+      "departure_time": "",
       "truck_id": "",
       ...record,
     });
@@ -141,7 +141,7 @@ const EditableTableOrder = (props) => {
         setEditingKey("");
         let dataToSend = {};
         for (var val of Object.keys(newData[index])) {
-          if(val !="service_time" && val !="order_number" && val !="latest_dep_time" && val != "key"){
+          if (val !== "service_time" && val !== "order_number" && val !== "latest_dep_time" && val !== "key") {
             dataToSend[val] = newData[index][val];
           }
         }
@@ -168,7 +168,7 @@ const EditableTableOrder = (props) => {
         return editable ? (
           <span>
             <a
-              href="javascript:;"
+              href='#Container'
               onClick={() => save(record.key)}
               style={{
                 marginRight: 8,
@@ -180,14 +180,14 @@ const EditableTableOrder = (props) => {
               title="Are you sure you want to cancel?"
               onConfirm={cancel}
             >
-              <a>Cancel</a>
+              <a href='#Container'>Cancel</a>
             </Popconfirm>
           </span>
         ) : (
-          <a disabled={editingKey !== ""} onClick={() => edit(record)}>
-            Edit
-          </a>
-        );
+            <a href='#Container' disabled={editingKey !== ""} onClick={() => edit(record)}>
+              Edit
+            </a>
+          );
       },
     },
   ];

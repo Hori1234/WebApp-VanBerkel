@@ -862,18 +862,8 @@ export default class ManualPlanning extends Component {
     return axios
       .delete(`/api/orders/${value}`)
       .then((res) => {
-        if (res.status === 404) {
-          message.error(res.message);
-        } else {
-          if (res.status === 204) {
-            message.success("Order succesfully deleted");
-          } else {
-            if (res.status === 401) {
-              message.error("Unauthorized Action");
-            } else {
-              message.error("Service Unavailable");
-            }
-          }
+        if (res.status === 204) {
+          message.success("Order succesfully deleted");
         }
         return true;
       })
@@ -883,6 +873,19 @@ export default class ManualPlanning extends Component {
           status: "error",
           error: error,
         }));
+        if (error.response.status === 404) {
+          message.error("Not Found: " + error.response.data.message);
+        } else {
+          if (error.response.status === 401) {
+            message.error(
+              "Unauthorized Action: " + error.response.data.message
+            );
+          } else {
+            message.error(
+              "Service Unavailable: " + error.response.data.message
+            );
+          }
+        }
         return false;
       });
   };
@@ -892,23 +895,14 @@ export default class ManualPlanning extends Component {
       const filteredData = this.state.data.filter((item) => item.id !== id);
       this.setState({ data: filteredData });
     });
+    this.getOrderList("latest");
   };
   deleteTruck = (value) => {
     return axios
       .delete(`/api/trucks/${value}`)
       .then((res) => {
-        if (res.status === 404) {
-          message.error(res.message);
-        } else {
-          if (res.status === 204) {
-            message.success("Truck succesfully deleted");
-          } else {
-            if (res.status === 401) {
-              message.error("Unauthorized Action");
-            } else {
-              message.error("Service Unavailable");
-            }
-          }
+        if (res.status === 204) {
+          message.success("Truck succesfully deleted");
         }
         this.getTruckList("latest");
         return true;
@@ -919,6 +913,14 @@ export default class ManualPlanning extends Component {
           status: "error",
           error: error,
         }));
+        if (error.response.status === 404) {
+          message.error("Not Found: " + error.response.data.message);
+        }
+        if (error.response.status === 401) {
+          message.error("Unauthorized Action: " + error.response.data.message);
+        } else {
+          message.error("Service Unavailable: " + error.response.data.message);
+        }
         return false;
       });
   };
@@ -928,6 +930,7 @@ export default class ManualPlanning extends Component {
       const filteredData = this.state.data2.filter((item) => item.id !== id);
       this.setState({ data2: filteredData });
     });
+    this.getTruckList("latest");
   };
 
   //Adding the truck and the order
@@ -939,10 +942,6 @@ export default class ManualPlanning extends Component {
       .then((res) => {
         if (res.status === 200) {
           message.success("Truck: added succesfully");
-        } else {
-          if (res.status === 422) {
-            message.success(res.message);
-          }
         }
         this.getTruckList("latest");
         this.handleOk();
@@ -954,6 +953,21 @@ export default class ManualPlanning extends Component {
           status: "error",
           error: error,
         }));
+        if (error.response.status === 401) {
+          message.error("Unauthorized: " + error.response.data.message);
+        } else {
+          if (error.response.status === 404) {
+            message.error("Not Found: " + error.response.data.message);
+          } else {
+            if (error.response.status === 422) {
+              message.error(
+                "	Unprocessable Entity: " + error.response.data.message
+              );
+            } else {
+              message.error(error.response.data.message);
+            }
+          }
+        }
         return false;
       });
   };
@@ -965,20 +979,6 @@ export default class ManualPlanning extends Component {
       .then((res) => {
         if (res.status === 200) {
           message.success("Order:  added succesfully");
-        } else {
-          if (res.status === 401) {
-            message.error("Unauthorized: " + res.message);
-          } else {
-            if (res.status === 404) {
-              message.error("Not Found: " + res.message);
-            } else {
-              if (res.status === 422) {
-                message.error("	Unprocessable Entity: " + res.message);
-              } else {
-                message.error(res.message);
-              }
-            }
-          }
         }
         this.handleOk();
         this.getOrderList("latest");
@@ -990,6 +990,21 @@ export default class ManualPlanning extends Component {
           status: "error",
           error: error,
         }));
+        if (error.response.status === 401) {
+          message.error("Unauthorized: " + error.response.data.message);
+        } else {
+          if (error.response.status === 404) {
+            message.error("Not Found: " + error.response.data.message);
+          } else {
+            if (error.response.status === 422) {
+              message.error(
+                "	Unprocessable Entity: " + error.response.data.message
+              );
+            } else {
+              message.error(error.response.data.message);
+            }
+          }
+        }
         return false;
       });
   };
@@ -1199,30 +1214,9 @@ export default class ManualPlanning extends Component {
             message.success("Truck succesfully unassigned");
           }
         } else {
-          if (res.status === 404) {
-            message.error(res.message);
-          } else {
-            if (res.status === 200) {
-              message.success("Order succesfully assigned");
-            } else {
-              if (res.satatus === 400) {
-                message.error("Bad Request" + res.message);
-              } else {
-                if (res.status === 401) {
-                  message.error("Unauthorized" + res.message);
-                } else {
-                  if (res.status === 404) {
-                    message.error("Not found" + res.message);
-                  } else {
-                    if (res.status === 422) {
-                      message.error("Unprocessable Entity" + res.message);
-                    } else {
-                      message.warning("Service unavailable");
-                    }
-                  }
-                }
-              }
-            }
+          console.log(res.status);
+          if (res.status === 200) {
+            message.success("Order succesfully assigned");
           }
         }
 
@@ -1234,10 +1228,22 @@ export default class ManualPlanning extends Component {
           status: "error",
           error: error,
         }));
+        if (error.response.status === 400) {
+          console.log("======================");
+          message.warning("Bad Request: " + error.response.data.message);
+        }
+        if (error.response.status === 401) {
+          message.error("Unauthorized: " + error.response.data.message);
+        }
+        if (error.response.status === 404) {
+          message.error("Not found: " + error.response.data.message);
+        }
+        if (error.response.status === 422) {
+          message.error("Unprocessable Entity: " + error.response.data.message);
+        }
         return false;
       });
   };
-  editOrder = () => {};
 
   render() {
     const showHideMenu = (

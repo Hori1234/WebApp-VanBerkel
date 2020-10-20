@@ -69,8 +69,8 @@ export function createCustomHTMLTooltip(
     "</li>" +
     '<li class="flex-item"><b>Container ID: </b>' +
     container +
-    "</li>" +
-    "</ul>"
+    '</li>' +
+    '</ul>'
   );
 }
 

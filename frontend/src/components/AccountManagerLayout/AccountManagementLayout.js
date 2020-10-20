@@ -162,9 +162,8 @@ export default class AccountManagementLayout extends Component {
         <Modal
           title="Create Account"
           style={{
-            width: "100vh",
             display: "flex",
-            marginLeft: 280,
+            marginLeft: "33%",
           }}
           centered={false}
           maskClosable={false}
@@ -181,7 +180,7 @@ export default class AccountManagementLayout extends Component {
             position: "absolute",
             top: "25%",
             bottom: "25%",
-            left: "25%",
+            left: "15%",
             right: "25%",
             display: "flex",
             alignItems: "center",
