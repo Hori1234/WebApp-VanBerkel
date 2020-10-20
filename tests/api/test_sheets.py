@@ -7,7 +7,7 @@ from backend.models import orders
 
 
 @pytest.fixture(autouse=True)
-def setup_db(setup_users, login_user, create_db_without_users):
+def setup_db(setup_users, login_admin, create_db_without_users):
     """
     Run the fixtures needed for this module.
     """
@@ -90,8 +90,8 @@ def test_upload_orders_success(client):
     assert rv.status_code == 200
     assert orders.OrderSheet.query.get(1)
 
-    order = orders.Order.query.get(8)
-    assert order.latest_dep_time.strftime('%H:%M') == '10:30'
+    order = orders.Order.query.get(7)
+    assert order.latest_dep_time.strftime('%H:%M') == '08:00'
     assert order.truck_type == 'port'
 
 
