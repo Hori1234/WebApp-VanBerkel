@@ -221,6 +221,7 @@ const EditableTableOrder = (props) => {
         columns={mergedColumns}
         scroll={{ x: "max-content", y: "50vh" }}
         pagination={{
+          pageSizeOptions:['10','100','200','300'],
           onChange: cancel,
         }}
         rowClassName="editable-row"
