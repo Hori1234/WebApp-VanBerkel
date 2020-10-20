@@ -20,7 +20,6 @@ import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
 import EditableTableTruck from "./EditableTableTruck";
 import "./ManualPlanning.css";
-import { getKeyThenIncreaseKey } from "antd/lib/message";
 
 const { Option } = Select;
 
@@ -1783,7 +1782,7 @@ export default class ManualPlanning extends Component {
           </Col>
           <Col span={2}>
             <Button onClick={() => window.open("/data")}>
-              Data visualization
+              Data visualisation
             </Button>
           </Col>
         </Row>

@@ -117,7 +117,7 @@ function NavigationLayout() {
                       <Link to="/view">View Planning</Link>
                     </Menu.Item>
                     <Menu.Item key="5">
-                      <Link to="/data">Data Visualization</Link>
+                      <Link to="/data">Data Visualisation</Link>
                     </Menu.Item>
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
@@ -146,7 +146,7 @@ function NavigationLayout() {
                       <Link to="/view">View Planning</Link>
                     </Menu.Item>
                     <Menu.Item key="5">
-                      <Link to="/data">Data Visualization</Link>
+                      <Link to="/data">Data Visualisation</Link>
                     </Menu.Item>
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
@@ -169,7 +169,7 @@ function NavigationLayout() {
                       <Link to="/view">View Planning</Link>
                     </Menu.Item>
                     <Menu.Item key="5">
-                      <Link to="/data">Data Visualization</Link>
+                      <Link to="/data">Data Visualisation</Link>
                     </Menu.Item>
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
