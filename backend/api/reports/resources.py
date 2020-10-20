@@ -1,4 +1,4 @@
-from flask import safe_join, send_file
+from flask import safe_join, send_file, send_from_directory
 from flask_smorest import abort
 from flask.views import MethodView
 from sqlalchemy import func, and_
@@ -9,6 +9,7 @@ import time
 from backend.app import db
 from backend.models.orders import Order, OrderSheet
 from backend.extensions import roles_required
+import io
 
 
 @bp.route('/firstrides/<sheet_id_or_latest>')
@@ -143,15 +144,16 @@ class FirstRides(MethodView):
                 order.truck.others.get('Remarks', '')  # remarks
 
         filename = 'first-rides-' + now_save + '.xlsx'
-        book.save(filename=filename)
-        safe_path = safe_join('/bestanden/1-SEP TRUCK/sep-2021_q1-group-2/',
-                              filename)
+        file = io.BytesIO()
+        book.save(file)
+        file.seek(0)
+
         try:
             return send_file(
-                safe_path,
+                file,
                 attachment_filename=filename,
                 as_attachment=True
-            )
+                )
         except FileNotFoundError:
             abort(404)
 
