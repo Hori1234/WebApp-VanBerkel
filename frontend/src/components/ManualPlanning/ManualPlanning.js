@@ -1233,7 +1233,7 @@ export default class ManualPlanning extends Component {
         }));
         if (error.response.status === 400) {
           console.log("======================");
-          message.warning("Bad Request: " + error.response.data.message);
+          message.error("Bad Request: " + error.response.data.message);
         }
         if (error.response.status === 401) {
           message.error("Unauthorized: " + error.response.data.message);
@@ -1913,7 +1913,7 @@ export default class ManualPlanning extends Component {
           {this.state.AssignModal && (
             <Form>
               <Form.Item
-                name={"Departure Time"}
+                name={"departureTime"}
                 label={"Departure Time:"}
                 rules={[{ required: true }]}
               >
