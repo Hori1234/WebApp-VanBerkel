@@ -1249,6 +1249,87 @@ export default class ManualPlanning extends Component {
     const showHideMenu = (
       <Menu Scrollable style={{ maxHeight: "50vh", overflowY: "scroll" }}>
         <Menu.ItemGroup title="Columns">
+          <Menu.Item key="Booking">
+            <Checkbox
+              id="Booking"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Booking
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="inl_terminal">
+            <Checkbox
+              id="inl_terminal"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              inl_terminal
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="latest_dep_time">
+            <Checkbox
+              id="latest_dep_time"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              latest_dep_time
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="truck_type">
+            <Checkbox
+              id="truck_type"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              truck_type
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="hierarchy">
+            <Checkbox
+              id="hierarchy"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              hierarchy
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="delivery_deadline">
+            <Checkbox
+              id="delivery_deadline"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              delivery_deadline
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="driving_time">
+            <Checkbox
+              id="driving_time"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              driving_time
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="process_time">
+            <Checkbox
+              id="process_time"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              process_time
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="service_time">
+            <Checkbox
+              id="service_time"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              service_time
+            </Checkbox>
+          </Menu.Item>
           <Menu.Item key="Container">
             <Checkbox
               id="Container"
