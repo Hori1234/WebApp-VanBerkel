@@ -10,7 +10,7 @@ from backend.app import db
 class TruckSheet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     upload_date = db.Column(db.DateTime, server_default=func.now())
-    trucks = db.relationship('Truck', backref='trucksheet',
+    trucks = db.relationship('Truck', backref='truck_sheet',
                              cascade='all, delete-orphan')
 
     @hybrid_property

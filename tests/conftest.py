@@ -85,9 +85,9 @@ def setup_users(db):
 
 
 @pytest.fixture
-def login_user(client):
+def login_admin(client):
     """
-    Logs in the user before each test.
+    Logs in an admin before each test.
 
     Client is recreated for each test, so the cookies should be set again.
 
@@ -98,6 +98,31 @@ def login_user(client):
     data = dict(
         username='Midas Bergveen',
         password='w8woord',
+        remember=False
+    )
+
+    client.post('/api/auth/login',
+                data=json.dumps(data),
+                content_type='application/json')
+
+    yield
+
+    client.post('/api/auth/logout')
+
+
+@pytest.fixture
+def login_view_only(client):
+    """
+    Logs in a view-only user before each test.
+
+    Client is recreated for each test, so the cookies should be set again.
+
+    :param client: Flask test client
+    :type client: :class:`flask.testing.FlaskClient`
+    """
+    data = dict(
+        username='Twan van Broekhoven',
+        password='SomethingClever',
         remember=False
     )
 
