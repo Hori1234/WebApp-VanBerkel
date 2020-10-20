@@ -803,9 +803,17 @@ export default class ManualPlanning extends Component {
   };
 
   showAssignModal = () => {
-    this.setState({
-      AssignModal: true,
-    });
+    if(this.state.selectedTrucksRowKeys.length == 0){
+      message.error("Please select a truck to assign an order to.");
+    }
+    else if(this.state.selectedTrucksRowKeys.length > 1){
+      message.error("You have selected more than 1 truck. Please select only 1 truck.");
+    }
+    else{
+      this.setState({
+        AssignModal: true,
+      });
+    }  
   };
   ShowTruckModal = () => {
     this.setState({
@@ -847,7 +855,6 @@ export default class ManualPlanning extends Component {
     this.setState({ magnifyOrders: false, magnifyTrucks: false });
   };
   truckRowColor = (e) => {
-    console.log(e)
     if (e === "regional") {
       return "table-row-regional";
     } else if (e === "terminal") {
