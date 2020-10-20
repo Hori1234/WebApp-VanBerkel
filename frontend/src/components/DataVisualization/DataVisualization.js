@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Chart from "react-google-charts";
 import "../Css/DataVisualization.css";
-import { Row, Col, Layout, Button } from "antd";
+import { Row, Col, Layout, Button, message } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import axios from "axios";
@@ -196,6 +196,26 @@ export default class DataVisualization extends Component {
       });
   };
 
+  publishLatest = (value,value1) => {
+    return axios
+      .post(`/api/plannings/${value}/${value1}`)
+      .then((res) => {
+        if (res.status === 200) {
+          message.success("Planning: Published successfully");
+        }
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+          message.error("Unauthorized: " + error.response.data.message);
+          return false;
+      });
+  };
+
   createArrays = () => {
     let address = [];
     let bookingID = [];
@@ -301,7 +321,7 @@ export default class DataVisualization extends Component {
             </Button>
           </Col>
           <Col span={4} offset={14}>
-            <Button type="primary" size={"large"} style={{ width: "100%" }} onClick={this.createArrays}>
+            <Button type="primary" size={"large"} style={{ width: "100%" }} onClick={() => this.publishLatest('latest','latest')}>
               Publish
             </Button>
           </Col>
