@@ -40,6 +40,7 @@ class TruckAvailabilitySchema(Schema):
     starting_time = Time(data_key='Starting time', required=True)
 
     class Meta:
+        # defines that columns which were not defined are still included
         unknown = INCLUDE
 
 
@@ -64,6 +65,7 @@ class OrderListSchema(Schema):
     process_time = Integer(data_key='proces time', required=True)
 
     class Meta:
+        # defines that columns which were not defined are still included
         unknown = INCLUDE
 
 

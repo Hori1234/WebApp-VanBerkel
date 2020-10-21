@@ -5,6 +5,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or "wowsupersecretenzo"
+
+    # Data validation configuration
     ROLES = ['view-only', 'planner', 'administrator']
     TERMINALS = ['KAT', 'ITV', 'OSS']
     TRUCK_TYPES = ['terminal', 'regional', 'port']

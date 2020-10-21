@@ -27,6 +27,12 @@ class OrderQuery(BaseQuery):
 
 
 class Order(ValidationMixin, db.Model):
+    """
+    The different columns of an order sheet, the ones mentioned
+    by name are required in the provided sheets,
+    with the exception of 'truck_id', and 'departure time.
+    These can only be added later
+    """
     query_class = OrderQuery
 
     order_number = db.Column(db.Integer, primary_key=True)
@@ -66,16 +72,21 @@ class Order(ValidationMixin, db.Model):
     def validate_departure_time(self, key, value):
         if value is None:
             return None
+
+    # Check if departure time is before the latest departure time of the order
         if value > self.latest_dep_time:
             raise ValueError(
                 f'The latest departure time for this order is '
                 f'{self.latest_dep_time.strftime("%H:%M")}, the truck cannot '
                 f'depart at {value.strftime("%H:%M")}.'
             )
+
+        # If no truck has been assigned yet, find it and assign it
         if self.truck is None:
             truck = Truck.query.get_or_404(self.truck_id)
         else:
             truck = self.truck
+        # Check if departure time is after the starting time of the truck
         if value < truck.starting_time:
             raise ValueError(
                 f'The truck\'s starting time is '
@@ -111,16 +122,25 @@ class Order(ValidationMixin, db.Model):
 
     @hybrid_property
     def service_time(self):
+        """
+        Calculates the service time of the order
+        """
         return 2*self.driving_time + self.process_time
 
     @hybrid_property
     def latest_dep_time(self):
+        """
+        Calculates the latest departure time of the order
+        """
         time_as_date = dt.datetime.combine(dt.date(1, 1, 1),
                                            self.delivery_deadline)
         return (time_as_date - dt.timedelta(minutes=self.driving_time)).time()
 
     @hybrid_property
     def end_time(self):
+        """
+        Calculates the end time of the order
+        """
         time_as_date = dt.datetime.combine(dt.date(1, 1, 1),
                                            self.departure_time)
         return (time_as_date +

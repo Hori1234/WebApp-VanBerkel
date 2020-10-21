@@ -11,6 +11,8 @@ class FileSchema(ma.Schema):
 
 
 class SheetSchema(ma.SQLAlchemyAutoSchema):
+    # this class is left empty intentionally
 
     class Meta:
+        # defines which table is used for the field types
         model = OrderSheet

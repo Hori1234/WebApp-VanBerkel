@@ -16,6 +16,7 @@ class TruckSchema(ma.SQLAlchemyAutoSchema):
     others = ma.Dict(dump_only=True)
 
     class Meta:
+        # defines which table is used for the field types
         model = Truck
         ordered = True
         dump_only = ('s_number', )
@@ -34,8 +35,10 @@ class TruckSchema(ma.SQLAlchemyAutoSchema):
 
 class TruckTableSchema(ma.SQLAlchemySchema):
 
+    # defines the column names
     trucks = ma.Nested(TruckSchema, many=True)
     column_names = ma.Dict()
 
     class Meta:
+        # defines which table is used for the field types
         model = TruckSheet

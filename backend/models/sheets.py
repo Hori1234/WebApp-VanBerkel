@@ -62,6 +62,9 @@ class TruckSheet(SheetMixin, db.Model):
 
     @hybrid_property
     def column_names(self):
+        """
+        Gets the names of all properties in the 'others' attribute
+        """
         property_names = TruckProperties.query.\
             with_entities(TruckProperties.key).join(Truck)\
             .filter(Truck.sheet_id == self.id).distinct().all()
@@ -79,9 +82,15 @@ class TruckSheet(SheetMixin, db.Model):
         return {**standard_names, **property_names}
 
     def add_row(self, truck):
+        """
+        Adds a truck to the database
+        """
         self.trucks.append(truck)
 
     def add_rows(self, rows):
+        """
+        Adds one or more rows to all trucks
+        """
         self.trucks.extend(rows)
 
 
@@ -92,6 +101,9 @@ class OrderSheet(SheetMixin, db.Model):
 
     @hybrid_property
     def column_names(self):
+        """
+        Gets the names of all properties in the 'others' attribute
+        """
         property_names = OrderProperties.query. \
             with_entities(OrderProperties.key).join(Order) \
             .filter(Order.sheet_id == self.id).distinct().all()
@@ -109,7 +121,13 @@ class OrderSheet(SheetMixin, db.Model):
         return {**standard_names, **property_names}
 
     def add_row(self, order):
+        """
+        Adds an order to the database
+        """
         self.orders.append(order)
 
     def add_rows(self, rows):
+        """
+        Adds one or more row to all orders
+        """
         self.orders.extend(rows)
