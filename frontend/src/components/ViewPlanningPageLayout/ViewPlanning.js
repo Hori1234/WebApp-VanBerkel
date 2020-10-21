@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {
+  Table,
   Layout,
   Button,
   Row,
@@ -1201,16 +1202,21 @@ export default class ManualPlanning extends Component {
         </Row>
         <Row gutter={[24, 8]} justify="space-around" align="middle">
           <Col span={24}>
-            <EditableTableOrder
-              rowSelection={ordersRowSelection}
-              dataSource={this.state.data}
-              columns={this.state.columns}
-              onRow={(record) => ({
-                onClick: () => {
-                  this.selectOrdersRow(record);
-                },
-              })}
-            ></EditableTableOrder>
+            <Table
+
+        bordered={true}
+        rowSelection={ordersRowSelection}
+        dataSource={this.state.data}
+        columns={this.state.columns}
+        scroll={{ x: "max-content", y: "50vh" }}
+        pagination={false}
+        onRow={(record) => ({
+          onClick: () => {
+            this.selectOrdersRow(record);
+          },
+        })}
+      />
+            
             <br />
             <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
             &nbsp;
