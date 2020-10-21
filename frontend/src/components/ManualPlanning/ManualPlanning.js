@@ -806,6 +806,8 @@ export default class ManualPlanning extends Component {
     }
     else if(this.state.selectedTrucksRowKeys.length > 1){
       message.error("You have selected more than 1 truck. Please select only 1 truck.");
+    } else if(this.state.selectedOrdersRowKeys.length == 0){
+      message.error("Please select one or more orders.");
     }
     else{
       this.setState({
@@ -1236,7 +1238,6 @@ export default class ManualPlanning extends Component {
           error: error,
         }));
         if (error.response.status === 400) {
-          console.log("======================");
           message.error("Bad Request: " + error.response.data.message);
         }
         if (error.response.status === 401) {
