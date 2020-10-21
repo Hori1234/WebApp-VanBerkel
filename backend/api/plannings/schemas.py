@@ -1,5 +1,5 @@
 from backend.app import ma
-from backend.models.planning import Planning
+from backend.models import Planning
 
 
 class PlanningSchema(ma.SQLAlchemyAutoSchema):

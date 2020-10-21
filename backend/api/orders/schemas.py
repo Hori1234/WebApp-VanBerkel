@@ -1,11 +1,28 @@
 from backend.app import ma
 from marshmallow import INCLUDE, post_dump
-from backend.models.orders import Order, OrderSheet
+from backend.models import Order, OrderSheet
 
 
-class OrderSchema(ma.SQLAlchemyAutoSchema):
+class OthersSchemaMixin(object):
     """
-    Serializes the order table to JSON
+    Mixin for schemas to extend from, adds the functionality that the `others`
+    field is unpacked in the dumped object.
+    """
+
+    @post_dump
+    def flatten_others(self, obj, many, **kwargs):
+        """
+        Flattens the others field of an order
+        """
+        for k, v in obj['others'].items():
+            obj[k] = v
+        obj.pop('others')
+        return obj
+
+
+class OrderSchema(OthersSchemaMixin, ma.SQLAlchemyAutoSchema):
+    """
+    Serializes the order table to JSON.
     """
 
     latest_dep_time = ma.Time()
@@ -20,16 +37,6 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
                      'latest_dep_time',
                      'service_time')
         unknown = INCLUDE
-
-    @post_dump
-    def flatten_others(self, obj, many, **kwargs):
-        """
-        Flattens the others field of an order
-        """
-        for k, v in obj['others'].items():
-            obj[k] = v
-        obj.pop('others')
-        return obj
 
 
 class OrderTableSchema(ma.SQLAlchemySchema):
@@ -48,7 +55,7 @@ class TimeLineSchemaOthers(ma.Schema):
     client = ma.String(default=None, attribute='Client')
 
 
-class TimeLineSchema(ma.SQLAlchemySchema):
+class TimeLineSchema(OthersSchemaMixin, ma.SQLAlchemySchema):
 
     truck_id = ma.Integer()
     departure_time = ma.Time()
@@ -57,14 +64,4 @@ class TimeLineSchema(ma.SQLAlchemySchema):
     order_type = ma.String(attribute='truck_type')
 
     class Meta:
-        model = OrderSheet
-
-    @post_dump
-    def flatten_others(self, obj, many, **kwargs):
-        """
-        Flattens the others field of an order
-        """
-        for k, v in obj['others'].items():
-            obj[k] = v
-        obj.pop('others')
-        return obj
+        model = Order

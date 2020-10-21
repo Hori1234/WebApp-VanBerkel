@@ -42,12 +42,4 @@ def create_app(config=Config):
     migrate.init_app(app, db)
     register_api(api)
 
-    # Set the user loader of flask-login, so it can load users
-    # when they are logged in
-    from backend.models.users import User
-
-    @login.user_loader
-    def user_loader(user_id):
-        return User.query.get(user_id)
-
     return app

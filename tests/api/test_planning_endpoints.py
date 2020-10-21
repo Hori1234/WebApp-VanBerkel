@@ -4,9 +4,7 @@ from pathlib import Path
 import pytest
 import json
 
-from backend.models import trucks
-from backend.models import orders
-from backend.models import planning
+from backend.models import Truck, TruckSheet, Order, OrderSheet, Planning
 
 
 def get_file_path(file):
@@ -85,8 +83,8 @@ def setup_db(setup_users, login_admin, create_db_without_users, client):
 
     # The above two files are uploaded at pretty much the same time, so it is
     # not defined which one is the latest
-    orders.OrderSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
-    trucks.TruckSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
+    OrderSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
+    TruckSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
 
 
 def get_order(client, order_id):
@@ -354,7 +352,7 @@ def test_get_orders_view_only(client, db, sheet_id):
         data = rv.get_json()['orders']
         assert len(data) > 5
 
-        order_sheet = orders.OrderSheet.query.get(
+        order_sheet = OrderSheet.query.get(
             sheet_id if sheet_id != 'latest' else 2)
         assert order_sheet.orders[0].order_number == data[0]['order_number']
 
@@ -374,7 +372,7 @@ def test_get_trucks(client, db):
 
 def test_get_trucks_invalid(client, db):
     """
-    Tests the get trucks endpoint but with a invalid trucks.
+    Tests the get trucks endpoint but with an invalid truck.
     """
     rv = get_trucks(client, 20)
 
@@ -421,7 +419,7 @@ def test_get_trucks_view_only(client, db, sheet_id):
         data = rv.get_json()['trucks']
         assert len(data) > 5
 
-        truck_sheet = trucks.TruckSheet.query.get(
+        truck_sheet = TruckSheet.query.get(
             sheet_id if sheet_id != 'latest' else 2)
         assert truck_sheet.trucks[0].s_number == data[0]['s_number']
 
@@ -442,7 +440,7 @@ def test_patch_order(client, db):
     rv = patch_order(client, 1, **request)
 
     assert rv.status_code == 200
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert order.truck_type == 'regional'
     assert order.inl_terminal == 'KAT'
     assert order.others['SomethingNew'] == 'TEST'
@@ -459,7 +457,7 @@ def test_patch_order_remove_others(client, db):
     )
     rv = patch_order(client, 1, **request)
     assert rv.status_code == 200
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert 'Container' not in order.others
 
 
@@ -502,8 +500,8 @@ def test_patch_order_set_truck_id(client, db):
     assert rv.get_json()['truck_id'] == 14
     assert rv.get_json()['departure_time'] == '12:30:00'
 
-    order = orders.Order.query.get(1)
-    truck = trucks.Truck.query.get(14)
+    order = Order.query.get(1)
+    truck = Truck.query.get(14)
     # also been changed in the database
     assert order.departure_time.strftime('%H:%M') == '12:30'
     assert order.truck == truck
@@ -649,7 +647,7 @@ def test_patch_order_with_departure_time_truck_set(client, db):
     data = rv2.get_json()
     assert data['departure_time'] == '10:00:00'
 
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert order.truck_id == 14
     assert order.departure_time.strftime('%H:%M') == '10:00'
 
@@ -673,7 +671,7 @@ def test_patch_order_dot_seperated(client, db, key):
     assert key in data
     assert data[key] == 'val'
 
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert order.others[key] == 'val'
 
 
@@ -715,7 +713,7 @@ def test_patch_truck(client, db):
     rv = patch_truck(client, 1, **request)
 
     assert rv.status_code == 200
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert truck.truck_type == 'port'
     assert truck.terminal == 'KAT'
     assert truck.others['SomethingNew'] == 'NEW!'
@@ -734,7 +732,7 @@ def test_patch_truck_remove_others(client, db):
     rv = patch_truck(client, 1, **request)
     assert rv.status_code == 200
 
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert 'Driver' not in truck.others
 
 
@@ -781,7 +779,7 @@ def test_patch_truck_with_orders(client, db):
 
     assert rv.status_code == 200
 
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert truck.truck_type == 'port'
     assert len(truck.orders) == 2
     assert truck.orders[0].order_number == 1
@@ -842,7 +840,7 @@ def test_patch_truck_dot_seperated(client, db, key):
     assert key in data
     assert data[key] == 'val'
 
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert truck.others[key] == 'val'
 
 
@@ -883,7 +881,7 @@ def test_post_order(client, db):
     rv = post_order(client, 1, **request)
     assert rv.status_code == 200
     data = rv.get_json()
-    order = orders.Order.query.get_or_404(data['order_number'])
+    order = Order.query.get_or_404(data['order_number'])
     assert order.hierarchy == 3
 
 
@@ -926,7 +924,7 @@ def test_post_order_latest(client, db):
 
     assert rv.status_code == 200
     data = rv.get_json()
-    order = orders.Order.query.get_or_404(data['order_number'])
+    order = Order.query.get_or_404(data['order_number'])
     assert order.hierarchy == 3
 
 
@@ -962,7 +960,7 @@ def test_post_order_with_truck_id(client, db):
     assert data['truck_id'] == 14
     assert data['departure_time'] == '14:00:00'
 
-    order = orders.Order.query.get(data['order_number'])
+    order = Order.query.get(data['order_number'])
     assert order.truck_id == 14
     assert order.departure_time.strftime('%H:%M') == '14:00'
 
@@ -1070,7 +1068,7 @@ def test_post_truck(client, db):
 
     assert rv.status_code == 200
     data = rv.get_json()
-    truck = trucks.Truck.query.get(data['s_number'])
+    truck = Truck.query.get(data['s_number'])
     assert truck.hierarchy == 2
 
 
@@ -1116,7 +1114,7 @@ def test_post_truck_latest(client, db):
 
     assert rv.status_code == 200
     data = rv.get_json()
-    truck = trucks.Truck.query.get_or_404(data['s_number'])
+    truck = Truck.query.get_or_404(data['s_number'])
     assert truck.hierarchy == 2
 
 
@@ -1245,11 +1243,11 @@ def test_delete_order(client, db):
     assert rv.status_code == 204
 
     # Check if order was deleted
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert order is None
 
     # Check if there are any orders left
-    order_list = orders.Order.query.filter_by(sheet_id=1).all()
+    order_list = Order.query.filter_by(sheet_id=1).all()
     assert len(order_list) > 0
 
 
@@ -1292,11 +1290,11 @@ def test_delete_truck(client, db):
     assert rv.status_code == 204
 
     # Check if the truck was deleted
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert truck is None
 
     # Check if there are any trucks left
-    truck_list = trucks.Truck.query.filter_by(sheet_id=1).all()
+    truck_list = Truck.query.filter_by(sheet_id=1).all()
     assert len(truck_list) > 0
 
 
@@ -1334,7 +1332,7 @@ def test_delete_then_post_truck(client, db):
     assert rv2.status_code == 200
 
     data = rv2.get_json()
-    truck = trucks.Truck.query.get(data['s_number'])
+    truck = Truck.query.get(data['s_number'])
     assert truck.truck_id == '45-TBD-1'
     assert truck.use_cost == 17
 
@@ -1355,7 +1353,7 @@ def test_delete_then_post_order(client, db):
     assert rv2.status_code == 200
 
     data = rv2.get_json()
-    order = orders.Order.query.get(data['order_number'])
+    order = Order.query.get(data['order_number'])
     assert order.inl_terminal == 'ITV'
     assert order.process_time == 1
 
@@ -1605,7 +1603,7 @@ def test_get_plannings(client, page_size):
         rv = publish_planning(client, i, i)
         assert rv.status_code == 200
 
-    plan2 = planning.Planning.query.get((2, 2))
+    plan2 = Planning.query.get((2, 2))
     plan2.published_on += datetime.timedelta(hours=1)
 
     rv = get_plannings(client, page=1, per_page=page_size)

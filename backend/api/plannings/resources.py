@@ -1,13 +1,16 @@
 from flask.views import MethodView
 from flask_smorest import abort
 from flask_login import current_user
-from . import bp
 from .schemas import PlanningSchema
 from backend.app import db
-from backend.extensions import roles_required
-from backend.models.planning import Planning
-from backend.models.trucks import TruckSheet
-from backend.models.orders import OrderSheet
+from backend.extensions import roles_required, Blueprint
+from backend.models import Planning
+from backend.models import TruckSheet, OrderSheet
+
+
+bp = Blueprint('plannings',
+               'plannings',
+               description='Publish and view plannings')
 
 
 @bp.route('/')
@@ -39,29 +42,9 @@ class PlanningByID(MethodView):
     @bp.response(PlanningSchema)
     @bp.alt_response('NOT_FOUND', code=404)
     def get(self, truck_sheet_id, order_sheet_id):
-        try:
-            truck_sheet = TruckSheet.query \
-                .get_or_404(int(truck_sheet_id),
-                            description='Truck sheet not found')
-        except ValueError:
-            if truck_sheet_id == 'latest':
-                truck_sheet = TruckSheet.query \
-                    .order_by(TruckSheet.upload_date.desc()) \
-                    .first_or_404()
-            else:
-                return abort(404, message='Truck sheet not found')
+        truck_sheet = TruckSheet.query.get_sheet_or_404(truck_sheet_id)
 
-        try:
-            order_sheet = OrderSheet.query \
-                .get_or_404(int(order_sheet_id),
-                            description='Order sheet not found')
-        except ValueError:
-            if order_sheet_id == 'latest':
-                order_sheet = OrderSheet.query \
-                    .order_by(OrderSheet.upload_date.desc()) \
-                    .first_or_404()
-            else:
-                return abort(404, message='Truck sheet not found')
+        order_sheet = OrderSheet.query.get_sheet_or_404(order_sheet_id)
 
         return Planning.query.get_or_404((truck_sheet.id, order_sheet.id))
 
@@ -70,29 +53,9 @@ class PlanningByID(MethodView):
     @bp.alt_response('BAD_REQUEST', code=400)
     @bp.alt_response('NOT_FOUND', code=404)
     def post(self, truck_sheet_id, order_sheet_id):
-        try:
-            truck_sheet = TruckSheet.query \
-                .get_or_404(int(truck_sheet_id),
-                            description='Truck sheet not found')
-        except ValueError:
-            if truck_sheet_id == 'latest':
-                truck_sheet = TruckSheet.query \
-                    .order_by(TruckSheet.upload_date.desc()) \
-                    .first_or_404()
-            else:
-                return abort(404, message='Truck sheet not found')
+        truck_sheet = TruckSheet.query.get_sheet_or_404(truck_sheet_id)
 
-        try:
-            order_sheet = OrderSheet.query \
-                .get_or_404(int(order_sheet_id),
-                            description='Order sheet not found')
-        except ValueError:
-            if order_sheet_id == 'latest':
-                order_sheet = OrderSheet.query \
-                    .order_by(OrderSheet.upload_date.desc()) \
-                    .first_or_404()
-            else:
-                return abort(404, message='Order sheet not found')
+        order_sheet = OrderSheet.query.get_sheet_or_404(order_sheet_id)
 
         if truck_sheet.planning is None and order_sheet.planning is None:
             planning = Planning(truck_sheet.id,

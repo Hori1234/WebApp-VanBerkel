@@ -1,7 +1,7 @@
 from backend.app import ma
 from marshmallow import INCLUDE, post_dump
 from backend.api.orders.schemas import OrderSchema
-from backend.models.trucks import Truck, TruckSheet
+from backend.models import Truck, TruckSheet
 
 
 class TruckSchema(ma.SQLAlchemyAutoSchema):

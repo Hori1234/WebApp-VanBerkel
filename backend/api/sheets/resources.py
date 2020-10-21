@@ -2,13 +2,15 @@ from flask.views import MethodView
 from flask_smorest import abort
 from xlrd import XLRDError
 from marshmallow.exceptions import ValidationError
-from . import bp
 from .schemas import FileSchema, SheetSchema
 from .SheetParser import TruckAvailabilityParser, OrderListParser
 from backend.app import db
-from backend.models.orders import OrderSheet
-from backend.models.trucks import TruckSheet
-from backend.extensions import roles_required
+from backend.models import OrderSheet, TruckSheet
+from backend.extensions import Blueprint, roles_required
+
+bp = Blueprint('sheets',
+               'sheets',
+               description='Upload and parse sheets')
 
 
 @bp.route('/')
@@ -96,13 +98,41 @@ class Sheets(MethodView):
             )
 
 
-@bp.route('/orders')
-class ListOrderSheet(MethodView):
+class ListSheet(MethodView):
 
     @roles_required('planner', 'administrator')
     @bp.response(SheetSchema(many=True))
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
+    def get(self, table, pagination_parameters):
+        """
+        Queries a list of objects from `table`, paginated
+        using `pagination_parameters`.
+        :param table: Database table fitting :class:`SheetSchema`.
+        :type table: :class:`flask_sqlalchemy.Model`.
+        :param pagination_parameters: Page, page size and total items
+         of the pagination.
+        :type pagination_parameters: dict
+        :return: List of items from `table` with length `page_size`
+        :rtype: :class:`werkzeug.wrappers.Response`
+        """
+        # Get a list of sheets according to the page and page_size parameters
+        pagination = table.query \
+            .order_by(table.upload_date.desc()) \
+            .paginate(
+                page=pagination_parameters.page,
+                per_page=pagination_parameters.page_size)
+
+        # Set the total number of users
+        # for the X-Pagination header in the response
+        pagination_parameters.item_count = pagination.total
+
+        return pagination.items
+
+
+@bp.route('/orders')
+class ListOrderSheet(ListSheet):
+
     @bp.paginate()
     def get(self, pagination_parameters):
         """
@@ -112,27 +142,12 @@ class ListOrderSheet(MethodView):
         the parameters in the query string.
         Roles required: Planner, Administrator
         """
-        # Get a list of sheets according to the page and page_size parameters
-        pagination = OrderSheet.query\
-            .order_by(OrderSheet.upload_date.desc())\
-            .paginate(
-                page=pagination_parameters.page,
-                per_page=pagination_parameters.page_size)
-
-        # Set the total number of users
-        # for the X-Pagination header in the response
-        pagination_parameters.item_count = pagination.total
-
-        return pagination.items
+        return super().get(OrderSheet, pagination_parameters)
 
 
 @bp.route('/trucks')
-class TruckOrderSheet(MethodView):
+class ListTruckSheet(ListSheet):
 
-    @roles_required('planner', 'administrator')
-    @bp.response(SheetSchema(many=True))
-    @bp.alt_response('UNAUTHORIZED', code=401)
-    @bp.alt_response('NOT_FOUND', code=404)
     @bp.paginate()
     def get(self, pagination_parameters):
         """
@@ -142,15 +157,4 @@ class TruckOrderSheet(MethodView):
         the parameters in the query string.
         Roles required: Planner, Administrator
         """
-        # Get a list of sheets according to the page and page_size parameters
-        pagination = TruckSheet.query\
-            .order_by(TruckSheet.upload_date.desc())\
-            .paginate(
-                page=pagination_parameters.page,
-                per_page=pagination_parameters.page_size)
-
-        # Set the total number of users
-        # for the X-Pagination header in the response
-        pagination_parameters.item_count = pagination.total
-
-        return pagination.items
+        return super().get(TruckSheet, pagination_parameters)

@@ -1,5 +1,5 @@
 from backend.app import ma
-from backend.models.users import User
+from backend.models import User
 
 
 class LoginArguments(ma.SQLAlchemySchema):

@@ -1,46 +1,36 @@
 import datetime as dt
 from flask import current_app
-from sqlalchemy.sql import func
+from marshmallow import ValidationError
+from flask_smorest import abort
+from flask_sqlalchemy import BaseQuery
 from sqlalchemy.event import listens_for
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm.collections import attribute_mapped_collection
 from backend.app import db
+from backend.extensions import validate_truck_type, validate_terminal
+from .mixins.ValidationMixin import ValidationMixin
 from .trucks import Truck
+from .properties import OrderProperties
 
 
-class OrderSheet(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    upload_date = db.Column(db.DateTime, server_default=func.now())
-    orders = db.relationship('Order', backref='order_sheet',
-                             cascade='all, delete-orphan')
+class OrderQuery(BaseQuery):
 
-    @hybrid_property
-    def column_names(self):
-        property_names = OrderProperties.query. \
-            with_entities(OrderProperties.key).join(Order) \
-            .filter(Order.sheet_id == self.id).distinct().all()
-        property_names = {name: name for name, in property_names}
-        standard_names = {'order_number': 'Order Number',
-                          'truck_type': 'Truck type',
-                          'truck_id': 'Truck ID',
-                          'inl_terminal': 'Terminal',
-                          'departure_time': 'Departure time',
-                          'driving_time': 'Driving time',
-                          'process_time': 'Process time',
-                          'service_time': 'Service time',
-                          'latest_dep_time': 'Latest departure time'
-                          }
-        return {**standard_names, **property_names}
-
-    def add_row(self, order):
-        self.orders.append(order)
-
-    def add_rows(self, rows):
-        self.orders.extend(rows)
+    def get_all_or_404(self, list_of_ids):
+        # Get all objects with ids from the list
+        order_objects = self.filter(
+            Order.order_number.in_(list_of_ids)) \
+            .all()
+        # if not all object were found, return 404
+        if len(order_objects) != len(list_of_ids):
+            abort(404,
+                  message='Not all orders were found!',
+                  status='Not Found')
+        return order_objects
 
 
-class Order(db.Model):
+class Order(ValidationMixin, db.Model):
+    query_class = OrderQuery
+
     order_number = db.Column(db.Integer, primary_key=True)
     sheet_id = db.Column(db.Integer,
                          db.ForeignKey('order_sheet.id', ondelete='CASCADE'))
@@ -73,26 +63,6 @@ class Order(db.Model):
         self.truck_id = truck_id
         self.departure_time = departure_time
         self.others = kwargs
-
-    @db.validates('inl_terminal')
-    def validate_terminal(self, key, value):
-        terminals = current_app.config['TERMINALS']
-        if value.upper() not in terminals:
-            raise ValueError(
-                f"Terminal base must be one of {', '.join(terminals[:-1])} "
-                f"or {terminals[-1]}"
-            )
-        return value.upper()
-
-    @db.validates('truck_type')
-    def validate_truck_type(self, key, value):
-        trucks = current_app.config['TRUCK_TYPES']
-        if value.lower() not in trucks:
-            raise ValueError(
-                f"Truck type must be one of {', '.join(trucks[:-1])} "
-                f"or {trucks[-1]}"
-            )
-        return value.lower()
 
     @db.validates('departure_time')
     def validate_departure_time(self, key, value):
@@ -166,17 +136,3 @@ def update_departure_time(target, truck, oldvalue, initiator):
     """
     if truck is None and oldvalue is not None:
         target.departure_time = None
-
-
-class OrderProperties(db.Model):
-    order_number = db.Column(db.Integer,
-                             db.ForeignKey('order.order_number',
-                                           ondelete='CASCADE'),
-                             primary_key=True)
-    key = db.Column(db.String, primary_key=True)
-    value = db.Column(db.String, nullable=False)
-
-    order = db.relationship(Order, backref=db.backref(
-        'properties',
-        collection_class=attribute_mapped_collection('key'),
-        cascade='all, delete-orphan'))
