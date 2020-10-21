@@ -659,9 +659,23 @@ export default class ManualPlanning extends Component {
     console.log("orders", selectedOrdersRowKeys);
   }; 
 
+  selectPlanningsRow = (record) => {
+    const selectedPlanningsRowKeys = [...this.state.selectedPlanningsRowKeys];
+    if (selectedPlanningsRowKeys.indexOf(record.key) >= 0) {
+      selectedPlanningsRowKeys.splice(
+        selectedPlanningsRowKeys.indexOf(record.key),
+        1
+      );
+    } else {
+      selectedPlanningsRowKeys.push(record.key);
+    }
+    this.setState({ selectedPlanningsRowKeys });
+    console.log(selectedPlanningsRowKeys);
+  };
+
   onSelectedTrucksRowKeysChange = (selectedPlanningsRowKeys) => {
     this.setState({ selectedPlanningsRowKeys });
-    console.log("trucks", selectedPlanningsRowKeys);
+    console.log("sheet id:", selectedPlanningsRowKeys);
   };
 
   magnifyOrdersModal = () => {
@@ -728,6 +742,7 @@ export default class ManualPlanning extends Component {
         var outarray = [];
         for (var i = 0; i < res.data.length; i++) {
           var temp = {
+            key: res.data[i]["order_sheet_id"],
             order_sheet_id: res.data[i]["order_sheet_id"],
             published_on: res.data[i]["published_on"],
             truck_sheet_id: res.data[i]["truck_sheet_id"],
@@ -761,6 +776,7 @@ export default class ManualPlanning extends Component {
         var outarray = [];
         for (var i = 0; i < res.data.orders.length; i++) {
           var temp = {
+            key: res.data[i]["order_sheet_id"],
             order_sheet_id: res.data[i]["order_sheet_id"],
             published_on: res.data[i]["published_on"],
             truck_sheet_id: res.data[i]["truck_sheet_id"],
@@ -1255,7 +1271,7 @@ export default class ManualPlanning extends Component {
           {this.state.magnifyPlannings && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
               <Table
-                rowSelection={planningRowSelection}
+                rowSelection={{type:'radio', ...planningRowSelection}}
                 dataSource={this.state.data2}
                 columns={this.state.columns2}
                 onRow={(record) => ({
