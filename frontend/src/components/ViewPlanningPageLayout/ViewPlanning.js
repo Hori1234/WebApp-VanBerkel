@@ -659,20 +659,6 @@ export default class ManualPlanning extends Component {
     console.log("orders", selectedOrdersRowKeys);
   }; 
 
-  selectPlanningsRow = (record) => {
-    const selectedPlanningsRowKeys = [...this.state.selectedPlanningsRowKeys];
-    if (selectedPlanningsRowKeys.indexOf(record.order_sheet_id) >= 0) {
-      selectedPlanningsRowKeys.splice(
-        selectedPlanningsRowKeys.indexOf(record.order_sheet_id),
-        1
-      );
-    } else {
-      selectedPlanningsRowKeys.push(record.order_sheet_id);
-    }
-    this.setState({ selectedPlanningsRowKeys });
-    console.log(selectedPlanningsRowKeys);
-  };
-
   onSelectedTrucksRowKeysChange = (selectedPlanningsRowKeys) => {
     this.setState({ selectedPlanningsRowKeys });
     console.log("trucks", selectedPlanningsRowKeys);
@@ -710,10 +696,11 @@ export default class ManualPlanning extends Component {
     });
   };
   okMagnify = (e) => {
-    this.setState({ magnifyOrders: false, magnifyPlannings: false, magnifyTimeline: false });
+    this.setState({ magnifyOrders: false, magnifyTimeline: false });
   };
   okPlanningSelected = (e) => {
-    this.getOrderList(2);
+    this.getOrderList(this.state.selectedSheetID);
+    this.setState({magnifyPlannings: false});
   };
   cancelMagnify = (e) => {
     this.setState({ magnifyOrders: false, magnifyPlannings: false, magnifyTimeline: false });
@@ -878,6 +865,7 @@ export default class ManualPlanning extends Component {
         return false;
       });
   };
+
 
   render() {
     const showHideMenu = (
@@ -1272,8 +1260,8 @@ export default class ManualPlanning extends Component {
                 columns={this.state.columns2}
                 onRow={(record) => ({
                   onClick: () => {
-                    this.selectPlanningsRow(record);
                     console.log(record);
+                    this.setState({ selectedSheetID: record["order_sheet_id"] });
                   },
                 })}
               />
@@ -1299,10 +1287,10 @@ export default class ManualPlanning extends Component {
                   background: "white"
                 }}
               >
-                <Timeline timeline="latest" />
+                <Timeline timeline={this.state.selectedSheetID} />
                 <Row>
                   <Col span={6}>
-                    <FirstRideButton orderNumber="latest" />
+                    <FirstRideButton orderNumber={this.state.selectedSheetID} />
                   </Col>
                 </Row>
               </Layout>
