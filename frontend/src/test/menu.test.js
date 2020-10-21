@@ -161,4 +161,62 @@ describe('React App', () => {
     await page.waitFor(3000);
     await browser.close();
   }, 20000);
+
+  it('shall succesfully logout after login in', async () => {
+
+    const browser = await puppeteer.launch({
+      headless: false,
+      defaultViewport: null,
+      args: [`--window-size=${1920},${1080}`]
+    });
+    const page = await browser.newPage();
+    await page.goto('http://localhost:3000');
+
+    await page.waitForSelector('#basic_username');
+
+    await page.type('#basic_username', username);
+    await page.type('#basic_password', password);
+    await page.click('.ant-btn-primary');
+
+    await page.waitFor(2000);
+    await page.waitForSelector('.ant-menu-item.ant-menu-item-only-child:nth-child(8)');
+    await page.click('.ant-menu-item.ant-menu-item-only-child:nth-child(8)');
+    await page.waitFor(500);
+    await page.waitForSelector('#basic_username');
+    await browser.close();
+  }, 20000);
+
+  it('when logging out on a other page than homepage, login in will start at homepage', async () => {
+
+    const browser = await puppeteer.launch({
+      headless: false,
+      defaultViewport: null,
+      args: [`--window-size=${1920},${1080}`]
+    });
+    const page = await browser.newPage();
+    await page.goto('http://localhost:3000');
+
+    await page.waitForSelector('#basic_username');
+
+    await page.type('#basic_username', username);
+    await page.type('#basic_password', password);
+
+    await page.click('.ant-btn-primary');
+    await page.waitForSelector('.ant-menu-item.ant-menu-item-only-child:nth-child(5)');
+    await page.click('.ant-menu-item.ant-menu-item-only-child:nth-child(5)');
+    await page.waitFor(300);
+    const currentPage = page.url();
+    expect(currentPage).toEqual('http://localhost:3000/view');
+    await page.waitFor(2000);
+    await page.waitForSelector('.ant-menu-item.ant-menu-item-only-child:nth-child(8)');
+    await page.click('.ant-menu-item.ant-menu-item-only-child:nth-child(8)');
+    await page.waitForSelector('#basic_username');
+    await page.type('#basic_username', username);
+    await page.type('#basic_password', password);
+    await page.click('.ant-btn-primary');
+    await page.waitForSelector('#viewButton');
+    await page.waitFor(500);
+
+    await browser.close();
+  }, 20000);
 });

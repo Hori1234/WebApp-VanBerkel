@@ -6,21 +6,6 @@ import { DownloadOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import axios from "axios";
 
-export function downloadFile() {
-  axios({
-    url: "http://localhost:5000/data/firstride.pdf",
-    method: "GET",
-    responseType: "blob", // important
-  }).then((response) => {
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "FirstRide.pdf");
-    document.body.appendChild(link);
-    link.click();
-  });
-}
-
 
 // var truckIDsDummy = ["23", "23", "23", "234", "235"];
 // var orderIDsDummy = ["1", "2", "3", "4", "5"];
@@ -175,6 +160,44 @@ export default class DataVisualization extends Component {
     this.getTimeline("latest");
   }
 
+  downloadFile = (value) => {
+    axios({
+      url: "http://localhost:5000​/api​/reports​/firstrides​/"+value,
+      method: "GET",
+      responseType: "blob", // important
+    }).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "FirstRide.pdf");
+      document.body.appendChild(link);
+      link.click();
+    });
+  }
+
+  // downloadFile = async (value) => {
+  //   return await axios
+  //     .get(`/api/reports​/firstrides​/${value}`)
+  //     .then((response) => {
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", "FirstRide.pdf");
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   });
+  // }
+
+  dummyDownloadFile = (value) => {
+    // return axios
+    //   .get(`/api/reports​/firstrides​/${value}`)
+    //   .then((response) => {
+    const link = document.createElement("a");
+    const url = "localhost:5000/api/reports​/firstrides​/latest";
+    link.href = url;
+    link.click();
+  }
+
   getTimeline = async (value) => {
     return await axios
       .get(`/api/orders/timeline/${value}`)
@@ -315,7 +338,7 @@ export default class DataVisualization extends Component {
               icon={<DownloadOutlined />}
               size={"large"}
               style={{ width: "100%" }}
-              onClick={downloadFile}
+              onClick={() => this.downloadFile('latest')}//this.downloadFile('latest')}
             >
               Download First-Rides
             </Button>

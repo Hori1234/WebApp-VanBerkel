@@ -122,7 +122,7 @@ function NavigationLayout() {
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
                     </Menu.Item>
-                    <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
                   </SubMenu>
                 )}
 
@@ -151,7 +151,7 @@ function NavigationLayout() {
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
                     </Menu.Item>
-                    <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
                   </SubMenu>
                 )}
 
@@ -174,7 +174,7 @@ function NavigationLayout() {
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
                     </Menu.Item>
-                    <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
                   </SubMenu>
                 )}
               </Menu>
