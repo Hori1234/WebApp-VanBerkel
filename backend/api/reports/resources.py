@@ -9,12 +9,15 @@ import time
 from backend.app import db
 from backend.models.orders import Order, OrderSheet
 from backend.extensions import roles_required
+from backend.api.reports.schemas import ReportSchema
 import io
 
 
 @bp.route('/firstrides/<sheet_id_or_latest>')
 class FirstRides(MethodView):
 
+    @bp.response(ReportSchema, code=200)
+    @bp.alt_response("BAD_REQUEST", code=400)
     @roles_required('planner', 'administrator')
     def get(self, sheet_id_or_latest):
         """
@@ -153,7 +156,7 @@ class FirstRides(MethodView):
                 file,
                 attachment_filename=filename,
                 as_attachment=True
-                )
+                ), 200
         except FileNotFoundError:
             abort(404)
 
