@@ -6,7 +6,7 @@ import {
     createSingleDataInput,
     createAllDataInput
 }
-    from './DataVisualization'
+    from './Timeline'
 
 describe("Create date function", () => {
     test("it should give correct date when given time string 8:00", () => {
@@ -118,7 +118,7 @@ describe("Create tooltip function", () => {
 
 describe("Create single data point function", () => {
     test("it should give correct data point with given parameters", () => {
-        const input1 = "Truck Creampie";
+        const input1 = "Truck Janna";
         const input2 = '345';
         const input3 = "6:00"
         const input4 = "12:00"
@@ -126,7 +126,7 @@ describe("Create single data point function", () => {
         const input6 = "port";
         const input7 = "Janna";
         const input8 = "1A";
-        const output = ["Truck Creampie",
+        const output = ["Truck Janna",
             '345',
             '<ul class="flex-container">' +
             '<li class="flex-item" style="text-align: center" ><h4><b>345</b></h4></li>' +
@@ -146,7 +146,7 @@ describe("Create single data point function", () => {
 
 describe("Create single data point function", () => {
     test("it should give correct data point with given parameters 2", () => {
-        const input1 = "Truck Creampie";
+        const input1 = "Truck Janna";
         const input2 = '117';
         const input3 = "4:00"
         const input4 = "14:00"
@@ -154,7 +154,7 @@ describe("Create single data point function", () => {
         const input6 = "port";
         const input7 = "Hans";
         const input8 = "1A";
-        const output = ["Truck Creampie",
+        const output = ["Truck Janna",
             '117',
             '<ul class="flex-container">' +
             '<li class="flex-item" style="text-align: center" ><h4><b>117</b></h4></li>' +
@@ -179,7 +179,7 @@ describe("Create all data point function", () => {
         { type: 'string', role: 'tooltip', 'p': { 'html': true } },
         { type: 'date', id: 'Start' },
         { type: 'date', id: 'End' },];
-        const input1 = ["Truck Creampie", "Truck Creampie"];
+        const input1 = ["Truck Janna", "Truck Janna"];
         const input2 = ["345", "117"];
         const input3 = ["6:00", "4:00"]
         const input4 = ["12:00", "14:00"]
@@ -187,7 +187,7 @@ describe("Create all data point function", () => {
         const input6 = ["port", "port"]
         const input7 = ["Janna", "Hans"]
         const input8 = ["1A", "1A"]
-        const output = [startArray, ["Truck Creampie",
+        const output = [startArray, ["Truck Janna",
             '345',
             '<ul class="flex-container">' +
             '<li class="flex-item" style="text-align: center" ><h4><b>345</b></h4></li>' +
@@ -201,7 +201,7 @@ describe("Create all data point function", () => {
             '</ul>',
             new Date(0, 0, 0, 6, 0, 0),
             new Date(0, 0, 0, 12, 0, 0)],
-            ["Truck Creampie",
+            ["Truck Janna",
                 '117',
                 '<ul class="flex-container">' +
                 '<li class="flex-item" style="text-align: center" ><h4><b>117</b></h4></li>' +
