@@ -23,7 +23,6 @@ export default class ManualPlanning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedSheetID: [],
       selectedOrdersRowKeys: [],
       selectedPlanningsRowKeys: [],
       columnFilter: [],
@@ -713,7 +712,7 @@ export default class ManualPlanning extends Component {
     this.setState({ magnifyOrders: false, magnifyTimeline: false });
   };
   okPlanningSelected = (e) => {
-    this.getOrderList(this.state.selectedSheetID);
+    this.getOrderList(this.state.selectedPlanningsRowKeys);
     this.setState({magnifyPlannings: false});
   };
   cancelMagnify = (e) => {
@@ -1277,7 +1276,6 @@ export default class ManualPlanning extends Component {
                 onRow={(record) => ({
                   onClick: () => {
                     console.log(record);
-                    this.setState({ selectedSheetID: record["order_sheet_id"] });
                   },
                 })}
               />
@@ -1303,10 +1301,10 @@ export default class ManualPlanning extends Component {
                   background: "white"
                 }}
               >
-                <Timeline timeline={this.state.selectedSheetID} />
+                <Timeline timeline={this.state.selectedPlanningsRowKeys} />
                 <Row>
                   <Col span={6}>
-                    <FirstRideButton orderNumber={this.state.selectedSheetID} />
+                    <FirstRideButton orderNumber={this.state.selectedPlanningsRowKeys} />
                   </Col>
                 </Row>
               </Layout>
