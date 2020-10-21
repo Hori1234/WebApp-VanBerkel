@@ -11,8 +11,12 @@ class FileSchema(ma.Schema):
 
 
 class SheetSchema(ma.SQLAlchemyAutoSchema):
-    # this class is left empty intentionally
+    """
+    Serializes :class:`backend.models.OrderSheet` to JSON.
+    """
 
     class Meta:
-        # defines which table is used for the field types
+        """
+        Determines which fields are in the schema.
+        """
         model = OrderSheet

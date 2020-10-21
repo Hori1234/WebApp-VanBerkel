@@ -16,13 +16,15 @@ class OthersSchemaMixin(object):
         """
         for k, v in obj['others'].items():
             obj[k] = v
+
+        # remove the others field from the object
         obj.pop('others')
         return obj
 
 
 class OrderSchema(OthersSchemaMixin, ma.SQLAlchemyAutoSchema):
     """
-    Serializes the order table to JSON.
+    Serializes the :class:`backend.models.Order` database table to JSON.
     """
 
     latest_dep_time = ma.Time()
@@ -31,6 +33,11 @@ class OrderSchema(OthersSchemaMixin, ma.SQLAlchemyAutoSchema):
     others = ma.Dict(dump_only=True)
 
     class Meta:
+        """
+        Determines the database table from which the fields are inferred from.
+        Also determines the order and includes the unknown fields in the
+        loaded and dumped objects.
+        """
         model = Order
         ordered = True
         dump_only = ('order_number',
@@ -40,15 +47,26 @@ class OrderSchema(OthersSchemaMixin, ma.SQLAlchemyAutoSchema):
 
 
 class OrderTableSchema(ma.SQLAlchemySchema):
+    """
+    Serializes a :class:`backend.models.OrderSheet` including
+    the columns names to JSON.
+    """
 
     orders = ma.Nested(OrderSchema, many=True)
     column_names = ma.Dict()
 
     class Meta:
+        """
+        Determines the inferred fields of the schema.
+        """
         model = OrderSheet
 
 
 class TimeLineSchemaOthers(ma.Schema):
+    """
+    Serializes the parameters stored in the others relation
+    (from :class:`backend.models.OrderProperties`) for the planning timeline.
+    """
     container_id = ma.String(default=None, attribute='Container')
     address = ma.String(default=None, attribute='Address')
     booking_id = ma.String(default=None, attribute='Booking')
@@ -56,7 +74,9 @@ class TimeLineSchemaOthers(ma.Schema):
 
 
 class TimeLineSchema(OthersSchemaMixin, ma.SQLAlchemySchema):
-
+    """
+    Serializes the parameters needed for the planning timeline.
+    """
     truck_id = ma.Integer()
     departure_time = ma.Time()
     end_time = ma.Time()
@@ -64,4 +84,7 @@ class TimeLineSchema(OthersSchemaMixin, ma.SQLAlchemySchema):
     order_type = ma.String(attribute='truck_type')
 
     class Meta:
+        """
+        Determines the inferred fields on the schema.
+        """
         model = Order

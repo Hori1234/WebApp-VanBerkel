@@ -24,7 +24,7 @@ class TruckAvailabilitySchema(Schema):
     that the terminal string is one of 'ITV', 'KAT' or 'OSS'.
 
     Any additional columns in the data will also be parsed,
-    but will not be tested against type.
+    but will not be tested against a type.
     """
 
     truck_id = String(data_key='Truck ID', required=True)
@@ -40,7 +40,9 @@ class TruckAvailabilitySchema(Schema):
     starting_time = Time(data_key='Starting time', required=True)
 
     class Meta:
-        # defines that columns which were not defined are still included
+        """
+        Defines that columns which are not defined are included.
+        """
         unknown = INCLUDE
 
 
@@ -53,7 +55,7 @@ class OrderListSchema(Schema):
     that the inl_terminal string is one of 'ITV', 'KAT' or 'OSS'.
 
     Any additional columns in the data will also be parsed,
-    but will not be tested against type.
+    but will not be tested against a type.
     """
     inl_terminal = String(data_key='Inl* ter*', required=True,
                           validate=validate_terminal)
@@ -65,7 +67,9 @@ class OrderListSchema(Schema):
     process_time = Integer(data_key='proces time', required=True)
 
     class Meta:
-        # defines that columns which were not defined are still included
+        """
+        Defines that columns which are not defined are included.
+        """
         unknown = INCLUDE
 
 
@@ -158,6 +162,7 @@ class SheetParser(abc.ABC):
         :return: A :class:`pandas.DataFrame` containing the data from `file`.
         :rtype: :class:`pandas.DataFrame`
         """
+        # Parse the sheet file as a dataframe
         raw_df = read_excel(file,
                             *args, **kwargs)
 
@@ -165,14 +170,19 @@ class SheetParser(abc.ABC):
         if not raw_df.columns.str.contains('Unnamed').all():
             df = raw_df
         else:
+            # Find the first non-empty row, and use it as the header row
             for i, row in raw_df.iterrows():
                 if row.notnull().all():
+                    # Non-emtpy row was found
                     df = raw_df.iloc[(i + 1):].reset_index(drop=True)
                     df.columns = list(raw_df.iloc[i])
                     break
             else:
+                # No header row was found, just return the raw dataframe
+                # All columns will be 'marked' as missing
                 return cls.post_dataframe(raw_df)
 
+        # Remove the columns that should be ignored
         df.drop(cls.ignored_columns, errors='ignore', axis=1, inplace=True)
 
         # Rename duplicate rows
@@ -187,6 +197,7 @@ class SheetParser(abc.ABC):
                 seen[c] = 0
                 new_columns.append(c)
         df.columns = new_columns
+
         return cls.post_dataframe(df)
 
     @staticmethod

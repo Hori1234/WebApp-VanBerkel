@@ -1,5 +1,4 @@
 import datetime
-import typing
 from sqlalchemy.ext.associationproxy import association_proxy
 from backend.plugins import db
 from .mixins.ValidationMixin import ValidationMixin
@@ -8,8 +7,11 @@ from .properties import TruckProperties
 
 class Truck(ValidationMixin, db.Model):
     """
-    The different columns of a truck availability sheet, the ones mentioned
-    by name are required in the provided sheets.
+    A single row in a truck availability sheet.
+
+    The columns are all required to create a planning. The non-required columns
+    are stored in the others relation with
+    :class:`backend.models.TruckProperties`.
     """
     s_number = db.Column(db.Integer, primary_key=True)
     sheet_id = db.Column(db.Integer,
@@ -24,7 +26,7 @@ class Truck(ValidationMixin, db.Model):
     date = db.Column(db.Date, nullable=False)
     starting_time = db.Column(db.Time, nullable=False)
 
-    # The 'others' field is for every property that is not required.
+    # The `others` field is for every property that is not required.
     others = association_proxy('properties',
                                'value',
                                creator=lambda k, v:
@@ -49,9 +51,15 @@ class Truck(ValidationMixin, db.Model):
         self.starting_time = starting_time
         self.others = kwargs
 
-    def assign_orders(self, orders: typing.Dict, departure_times):
+    def assign_orders(self, orders, departure_times):
         """
-        assigns an order to a truck, departure time has to be included
+        Assigns a list of orders to this truck,
+        departure time has to be included.
+
+        :param orders: List of order objects to be assigned to this truck
+        :type orders: List[:class:`backend.models.Order`]
+        :param departure_times: List of departure times for the orders.
+        :type departure_times: List[str]
         """
         for order, departure_time in zip(orders, departure_times):
             order.truck = self

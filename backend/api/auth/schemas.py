@@ -16,6 +16,10 @@ class LoginArguments(ma.SQLAlchemySchema):
                                    "after exiting the web application")
 
     class Meta:
+        """
+        Defines the model used for determining the auto fields and sets the
+        order of the parameters.
+        """
         model = User
         ordered = True
 
@@ -36,5 +40,8 @@ class AccountInfo(ma.SQLAlchemySchema):
                          required=True)
 
     class Meta:
+        """
+        Defines the model used for determining the auto fields.
+        """
         model = User
         ordered = True

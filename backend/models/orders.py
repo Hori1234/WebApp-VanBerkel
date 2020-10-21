@@ -12,12 +12,17 @@ from .properties import OrderProperties
 
 
 class OrderQuery(BaseQuery):
+    """
+    Extends the base query to implement getting
+    a list of objects using a list of ids.
+    """
 
     def get_all_or_404(self, list_of_ids):
         # Get all objects with ids from the list
         order_objects = self.filter(
             Order.order_number.in_(list_of_ids)) \
             .all()
+
         # if not all object were found, return 404
         if len(order_objects) != len(list_of_ids):
             abort(404,
@@ -28,10 +33,14 @@ class OrderQuery(BaseQuery):
 
 class Order(ValidationMixin, db.Model):
     """
-    The different columns of an order sheet, the ones mentioned
-    by name are required in the provided sheets,
-    with the exception of 'truck_id', and 'departure time.
-    These can only be added later
+    A single row in an order sheet.
+
+    The columns are all required to create a planning. The non-required columns
+    are stored in the others relation with
+    :class:`backend.models.OrderProperties`.
+
+    `truck_id` and `departure_time` can only be set after the creation of a
+    row.
     """
     query_class = OrderQuery
 
@@ -70,10 +79,18 @@ class Order(ValidationMixin, db.Model):
 
     @db.validates('departure_time')
     def validate_departure_time(self, key, value):
+        """
+        Validates if the departure time set for this order is valid.
+
+        The departure time should be set in between the assigned truck's
+        starting time and the latest departure time for this order:
+        self.truck.starting_time <= self.departure_time <= self.latest_dep_time
+        """
         if value is None:
             return None
 
-    # Check if departure time is before the latest departure time of the order
+        # Check if departure time is before the
+        # latest departure time of the order
         if value > self.latest_dep_time:
             raise ValueError(
                 f'The latest departure time for this order is '
@@ -81,11 +98,13 @@ class Order(ValidationMixin, db.Model):
                 f'depart at {value.strftime("%H:%M")}.'
             )
 
-        # If no truck has been assigned yet, find it and assign it
+        # If this object has not been flushed yet, the relation truck cannot
+        # be found. We should get the truck using the truck id
         if self.truck is None:
             truck = Truck.query.get_or_404(self.truck_id)
         else:
             truck = self.truck
+
         # Check if departure time is after the starting time of the truck
         if value < truck.starting_time:
             raise ValueError(
@@ -97,6 +116,9 @@ class Order(ValidationMixin, db.Model):
 
     @db.validates('truck', 'truck_id')
     def validate_truck(self, key, truck):
+        """
+        Validates if the truck assigned to this order can carry out this order.
+        """
         if truck is None:
             return None
 
@@ -150,7 +172,7 @@ class Order(ValidationMixin, db.Model):
 @listens_for(Order.truck_id, 'set')
 def update_departure_time(target, truck, oldvalue, initiator):
     """
-    Sets Order.departure_time to null if truck_id was set to null.
+    Sets `Order.departure_time` to null if `Order.truck_id` was set to null.
     """
     if truck is None and oldvalue is not None:
         target.departure_time = None

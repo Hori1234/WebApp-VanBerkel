@@ -24,7 +24,7 @@ class Orders(MethodView):
         Get a list of orders from an order sheet.
 
         In case `sheet_id_or_latest` is `latest`, the most recently uploaded
-        order sheet will be used.
+        order sheet will be requested.
 
         Required roles: view-only, planner, administrator
         """
@@ -243,10 +243,20 @@ class DataVisualisation(MethodView):
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
     def get(self, sheet_id_or_latest):
+        """
+        Gets a the parameters needed for making a timeline.
+
+        In case `sheet_id_or_latest` is `latest`, the most recently uploaded
+        order sheet will be used to create the timeline.
+
+        Required roles: view-only, planner, administrator
+        """
+        # Get the requested order sheet
         is_view_only = current_user.role == 'view-only'
         order_sheet = OrderSheet.query.get_sheet_or_404(sheet_id_or_latest,
                                                         is_view_only)
 
+        # Get all orders from the order sheet that have trucks assigned
         orders = Order.query \
             .filter(Order.sheet_id == order_sheet.id) \
             .filter(Order.truck_id.isnot(None)) \

@@ -3,9 +3,13 @@ from backend.models import Planning
 
 
 class PlanningSchema(ma.SQLAlchemyAutoSchema):
-    # this class is left intentionally empty
+    """
+    Serializes a :class:`backend.models.Planning` object to JSON.
+    """
 
     class Meta:
-        # Defines which model to use
+        """
+        Determines which fields are in the schema.
+        """
         model = Planning
         include_fk = True

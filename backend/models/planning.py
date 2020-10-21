@@ -4,8 +4,12 @@ from .users import User
 
 
 class Planning(db.Model):
-    # The information of the planning,
-    # i.e. the order sheet, truck sheet, publishing time, and publishing user
+    """
+    A published planning.
+
+    This model links between an order sheet and truck availability sheet.
+    """
+
     order_sheet_id = db.Column(db.Integer,
                                db.ForeignKey('order_sheet.id'),
                                primary_key=True)
@@ -31,7 +35,7 @@ class Planning(db.Model):
 
     def __init__(self, truck_sheet_id, order_sheet_id,  user_id):
         # The publishing time is calculated automatically,
-        # while these other three properties are taken as inputs
+        # while the other three properties are taken as inputs
         self.truck_sheet_id = truck_sheet_id
         self.order_sheet_id = order_sheet_id
         self.user_id = user_id

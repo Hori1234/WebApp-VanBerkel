@@ -13,7 +13,7 @@ class Config(object):
 
     # API configuration
     API_TITLE = 'T.R.U.C.K.S. API'
-    API_VERSION = '0.1'
+    API_VERSION = '1.0'
     OPENAPI_VERSION = '3.0.2'
     OPENAPI_JSON_PATH = 'swagger.json'
     OPENAPI_URL_PREFIX = '/'
