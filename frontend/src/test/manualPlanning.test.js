@@ -10,7 +10,7 @@ describe('React App', () => {
     it('shall succesfully magnify the orders', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });
@@ -42,7 +42,7 @@ describe('React App', () => {
       it('shall succesfully edit an order', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });
@@ -94,7 +94,7 @@ describe('React App', () => {
       it('shall succesfully edit a truck', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });
@@ -147,7 +147,7 @@ describe('React App', () => {
       it('shall succesfully add an entry in orders table', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });
@@ -215,7 +215,7 @@ describe('React App', () => {
       it('shall succesfully add an entry in truck table', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });
@@ -287,7 +287,7 @@ describe('React App', () => {
       it('shall succesfully delete an item from order list table', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });
@@ -319,7 +319,7 @@ describe('React App', () => {
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-12 > button:nth-child(4)');
         
         await page.waitFor(500);
-        await page.click('body > div:nth-child(8) > div > div > div > div.ant-popover-inner > div > div.ant-popover-buttons > button.ant-btn.ant-btn-primary.ant-btn-sm > span');
+        await page.click('body > div:nth-child(12) > div > div > div > div.ant-popover-inner > div > div.ant-popover-buttons > button.ant-btn.ant-btn-primary.ant-btn-sm');
         
         await page.waitForSelector('.ant-message-custom-content.ant-message-success');
         const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-success', element => element.textContent);
@@ -334,7 +334,7 @@ describe('React App', () => {
       it('shall succesfully delete an item from truck availability table', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });
@@ -365,7 +365,7 @@ describe('React App', () => {
 
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-9 > button:nth-child(4) > span');
         await page.waitFor(1000);
-        await page.click('body > div:nth-child(8) > div > div > div > div.ant-popover-inner > div > div.ant-popover-buttons > button.ant-btn.ant-btn-primary.ant-btn-sm');
+        await page.click('body > div:nth-child(13) > div > div > div > div.ant-popover-inner > div > div.ant-popover-buttons > button.ant-btn.ant-btn-primary.ant-btn-sm > span');
 
 
         await page.waitForSelector('.ant-message-custom-content.ant-message-success');
@@ -381,7 +381,7 @@ describe('React App', () => {
       it('shall succesfully throw an error on empty assignment', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });
@@ -402,15 +402,12 @@ describe('React App', () => {
         expect(currentPage).toEqual('http://localhost:3000/planning');
     
         await page.click('#root > section > section > section > section > main > section > section > div.ant-row.ant-row-space-around.ant-row-middle > div.ant-col.ant-col-3 > div:nth-child(1) > button');
-        await page.type('#departureTime', '07:00:00');
-
-        await page.click('.ant-modal-footer > button:nth-child(2)');
 
         
         await page.waitForSelector('.ant-message-custom-content.ant-message-error');
         const ErrorMessage = await page.$eval('.ant-message-custom-content.ant-message-error', element => element.textContent);
 
-        expect(ErrorMessage).toEqual('Not found: undefined');
+        expect(ErrorMessage).toEqual('Please select a truck to assign an order to.');
       
         await browser.close();
 
@@ -419,7 +416,7 @@ describe('React App', () => {
       it('shall succesfully throw an error on empty unassign', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });
@@ -456,7 +453,7 @@ describe('React App', () => {
       it('shall succesfully throw an error on invalid assignment', async () => {
 
         const browser = await puppeteer.launch({ 
-            headless: false,
+            headless: true,
             defaultViewport: null,
             args: [`--window-size=${1920},${1080}`]
         });

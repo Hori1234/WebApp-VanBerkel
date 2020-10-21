@@ -8,7 +8,7 @@ describe('React App', () => {
   it('shall succesfully go to the user management page with the side menu after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         defaultViewport: null,
         args: [`--window-size=${1920},${1080}`]
     });
@@ -34,7 +34,7 @@ describe('React App', () => {
   it('shall succesfully go to the upload page with the side menu after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         defaultViewport: null,
         args: [`--window-size=${1920},${1080}`]
     });
@@ -61,7 +61,7 @@ describe('React App', () => {
   it('shall succesfully go to the manual planning page with the side menu after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         defaultViewport: null,
         args: [`--window-size=${1920},${1080}`]
     });
@@ -87,7 +87,7 @@ describe('React App', () => {
   it('shall succesfully go to the view planning page with the side menu after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         defaultViewport: null,
         args: [`--window-size=${1920},${1080}`]
     });
@@ -113,7 +113,7 @@ describe('React App', () => {
   it('shall succesfully go to the data visualisation page with the side menu after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         defaultViewport: null,
         args: [`--window-size=${1920},${1080}`]
     });
@@ -139,7 +139,7 @@ describe('React App', () => {
   it('shall succesfully go to the monthly data analytics page with the side menu after logging in', async () => {
 
     const browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         defaultViewport: null,
         args: [`--window-size=${1920},${1080}`]
     });

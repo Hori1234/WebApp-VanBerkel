@@ -8,7 +8,7 @@ describe('React App', () => {
   it('shall display correct error message after failed upload', async () => {
 
     const browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         defaultViewport: null,
         args: [`--window-size=${1920},${1080}`]
     });
@@ -53,7 +53,7 @@ describe('React App', () => {
   it('shall display correct response message after successful upload', async () => {
 
     const browser = await puppeteer.launch({ 
-        headless: false,
+        headless: true,
         defaultViewport: null,
         args: [`--window-size=${1920},${1080}`]
     });
