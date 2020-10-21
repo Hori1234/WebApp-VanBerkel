@@ -1932,6 +1932,7 @@ export default class ManualPlanning extends Component {
         </Modal>
 
         <Modal
+          width="100vh"
           title="Add Truck"
           visible={this.state.ATVisible}
           onOk={() => {

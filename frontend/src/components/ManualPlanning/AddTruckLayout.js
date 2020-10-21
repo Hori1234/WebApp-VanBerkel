@@ -210,7 +210,7 @@ export default class AddTruckLayout extends Component {
             </Form.Item>
             <Form.Item
               name={"Date"}
-              label={"Date:"}
+              label={"Date (YYYY-MM-DD):"}
               rules={[{ required: true }]}
             >
               <Input value={this.state.date} onChange={this.handleChangeDate} />
