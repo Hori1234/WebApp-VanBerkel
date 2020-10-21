@@ -1240,7 +1240,6 @@ export default class ManualPlanning extends Component {
           error: error,
         }));
         if (error.response.status === 400) {
-          console.log("======================");
           message.error("Bad Request: " + error.response.data.message);
         }
         if (error.response.status === 401) {
