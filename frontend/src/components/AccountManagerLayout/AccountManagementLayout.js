@@ -39,6 +39,10 @@ export default class AccountManagementLayout extends Component {
       users: value,
     });
   };
+
+  /**
+   * Sending a request to the database to retrieve all users.
+   */
   getUsers = async (vPage, vPage_size) => {
     return axios
       .get("/api/auth/users", {
@@ -64,6 +68,11 @@ export default class AccountManagementLayout extends Component {
         return false;
       });
   };
+
+  /**
+   * case ca: Display the account creation modal(page).
+   * case ea: Display the edit account modal(page).
+   */
   showModal = (value, vId, vUsername, vRole) => {
     console.log(this.state.Metadata);
     switch (value) {
@@ -93,6 +102,9 @@ export default class AccountManagementLayout extends Component {
     console.log(this.state.Metadata);
   };
 
+  /**
+   * Hide modals after Submit or Cancel button have been pressed.
+   */
   handleOk = (e) => {
     console.log(e);
     this.setState({
@@ -101,14 +113,10 @@ export default class AccountManagementLayout extends Component {
     });
   };
 
-  handleCancel = (e) => {
-    console.log(e);
-    this.setState({
-      EAVisible: false,
-      CAVisible: false,
-    });
-  };
 
+  /**
+   * Rendering of the account management page.
+   */
   render() {
     return (
       <Layout
@@ -168,7 +176,7 @@ export default class AccountManagementLayout extends Component {
           centered={false}
           maskClosable={false}
           visible={this.state.CAVisible}
-          onCancel={this.handleCancel}
+          onCancel={this.handleOk}
         >
           {this.state.CAVisible && (
             <CreateAccountsComponent modalHandleOk={this.handleOk} />
@@ -188,7 +196,7 @@ export default class AccountManagementLayout extends Component {
           }}
           visible={this.state.EAVisible}
           maskClosable={false}
-          onCancel={this.handleCancel}
+          onCancel={this.handleOk}
         >
           {this.state.EAVisible && (
             <EditAccountModalComponent
