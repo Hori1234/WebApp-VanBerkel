@@ -499,9 +499,7 @@ export default class ManualPlanning extends Component {
           width: 150,
           editable: true,
           sorter: (a, b) =>
-            (a.order_sheet_id || "|||")
-              .toUpperCase()
-              .localeCompare((b.order_sheet_id || "|||").toUpperCase()),
+            (a.order_sheet_id)-(b.order_sheet_id),
         },
         {
           title: "Published On",
@@ -517,9 +515,7 @@ export default class ManualPlanning extends Component {
           title: "Truck Sheet Id",
           dataIndex: "truck_sheet_id",
           sorter: (a, b) =>
-            (a.truck_sheet_id || "|||")
-              .toUpperCase()
-              .localeCompare((b.truck_sheet_id || "|||").toUpperCase()),
+            (a.truck_sheet_id)-(b.truck_sheet_id),
           width: 150,
           editable: true,
         },
@@ -529,9 +525,7 @@ export default class ManualPlanning extends Component {
           width: 150,
           editable: true,
           sorter: (a, b) =>
-            (a.user_id || "|||")
-              .toUpperCase()
-              .localeCompare((b.user_id || "|||").toUpperCase()),
+            (a.user_id)-(b.user_id),
         },
       ],
       data: [],
