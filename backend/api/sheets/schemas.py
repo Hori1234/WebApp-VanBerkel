@@ -1,4 +1,4 @@
-from backend.app import ma
+from backend.plugins import ma
 from backend.models import OrderSheet
 from flask_smorest.fields import Upload
 

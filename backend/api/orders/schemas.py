@@ -1,4 +1,4 @@
-from backend.app import ma
+from backend.plugins import ma
 from marshmallow import INCLUDE, post_dump
 from backend.models import Order, OrderSheet
 

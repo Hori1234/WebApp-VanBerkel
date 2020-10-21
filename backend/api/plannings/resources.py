@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask_smorest import abort
 from flask_login import current_user
 from .schemas import PlanningSchema
-from backend.app import db
+from backend.plugins import db
 from backend.extensions import roles_required, Blueprint
 from backend.models import Planning
 from backend.models import TruckSheet, OrderSheet

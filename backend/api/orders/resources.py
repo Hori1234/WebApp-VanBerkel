@@ -4,7 +4,7 @@ from backend.models import Order
 from backend.models import OrderSheet
 from backend.extensions import Blueprint, roles_required, unnest
 from .schemas import OrderSchema, OrderTableSchema, TimeLineSchema
-from backend.app import db
+from backend.plugins import db
 from flask_smorest import abort
 
 bp = Blueprint('orders',

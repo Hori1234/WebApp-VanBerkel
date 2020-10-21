@@ -1,5 +1,5 @@
 from sqlalchemy import func
-from backend.app import db
+from backend.plugins import db
 from .users import User
 
 

@@ -1,5 +1,5 @@
 from sqlalchemy.orm.collections import attribute_mapped_collection
-from backend.app import db
+from backend.plugins import db
 
 
 class PropertiesMixin(object):

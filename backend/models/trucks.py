@@ -1,7 +1,7 @@
 import datetime
 import typing
 from sqlalchemy.ext.associationproxy import association_proxy
-from backend.app import db
+from backend.plugins import db
 from .mixins.ValidationMixin import ValidationMixin
 from .properties import TruckProperties
 
@@ -46,5 +46,3 @@ class Truck(ValidationMixin, db.Model):
         for order, departure_time in zip(orders, departure_times):
             order.truck = self
             order.departure_time = departure_time
-
-

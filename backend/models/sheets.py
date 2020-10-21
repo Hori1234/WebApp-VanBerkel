@@ -1,9 +1,8 @@
 from flask_sqlalchemy import BaseQuery
-from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.sql import func
 from flask import abort
-from backend.app import db
+from backend.plugins import db
 from .trucks import Truck
 from .orders import Order
 from .properties import TruckProperties, OrderProperties

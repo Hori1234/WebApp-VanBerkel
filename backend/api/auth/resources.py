@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask_login import login_user, logout_user, current_user
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
-from backend.app import db
+from backend.plugins import db
 from backend.extensions import Blueprint, roles_required
 from flask_smorest import abort
 from .schemas import LoginArguments, AccountInfo

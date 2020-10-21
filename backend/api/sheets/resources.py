@@ -4,7 +4,7 @@ from xlrd import XLRDError
 from marshmallow.exceptions import ValidationError
 from .schemas import FileSchema, SheetSchema
 from .SheetParser import TruckAvailabilityParser, OrderListParser
-from backend.app import db
+from backend.plugins import db
 from backend.models import OrderSheet, TruckSheet
 from backend.extensions import Blueprint, roles_required
 

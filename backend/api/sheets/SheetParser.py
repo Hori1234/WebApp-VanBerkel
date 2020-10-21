@@ -2,9 +2,7 @@ import abc
 import re
 from typing import Type
 import datetime
-from flask import current_app
-from marshmallow import validates, Schema, INCLUDE
-from marshmallow.exceptions import ValidationError
+from marshmallow import Schema, INCLUDE
 from marshmallow.fields import String, Integer, Boolean, Float
 from pandas import read_excel, notnull
 from backend.extensions import (
@@ -14,7 +12,7 @@ from backend.extensions import (
     validate_truck_type
 )
 from backend.models import Order, Truck, OrderSheet, TruckSheet
-from backend.app import db
+from backend.plugins import db
 
 
 class TruckAvailabilitySchema(Schema):

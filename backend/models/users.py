@@ -1,4 +1,4 @@
-from backend.app import db, login
+from backend.plugins import db, login
 from flask import current_app
 from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_property

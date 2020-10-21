@@ -1,13 +1,11 @@
 import datetime as dt
 from flask import current_app
-from marshmallow import ValidationError
 from flask_smorest import abort
 from flask_sqlalchemy import BaseQuery
 from sqlalchemy.event import listens_for
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.associationproxy import association_proxy
-from backend.app import db
-from backend.extensions import validate_truck_type, validate_terminal
+from backend.plugins import db
 from .mixins.ValidationMixin import ValidationMixin
 from .trucks import Truck
 from .properties import OrderProperties

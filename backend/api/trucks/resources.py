@@ -4,7 +4,7 @@ from flask_smorest import abort
 from backend.models import Order, Truck, TruckSheet
 from backend.extensions import Blueprint, roles_required, unnest
 from .schemas import TruckSchema, TruckTableSchema
-from backend.app import db
+from backend.plugins import db
 
 
 bp = Blueprint('trucks',
