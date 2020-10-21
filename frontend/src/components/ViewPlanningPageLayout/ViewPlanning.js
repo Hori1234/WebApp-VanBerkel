@@ -1244,17 +1244,22 @@ export default class ManualPlanning extends Component {
         >
           {this.state.magnifyOrders && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
-              <EditableTableOrder
+              <Table
+
+                bordered={true}
                 rowSelection={ordersRowSelection}
                 dataSource={this.state.data}
                 columns={this.state.columns}
+                scroll={{ x: "max-content", y: "50vh" }}
+                pagination={false}
                 setData={this.setData}
                 onRow={(record) => ({
                   onClick: () => {
                     this.selectOrdersRow(record);
                   },
                 })}
-              ></EditableTableOrder>
+              />
+              
             </Layout>
           )}
         </Modal>
