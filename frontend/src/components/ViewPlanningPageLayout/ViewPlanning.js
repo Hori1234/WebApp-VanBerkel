@@ -14,6 +14,8 @@ import {
 import axios from "axios";
 import EditableTableOrder from "../ManualPlanning/EditableTableOrder";
 import "../ManualPlanning/ManualPlanning.css";
+import Timeline from "../DataVisualization/Timeline"
+import FirstRideButton from "../DataVisualization/FirstRideButton"
 
 const { Option } = Select;
 
@@ -21,6 +23,7 @@ export default class ManualPlanning extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      selectedSheetID: [],
       selectedOrdersRowKeys: [],
       selectedPlanningsRowKeys: [],
       columnFilter: [],
@@ -660,7 +663,7 @@ export default class ManualPlanning extends Component {
   onSelectedOrdersRowKeysChange = (selectedOrdersRowKeys) => {
     this.setState({ selectedOrdersRowKeys });
     console.log("orders", selectedOrdersRowKeys);
-  };
+  }; 
 
   selectPlanningsRow = (record) => {
     const selectedPlanningsRowKeys = [...this.state.selectedPlanningsRowKeys];
@@ -673,7 +676,9 @@ export default class ManualPlanning extends Component {
       selectedPlanningsRowKeys.push(record.order_sheet_id);
     }
     this.setState({ selectedPlanningsRowKeys });
+    console.log(selectedPlanningsRowKeys);
   };
+
   onSelectedTrucksRowKeysChange = (selectedPlanningsRowKeys) => {
     this.setState({ selectedPlanningsRowKeys });
     console.log("trucks", selectedPlanningsRowKeys);
@@ -691,6 +696,12 @@ export default class ManualPlanning extends Component {
     });
   };
 
+  magnifyTimelineModal = () => {
+    this.setState({
+      magnifyTimeline: true,
+    });
+  };
+
   handleOk = () => {
     this.setState({
       AOVisible: false,
@@ -705,13 +716,13 @@ export default class ManualPlanning extends Component {
     });
   };
   okMagnify = (e) => {
-    this.setState({ magnifyOrders: false, magnifyPlannings: false });
+    this.setState({ magnifyOrders: false, magnifyPlannings: false, magnifyTimeline: false });
   };
   okPlanningSelected = (e) => {
     this.getOrderList(2);
   };
   cancelMagnify = (e) => {
-    this.setState({ magnifyOrders: false, magnifyPlannings: false });
+    this.setState({ magnifyOrders: false, magnifyPlannings: false, magnifyTimeline: false });
   };
   truckRowColor = (e) => {
     if (e === "Regional") {
@@ -1204,23 +1215,25 @@ export default class ManualPlanning extends Component {
           <Col span={24}>
             <Table
 
-        bordered={true}
-        rowSelection={ordersRowSelection}
-        dataSource={this.state.data}
-        columns={this.state.columns}
-        scroll={{ x: "max-content", y: "50vh" }}
-        pagination={false}
-        onRow={(record) => ({
-          onClick: () => {
-            this.selectOrdersRow(record);
-          },
-        })}
-      />
-            
+              bordered={true}
+              rowSelection={ordersRowSelection}
+              dataSource={this.state.data}
+              columns={this.state.columns}
+              scroll={{ x: "max-content", y: "50vh" }}
+              pagination={false}
+              onRow={(record) => ({
+                onClick: () => {
+                  this.selectOrdersRow(record);
+                },
+              })}
+            />
+
             <br />
             <Button onClick={this.magnifyOrdersModal}>Magnify</Button>
             &nbsp;
             <Button onClick={this.magnifyPlanningsModal}>Plannings</Button>
+            &nbsp;
+            <Button onClick={this.magnifyTimelineModal}>Timeline</Button>
           </Col>
         </Row>
 
@@ -1266,9 +1279,39 @@ export default class ManualPlanning extends Component {
                 onRow={(record) => ({
                   onClick: () => {
                     this.selectPlanningsRow(record);
+                    console.log(record);
                   },
                 })}
               ></EditableTableOrder>
+            </Layout>
+          )}
+        </Modal>
+
+        <Modal
+          title="Timeline"
+          visible={this.state.magnifyTimeline}
+          onOk={this.okMagnify}
+          onCancel={this.cancelMagnify}
+          width={"100%"}
+          style={{ top: 20 }}
+        >
+          {this.state.magnifyTimeline && (
+            <Layout style={{ width: "100%", backgroundColor: "white" }}>
+              <Layout
+                style={{
+                  display: "flex",
+                  height: "100%",
+                  width: "100%",
+                  background: "white"
+                }}
+              >
+                <Timeline timeline="latest" />
+                <Row>
+                  <Col span={6}>
+                    <FirstRideButton orderNumber="latest" />
+                  </Col>
+                </Row>
+              </Layout>
             </Layout>
           )}
         </Modal>
