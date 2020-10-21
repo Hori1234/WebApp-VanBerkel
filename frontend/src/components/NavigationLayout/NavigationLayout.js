@@ -15,6 +15,7 @@ import Logout from "../Logout/Logout";
 import { useAuth } from "../contextConfig";
 import ManualPlanning from "../ManualPlanning/ManualPlanning";
 import DataVisualization from "../DataVisualization/DataVisualization";
+import MonthlyDataAnalytics from "../MonthlyDataAnalytics/MonthlyDataAnalytics";
 const { SubMenu } = Menu;
 const { Content, Sider, Footer, Header } = Layout;
 
@@ -230,7 +231,7 @@ function NavigationLayout() {
                     <Route path="/data">
                       <DataVisualization />
                     </Route>
-                    <Route path="/montly"></Route>
+                    <Route path="/montly"><MonthlyDataAnalytics /></Route>
                     <Route path="/" exact>
                       <Home />
                     </Route>
