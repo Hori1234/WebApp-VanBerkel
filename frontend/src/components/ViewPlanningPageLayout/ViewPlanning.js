@@ -1253,7 +1253,7 @@ export default class ManualPlanning extends Component {
         >
           {this.state.magnifyPlannings && (
             <Layout style={{ width: "100%", backgroundColor: "white" }}>
-              <EditableTableOrder
+              <Table
                 rowSelection={planningRowSelection}
                 dataSource={this.state.data2}
                 columns={this.state.columns2}
@@ -1262,7 +1262,7 @@ export default class ManualPlanning extends Component {
                     this.selectPlanningsRow(record);
                   },
                 })}
-              ></EditableTableOrder>
+              />
             </Layout>
           )}
         </Modal>
