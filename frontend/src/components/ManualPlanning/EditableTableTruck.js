@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table, Input, InputNumber, Popconfirm, Form, message } from "antd";
 import axios from "axios";
+import "./ManualPlanning.css";
 
 const EditableCell = ({
   editing,
@@ -30,6 +31,7 @@ const EditableCell = ({
     </td>
   );
 };
+
 
 const EditableTableTruck = (props) => {
   const [form] = Form.useForm();
@@ -185,13 +187,13 @@ const EditableTableTruck = (props) => {
         }}
         bordered={true}
         rowSelection={props.rowSelection}
+        rowClassName={props.rowClassName}
         dataSource={props.dataSource}
         columns={mergedColumns}
         scroll={{ x: "max-content", y: "50vh" }}
         pagination={{
           onChange: cancel,
         }}
-        rowClassName="editable-row"
         onRow={props.onRow}
       />
     </Form>

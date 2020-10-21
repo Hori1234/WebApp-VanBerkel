@@ -483,9 +483,7 @@ export default class ManualPlanning extends Component {
           width: 150,
           editable: true,
           sorter: (a, b) =>
-            (a.truck_id || "|||")
-              .toUpperCase()
-              .localeCompare((b.truck_id || "|||").toUpperCase()),
+              (a.truck_id) - (b.truck_id),
         },
         {
           title: "Departure time",
@@ -803,9 +801,19 @@ export default class ManualPlanning extends Component {
   };
 
   showAssignModal = () => {
-    this.setState({
-      AssignModal: true,
-    });
+    if(this.state.selectedTrucksRowKeys.length == 0){
+      message.error("Please select a truck to assign an order to.");
+    }
+    else if(this.state.selectedTrucksRowKeys.length > 1){
+      message.error("You have selected more than 1 truck. Please select only 1 truck.");
+    } else if(this.state.selectedOrdersRowKeys.length == 0){
+      message.error("Please select one or more orders.");
+    }
+    else{
+      this.setState({
+        AssignModal: true,
+      });
+    }  
   };
   ShowTruckModal = () => {
     this.setState({
@@ -847,11 +855,11 @@ export default class ManualPlanning extends Component {
     this.setState({ magnifyOrders: false, magnifyTrucks: false });
   };
   truckRowColor = (e) => {
-    if (e === "Regional") {
+    if (e === "regional") {
       return "table-row-regional";
-    } else if (e === "Terminal") {
+    } else if (e === "terminal") {
       return "table-row-terminal";
-    } else if (e === "Port") {
+    } else if (e === "port") {
       return "table-row-port";
     }
   };
@@ -904,6 +912,7 @@ export default class ManualPlanning extends Component {
         if (res.status === 204) {
           message.success("Truck succesfully deleted");
         }
+        this.getTruckList("latest");
         return true;
       })
       .catch((error) => {
@@ -1218,7 +1227,8 @@ export default class ManualPlanning extends Component {
             message.success("Order succesfully assigned");
           }
         }
-
+        this.getOrderList("latest");
+        this.getTruckList("latest");
         return true;
       })
       .catch((error) => {
@@ -1228,8 +1238,7 @@ export default class ManualPlanning extends Component {
           error: error,
         }));
         if (error.response.status === 400) {
-          console.log("======================");
-          message.warning("Bad Request: " + error.response.data.message);
+          message.error("Bad Request: " + error.response.data.message);
         }
         if (error.response.status === 401) {
           message.error("Unauthorized: " + error.response.data.message);
@@ -1248,6 +1257,87 @@ export default class ManualPlanning extends Component {
     const showHideMenu = (
       <Menu Scrollable style={{ maxHeight: "50vh", overflowY: "scroll" }}>
         <Menu.ItemGroup title="Columns">
+          <Menu.Item key="Booking">
+            <Checkbox
+              id="Booking"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              Booking
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="inl_terminal">
+            <Checkbox
+              id="inl_terminal"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              inl_terminal
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="latest_dep_time">
+            <Checkbox
+              id="latest_dep_time"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              latest_dep_time
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="truck_type">
+            <Checkbox
+              id="truck_type"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              truck_type
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="hierarchy">
+            <Checkbox
+              id="hierarchy"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              hierarchy
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="delivery_deadline">
+            <Checkbox
+              id="delivery_deadline"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              delivery_deadline
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="driving_time">
+            <Checkbox
+              id="driving_time"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              driving_time
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="process_time">
+            <Checkbox
+              id="process_time"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              process_time
+            </Checkbox>
+          </Menu.Item>
+          <Menu.Item key="service_time">
+            <Checkbox
+              id="service_time"
+              onChange={this.filterColumns}
+              defaultChecked
+            >
+              service_time
+            </Checkbox>
+          </Menu.Item>
           <Menu.Item key="Container">
             <Checkbox
               id="Container"
@@ -1698,7 +1788,7 @@ export default class ManualPlanning extends Component {
           </Col>
           <Col span={2}>
             <Button onClick={() => window.open("/data")}>
-              Data visualization
+              Data visualisation
             </Button>
           </Col>
         </Row>
@@ -1751,6 +1841,7 @@ export default class ManualPlanning extends Component {
                     null,
                     false
                   );
+                  
                 }}
               >
                 Unassign
@@ -1764,6 +1855,7 @@ export default class ManualPlanning extends Component {
           <Col span={9}>
             <EditableTableTruck
               rowSelection={trucksRowSelection}
+              rowClassName={(record, index) => this.truckRowColor(record.truck_type)}
               dataSource={this.state.data2}
               columns={this.state.columns2}
               setData={this.setData2}
@@ -1826,7 +1918,7 @@ export default class ManualPlanning extends Component {
           {this.state.AssignModal && (
             <Form>
               <Form.Item
-                name={"Departure Time"}
+                name={"departureTime"}
                 label={"Departure Time:"}
                 rules={[{ required: true }]}
               >
@@ -1843,7 +1935,7 @@ export default class ManualPlanning extends Component {
           title="Add Truck"
           visible={this.state.ATVisible}
           onOk={() => {
-            this.addTruck("latest");
+            this.addTruck('latest');
           }}
           onCancel={this.handleCancel}
         >

@@ -383,15 +383,15 @@ export default class AddOrdersLayout extends Component {
       },
     };
     return (
-      <Form
-        style={{ width: "100vh", marginRight: 20 }}
+      <Form Scrollable
+        style={{ width: "100vh", maxHeight: "50vh", overflowY: "scroll", overflowX: "hidden" }}
         name="nest-messages"
         onFinish={this.onFinish}
         onFinishFailed={this.onFinishFailed}
         validateMessages={validateMessages}
       >
         <Row gutter={[24, 8]}>
-          <Col span={12}>
+          <Col span={11}>
             <Form.Item
               name="Inl_terminal"
               label="Inl Terminal:"
@@ -401,7 +401,7 @@ export default class AddOrdersLayout extends Component {
             </Form.Item>
 
             <Form.Item
-              name="Truck Type"
+              name="truckType"
               label="Truck Type:"
               rules={[{ required: true }]}
             >

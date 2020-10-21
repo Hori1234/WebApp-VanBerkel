@@ -82,8 +82,9 @@ export default class CreateAccountsComponent extends Component {
       );
     };
     return (
-      <Layout
+      <Layout Scrollable
         style={{
+          overflowY: "scroll",
           alignItems: "center",
           display: "flex",
           backgroundColor: "white",
