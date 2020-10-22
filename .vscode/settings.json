@@ -3,6 +3,7 @@
         "antd",
         "arraybuffer",
         "firstrides",
+        "popconfirm",
         "testid"
     ],
     "cSpell.words": [
