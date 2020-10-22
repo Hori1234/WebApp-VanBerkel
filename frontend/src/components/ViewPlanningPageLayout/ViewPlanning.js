@@ -479,9 +479,7 @@ export default class ManualPlanning extends Component {
           width: 150,
           editable: true,
           sorter: (a, b) =>
-            (a.truck_id || "|||")
-              .toUpperCase()
-              .localeCompare((b.truck_id || "|||").toUpperCase()),
+            (a.truck_id) - (b.truck_id),
         },
         {
           title: "Departure time",
