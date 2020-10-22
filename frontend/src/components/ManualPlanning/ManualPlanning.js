@@ -20,7 +20,6 @@ import AddOrdersLayout from "./AddOrdersLayout";
 import AddTruckLayout from "./AddTruckLayout";
 import EditableTableTruck from "./EditableTableTruck";
 import "./ManualPlanning.css";
-import { getKeyThenIncreaseKey } from "antd/lib/message";
 
 const { Option } = Select;
 
@@ -484,9 +483,7 @@ export default class ManualPlanning extends Component {
           width: 150,
           editable: true,
           sorter: (a, b) =>
-            (a.truck_id || "|||")
-              .toUpperCase()
-              .localeCompare((b.truck_id || "|||").toUpperCase()),
+              (a.truck_id) - (b.truck_id),
         },
         {
           title: "Departure time",
@@ -804,9 +801,19 @@ export default class ManualPlanning extends Component {
   };
 
   showAssignModal = () => {
-    this.setState({
-      AssignModal: true,
-    });
+    if(this.state.selectedTrucksRowKeys.length === 0){
+      message.error("Please select a truck to assign an order to.");
+    }
+    else if(this.state.selectedTrucksRowKeys.length > 1){
+      message.error("You have selected more than 1 truck. Please select only 1 truck.");
+    } else if(this.state.selectedOrdersRowKeys.length === 0){
+      message.error("Please select one or more orders.");
+    }
+    else{
+      this.setState({
+        AssignModal: true,
+      });
+    }  
   };
   ShowTruckModal = () => {
     this.setState({
@@ -848,7 +855,6 @@ export default class ManualPlanning extends Component {
     this.setState({ magnifyOrders: false, magnifyTrucks: false });
   };
   truckRowColor = (e) => {
-    console.log(e)
     if (e === "regional") {
       return "table-row-regional";
     } else if (e === "terminal") {
@@ -1232,8 +1238,7 @@ export default class ManualPlanning extends Component {
           error: error,
         }));
         if (error.response.status === 400) {
-          console.log("======================");
-          message.warning("Bad Request: " + error.response.data.message);
+          message.error("Bad Request: " + error.response.data.message);
         }
         if (error.response.status === 401) {
           message.error("Unauthorized: " + error.response.data.message);
@@ -1783,7 +1788,7 @@ export default class ManualPlanning extends Component {
           </Col>
           <Col span={2}>
             <Button onClick={() => window.open("/data")}>
-              Data visualization
+              Data visualisation
             </Button>
           </Col>
         </Row>
@@ -1913,7 +1918,7 @@ export default class ManualPlanning extends Component {
           {this.state.AssignModal && (
             <Form>
               <Form.Item
-                name={"Departure Time"}
+                name={"departureTime"}
                 label={"Departure Time:"}
                 rules={[{ required: true }]}
               >
@@ -1927,6 +1932,7 @@ export default class ManualPlanning extends Component {
         </Modal>
 
         <Modal
+          width="100vh"
           title="Add Truck"
           visible={this.state.ATVisible}
           onOk={() => {

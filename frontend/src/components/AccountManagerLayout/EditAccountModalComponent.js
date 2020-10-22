@@ -28,7 +28,7 @@ export default class CreateAccountsComponent extends Component {
   }
   updateAccount = async (user_id, vUsername, vPassword, vRole) => {
     return axios
-      .put(`/api/auth/user/${user_id}`, {
+      .patch(`/api/auth/user/${user_id}`, {
         username: vUsername,
         password: vPassword,
         role: vRole,

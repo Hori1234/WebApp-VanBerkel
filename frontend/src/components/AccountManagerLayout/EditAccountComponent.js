@@ -159,7 +159,7 @@ export default class EditAccountComponent extends Component {
                     avatar={
                       <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                     }
-                    title={<a href="https://ant.design">{item.username}</a>}
+                    title={<a>{item.username}</a>}
                     description={item.role}
                   />
                   <div>

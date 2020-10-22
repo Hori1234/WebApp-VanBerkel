@@ -148,7 +148,7 @@ export default class CreateAccountsComponent extends Component {
             </Form.Item>
             <Form.Item
               name={["user", "password"]}
-              label="password"
+              label="Password"
               rules={[{ required: true }]}
             >
               <Input

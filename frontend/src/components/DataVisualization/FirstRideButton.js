@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import Chart from "react-google-charts";
 import "../Css/DataVisualization.css";
-import { Row, Col, Layout, Button, message } from "antd";
+import { Button} from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import axios from "axios";

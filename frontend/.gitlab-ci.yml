@@ -24,6 +24,7 @@ frontend-build:
   stage: Build
   script:
     - npm ci
+    - sudo apt install -y libnss3
 
 # Check style of the code
 frontend-lint:
