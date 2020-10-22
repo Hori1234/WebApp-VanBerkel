@@ -46,9 +46,11 @@ export default class AddTruckLayout extends Component {
     return dataToSend;
   };
 
+  /**
+   * Get data in order to correclty display the add truck form.
+   */
   getFormTruckData = () => {
     let temp = [];
-    //var availability = this.state.availability === "true";
     temp.push(
       this.state.truck_id,
       Boolean(this.state.availability),
@@ -67,67 +69,122 @@ export default class AddTruckLayout extends Component {
     return temp;
   };
 
+  /**
+   * The following set of functions are all setting new values for each field
+   * when adding a truck.
+   */
+
+   /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTruckId = (event) => {
     this.setState({
       truck_id: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeAvailability = (event) => {
     this.setState({
       availability: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTruckType = (event) => {
     this.setState({
       truck_type: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeHierarchy = (event) => {
     this.setState({
       hierarchy: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTerminal = (event) => {
     this.setState({
       terminal: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeUseCost = (event) => {
     this.setState({
       use_cost: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeStartingTime = (event) => {
     this.setState({
       starting_time: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeDate = (event) => {
     this.setState({
       date: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeOwner = (event) => {
     this.setState({
       Owner: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeDriver = (event) => {
     this.setState({
       Driver: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeRemarks = (event) => {
     this.setState({
       Remarks: event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeBusiness_type = (event) => {
     this.setState({
       business_type: event.target.value,
     });
   };
 
+  /**
+   * Renders the add truck modal.
+   */
   render() {
     return (
       <Form>

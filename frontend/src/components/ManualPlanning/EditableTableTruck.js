@@ -3,6 +3,15 @@ import { Table, Input, InputNumber, Popconfirm, Form, message } from "antd";
 import axios from "axios";
 import "./ManualPlanning.css";
 
+/**
+ * Make a cell editable.
+ * @param {Boolean to see if currently editiong or not} editing
+ * @param {Index of the data} dataIndex 
+ * @param {Name of the field} title 
+ * @param {Type of the input} inputType 
+ * @param {Instance} record 
+ * @param {Index} index  
+ */
 const EditableCell = ({
   editing,
   dataIndex,
@@ -32,12 +41,19 @@ const EditableCell = ({
   );
 };
 
-
+/**
+ * Create an editable instance of the row.
+ * @param {Instance} props 
+ */
 const EditableTableTruck = (props) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record) => record.key === editingKey;
 
+  /**
+   * Set initial values of the editable row.
+   * @param {Editable row} record 
+   */
   const edit = (record) => {
     form.setFieldsValue({
       truck_id: "",
@@ -57,10 +73,19 @@ const EditableTableTruck = (props) => {
     setEditingKey(record.key);
   };
 
+  /**
+   * Handles the cancel button during the edit.
+   */
   const cancel = () => {
     setEditingKey("");
   };
 
+
+  /**
+   * Handles account editing proccess.
+   * @param {Id of the truck to be edited} truck_id 
+   * @param {New data for the order} Data 
+   */
   const editAccount = (truck_id, Data) => {
     return axios
       .patch(`/api/trucks/${truck_id}`, Data)
@@ -94,6 +119,10 @@ const EditableTableTruck = (props) => {
       });
   };
 
+  /**
+   * Handles the click on the save button.
+   * @param {Id of the row} key 
+   */
   const save = async (key) => {
     try {
       const row = await form.validateFields();
@@ -122,6 +151,9 @@ const EditableTableTruck = (props) => {
     }
   };
 
+  /**
+   * Renders save/cancel buttons and text fields.
+   */
   const columnsOrder = [
     ...props.columns,
     {
@@ -161,6 +193,10 @@ const EditableTableTruck = (props) => {
       },
     },
   ];
+
+  /**
+   * Renders the edit form.
+   */
   const mergedColumns = columnsOrder.map((col) => {
     if (!col.editable) {
       return col;
@@ -177,6 +213,10 @@ const EditableTableTruck = (props) => {
       }),
     };
   });
+
+  /**
+   * Renders the edit form.
+   */
   return (
     <Form form={form} component={false}>
       <Table

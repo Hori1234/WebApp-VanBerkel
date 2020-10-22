@@ -2,6 +2,15 @@ import React, { useState } from "react";
 import { Table, Input, InputNumber, Popconfirm, Form, message } from "antd";
 import axios from "axios";
 
+/**
+ * Make a cell editable.
+ * @param {Boolean to see if currently editiong or not} editing
+ * @param {Index of the data} dataIndex 
+ * @param {Name of the field} title 
+ * @param {Type of the input} inputType 
+ * @param {Instance} record 
+ * @param {Index} index  
+ */
 const EditableCell = ({
   editing,
   dataIndex,
@@ -31,11 +40,19 @@ const EditableCell = ({
   );
 };
 
+/**
+ * Create an editable instance of the row.
+ * @param {Instance} props 
+ */
 const EditableTableOrder = (props) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record) => record.key === editingKey;
 
+  /**
+   * Set initial values of the editable row.
+   * @param {Editable row} record 
+   */
   const edit = (record) => {
     form.setFieldsValue({
       "Container": "",
@@ -91,10 +108,18 @@ const EditableTableOrder = (props) => {
     setEditingKey(record.key);
   };
 
+  /**
+   * Handles the cancel button during the edit.
+   */
   const cancel = () => {
     setEditingKey("");
   };
 
+  /**
+   * Handles account editing proccess.
+   * @param {Id of the order to be edited} order_id 
+   * @param {New data for the order} Data 
+   */
   const editAccount = (order_id, Data) => {
     return axios
       .patch(`/api/orders/${order_id}`, Data)
@@ -123,11 +148,15 @@ const EditableTableOrder = (props) => {
         return true;
       })
       .catch((error) => {
-        message.error("An error hsa occured");
+        message.error("An error has occured");
         return false;
       });
   };
 
+  /**
+   * Handles the click on the save button.
+   * @param {Id of the row} key 
+   */
   const save = async (key) => {
     try {
       const row = await form.validateFields();
@@ -156,6 +185,9 @@ const EditableTableOrder = (props) => {
     }
   };
 
+  /**
+   * Renders save/cancel buttons and text fields.
+   */
   const columnsOrder = [
     ...props.columns,
     {
@@ -191,6 +223,10 @@ const EditableTableOrder = (props) => {
       },
     },
   ];
+
+  /**
+   * Renders the edit form.
+   */
   const mergedColumns = columnsOrder.map((col) => {
     if (!col.editable) {
       return col;
@@ -207,6 +243,10 @@ const EditableTableOrder = (props) => {
       }),
     };
   });
+
+  /**
+   * Renders the edit form.
+   */
   return (
     <Form form={form} component={false}>
       <Table

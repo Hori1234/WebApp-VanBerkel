@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Form, Input, Row, Col, message } from "antd";
 import "antd/dist/antd.css";
 
-//const { Text } = Typography;
 
 export default class AddOrdersLayout extends Component {
   constructor(props) {
@@ -113,6 +112,9 @@ export default class AddOrdersLayout extends Component {
     return dataToSend
   }
 
+  /**
+   * Get data in order to correclty display the add order form.
+   */
   getFormOrderData = () => {
     let temp = [];
     temp.push(
@@ -126,251 +128,442 @@ export default class AddOrdersLayout extends Component {
       this.state.G,
       this.state.Gate
     );
-    console.log(temp);
     return temp;
   };
+
+  /**
+   * The following set of functions are all setting new values for each field
+   * when adding an order.
+   */
+
+   /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeBooking = (event) => {
     this.setState({
       "Booking": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeInl = (event) => {
     this.setState({
       "inl_terminal": event.target.value,
     });
   };
 
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTruckType = (event) => {
     this.setState({
       "truck_type": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeHierarchy = (event) => {
     this.setState({
       "hierarchy": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeDeliveryDeadline = (event) => {
     this.setState({
       "delivery_deadline": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeDrivingTime = (event) => {
     this.setState({
       "driving_time": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeProcessTime = (event) => {
     this.setState({
       "process_time": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeCity = (event) => {
     this.setState({
       "City": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeClosing = (event) => {
     this.setState({
       "Closing": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeContainer = (event) => {
     this.setState({
       "Container": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeDate = (event) => {
     this.setState({
       "Date": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeDelay = (event) => {
     this.setState({
       "Delay": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeGate = (event) => {
     this.setState({
       "Gate": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeGate1 = (event) => {
     this.setState({
       "Gate (1)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeGross = (event) => {
     this.setState({
       "Gross (kgs)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeInl_ter_1 = (event) => {
     this.setState({
       "Inl. ter. (1)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeInvoice_reference = (event) => {
     this.setState({
       "Invoice reference": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeL_D = (event) => {
     this.setState({
       "L/D": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeMax_departure = (event) => {
     this.setState({
       "Max. departure": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangePickup = (event) => {
     this.setState({
       "Pickup": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeSeal = (event) => {
     this.setState({
       "Seal": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeStatus = (event) => {
     this.setState({
       "Status": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeShip_comp = (event) => {
     this.setState({
       "Ship. comp.": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTariff_type = (event) => {
     this.setState({
       "Tariff type": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTerminal = (event) => {
     this.setState({
       "Terminal": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTerminal1 = (event) => {
     this.setState({
       "Terminal (1)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTime = (event) => {
     this.setState({
       "Time": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTime1 = (event) => {
     this.setState({
       "Time (1)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTime2 = (event) => {
     this.setState({
       "Time (2)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTime3 = (event) => {
     this.setState({
       "Time (3)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTruck = (event) => {
     this.setState({
       "Truck": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTruck1 = (event) => {
     this.setState({
       "Truck (1)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTruck2 = (event) => {
     this.setState({
       "Truck (2)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTruck3 = (event) => {
     this.setState({
       "Truck (3)": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTruck_used = (event) => {
     this.setState({
       "Truck Used": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeUnit_type = (event) => {
     this.setState({
       "Unit type": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeVoyage_inland_carrier = (event) => {
     this.setState({
       "Voyage/inland carrier": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeWeight = (event) => {
     this.setState({
       "Weight": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeDeparture_time = (event) => {
     this.setState({
       "departure_time": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTruck_id = (event) => {
     this.setState({
       "truck_id": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeF = (event) => {
     this.setState({
       "F": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeG = (event) => {
     this.setState({
       "G": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangePod = (event) => {
     this.setState({
       "POD": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangePositie = (event) => {
     this.setState({
       "Positie": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeReference = (event) => {
     this.setState({
       "Reference": event.target.value,
     });
   };
+
+  /**
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeTemperature = (event) => {
     this.setState({
       "Temperature °C": event.target.value,
     });
   };
 
+  /**
+   * Thrown error in case not all the required fields were completed.
+   * @param {Error information} errorInfo 
+   */
   onFinishFailed = (errorInfo) => {
     message.error("Failed: Please complete all the required fields", errorInfo);
     this.setState({
       status: "error",
     });
   };
-  onFinish = (values) => {
-    console.log(values);
-  };
 
+  /**
+   * Renders the add orders modal.
+   */
   render() {
     const validateMessages = {
       required: "label is required!",
@@ -386,7 +579,6 @@ export default class AddOrdersLayout extends Component {
       <Form Scrollable
         style={{ width: "100vh", maxHeight: "50vh", overflowY: "scroll", overflowX: "hidden" }}
         name="nest-messages"
-        onFinish={this.onFinish}
         onFinishFailed={this.onFinishFailed}
         validateMessages={validateMessages}
       >

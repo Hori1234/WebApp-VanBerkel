@@ -1,3 +1,6 @@
+/**
+ * Create the Order table columns.
+ */
 export const getColumnOrder = () => {
     return [
         {

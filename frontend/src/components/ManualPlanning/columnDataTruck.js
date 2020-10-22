@@ -1,3 +1,6 @@
+/**
+ * Create the Truck table columns.
+ */
 export const getColumnTruck = () => {
     return [
         {
