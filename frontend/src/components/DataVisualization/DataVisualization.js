@@ -53,7 +53,7 @@ export default class DataVisualization extends Component {
                             <Button type="primary" size={"large"} style={{width: "100%"}}>
                                 Publish
                             </Button>
-                        </Popconfirm>,
+                        </Popconfirm>
                     </Col>
                 </Row>
             </Layout>
