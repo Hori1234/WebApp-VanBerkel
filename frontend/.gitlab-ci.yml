@@ -1,5 +1,5 @@
 # Get the latest node docker container
-image: node:latest
+image: buildkite/puppeteer:5.2.1
 
 # Cache node_modules for future jobs
 cache:
@@ -24,7 +24,6 @@ frontend-build:
   stage: Build
   script:
     - npm ci
-    - sudo apt install -y libnss3
 
 # Check style of the code
 frontend-lint:
