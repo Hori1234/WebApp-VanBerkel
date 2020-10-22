@@ -29,6 +29,12 @@ export default class CreateAccountsComponent extends Component {
     };
   }
 
+   /**
+    * Adding an account to the database.
+    * @param {New username} vUsername 
+    * @param {New password} vPassword 
+    * @param {New role} vRole 
+    */
   addAccount = async (vUsername, vPassword, vRole) => {
     return axios
       .post("/api/auth/user", {
@@ -55,24 +61,38 @@ export default class CreateAccountsComponent extends Component {
       });
   };
 
+   /**
+    * Handle changes in the Username text box.
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangeUsername = (event) => {
     this.setState({
       username: event.target.value,
     });
   };
 
+   /**
+    * Handle changes in the Password text box.
+    * @param {Returned value of the triggered event} event 
+    */
   handleChangePassword = (event) => {
     this.setState({
       password: event.target.value,
     });
   };
+
+   /**
+    * Handle changes in the Role selector drop down menu.
+    * @param {Role values} value 
+    */
   handleChangeRole = (value) => {
     this.setState({ role: value });
   };
 
-  onFinish = (values) => {
-    console.log(values);
-  };
+   /**
+    * Throw error if not all the required fields are completed.
+    * @param {Error information retrieved from backend} errorInfo 
+    */
   onFinishFailed = (errorInfo) => {
     message.error("Failed: Please complete all the required fields", errorInfo);
     this.setState({
@@ -80,22 +100,21 @@ export default class CreateAccountsComponent extends Component {
     });
   };
 
+  /**
+   * Renders the accoutn creation modal(page).
+   */
   render() {
     const layout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 16 },
     };
 
+    /**
+     * Throws error if field is empty.
+     */
     /* eslint no-template-curly-in-string: "off" */
     const validateMessages = {
       required: "${label} is required!",
-      types: {
-        email: "${label} is not validate email!",
-        number: "${label} is not a validate number!",
-      },
-      number: {
-        range: "${label} must be between ${min} and ${max}",
-      },
     };
 
     return (

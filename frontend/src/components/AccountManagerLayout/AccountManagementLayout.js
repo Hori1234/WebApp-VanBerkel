@@ -16,6 +16,9 @@ import EditAccountModalComponent from "./EditAccountModalComponent";
 
 const { Text } = Typography;
 
+/**
+ * Export the class.
+ */
 export default class AccountManagementLayout extends Component {
   constructor(props) {
     super(props);
@@ -34,15 +37,23 @@ export default class AccountManagementLayout extends Component {
   componentDidMount = () => {
     this.getUsers();
   };
+
+  /**
+   * Set the values of all the users.
+   * @param {Current value} value 
+   */
   setUsers = (value) => {
     this.setState({
       users: value,
     });
   };
 
-  /**
-   * Sending a request to the database to retrieve all users.
-   */
+   /**
+    * Sending a request to the database
+    * to retrive the list of all users.
+    * @param {Current page} vPage 
+    * @param {Current account list size} vPage_size 
+    */
   getUsers = async (vPage, vPage_size) => {
     return axios
       .get("/api/auth/users", {
@@ -69,10 +80,14 @@ export default class AccountManagementLayout extends Component {
       });
   };
 
-  /**
-   * case ca: Display the account creation modal(page).
-   * case ea: Display the edit account modal(page).
-   */
+   /**
+    * case ca: Display the account creation modal(page).
+    * case ea: Display the edit account modal(page).
+    * @param {ea or ca (create account or eddit account)} value 
+    * @param {Id of a user} vId 
+    * @param {New username of a user} vUsername 
+    * @param {New role of a user} vRole 
+    */
   showModal = (value, vId, vUsername, vRole) => {
     console.log(this.state.Metadata);
     switch (value) {
@@ -101,18 +116,17 @@ export default class AccountManagementLayout extends Component {
     }
     console.log(this.state.Metadata);
   };
-
-  /**
-   * Hide modals after Submit or Cancel button have been pressed.
-   */
+  
+   /**
+    * Hide modals after Submit or Cancel button have been pressed.
+    * @param {Returned value of the triggered event} e 
+    */
   handleOk = (e) => {
-    console.log(e);
     this.setState({
       EAVisible: false,
       CAVisible: false,
     });
   };
-
 
   /**
    * Rendering of the account management page.
@@ -210,3 +224,4 @@ export default class AccountManagementLayout extends Component {
     );
   }
 }
+

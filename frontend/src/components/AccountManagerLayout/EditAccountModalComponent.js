@@ -16,7 +16,10 @@ import "antd/dist/antd.css";
 const { Text, Title } = Typography;
 const { Option } = Select;
 
-export default class CreateAccountsComponent extends Component {
+/**
+ * Export the edit account modal class
+ */
+export default class EditAccountModalComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,6 +29,14 @@ export default class CreateAccountsComponent extends Component {
       nRole: "",
     };
   }
+
+   /**
+    * When the Submit button is pressed the account is updated in the database.
+    * @param {Id of a user to be edited} user_id 
+    * @param {New Username} vUsername 
+    * @param {New password} vPassword 
+    * @param {New role} vRole 
+    */
   updateAccount = async (user_id, vUsername, vPassword, vRole) => {
     return axios
       .patch(`/api/auth/user/${user_id}`, {
@@ -40,41 +51,56 @@ export default class CreateAccountsComponent extends Component {
         return false;
       });
   };
+
+  /**
+   * Username is updated.
+   * @param {Returned value of the triggered event} event 
+   */
   handleChangeUsername = (event) => {
     this.setState({
       nUssername: event.target.value,
     });
   };
+
+  /**
+   * Password is updated.
+   * @param {Returned value of the triggered event} event 
+   */
   handleChangePassword = (event) => {
     this.setState({
       nPassword: event.target.value,
     });
   };
+
+  /**
+   * Role is updated.
+   * @param {Returned value of the triggered event} value 
+   */
   handleChangeRole = (value) => {
     this.setState({ nRole: value });
   };
 
+  /**
+   * Renders the edit account modal.
+   */
   render() {
     const layout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 16 },
     };
 
+    /**
+     * Throws error if fields are empty.
+     */
     /* eslint no-template-curly-in-string: off */
     const validateMessages = {
       required: "${label} is required!",
-      types: {
-        email: "${label} is not a valid email!",
-        number: "${label} is not a valid number!",
-      },
-      number: {
-        range: "${label} must be between ${min} and ${max}",
-      },
     };
 
-    const onFinish = (values) => {
-      console.log(values);
-    };
+    /**
+     * Error if not all the fields are completed
+     * @param {Error information} errorInfo 
+     */
     const onFinishFailed = (errorInfo) => {
       message.error(
         "Failed: Please complete all the required fields",
@@ -126,7 +152,6 @@ export default class CreateAccountsComponent extends Component {
           <Form
             {...layout}
             name="nest-messages"
-            onFinish={onFinish}
             validateMessages={validateMessages}
             style={{ width: "30vh", marginRight: 50 }}
           >
@@ -151,7 +176,6 @@ export default class CreateAccountsComponent extends Component {
           <Form
             {...layout}
             name="nest-messages"
-            onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             validateMessages={validateMessages}
             style={{ width: "40vh", marginRight: 50 }}

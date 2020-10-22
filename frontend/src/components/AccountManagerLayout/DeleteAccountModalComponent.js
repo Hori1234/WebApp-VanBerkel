@@ -6,7 +6,9 @@ import {
 
 import "antd/dist/antd.css";
 const { Text } = Typography;
-
+/**
+ * Export Delete account class.
+ */
 export default class DeleteAccountConfirmationComponent extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +20,9 @@ export default class DeleteAccountConfirmationComponent extends Component {
     };
   }
 
+  /**
+   * Renders the Delete account confirmation pop up.
+   */
   render() {
 
     return (

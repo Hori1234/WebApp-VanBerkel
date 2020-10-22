@@ -490,7 +490,7 @@ export default class ManualPlanning extends Component {
             ],
             columns2: [
                 {
-                    title: "Order_ID",
+                    title: "Order Sheet Id",
                     dataIndex: "order_sheet_id",
                     width: 150,
                     editable: true,

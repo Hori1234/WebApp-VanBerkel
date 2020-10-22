@@ -22,12 +22,18 @@ export default class EditAccountComponent extends Component {
     item: "",
   };
 
+  /**
+   * Number of accounts displayed in the first page.
+   */
   componentDidMount() {
     this.getUsers(1, 10);
-
-    console.log(this.state.data);
   }
 
+   /**
+    * Get users from the database.
+    * @param {Current page} vPage 
+    * @param {Current account list size} vPage_size 
+    */
   getUsers = async (vPage, vPage_size) => {
     let { data } = this.state;
     return axios
@@ -56,6 +62,10 @@ export default class EditAccountComponent extends Component {
       });
   };
 
+   /**
+    * Handles succsessful and unsuccessful account deletions.
+    * @param {Path to user to be deleted} value 
+    */
   deleteUser = (value) => {
     return axios
       .delete(`/api/auth/user/${value}`)
@@ -84,12 +94,19 @@ export default class EditAccountComponent extends Component {
       });
   };
 
+   /**
+    * Delete item by id in the databse.
+    * @param {Id of the user to be deleted} id 
+    */
   deleteItemById = (id) => {
     this.deleteUser(id);
     const filteredData = this.state.data.filter((item) => item.id !== id);
     this.setState({ data: filteredData });
   };
 
+  /**
+   * Gets list of users on multiple pages from the database.
+   */
   handleInfiniteOnLoad = () => {
     let { data } = this.state;
     this.setState({
@@ -98,7 +115,6 @@ export default class EditAccountComponent extends Component {
 
     if (data.length < vPage * vPage_size) {
       message.warning("Infinite List loaded all");
-      console.log("i am heree");
       this.setState({
         hasMore: false,
         loading: false,
@@ -113,12 +129,20 @@ export default class EditAccountComponent extends Component {
     }
   };
 
+   /**
+    * Handles Cancel button on account deletion confirmation pop up.
+    * @param {Returned value of the triggered event} e 
+    */
   handleCancel = (e) => {
     this.setState({
       DAVisible: false,
     });
   };
 
+   /**
+    * Displays the confirmation pop up for account deletion.
+    * @param {Returned value of the triggered event} e 
+    */
   showDeleteAccountModal = (e) => {
     this.setState({
       DAVisible: true,
@@ -126,6 +150,10 @@ export default class EditAccountComponent extends Component {
     });
   };
 
+   /**
+    * Item is sent to be deleted by id in the database.
+    * @param {Id of the user to be deleted} id 
+    */
   handleDelete = (id) => {
     this.setState({
       DAVisible: false,
@@ -133,6 +161,10 @@ export default class EditAccountComponent extends Component {
     this.deleteItemById(id);
   };
 
+  /**
+   * Renders the Edit account and Delete account buttons. 
+   * As well as the confirmation pop ups.
+   */
   render() {
     return (
       <Layout

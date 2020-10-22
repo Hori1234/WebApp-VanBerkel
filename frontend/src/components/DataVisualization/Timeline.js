@@ -241,7 +241,7 @@ export default class Timeline extends Component {
     const property = this.state.timelineDetails;
     console.log(property);
     console.log(property.length);
-    if (property.length == 0) {
+    if (property.length === 0) {
       this.setState({ timelineEmpty: true });
     } else {
       this.setState({ timelineEmpty: false });
