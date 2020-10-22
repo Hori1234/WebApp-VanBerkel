@@ -1,31 +1,31 @@
 import pytest
 import json
-from backend.models.users import User
+from backend.models import User
 
 
 @pytest.fixture(autouse=True)
-def setup_db(setup_users, login_user, create_db_without_users):
+def setup_db(setup_users, login_admin, create_db_without_users):
     """
     Run the fixtures needed for this module.
     """
     pass
 
 
-def remove_user(client, userID):
+def remove_user(client, user_id):
     """
     Removes the given user from the database
-    :param client: the client
-    :param userID: the user to be deleted
+    :param client: the client to make the request
+    :param user_id: the user to be deleted
     :return: 204 if successful, 404 if user was not found,
              400 if user is logged in
     """
-    return client.delete(f'/api/auth/user/{userID}')
+    return client.delete(f'/api/auth/user/{user_id}')
 
 
 def add_user(client, **kwargs):
     """
     Adds a user with given username, password and role
-    :param client: the client
+    :param client: the client to make the request
     :return: the created user, 201 if successful
     """
     return client.post('/api/auth/user',
@@ -36,7 +36,7 @@ def add_user(client, **kwargs):
 def change_user_details(client, userid, **kwargs):
     """
     Changes the details of an existing user
-    :param client:
+    :param client: the client to make the request
     :param userid: the user whose details need changing
     :param kwargs: the details that need to be changed
     :return:
@@ -49,7 +49,7 @@ def change_user_details(client, userid, **kwargs):
 def get_user_list(client, page, per_page):
     """
     Gets the list of all users in the database
-    :param client:
+    :param client: the client to make the request
     :param page: the page to be shown
     :param per_page: the amount of users per page
     :return:

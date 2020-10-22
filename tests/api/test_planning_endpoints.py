@@ -1,18 +1,65 @@
 import datetime
+from contextlib import contextmanager
 from pathlib import Path
 import pytest
 import json
 
-from backend.models import trucks
-from backend.models import orders
+from backend.models import Truck, TruckSheet, Order, OrderSheet, Planning
 
 
 def get_file_path(file):
     return Path(__file__).parent / 'data' / file
 
 
+@contextmanager
+def login_as_admin(client):
+    """
+    Logs in an admin.
+
+    :param client: Flask test client
+    :type client: :class:`flask.testing.FlaskClient`
+    """
+
+    data = dict(
+        username='Midas Bergveen',
+        password='w8woord',
+        remember=False
+    )
+
+    client.post('/api/auth/login',
+                data=json.dumps(data),
+                content_type='application/json')
+
+    yield
+
+    client.post('/api/auth/logout')
+
+
+@contextmanager
+def login_as_view_only(client):
+    """
+    Logs in a view-only user.
+
+    :param client: Flask test client
+    :type client: :class:`flask.testing.FlaskClient`
+    """
+    data = dict(
+        username='Twan van Broekhoven',
+        password='SomethingClever',
+        remember=False
+    )
+
+    client.post('/api/auth/login',
+                data=json.dumps(data),
+                content_type='application/json')
+
+    yield
+
+    client.post('/api/auth/logout')
+
+
 @pytest.fixture(autouse=True)
-def setup_db(setup_users, login_user, create_db_without_users, client):
+def setup_db(setup_users, login_admin, create_db_without_users, client):
     """
     Setup the database for the current test.
     """
@@ -36,8 +83,8 @@ def setup_db(setup_users, login_user, create_db_without_users, client):
 
     # The above two files are uploaded at pretty much the same time, so it is
     # not defined which one is the latest
-    orders.OrderSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
-    trucks.TruckSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
+    OrderSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
+    TruckSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
 
 
 def get_order(client, order_id):
@@ -103,7 +150,6 @@ def patch_truck(client, truck_id, **kwargs):
     """
     attempts to change the specified row in truck
     :param client: the client to make the request with
-    :param sheet_id: the id of the sheet
     :param truck_id: the id of the truck to change
     :param kwargs: the data that needs to be changed
     :return:
@@ -161,6 +207,43 @@ def get_timeline(client, sheet_id):
     :return:
     """
     return client.get(f'/api/orders/timeline/{sheet_id}')
+
+
+def publish_planning(client, truck_sheet_id, order_sheet_id):
+    """
+    Publishes a planning with the specified order sheet and truck sheet
+    :param client: the client to make the request
+    :param truck_sheet_id: the id of the truck sheet to publish
+    :param order_sheet_id: the id of the order sheet to publish
+    :return:
+    """
+    return client.post(f'/api/plannings/{truck_sheet_id}/{order_sheet_id}')
+
+
+def get_planning(client, truck_sheet_id, order_sheet_id):
+    """
+    Gets a planning with the specified order sheet and truck sheet
+    :param client: the client to make the request
+    :param truck_sheet_id: the id of the truck sheet
+    :param order_sheet_id: the id of the order sheet
+    :return:
+    """
+    return client.get(f'/api/plannings/{truck_sheet_id}/{order_sheet_id}')
+
+
+def get_plannings(client, page, per_page):
+    """
+    Gets the list of all plannings in the database
+    :param client: the client to make the request
+    :param page: the page to be shown
+    :param per_page: the amount of plannings per page
+    :return:
+    """
+    pagedetails = dict(
+        page=page,
+        page_size=per_page
+    )
+    return client.get('/api/plannings/', query_string=pagedetails)
 
 # GET ORDER TESTS
 
@@ -229,7 +312,7 @@ def test_get_orders_invalid(client, db):
     assert rv.status_code == 404
 
 
-def test_get_order_sheet_latest(client, db):
+def test_get_orders_latest(client, db):
     """
     Tests the intended use of the get order sheet latest endpoint.
     """
@@ -240,7 +323,7 @@ def test_get_order_sheet_latest(client, db):
     assert len(data) > 0
 
 
-def test_get_order_sheet_not_latest(client, db):
+def test_get_orders_not_latest(client, db):
     """
     Tests the get order sheet latest endpoint but not with the latest sheet.
     """
@@ -248,8 +331,33 @@ def test_get_order_sheet_not_latest(client, db):
 
     assert rv.status_code == 404
 
-# GET TRUCKS TESTS
 
+# TODO: UTP
+@pytest.mark.parametrize('sheet_id', (1, 'latest'))
+def test_get_orders_view_only(client, db, sheet_id):
+    """
+    Tests the get order sheet with a view-only user.
+    """
+    with login_as_view_only(client):
+        rv = get_orders(client, sheet_id)
+        assert rv.status_code == 404
+
+    with login_as_admin(client):
+        rv = publish_planning(client, 1, sheet_id)
+        assert rv.status_code == 200
+
+    with login_as_view_only(client):
+        rv = get_orders(client, sheet_id)
+        assert rv.status_code == 200
+        data = rv.get_json()['orders']
+        assert len(data) > 5
+
+        order_sheet = OrderSheet.query.get(
+            sheet_id if sheet_id != 'latest' else 2)
+        assert order_sheet.orders[0].order_number == data[0]['order_number']
+
+
+# GET TRUCKS TESTS
 
 def test_get_trucks(client, db):
     """
@@ -264,14 +372,14 @@ def test_get_trucks(client, db):
 
 def test_get_trucks_invalid(client, db):
     """
-    Tests the get trucks endpoint but with a invalid trucks.
+    Tests the get trucks endpoint but with an invalid truck.
     """
     rv = get_trucks(client, 20)
 
     assert rv.status_code == 404
 
 
-def test_get_truck_sheet_latest(client, db):
+def test_get_trucks_latest(client, db):
     """
     Tests the intended use of the get truck sheet latest endpoint.
     """
@@ -282,13 +390,38 @@ def test_get_truck_sheet_latest(client, db):
     assert len(data) > 0
 
 
-def test_get_truck_sheet_not_latest(client, db):
+def test_get_trucks_not_latest(client, db):
     """
     Tests the truck sheet latest endpoint but not with the latest sheet.
     """
     rv = get_trucks(client, 'test')
 
     assert rv.status_code == 404
+
+
+# TODO: UTP
+@pytest.mark.parametrize('sheet_id', (1, 'latest'))
+def test_get_trucks_view_only(client, db, sheet_id):
+    """
+    Tests the get truck sheet with a view-only user.
+    """
+    with login_as_view_only(client):
+        rv = get_trucks(client, sheet_id)
+        assert rv.status_code == 404
+
+    with login_as_admin(client):
+        rv = publish_planning(client, sheet_id, 1)
+        assert rv.status_code == 200
+
+    with login_as_view_only(client):
+        rv = get_trucks(client, sheet_id)
+        assert rv.status_code == 200
+        data = rv.get_json()['trucks']
+        assert len(data) > 5
+
+        truck_sheet = TruckSheet.query.get(
+            sheet_id if sheet_id != 'latest' else 2)
+        assert truck_sheet.trucks[0].s_number == data[0]['s_number']
 
 
 # PATCH ORDER TESTS
@@ -307,7 +440,7 @@ def test_patch_order(client, db):
     rv = patch_order(client, 1, **request)
 
     assert rv.status_code == 200
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert order.truck_type == 'regional'
     assert order.inl_terminal == 'KAT'
     assert order.others['SomethingNew'] == 'TEST'
@@ -324,7 +457,7 @@ def test_patch_order_remove_others(client, db):
     )
     rv = patch_order(client, 1, **request)
     assert rv.status_code == 200
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert 'Container' not in order.others
 
 
@@ -367,8 +500,8 @@ def test_patch_order_set_truck_id(client, db):
     assert rv.get_json()['truck_id'] == 14
     assert rv.get_json()['departure_time'] == '12:30:00'
 
-    order = orders.Order.query.get(1)
-    truck = trucks.Truck.query.get(14)
+    order = Order.query.get(1)
+    truck = Truck.query.get(14)
     # also been changed in the database
     assert order.departure_time.strftime('%H:%M') == '12:30'
     assert order.truck == truck
@@ -514,7 +647,7 @@ def test_patch_order_with_departure_time_truck_set(client, db):
     data = rv2.get_json()
     assert data['departure_time'] == '10:00:00'
 
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert order.truck_id == 14
     assert order.departure_time.strftime('%H:%M') == '10:00'
 
@@ -538,8 +671,31 @@ def test_patch_order_dot_seperated(client, db, key):
     assert key in data
     assert data[key] == 'val'
 
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert order.others[key] == 'val'
+
+
+# TODO: UTP
+def test_patch_order_published(client, db):
+    """
+    Tests if patching an order which has already been published responds
+    with an error.
+    """
+    rv = publish_planning(client, 1, 1)
+    assert rv.status_code == 200
+
+    request = dict(
+        truck_id=14,
+        departure_time='12:00'
+    )
+
+    rv = patch_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    data = rv.get_json()
+    assert 'message' in data
+    assert 'planning' in data['message']
+    assert 'change' in data['message']
 
 # PATCH TRUCK TESTS
 
@@ -557,7 +713,7 @@ def test_patch_truck(client, db):
     rv = patch_truck(client, 1, **request)
 
     assert rv.status_code == 200
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert truck.truck_type == 'port'
     assert truck.terminal == 'KAT'
     assert truck.others['SomethingNew'] == 'NEW!'
@@ -576,7 +732,7 @@ def test_patch_truck_remove_others(client, db):
     rv = patch_truck(client, 1, **request)
     assert rv.status_code == 200
 
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert 'Driver' not in truck.others
 
 
@@ -614,8 +770,8 @@ def test_patch_truck_with_orders(client, db):
             order_number=1,
             departure_time='12:30'
         ), dict(
-            order_number=24,
-            departure_time='10:00'
+            order_number=7,
+            departure_time='7:00'
         )
         ]
     )
@@ -623,7 +779,7 @@ def test_patch_truck_with_orders(client, db):
 
     assert rv.status_code == 200
 
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert truck.truck_type == 'port'
     assert len(truck.orders) == 2
     assert truck.orders[0].order_number == 1
@@ -684,8 +840,31 @@ def test_patch_truck_dot_seperated(client, db, key):
     assert key in data
     assert data[key] == 'val'
 
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert truck.others[key] == 'val'
+
+
+# TODO: UTP
+def test_patch_truck_published(client, db):
+    """
+    Tests if patching a truck which has already been published responds
+    with an error.
+    """
+    rv = publish_planning(client, 1, 1)
+    assert rv.status_code == 200
+
+    request = dict(
+        truck_type='port',
+        terminal='KAT'
+    )
+
+    rv = patch_truck(client, 1, **request)
+
+    assert rv.status_code == 400
+    data = rv.get_json()
+    assert 'message' in data
+    assert 'planning' in data['message']
+    assert 'change' in data['message']
 
 # POST ORDER TESTS
 
@@ -702,7 +881,7 @@ def test_post_order(client, db):
     rv = post_order(client, 1, **request)
     assert rv.status_code == 200
     data = rv.get_json()
-    order = orders.Order.query.get_or_404(data['order_number'])
+    order = Order.query.get_or_404(data['order_number'])
     assert order.hierarchy == 3
 
 
@@ -745,7 +924,7 @@ def test_post_order_latest(client, db):
 
     assert rv.status_code == 200
     data = rv.get_json()
-    order = orders.Order.query.get_or_404(data['order_number'])
+    order = Order.query.get_or_404(data['order_number'])
     assert order.hierarchy == 3
 
 
@@ -781,7 +960,7 @@ def test_post_order_with_truck_id(client, db):
     assert data['truck_id'] == 14
     assert data['departure_time'] == '14:00:00'
 
-    order = orders.Order.query.get(data['order_number'])
+    order = Order.query.get(data['order_number'])
     assert order.truck_id == 14
     assert order.departure_time.strftime('%H:%M') == '14:00'
 
@@ -847,6 +1026,31 @@ def test_post_order_dot_seperated(client, db, key):
     assert key in data
     assert data[key] == 'val'
 
+
+# TODO: UTP
+def test_post_order_published(client, db):
+    """
+    Tests if post orders returns an error when the order sheet is
+    already published.
+    """
+    rv = publish_planning(client, 1, 1)
+    assert rv.status_code == 200
+
+    request = dict(
+        inl_terminal='ITV', latest_dep_time=1000,
+        truck_type='port', hierarchy=3, delivery_deadline='20:00',
+        driving_time=10, process_time=1, service_time=2
+    )
+
+    rv = post_order(client, 1, **request)
+
+    assert rv.status_code == 400
+    data = rv.get_json()
+    assert 'message' in data
+    assert 'planning' in data['message']
+    assert 'add' in data['message']
+
+
 # POST TRUCK TESTS
 
 
@@ -864,7 +1068,7 @@ def test_post_truck(client, db):
 
     assert rv.status_code == 200
     data = rv.get_json()
-    truck = trucks.Truck.query.get(data['s_number'])
+    truck = Truck.query.get(data['s_number'])
     assert truck.hierarchy == 2
 
 
@@ -910,7 +1114,7 @@ def test_post_truck_latest(client, db):
 
     assert rv.status_code == 200
     data = rv.get_json()
-    truck = trucks.Truck.query.get_or_404(data['s_number'])
+    truck = Truck.query.get_or_404(data['s_number'])
     assert truck.hierarchy == 2
 
 
@@ -938,13 +1142,13 @@ def test_post_truck_with_orders(client, db):
         truck_id='45-TBD-1', availability=True,
         truck_type='port', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='10:00',
+        starting_time='6:00',
         orders=[dict(
             order_number=1,
             departure_time='12:30'
         ), dict(
-            order_number=24,
-            departure_time='10:00'
+            order_number=7,
+            departure_time='7:00'
         )
         ]
     )
@@ -1002,6 +1206,31 @@ def test_post_truck_dot_seperated(client, db, key):
     assert key in data
     assert data[key] == 'val'
 
+
+# TODO: UTP
+def test_post_truck_published(client, db):
+    """
+    Tests if post trucks returns an error when the truck sheet is
+    already published.
+    """
+    rv = publish_planning(client, 1, 1)
+    assert rv.status_code == 200
+
+    request = dict(
+        truck_id='45-TBD-1', availability=True,
+        truck_type='terminal', business_type='ITV', terminal='ITV',
+        hierarchy=2, use_cost=17, date='2020-10-01',
+        starting_time='15:30'
+    )
+
+    rv = post_truck(client, 1, **request)
+
+    assert rv.status_code == 400
+    data = rv.get_json()
+    assert 'message' in data
+    assert 'planning' in data['message']
+    assert 'add' in data['message']
+
 # DELETE ORDER TESTS
 
 
@@ -1014,11 +1243,11 @@ def test_delete_order(client, db):
     assert rv.status_code == 204
 
     # Check if order was deleted
-    order = orders.Order.query.get(1)
+    order = Order.query.get(1)
     assert order is None
 
     # Check if there are any orders left
-    order_list = orders.Order.query.filter_by(sheet_id=1).all()
+    order_list = Order.query.filter_by(sheet_id=1).all()
     assert len(order_list) > 0
 
 
@@ -1029,6 +1258,25 @@ def test_delete_order_wrong(client, db):
     rv = delete_order(client, 100000)
 
     assert rv.status_code == 404
+
+
+# TODO: UTP
+def test_delete_order_published(client, db):
+    """
+    Tests if deleting an order from a published planning responds
+    with an error.
+    """
+    rv = publish_planning(client, 1, 1)
+    assert rv.status_code == 200
+
+    rv = delete_order(client, 1)
+    assert rv.status_code == 400
+
+    data = rv.get_json()
+    assert 'message' in data
+    assert 'planning' in data['message']
+    assert 'delete' in data['message']
+
 
 # DELETE TRUCK TESTS
 
@@ -1042,11 +1290,11 @@ def test_delete_truck(client, db):
     assert rv.status_code == 204
 
     # Check if the truck was deleted
-    truck = trucks.Truck.query.get(1)
+    truck = Truck.query.get(1)
     assert truck is None
 
     # Check if there are any trucks left
-    truck_list = trucks.Truck.query.filter_by(sheet_id=1).all()
+    truck_list = Truck.query.filter_by(sheet_id=1).all()
     assert len(truck_list) > 0
 
 
@@ -1067,13 +1315,13 @@ def test_delete_then_post_truck(client, db):
         truck_id='45-TBD-1', availability=True,
         truck_type='port', business_type='ITV', terminal='ITV',
         hierarchy=2, use_cost=17, date='2020-10-01',
-        starting_time='10:00',
+        starting_time='6:00',
         orders=[dict(
             order_number=1,
             departure_time='12:30'
         ), dict(
-            order_number=24,
-            departure_time='10:00'
+            order_number=7,
+            departure_time='7:00'
         )
         ]
     )
@@ -1084,7 +1332,7 @@ def test_delete_then_post_truck(client, db):
     assert rv2.status_code == 200
 
     data = rv2.get_json()
-    truck = trucks.Truck.query.get(data['s_number'])
+    truck = Truck.query.get(data['s_number'])
     assert truck.truck_id == '45-TBD-1'
     assert truck.use_cost == 17
 
@@ -1105,9 +1353,27 @@ def test_delete_then_post_order(client, db):
     assert rv2.status_code == 200
 
     data = rv2.get_json()
-    order = orders.Order.query.get(data['order_number'])
+    order = Order.query.get(data['order_number'])
     assert order.inl_terminal == 'ITV'
     assert order.process_time == 1
+
+
+# TODO: UTP
+def test_delete_truck_published(client, db):
+    """
+    Tests if deleting a truck from a published planning responds
+    with an error.
+    """
+    rv = publish_planning(client, 1, 1)
+    assert rv.status_code == 200
+
+    rv = delete_truck(client, 1)
+    assert rv.status_code == 400
+
+    data = rv.get_json()
+    assert 'message' in data
+    assert 'planning' in data['message']
+    assert 'delete' in data['message']
 
 # TEST GET TIMELINE
 
@@ -1124,7 +1390,7 @@ def test_get_timeline(client, db, sheet_id):
         Address='testStreet'
     )
 
-    rv3 = patch_order(client, 142, **request1)
+    rv3 = patch_order(client, 13, **request1)
     assert rv3.status_code == 200
 
     request2 = dict(
@@ -1133,7 +1399,7 @@ def test_get_timeline(client, db, sheet_id):
         Address='testStreet'
     )
 
-    rv2 = patch_order(client, 141, **request2)
+    rv2 = patch_order(client, 14, **request2)
     assert rv2.status_code == 200
 
     rv = get_timeline(client, sheet_id)
@@ -1142,9 +1408,9 @@ def test_get_timeline(client, db, sheet_id):
     data = rv.get_json()
     expected = dict(
         address=request2['Address'],
-        booking_id='167617B',
+        booking_id='167617C',
         client=None,
-        container_id='SEGU 628854 7',
+        container_id='TCNU 948989 7',
         departure_time=request2['departure_time'],
         truck_id=request2['truck_id'],
         order_type='port',
@@ -1161,3 +1427,190 @@ def test_get_timeline_wrong_sheet(client, sheet_id):
     """
     rv = get_timeline(client, sheet_id)
     assert rv.status_code == 404
+
+
+# TODO: UTP
+@pytest.mark.parametrize('sheet_id', (2, 'latest'))
+def test_get_timeline_view_only(client, db, sheet_id):
+    """
+    Tests the get timeline endpoint with a view-only user
+    """
+    # Assign truck to order
+    request1 = dict(
+        truck_id=15,
+        departure_time='08:00:00',
+        Address='testStreet'
+    )
+
+    rv3 = patch_order(client, 13, **request1)
+    assert rv3.status_code == 200
+
+    request2 = dict(
+        truck_id=14,
+        departure_time='08:00:00',
+        Address='testStreet'
+    )
+
+    rv2 = patch_order(client, 14, **request2)
+    assert rv2.status_code == 200
+
+    rv = get_timeline(client, sheet_id)
+    assert rv.status_code == 200
+
+    with login_as_view_only(client):
+        rv = get_timeline(client, sheet_id)
+        assert rv.status_code == 404
+
+    with login_as_admin(client):
+        rv = publish_planning(client, 1, sheet_id)
+        assert rv.status_code == 200
+
+    with login_as_view_only(client):
+        rv = get_timeline(client, sheet_id)
+        assert rv.status_code == 200
+        data = rv.get_json()
+
+        expected = dict(
+            address=request2['Address'],
+            booking_id='167617C',
+            client=None,
+            container_id='TCNU 948989 7',
+            departure_time=request2['departure_time'],
+            truck_id=request2['truck_id'],
+            order_type='port',
+            end_time="13:00:00"
+        )
+
+        assert len(data) == 2
+        assert expected in data
+
+# TEST POST PLANNING
+
+# TODO: UTP
+@pytest.mark.parametrize('truck_sheet_id', (2, 'latest'))
+@pytest.mark.parametrize('order_sheet_id', (2, 'latest'))
+def test_post_planning(client, truck_sheet_id, order_sheet_id):
+    """
+    Tests publishing a planning using correct inputs
+    """
+    rv = publish_planning(client, truck_sheet_id, order_sheet_id)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+
+    if truck_sheet_id == 'latest':
+        assert data['truck_sheet_id'] == 2
+    else:
+        assert data['truck_sheet_id'] == truck_sheet_id
+    if order_sheet_id == 'latest':
+        assert data['order_sheet_id'] == 2
+    else:
+        assert data['order_sheet_id'] == order_sheet_id
+
+    assert 'published_on' in data
+    assert 'user_id' in data
+
+
+# TODO: UTP
+@pytest.mark.parametrize('truck_sheet_id,order_sheet_id',
+                         [(2, 'something'), (2, 3), ('something', 2),
+                          (3, 2), ('something', 'something'), (3, 3)])
+def test_post_planning_wrong_request(client, truck_sheet_id, order_sheet_id):
+    """
+    Tests publishing a planning using incorrect inputs
+    """
+    rv = publish_planning(client, truck_sheet_id, order_sheet_id)
+
+    assert rv.status_code == 404
+
+
+# TODO: UTP
+@pytest.mark.parametrize('publish', ('truck', 'order', 'both'))
+def test_post_planning_already_published(client, publish):
+    """
+    Tests publishing a planning with already published
+    order sheet and truck sheets. Should respond with an error
+    """
+    if publish == 'truck':
+        rv = publish_planning(client, 1, 2)
+    elif publish == 'order':
+        rv = publish_planning(client, 2, 1)
+    else:
+        rv = publish_planning(client, 1, 1)
+    assert rv.status_code == 200
+
+    rv = publish_planning(client, 1, 1)
+    assert rv.status_code == 400
+    data = rv.get_json()
+    assert 'message' in data
+    assert 'published planning' in data['message']
+
+
+# TEST GET PLANNING
+
+# TODO: UTP
+@pytest.mark.parametrize('truck_sheet_id', (2, 'latest'))
+@pytest.mark.parametrize('order_sheet_id', (2, 'latest'))
+def test_get_planning(client, truck_sheet_id, order_sheet_id):
+    """
+    Tests the get single planning endpoint with correct inputs.
+    """
+    for i in range(1, 3):
+        rv = publish_planning(client, i, i)
+        assert rv.status_code == 200
+
+    rv = get_planning(client, truck_sheet_id, order_sheet_id)
+
+    assert rv.status_code == 200
+    data = rv.get_json()
+
+    if truck_sheet_id == 'latest':
+        assert data['truck_sheet_id'] == 2
+    else:
+        assert data['truck_sheet_id'] == truck_sheet_id
+    if order_sheet_id == 'latest':
+        assert data['order_sheet_id'] == 2
+    else:
+        assert data['order_sheet_id'] == order_sheet_id
+
+
+# TODO: UTP
+@pytest.mark.parametrize('truck_sheet_id,order_sheet_id',
+                         [(2, 'something'), (2, 3), ('something', 2),
+                          (3, 2), ('something', 'something'), (3, 3)])
+def test_get_planning_wrong_request(client, truck_sheet_id, order_sheet_id):
+    """
+    Tests the get single planning endpoint with incorrect inputs.
+    """
+    for i in range(1, 3):
+        rv = publish_planning(client, i, i)
+        assert rv.status_code == 200
+
+    rv = get_planning(client, truck_sheet_id, order_sheet_id)
+
+    assert rv.status_code == 404
+
+
+# TEST GET PLANNINGS
+
+# TODO: UTP
+@pytest.mark.parametrize('page_size', (1, 2, 10))
+def test_get_plannings(client, page_size):
+    """
+    Tests the get plannings endpoint
+    """
+    for i in range(1, 3):
+        rv = publish_planning(client, i, i)
+        assert rv.status_code == 200
+
+    plan2 = Planning.query.get((2, 2))
+    plan2.published_on += datetime.timedelta(hours=1)
+
+    rv = get_plannings(client, page=1, per_page=page_size)
+
+    assert rv.status_code == 200
+    assert 'X-Pagination' in rv.headers
+    data = rv.get_json()
+    assert len(data) == min(page_size, 2)
+    assert data[0]['order_sheet_id'] == 2
+    assert data[0]['truck_sheet_id'] == 2

@@ -1,11 +1,30 @@
-from backend.app import ma
+from backend.plugins import ma
 from marshmallow import INCLUDE, post_dump
-from backend.models.orders import Order, OrderSheet
+from backend.models import Order, OrderSheet
 
 
-class OrderSchema(ma.SQLAlchemyAutoSchema):
+class OthersSchemaMixin(object):
     """
-    Serializes the order table to JSON
+    Mixin for schemas to extend from, adds the functionality that the `others`
+    field is unpacked in the dumped object.
+    """
+
+    @post_dump
+    def flatten_others(self, obj, many, **kwargs):
+        """
+        Flattens the others field of an order
+        """
+        for k, v in obj['others'].items():
+            obj[k] = v
+
+        # remove the others field from the object
+        obj.pop('others')
+        return obj
+
+
+class OrderSchema(OthersSchemaMixin, ma.SQLAlchemyAutoSchema):
+    """
+    Serializes the :class:`backend.models.Order` database table to JSON.
     """
 
     latest_dep_time = ma.Time()
@@ -14,6 +33,11 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
     others = ma.Dict(dump_only=True)
 
     class Meta:
+        """
+        Determines the database table from which the fields are inferred from.
+        Also determines the order and includes the unknown fields in the
+        loaded and dumped objects.
+        """
         model = Order
         ordered = True
         dump_only = ('order_number',
@@ -21,35 +45,38 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
                      'service_time')
         unknown = INCLUDE
 
-    @post_dump
-    def flatten_others(self, obj, many, **kwargs):
-        """
-        Flattens the others field of an order
-        """
-        for k, v in obj['others'].items():
-            obj[k] = v
-        obj.pop('others')
-        return obj
-
 
 class OrderTableSchema(ma.SQLAlchemySchema):
+    """
+    Serializes a :class:`backend.models.OrderSheet` including
+    the columns names to JSON.
+    """
 
     orders = ma.Nested(OrderSchema, many=True)
     column_names = ma.Dict()
 
     class Meta:
+        """
+        Determines the inferred fields of the schema.
+        """
         model = OrderSheet
 
 
 class TimeLineSchemaOthers(ma.Schema):
+    """
+    Serializes the parameters stored in the others relation
+    (from :class:`backend.models.OrderProperties`) for the planning timeline.
+    """
     container_id = ma.String(default=None, attribute='Container')
     address = ma.String(default=None, attribute='Address')
     booking_id = ma.String(default=None, attribute='Booking')
     client = ma.String(default=None, attribute='Client')
 
 
-class TimeLineSchema(ma.SQLAlchemySchema):
-
+class TimeLineSchema(OthersSchemaMixin, ma.SQLAlchemySchema):
+    """
+    Serializes the parameters needed for the planning timeline.
+    """
     truck_id = ma.Integer()
     departure_time = ma.Time()
     end_time = ma.Time()
@@ -57,14 +84,7 @@ class TimeLineSchema(ma.SQLAlchemySchema):
     order_type = ma.String(attribute='truck_type')
 
     class Meta:
-        model = OrderSheet
-
-    @post_dump
-    def flatten_others(self, obj, many, **kwargs):
         """
-        Flattens the others field of an order
+        Determines the inferred fields on the schema.
         """
-        for k, v in obj['others'].items():
-            obj[k] = v
-        obj.pop('others')
-        return obj
+        model = Order

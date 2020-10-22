@@ -4,7 +4,9 @@ from pandas import Timestamp
 
 
 class DateValidation(Date):
-
+    """
+    Validates that the data is a correct date object
+    """
     def _deserialize(self, value, attr, data, **kwargs):
         if isinstance(value, Timestamp):
             return value.to_pydatetime()
@@ -14,7 +16,9 @@ class DateValidation(Date):
 
 
 class TimeValidation(Time):
-
+    """
+    Validates that the data is a correct time object
+    """
     def _deserialize(self, value, attr, data, **kwargs):
         if isinstance(value, dt.time):
             return value

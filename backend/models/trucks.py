@@ -1,44 +1,18 @@
 import datetime
-from flask import current_app
-from sqlalchemy.sql import func
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm.collections import attribute_mapped_collection
-from backend.app import db
+from backend.plugins import db
+from .mixins.ValidationMixin import ValidationMixin
+from .properties import TruckProperties
 
 
-class TruckSheet(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    upload_date = db.Column(db.DateTime, server_default=func.now())
-    trucks = db.relationship('Truck', backref='trucksheet',
-                             cascade='all, delete-orphan')
+class Truck(ValidationMixin, db.Model):
+    """
+    A single row in a truck availability sheet.
 
-    @hybrid_property
-    def column_names(self):
-        property_names = TruckProperties.query.\
-            with_entities(TruckProperties.key).join(Truck)\
-            .filter(Truck.sheet_id == self.id).distinct().all()
-        property_names = {name: name for name, in property_names}
-        standard_names = {'s_number': 'S Number',
-                          'truck_id': 'Truck ID',
-                          'availability': 'Availability',
-                          'truck_type': 'Truck type',
-                          'business_type': 'Business type',
-                          'terminal': 'Terminal',
-                          'hierarchy': 'Hierarchy',
-                          'use_cost': 'Use cost',
-                          'date': 'Date',
-                          'starting': 'Starting time'}
-        return {**standard_names, **property_names}
-
-    def add_row(self, truck):
-        self.trucks.append(truck)
-
-    def add_rows(self, rows):
-        self.trucks.extend(rows)
-
-
-class Truck(db.Model):
+    The columns are all required to create a planning. The non-required columns
+    are stored in the others relation with
+    :class:`backend.models.TruckProperties`.
+    """
     s_number = db.Column(db.Integer, primary_key=True)
     sheet_id = db.Column(db.Integer,
                          db.ForeignKey('truck_sheet.id', ondelete='CASCADE'))
@@ -51,11 +25,14 @@ class Truck(db.Model):
     use_cost = db.Column(db.Float, nullable=False)
     date = db.Column(db.Date, nullable=False)
     starting_time = db.Column(db.Time, nullable=False)
+
+    # The `others` field is for every property that is not required.
     others = association_proxy('properties',
                                'value',
                                creator=lambda k, v:
                                TruckProperties(key=k, value=v))
 
+    # The orders assigned to this particular truck
     orders = db.relationship('Order', backref='truck')
 
     def __init__(self, truck_id: str, availability: bool,
@@ -74,36 +51,16 @@ class Truck(db.Model):
         self.starting_time = starting_time
         self.others = kwargs
 
-    @db.validates('terminal')
-    def validate_terminal(self, key, value):
-        terminals = current_app.config['TERMINALS']
-        if value.upper() not in terminals:
-            raise ValueError(
-                f"Terminal base must be one of {', '.join(terminals[:-1])} "
-                f"or {terminals[-1]}"
-            )
-        return value.upper()
+    def assign_orders(self, orders, departure_times):
+        """
+        Assigns a list of orders to this truck,
+        departure time has to be included.
 
-    @db.validates('truck_type')
-    def validate_truck_type(self, key, value):
-        trucks = current_app.config['TRUCK_TYPES']
-        if value.lower() not in trucks:
-            raise ValueError(
-                f"Truck type must be one of {', '.join(trucks[:-1])} "
-                f"or {trucks[-1]}"
-            )
-        return value.lower()
-
-
-class TruckProperties(db.Model):
-    s_number = db.Column(db.Integer,
-                         db.ForeignKey('truck.s_number',
-                                       ondelete='CASCADE'),
-                         primary_key=True)
-    key = db.Column(db.String, primary_key=True)
-    value = db.Column(db.String, nullable=False)
-
-    truck = db.relationship(Truck, backref=db.backref(
-                'properties',
-                collection_class=attribute_mapped_collection('key'),
-                cascade='all, delete-orphan'))
+        :param orders: List of order objects to be assigned to this truck
+        :type orders: List[:class:`backend.models.Order`]
+        :param departure_times: List of departure times for the orders.
+        :type departure_times: List[str]
+        """
+        for order, departure_time in zip(orders, departure_times):
+            order.truck = self
+            order.departure_time = departure_time
