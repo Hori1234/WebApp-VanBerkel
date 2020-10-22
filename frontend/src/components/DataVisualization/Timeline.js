@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import Chart from "react-google-charts";
 import "../Css/DataVisualization.css";
-import {Layout, Button, message } from "antd";
+import { Layout, Spin, Typography } from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
+
+
+const { Title } = Typography
 
 export function createCustomHTMLTooltip(
   orderID,
@@ -138,7 +141,8 @@ export default class Timeline extends Component {
     super(props);
     this.state = {
       timelineDetails: [],
-      status: "loading"
+      status: "loading",
+      timelineEmpty: true
     };
   }
 
@@ -156,6 +160,7 @@ export default class Timeline extends Component {
           timelineDetails: res.data,
           status: "success",
         }));
+        this.setTimelineEmpty();
         return true;
       })
       .catch((error) => {
@@ -179,6 +184,7 @@ export default class Timeline extends Component {
     let truckID = [];
 
     const property = this.state.timelineDetails;
+
     property.forEach((element) => {
       if (element.address == null) {
         address.push("unknown destination");
@@ -231,35 +237,66 @@ export default class Timeline extends Component {
     return createAllDataInput(truckID, bookingID, departureTime, endTime, address, orderType, client, containerID);
   }
 
+  setTimelineEmpty = () => {
+    const property = this.state.timelineDetails;
+    console.log(property);
+    console.log(property.length);
+    if (property.length == 0) {
+      this.setState({ timelineEmpty: true });
+    } else {
+      this.setState({ timelineEmpty: false });
+    }
+  };
+
   render() {
     return (
-      
-      this.state.status === "loading" ? "loading...":
-      <Layout
-        style={{
-          display: "flex",
-          height: "100%",
-          width: "100%",
-          background: "white"
-        }}
-      >
-        <Chart
-          width={"100%"}
-          height={"100%"}
-          chartType="Timeline"
-          loader={<div>Loading Chart</div>}
-          data={ this.createArrays()
-          }
-          options={{
-            timeline: {
-              colorByRowLabel: false,
-              allowHtml: true,
-            },
-            avoidOverlappingGridLines: false,
+      this.state.status === "loading" ? <Layout
+      style={{
+        display: "flex",
+        height: "100%",
+        width: "100%",
+        background: "white",
+        justifyContent: "center", 
+        alignItems: "center" 
+      }}
+    > <Spin size="large" />
+    </Layout> :
+        this.state.timelineEmpty ? <Layout
+          style={{
+            display: "flex",
+            height: "100%",
+            width: "100%",
+            background: "white",
+            justifyContent: "center", 
+            alignItems: "center" 
           }}
-          rootProps={{ "data-testid": "5" }}
-        />
-      </Layout>
+        > <Title>This timline has no datapoints yet, Go to manual planning page to assign some</Title>
+        </Layout> :
+          <Layout
+            style={{
+              display: "flex",
+              height: "100%",
+              width: "100%",
+              background: "white"
+            }}
+          >
+            <Chart
+              width={"100%"}
+              height={"100%"}
+              chartType="Timeline"
+              loader={<Spin size="large" />}
+              data={this.createArrays()
+              }
+              options={{
+                timeline: {
+                  colorByRowLabel: false,
+                  allowHtml: true,
+                },
+                avoidOverlappingGridLines: false,
+              }}
+              rootProps={{ "data-testid": "5" }}
+            />
+          </Layout>
     );
   }
 }
