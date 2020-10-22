@@ -300,7 +300,7 @@ export default class Timeline extends Component {
             justifyContent: "center", 
             alignItems: "center" 
           }}
-        > <Title>This timeline has no data points yet, consider assigning some</Title>
+        > <Title>This timeline has no data points yet, consider assigning some.</Title>
         </Layout> :
           <Layout
             style={{

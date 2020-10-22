@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory, useLocation } from 'react-router-dom'
 import { useAuth } from "../contextConfig";
 import {
   Layout,
@@ -18,34 +19,52 @@ const { Title } = Typography;
 
 export default function SignInComponent() {
   const auth = useAuth();
+  let history = useHistory();
+  let location = useLocation();
+  let { from } = location.state || { from: { pathname: "/" } };
 
   const [state, setState] = useState({
     username: "",
     password: "",
+    remember: false
   });
 
   const onAuthenticate = async () => {
     const success = await auth.login({
       username: state.username,
       password: state.password,
+      remember: state.remember
     });
 
-    if (!success) message.info("Account not valid");
+    if (success) {
+      history.replace(from);
+    }
+
+    else {
+      message.info("Account not valid");
+    }
   };
 
   const handleChangeUsername = (event) => {
     setState({
       ...state,
-      username: event.target.value,
+      username: event.target.value
     });
   };
 
   const handleChangePassword = (event) => {
     setState({
       ...state,
-      password: event.target.value,
+      password: event.target.value
     });
   };
+
+  const handleChangeRemember = (event) => {
+    setState({
+      ...state,
+      remember: event.target.value
+    })
+  }
 
   const layout = {
     labelCol: {
@@ -138,10 +157,13 @@ export default function SignInComponent() {
           <Form.Item
             {...tailLayout}
             name="remember"
-            valuePropName="checked"
             style={{ width: "100%", marginRight: 180, marginLeft: -50 }}
           >
-            <Checkbox>Remember me</Checkbox>
+            <Checkbox
+              checked={state.remember}
+              onChange={handleChangeRemember}
+            >Remember me
+            </Checkbox>
           </Form.Item>
 
           <Form.Item {...tailLayout}>

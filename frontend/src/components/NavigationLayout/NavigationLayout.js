@@ -2,22 +2,17 @@ import React, { useState } from "react";
 import "antd/dist/antd.css";
 import { Layout, Menu, Avatar, Divider, Image } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-
-import { withRouter, useLocation, Switch, Route, Link } from "react-router-dom";
-
-import Home from "../Home/Home";
-import UploadButton from "../UploadButton/UploadButton";
-import AccountManagementLayout from "../AccountManagerLayout/AccountManagementLayout";
+import { useLocation, Link} from "react-router-dom";
 import "../Css/NavigationLayout.css";
-import Logout from "../Logout/Logout";
 import { useAuth } from "../contextConfig";
-import ManualPlanning from "../ManualPlanning/ManualPlanning";
-import DataVisualization from "../DataVisualization/DataVisualization";
-import ViewPlanning from "../ViewPlanningPageLayout/ViewPlanning";
+import PageRouter from "./PageRouter";
 const { SubMenu } = Menu;
 const { Content, Sider, Footer, Header } = Layout;
 
-function NavigationLayout() {
+/**
+ * Holds the sidebar and defines the main content layout.
+ */
+export default function NavigationLayout() {
   const auth = useAuth();
   const location = useLocation();
   const [state, setState] = useState({
@@ -26,29 +21,37 @@ function NavigationLayout() {
     collapsed: false,
     selectedKeys: [],
   });
+
+  /**
+   * Get the key of side menu item to highlight the current page.
+   *
+   * @param pathname: string of the current url path
+   */
   const keys = (pathname) =>{
-    if(pathname === '/'){
-      return '0';
-    }
-    else if(pathname === '/account'){
-      return '1';
-    }
-    else if(pathname === '/upload'){
-      return '2';
-    }
-    else if(pathname === '/planning'){
-      return '3';
-    }
-    else if(pathname === '/view'){
-      return '4';
-    }
-    else if(pathname === '/data'){
-      return '5';
-    }
-    else if(pathname === '/montly'){
-      return '6';
+    switch(pathname) {
+      case '/':
+        return '0';
+      case '/account':
+        return '1';
+      case '/upload':
+        return '2';
+      case '/planning':
+        return '3';
+      case '/view':
+        return '4';
+      case '/data':
+        return '5';
+      case '/monthly':
+        return '6'
+      default:
+        return null;
     }
   }
+
+  /** Make the sidebar collapsable
+   *
+   * @param collapsed: boolean to set the state of the sidebar
+   */
   const onCollapse = (collapsed) => {
     setState({
       ...state,
@@ -62,9 +65,9 @@ function NavigationLayout() {
       divider.style.setProperty("display", "flex");
     }
   };
+
+
   return (
-
-
     !auth.state ?  <pre>Loading...</pre> :
     
       <Layout style={{ height: "100vh" }}>
@@ -117,7 +120,7 @@ function NavigationLayout() {
                       <Link to="/data">Data Visualisation</Link>
                     </Menu.Item>
                     <Menu.Item key="6">
-                      <Link to="/montly">Monthly Data Analytics</Link>
+                      <Link to="/monthly">Monthly Data Analytics</Link>
                     </Menu.Item>
                     <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
                   </SubMenu>
@@ -146,7 +149,7 @@ function NavigationLayout() {
                       <Link to="/data">Data Visualisation</Link>
                     </Menu.Item>
                     <Menu.Item key="6">
-                      <Link to="/montly">Monthly Data Analytics</Link>
+                      <Link to="/monthly">Monthly Data Analytics</Link>
                     </Menu.Item>
                     <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
                   </SubMenu>
@@ -169,7 +172,7 @@ function NavigationLayout() {
                       <Link to="/data">Data Visualisation</Link>
                     </Menu.Item>
                     <Menu.Item key="6">
-                      <Link to="/montly">Monthly Data Analytics</Link>
+                      <Link to="/monthly">Monthly Data Analytics</Link>
                     </Menu.Item>
                     <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
                   </SubMenu>
@@ -210,30 +213,7 @@ function NavigationLayout() {
                   backgroundColor: "white",
                 }}
               >
-                <Switch>
-                  <Route path="/upload">
-                    <UploadButton />
-                  </Route>
-                  <Route path="/account">
-                    <AccountManagementLayout />
-                  </Route>
-                  <Route path="/logout">
-                    <Logout />
-                  </Route>
-                  <Route path="/planning">
-                    <ManualPlanning />
-                  </Route>
-                  <Route path="/view">
-                    <ViewPlanning />
-                  </Route>
-                  <Route path="/data">
-                    <DataVisualization />
-                  </Route>
-                  <Route path="/montly"></Route>
-                  <Route path="/" exact>
-                    <Home />
-                  </Route>
-                </Switch>
+              <PageRouter/>
               </Layout>
             </Content>
           </Layout>
@@ -245,4 +225,3 @@ function NavigationLayout() {
     </Layout>
   );
 }
-export default withRouter(NavigationLayout);

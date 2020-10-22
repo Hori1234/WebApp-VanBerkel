@@ -14,6 +14,6 @@ exports[`NavigationLayout component shall shallow the login page correctly 1`] =
     }
   }
 >
-  <withRouter(NavigationLayout) />
+  <NavigationLayout />
 </ContextProvider>
 `;

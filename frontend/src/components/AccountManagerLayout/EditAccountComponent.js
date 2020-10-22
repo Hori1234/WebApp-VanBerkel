@@ -8,7 +8,8 @@ import "antd/dist/antd.css";
 import InfiniteScroll from "react-infinite-scroller";
 import "../Css/EditAC.css";
 import DeleteAccountConfirmationComponent from "./DeleteAccountModalComponent";
-var vPage = 1;
+
+let vPage = 1;
 const vPage_size = 10;
 
 export default class EditAccountComponent extends Component {
@@ -21,6 +22,7 @@ export default class EditAccountComponent extends Component {
     DAVisible: false,
     item: "",
   };
+
 
   /**
    * Number of accounts displayed in the first page.
@@ -191,7 +193,7 @@ export default class EditAccountComponent extends Component {
                     avatar={
                       <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                     }
-                    title={<a>{item.username}</a>}
+                    title={item.username}
                     description={item.role}
                   />
                   <div>

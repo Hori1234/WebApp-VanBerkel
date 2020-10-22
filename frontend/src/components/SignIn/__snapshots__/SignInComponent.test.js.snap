@@ -55,7 +55,7 @@ exports[`SignInComponent shall render the login page correctly 1`] = `
       level={5.2}
       style={
         Object {
-          "marginLeft": -280,
+          "alignItems": "center",
         }
       }
     >
@@ -65,7 +65,7 @@ exports[`SignInComponent shall render the login page correctly 1`] = `
       level={5}
       style={
         Object {
-          "marginLeft": -190,
+          "alignItems": "center",
         }
       }
     >
@@ -161,7 +161,6 @@ exports[`SignInComponent shall render the login page correctly 1`] = `
             "width": "100%",
           }
         }
-        valuePropName="checked"
         wrapperCol={
           Object {
             "offset": 8,
@@ -170,7 +169,9 @@ exports[`SignInComponent shall render the login page correctly 1`] = `
         }
       >
         <Checkbox
+          checked={false}
           indeterminate={false}
+          onChange={[Function]}
         >
           Remember me
         </Checkbox>
