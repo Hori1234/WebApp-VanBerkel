@@ -1,16 +1,19 @@
-from flask import safe_join, send_file, send_from_directory
+import time
+import io
+from flask import send_file
 from flask_smorest import abort
 from flask.views import MethodView
 from sqlalchemy import func, and_
-from . import bp
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font
-import time
-from backend.app import db
-from backend.models.orders import Order, OrderSheet
-from backend.extensions import roles_required
+from backend.plugins import db
+from backend.models import Order, OrderSheet
+from backend.extensions import Blueprint, roles_required
 from backend.api.reports.schemas import ReportSchema
-import io
+
+bp = Blueprint('reports',
+               'reports',
+               description='Get report like first rides assignment')
 
 
 @bp.route('/firstrides/<sheet_id_or_latest>')

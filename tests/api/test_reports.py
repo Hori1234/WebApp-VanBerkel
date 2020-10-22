@@ -3,8 +3,7 @@ from pathlib import Path
 import pytest
 import json
 
-from backend.models import trucks
-from backend.models import orders
+from backend.models import TruckSheet, OrderSheet
 
 
 def get_file_path(file):
@@ -12,7 +11,7 @@ def get_file_path(file):
 
 
 @pytest.fixture(autouse=True)
-def setup_db(setup_users, login_user, create_db_without_users, client):
+def setup_db(setup_users, login_admin, create_db_without_users, client):
     """
     Setup the database for the current test.
     """
@@ -36,8 +35,8 @@ def setup_db(setup_users, login_user, create_db_without_users, client):
 
     # The above two files are uploaded at pretty much the same time, so it is
     # not defined which one is the latest
-    orders.OrderSheet.query.get(1).upload_date += datetime.timedelta(hours=1)
-    trucks.TruckSheet.query.get(1).upload_date += datetime.timedelta(hours=1)
+    OrderSheet.query.get(1).upload_date += datetime.timedelta(hours=1)
+    TruckSheet.query.get(1).upload_date += datetime.timedelta(hours=1)
 
     order1 = dict(
         truck_id=2, departure_time='10:00'
