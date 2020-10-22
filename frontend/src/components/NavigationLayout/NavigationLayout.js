@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import "antd/dist/antd.css";
 import { Layout, Menu, Avatar, Divider, Image } from "antd";
-import {
-  UserOutlined,
-} from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 
-import {withRouter , useLocation, Switch, Route, Link } from "react-router-dom";
+import { withRouter, useLocation, Switch, Route, Link } from "react-router-dom";
 
 import Home from "../Home/Home";
 import UploadButton from "../UploadButton/UploadButton";
@@ -15,13 +13,11 @@ import Logout from "../Logout/Logout";
 import { useAuth } from "../contextConfig";
 import ManualPlanning from "../ManualPlanning/ManualPlanning";
 import DataVisualization from "../DataVisualization/DataVisualization";
-import MonthlyDataAnalytics from "../MonthlyDataAnalytics/MonthlyDataAnalytics";
+import ViewPlanning from "../ViewPlanningPageLayout/ViewPlanning";
 const { SubMenu } = Menu;
 const { Content, Sider, Footer, Header } = Layout;
 
-
 function NavigationLayout() {
-
   const auth = useAuth();
   const location = useLocation();
   const [state, setState] = useState({
@@ -123,7 +119,7 @@ function NavigationLayout() {
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
                     </Menu.Item>
-                    <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
                   </SubMenu>
                 )}
 
@@ -152,7 +148,7 @@ function NavigationLayout() {
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
                     </Menu.Item>
-                    <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
                   </SubMenu>
                 )}
 
@@ -175,7 +171,7 @@ function NavigationLayout() {
                     <Menu.Item key="6">
                       <Link to="/montly">Monthly Data Analytics</Link>
                     </Menu.Item>
-                    <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
                   </SubMenu>
                 )}
               </Menu>
@@ -186,66 +182,67 @@ function NavigationLayout() {
               <Image
               src={require("../Images/van-berkel-logo-final.png")}
               preview={false}
-              />
-            </Header>
-            <Layout
+            />
+          </Header>
+          <Layout
+            style={{
+              marginTop: 25,
+              minHeight: 280,
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Content
+              className="site-layout-background"
               style={{
+                padding: 24,
                 marginTop: 25,
                 minHeight: 280,
-                alignItems: "center",
                 width: "100%",
               }}
             >
-              <Content
-                className="site-layout-background"
+              <Layout
                 style={{
                   padding: 24,
-                  marginTop: 25,
-                  minHeight: 280,
                   width: "100%",
+                  height: "100%",
+                  alignItems: "center",
+                  backgroundColor: "white",
                 }}
               >
-                <Layout
-                  style={{
-                    padding: 24,
-                    width: "100%",
-                    height: "100%",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                  }}
-                >
-                  <Switch>
-                    <Route path="/upload">
-                      <UploadButton />
-                    </Route>
-                    <Route path="/account">
-                      <AccountManagementLayout />
-                    </Route>
-                    <Route path="/logout">
-                      <Logout />
-                    </Route>
-                    <Route path="/planning">
-                      <ManualPlanning />
-                    </Route>
-                    <Route path="/view"></Route>
-                    <Route path="/data">
-                      <DataVisualization />
-                    </Route>
-                    <Route path="/montly"><MonthlyDataAnalytics /></Route>
-                    <Route path="/" exact>
-                      <Home />
-                    </Route>
-                  </Switch>
-                </Layout>
-              </Content>
-            </Layout>
-            <Footer style={{ textAlign: "center" }}>
-              T.R.U.C.K. ©2020 Created by SEP Group 2
-            </Footer>
+                <Switch>
+                  <Route path="/upload">
+                    <UploadButton />
+                  </Route>
+                  <Route path="/account">
+                    <AccountManagementLayout />
+                  </Route>
+                  <Route path="/logout">
+                    <Logout />
+                  </Route>
+                  <Route path="/planning">
+                    <ManualPlanning />
+                  </Route>
+                  <Route path="/view">
+                    <ViewPlanning />
+                  </Route>
+                  <Route path="/data">
+                    <DataVisualization />
+                  </Route>
+                  <Route path="/montly"></Route>
+                  <Route path="/" exact>
+                    <Home />
+                  </Route>
+                </Switch>
+              </Layout>
+            </Content>
           </Layout>
+          <Footer style={{ textAlign: "center" }}>
+            T.R.U.C.K. ©2020 Created by SEP Group 2
+          </Footer>
         </Layout>
       </Layout>
-    
+    </Layout>
   );
 }
 export default withRouter(NavigationLayout);

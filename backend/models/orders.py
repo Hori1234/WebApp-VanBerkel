@@ -12,7 +12,7 @@ from .trucks import Truck
 class OrderSheet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     upload_date = db.Column(db.DateTime, server_default=func.now())
-    orders = db.relationship('Order', backref='ordersheet',
+    orders = db.relationship('Order', backref='order_sheet',
                              cascade='all, delete-orphan')
 
     @hybrid_property

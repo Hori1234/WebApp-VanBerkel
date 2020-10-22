@@ -25,40 +25,12 @@ def secret_endpoint(app):
     app.add_url_rule('/secret', view_func=SecretEndpoint.as_view('secret'))
 
 
-def login_as_admin(client):
-    data = dict(
-        username='Midas Bergveen',
-        password='w8woord',
-        remember=False
-    )
-
-    client.post('/api/auth/login',
-                data=json.dumps(data),
-                content_type='application/json')
-
-
-def login_as_view_only(client):
-    data = dict(
-        username='Twan van Broekhoven',
-        password='SomethingClever',
-        remember=False
-    )
-
-    client.post('/api/auth/login',
-                data=json.dumps(data),
-                content_type='application/json')
-
-
-def test_roles_required_success(client):
-    login_as_admin(client)
-
+def test_roles_required_success(client, login_admin):
     rv = client.get('/secret')
     assert rv.status_code == 200
 
 
-def test_roles_required_fail_logged_in(client):
-    login_as_view_only(client)
-
+def test_roles_required_fail_logged_in(client, login_view_only):
     rv = client.get('/secret')
     assert rv.status_code == 401
 
@@ -68,16 +40,13 @@ def test_roles_required_fail_logged_out(client):
     assert rv.status_code == 401
 
 
-def test_roles_required_exempt(client):
-    login_as_view_only(client)
-
+def test_roles_required_exempt(client, login_view_only):
     rv = client.options('/secret')
     assert rv.status_code == 200
 
 
-def test_roles_required_login_disabled(app, client):
+def test_roles_required_login_disabled(app, client, login_view_only):
     app.config['LOGIN_DISABLED'] = True
 
-    login_as_view_only(client)
     rv = client.get('/secret')
     assert rv.status_code == 200
