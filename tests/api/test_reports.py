@@ -1,7 +1,10 @@
 import datetime
+from io import BytesIO
 from pathlib import Path
 import pytest
 import json
+from openpyxl import load_workbook
+from pandas.core.common import not_none
 
 from backend.models import TruckSheet, OrderSheet
 
@@ -81,6 +84,41 @@ def get_full_assignment(client, sheet_id_or_latest):
     return None
 
 
-def test_get_first_rides(client, db):
+def test_get_first_rides_latest(client, db):
     rv = get_first_rides(client, 'latest')
     assert rv.status_code == 200
+    wb = load_workbook(filename=BytesIO(rv.data))
+    ws = wb[wb.sheetnames[0]]
+    assert ws['C4'].value == 'Sno'
+    assert ws['F6'].value == 'ITV'
+    assert ws['G6'].value is None
+
+
+def test_get_first_rides_one(client, db):
+    rv = get_first_rides(client, 1)
+    assert rv.status_code == 200
+    wb = load_workbook(filename=BytesIO(rv.data))
+    ws = wb[wb.sheetnames[0]]
+    assert ws['I4'].value == 'Delivery Deadline'
+    assert ws['L5'].value == 'Helmond'
+    assert ws['O5'].value == 'Has a personal appointment at 15.30'
+
+
+def test_get_first_rides_two(client, db):
+    rv = get_first_rides(client, 2)
+    assert rv.status_code == 200
+    wb = load_workbook(filename=BytesIO(rv.data))
+    ws = wb[wb.sheetnames[0]]
+    assert ws['G4'].value == 'chassis'
+    assert ws['G5'].value is None
+    assert ws['D5'].value is None
+
+
+def test_get_first_rides_oob(client, db):
+    rv = get_first_rides(client, 5)
+    assert rv.status_code == 404
+
+
+def test_get_first_rides_not_latest(client, db):
+    rv = get_first_rides(client, 'random')
+    assert rv.status_code == 404
