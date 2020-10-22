@@ -1200,10 +1200,6 @@ export default class ManualPlanning extends Component {
             >
               <Button>Show/Hide</Button>
             </Dropdown>
-            &nbsp;
-            <Button onClick={() => window.open("/data")}>
-              Data visualization
-            </Button>
           </Col>
         </Row>
         <Row gutter={[24, 8]} justify="space-around" align="middle">
