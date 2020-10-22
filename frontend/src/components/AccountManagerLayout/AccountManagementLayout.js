@@ -1,20 +1,14 @@
 import React, { Component } from "react";
 import {
-  Row,
-  Col,
-  Card,
-  Statistic,
   Divider,
   Button,
   Layout,
   Typography,
   Modal,
 } from "antd";
-import {
-  UserAddOutlined,
-  ArrowUpOutlined,
-} from "@ant-design/icons";
+import { UserAddOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
+import axios from "axios";
 
 import CreateAccountsComponent from "./CreateAccountsComponent";
 import EditAccountComponent from "./EditAccountComponent";
@@ -22,16 +16,80 @@ import EditAccountModalComponent from "./EditAccountModalComponent";
 
 const { Text } = Typography;
 
+/**
+ * Export the class.
+ */
 export default class AccountManagementLayout extends Component {
   constructor(props) {
     super(props);
     this.state = {
       CAVisible: false,
       EAVisible: false,
-      DAVisible: false,
+      data: [],
+      Metadata: {
+        id: "",
+        username: "",
+        role: "",
+      },
     };
   }
-  showModal = (value) => {
+
+  componentDidMount = () => {
+    this.getUsers();
+  };
+
+  /**
+   * Set the values of all the users.
+   * @param {Current value} value 
+   */
+  setUsers = (value) => {
+    this.setState({
+      users: value,
+    });
+  };
+
+   /**
+    * Sending a request to the database
+    * to retrive the list of all users.
+    * @param {Current page} vPage 
+    * @param {Current account list size} vPage_size 
+    */
+  getUsers = async (vPage, vPage_size) => {
+    return axios
+      .get("/api/auth/users", {
+        params: {
+          page: vPage,
+          page_size: vPage_size,
+        },
+      })
+      .then((res) => {
+        this.setState((state) => ({
+          ...state,
+          data: res.data,
+          status: "success",
+        }));
+        return true;
+      })
+      .catch((error) => {
+        this.setState((state) => ({
+          ...state,
+          status: "error",
+          error: error,
+        }));
+        return false;
+      });
+  };
+
+   /**
+    * case ca: Display the account creation modal(page).
+    * case ea: Display the edit account modal(page).
+    * @param {ea or ca (create account or eddit account)} value 
+    * @param {Id of a user} vId 
+    * @param {New username of a user} vUsername 
+    * @param {New role of a user} vRole 
+    */
+  showModal = (value, vId, vUsername, vRole) => {
+    console.log(this.state.Metadata);
     switch (value) {
       case "ca":
         this.setState({
@@ -44,38 +102,35 @@ export default class AccountManagementLayout extends Component {
         this.setState({
           EAVisible: true,
         });
-        console.log("ea modal shown");
-        break;
-      case "da":
-        this.setState({
-          DAVisible: true,
+        this.setState((prevState) => {
+          let Metadata = Object.assign({}, prevState.Metadata); // creating copy of state variable Metadata
+          Metadata.id = vId; // update the name property, assign a new value
+          Metadata.username = vUsername;
+          Metadata.role = vRole;
+          return { Metadata }; // return new object Metadata object
         });
         console.log("ea modal shown");
         break;
       default:
       // no default
     }
-    console.log("modal shown");
+    console.log(this.state.Metadata);
   };
-
+  
+   /**
+    * Hide modals after Submit or Cancel button have been pressed.
+    * @param {Returned value of the triggered event} e 
+    */
   handleOk = (e) => {
-    console.log(e);
     this.setState({
       EAVisible: false,
       CAVisible: false,
-      DAVisible: false,
     });
   };
 
-  handleCancel = (e) => {
-    console.log(e);
-    this.setState({
-      EAVisible: false,
-      CAVisible: false,
-      DAVisible: false,
-    });
-  };
-
+  /**
+   * Rendering of the account management page.
+   */
   render() {
     return (
       <Layout
@@ -99,7 +154,7 @@ export default class AccountManagementLayout extends Component {
                 Create Accounts
               </Text>
               <Text style={{ fontSize: " 14" }}>
-                This page is used in order to create accounts
+                This page is used create accounts
               </Text>
             </Layout>
             <Layout
@@ -114,31 +169,14 @@ export default class AccountManagementLayout extends Component {
               </Button>
             </Layout>
           </Layout>
-          <Layout style={{ backgroundColor: "white", alignItems: "center" }}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Card style={{ width: "20vh" }}>
-                  <Statistic title="Active Users" value={112893} />
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card style={{ marginLeft: 40, width: "20vh" }}>
-                  <Statistic
-                    title="Active"
-                    value={11.28}
-                    precision={2}
-                    valueStyle={{ color: "#3f8600" }}
-                    prefix={<ArrowUpOutlined />}
-                    suffix="%"
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </Layout>
         </Layout>
         <Divider />
         <Layout
-          style={{ backgroundColor: "white", display: "flex", width: "100%" }}
+          style={{
+            backgroundColor: "white",
+            display: "flex",
+            width: "100%",
+          }}
         >
           <EditAccountComponent showModal={this.showModal} />
         </Layout>
@@ -146,34 +184,44 @@ export default class AccountManagementLayout extends Component {
         <Modal
           title="Create Account"
           style={{
-            width: "100vh",
             display: "flex",
-            marginLeft: 280,
+            marginLeft: "33%",
           }}
           centered={false}
           maskClosable={false}
           visible={this.state.CAVisible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
+          onCancel={this.handleOk}
         >
-          {this.state.CAVisible && <CreateAccountsComponent />}
+          {this.state.CAVisible && (
+            <CreateAccountsComponent modalHandleOk={this.handleOk} />
+          )}
         </Modal>
         <Modal
           title="Edit Account"
           style={{
-            width: "100vh",
+            position: "absolute",
+            top: "25%",
+            bottom: "25%",
+            left: "15%",
+            right: "25%",
             display: "flex",
             alignItems: "center",
             marginLeft: 280,
           }}
           visible={this.state.EAVisible}
           maskClosable={false}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
+          onCancel={this.handleOk}
         >
-          {this.state.EAVisible && <EditAccountModalComponent />}
+          {this.state.EAVisible && (
+            <EditAccountModalComponent
+              info={this.state.Metadata}
+              modalHandleOk={this.handleOk}
+            />
+          )}
         </Modal>
+        
       </Layout>
     );
   }
 }
+

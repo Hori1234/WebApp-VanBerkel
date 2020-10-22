@@ -1,31 +1,57 @@
 import React, { useState } from "react";
 import "antd/dist/antd.css";
-import { Layout, Menu, Avatar, Divider } from "antd";
-import {
-  UserOutlined,
-} from "@ant-design/icons";
-
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-
-import Home from "../Home/Home";
-import UploadButton from "../UploadButton/UploadButton";
-import AccountManagementLayout from "../AccountManagerLayout/AccountManagementLayout";
+import { Layout, Menu, Avatar, Divider, Image } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { useLocation, Link} from "react-router-dom";
 import "../Css/NavigationLayout.css";
-import Logout from "../Logout/Logout";
-import { useAuth } from '../contextConfig'
+import { useAuth } from "../contextConfig";
+import PageRouter from "./PageRouter";
 const { SubMenu } = Menu;
-const { Content, Sider, Footer } = Layout;
+const { Content, Sider, Footer, Header } = Layout;
 
+/**
+ * Holds the sidebar and defines the main content layout.
+ */
 export default function NavigationLayout() {
-
   const auth = useAuth();
-
+  const location = useLocation();
   const [state, setState] = useState({
     isEmptyState: true,
     UserState: false,
     collapsed: false,
+    selectedKeys: [],
   });
 
+  /**
+   * Get the key of side menu item to highlight the current page.
+   *
+   * @param pathname: string of the current url path
+   */
+  const keys = (pathname) =>{
+    switch(pathname) {
+      case '/':
+        return '0';
+      case '/account':
+        return '1';
+      case '/upload':
+        return '2';
+      case '/planning':
+        return '3';
+      case '/view':
+        return '4';
+      case '/data':
+        return '5';
+      case '/monthly':
+        return '6'
+      default:
+        return null;
+    }
+  }
+
+  /** Make the sidebar collapsable
+   *
+   * @param collapsed: boolean to set the state of the sidebar
+   */
   const onCollapse = (collapsed) => {
     setState({
       ...state,
@@ -40,11 +66,12 @@ export default function NavigationLayout() {
     }
   };
 
+
   return (
     !auth.state ?  <pre>Loading...</pre> :
-    <Router>
+    
       <Layout style={{ height: "100vh" }}>
-        <Layout style={{ margin: 10 }}>
+        <Layout style={{ margin: 10}}>
           <Sider
             collapsible
             collapsed={state.collapsed}
@@ -61,150 +88,140 @@ export default function NavigationLayout() {
               />
 
               <Divider>T.R.U.C.K.</Divider>
+              <Menu
+                mode="inline"
+                defaultOpenKeys={["sub1"]}
+                style={{ height: "100%", borderRight: 0 }}
+                selectedKeys={keys(location.pathname)}
+              >
+                {auth.state.user.role === "administrator" &&(
+                  <SubMenu
+                    key="sub1"
+                    defaultSelectedKeys={["0"]}
+                    icon={<UserOutlined />}
+                    title={auth.state.user.username}
+                  >
+                    <Menu.Item key="0" >
+                      <Link to="/" >Home </Link>
+                    </Menu.Item>
+                    <Menu.Item key="1">
+                      <Link to="/account">Account Management</Link>
+                    </Menu.Item>
+                    <Menu.Item key="2">
+                      <Link to="/upload">Upload</Link>
+                    </Menu.Item>
+                    <Menu.Item key="3">
+                      <Link to="/planning">Create Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="4">
+                      <Link to="/view">View Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="5">
+                      <Link to="/data">Data Visualisation</Link>
+                    </Menu.Item>
+                    <Menu.Item key="6">
+                      <Link to="/monthly">Monthly Data Analytics</Link>
+                    </Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
+                  </SubMenu>
+                )}
+
+                {auth.state.user.role === "planner" && (
+                  <SubMenu
+                    key="sub1"
+                    defaultSelectedKeys={["1"]}
+                    icon={<UserOutlined />}
+                    title={auth.state.user.username}
+                  >
+                    <Menu.Item key="1">
+                      <Link to="/">Home</Link>
+                    </Menu.Item>
+                    <Menu.Item key="2">
+                      <Link to="/upload">Upload</Link>
+                    </Menu.Item>
+                    <Menu.Item key="3">
+                      <Link to="/planning">Create Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="4">
+                      <Link to="/view">View Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="5">
+                      <Link to="/data">Data Visualisation</Link>
+                    </Menu.Item>
+                    <Menu.Item key="6">
+                      <Link to="/monthly">Monthly Data Analytics</Link>
+                    </Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
+                  </SubMenu>
+                )}
+
+                {auth.state.user.role === "view-only" && (
+                  <SubMenu
+                    key="sub1"
+                    defaultSelectedKeys={["3"]}
+                    icon={<UserOutlined />}
+                    title={auth.state.user.username}
+                  >
+                    <Menu.Item key="3">
+                      <Link to="/">Home</Link>
+                    </Menu.Item>
+                    <Menu.Item key="4">
+                      <Link to="/view">View Planning</Link>
+                    </Menu.Item>
+                    <Menu.Item key="5">
+                      <Link to="/data">Data Visualisation</Link>
+                    </Menu.Item>
+                    <Menu.Item key="6">
+                      <Link to="/monthly">Monthly Data Analytics</Link>
+                    </Menu.Item>
+                    <Menu.Item key="7" onClick={auth.logout}><Link to="/">Logout</Link></Menu.Item>
+                  </SubMenu>
+                )}
+              </Menu>
             </Layout>
-            <Menu
-              mode="inline"
-              defaultOpenKeys={["sub1"]}
-              style={{ height: "100%", borderRight: 0 }}
-            >
-              {auth.state.user.role === "administrator" && (
-                <SubMenu
-                  key="sub1"
-                  defaultSelectedKeys={["0"]}
-                  icon={<UserOutlined />}
-                  title="User Type: "
-                >
-                  <Menu.Item key="0">
-                    <Link to="/" >Home</Link>
-                  </Menu.Item>
-                  <Menu.Item key="1">
-                    <Link to="/account">Account Management</Link>
-                  </Menu.Item>
-                  <Menu.Item key="2">
-                    <Link to="/upload">Upload</Link>
-                  </Menu.Item>
-                  <Menu.Item key="3">
-                    <Link to="/planning">Create Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="4">
-                    <Link to="/view">View Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="5">
-                    <Link to="/data">Data Visualization</Link>
-                  </Menu.Item>
-                  <Menu.Item key="6">
-                    <Link to="/montly">Monthly Data Analytics</Link>
-                  </Menu.Item>
-                  <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
-                </SubMenu>
-              )}
-
-              {auth.state.user.role === "planner" && (
-                <SubMenu
-                  key="sub1"
-                  defaultSelectedKeys={["1"]}
-                  icon={<UserOutlined />}
-                  title="User Type: "
-                >
-                  <Menu.Item key="1">
-                    <Link to="/">Home</Link>
-                  </Menu.Item>
-                  <Menu.Item key="2">
-                    <Link to="/upload">Upload</Link>
-                  </Menu.Item>
-                  <Menu.Item key="3">
-                    <Link to="/planning">Create Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="4">
-                    <Link to="/view">View Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="5">
-                    <Link to="/data">Data Visualization</Link>
-                  </Menu.Item>
-                  <Menu.Item key="6">
-                    <Link to="/montly">Monthly Data Analytics</Link>
-                  </Menu.Item>
-                  <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
-                </SubMenu>
-              )}
-
-              {auth.state.user.role === "view-only" && (
-                <SubMenu
-                  key="sub1"
-                  defaultSelectedKeys={["3"]}
-                  icon={<UserOutlined />}
-                  title="User Type: "
-                >
-                  <Menu.Item key="3">
-                    <Link to="/">Home</Link>
-                  </Menu.Item>
-                  <Menu.Item key="4">
-                    <Link to="/view">View Planning</Link>
-                  </Menu.Item>
-                  <Menu.Item key="5">
-                    <Link to="/data">Data Visualization</Link>
-                  </Menu.Item>
-                  <Menu.Item key="6">
-                    <Link to="/montly">Monthly Data Analytics</Link>
-                  </Menu.Item>
-                  <Menu.Item key="7" onClick={auth.logout}>Logout</Menu.Item>
-                </SubMenu>
-              )}
-            </Menu>
           </Sider>
           <Layout style={{ padding: "0 24px 24px", height: "100%" }}>
-            <Layout
+            <Header style={{ backgroundColor: "white"}}>
+              <Image
+              src={require("../Images/van-berkel-logo-final.png")}
+              preview={false}
+            />
+          </Header>
+          <Layout
+            style={{
+              marginTop: 25,
+              minHeight: 280,
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Content
+              className="site-layout-background"
               style={{
+                padding: 24,
                 marginTop: 25,
                 minHeight: 280,
-                alignItems: "center",
                 width: "100%",
               }}
             >
-              <Content
-                className="site-layout-background"
+              <Layout
                 style={{
                   padding: 24,
-                  marginTop: 25,
-                  minHeight: 280,
                   width: "100%",
+                  height: "100%",
+                  alignItems: "center",
+                  backgroundColor: "white",
                 }}
               >
-                <Layout
-                  style={{
-                    padding: 24,
-                    width: "100%",
-                    height: "100%",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                  }}
-                >
-                  <Switch>
-                    <Route path="/upload">
-                      <UploadButton />
-                    </Route>
-                    <Route path="/account">
-                      <AccountManagementLayout />
-                    </Route>
-                    <Route path="/logout"><Logout/></Route>
-                    <Route path="/planning"></Route>
-                    <Route path="/view"></Route>
-                    <Route path="/data"></Route>
-                    <Route path="/montly"></Route>
-                    <Route path="/" exact>
-                      <Home />
-                    </Route>
-                  </Switch>
-                </Layout>
-              </Content>
-            </Layout>
-            <Footer style={{ textAlign: "center" }}>
-              T.R.U.C.K. ©2020 Created by SEP Group 2
-            </Footer>
+              <PageRouter/>
+              </Layout>
+            </Content>
           </Layout>
+          <Footer style={{ textAlign: "center" }}>
+            T.R.U.C.K. ©2020 Created by SEP Group 2
+          </Footer>
         </Layout>
       </Layout>
-    </Router>
+    </Layout>
   );
-
 }

@@ -4,11 +4,17 @@ import { Layout, Typography, Button } from "antd";
 import "antd/dist/antd.css";
 const { Text } = Typography;
 
+/**
+ * Exports logout class.
+ */
 export default class Logout extends Component {
   render() {
     return (
       <AuthProvider.Consumer>
         {(context) => (
+          /**
+           * Set the background and allignment of the logout button.
+           */
           <Layout
             style={{
               flexDirection: "column",
@@ -20,10 +26,16 @@ export default class Logout extends Component {
               padding: 250,
             }}
           >
+
             <Layout
               style={{ flexDirection: "column", backgroundColor: "white" }}
             >
+
               <Text
+              /**
+               * Set style of text.
+               * Create confirmation popup.
+               */
                 style={{
                   fontWeight: "bold",
                   fontSize: "18",
