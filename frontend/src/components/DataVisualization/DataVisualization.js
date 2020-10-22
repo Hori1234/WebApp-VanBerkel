@@ -6,8 +6,16 @@ import {Row, Col, Layout, Button, message, Popconfirm} from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 
+/**
+ * Export the data visualisation class.
+ */
 export default class DataVisualization extends Component {
 
+    /**
+     * Publish planning.
+     * @param {Truck sheet Id} value 
+     * @param {Order sheet Id} value1 
+     */
     publishLatest = (value, value1) => {
         return axios
             .post(`/api/plannings/${value}/${value1}`)
@@ -28,6 +36,9 @@ export default class DataVisualization extends Component {
             });
     };
 
+    /**
+     * Renders the data visualisation page
+     */
     render() {
         return (
             <Layout

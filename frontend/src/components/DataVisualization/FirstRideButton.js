@@ -5,9 +5,15 @@ import { DownloadOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import axios from "axios";
 
+/**
+ * Export the first ride reports class.
+ */
 export default class FirstRideButton extends Component {
   
-
+  /**
+   * Download planning.
+   * @param {Id} value 
+   */
   downloadFile = (value) => {
       console.log(value);
     return axios
@@ -22,6 +28,9 @@ export default class FirstRideButton extends Component {
     });
   }
 
+  /**
+   * Renders the download first rides report button.
+   */
   render() {
     return (
             <Button

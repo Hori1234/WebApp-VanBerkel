@@ -48,6 +48,11 @@ export function createCustomHTMLTooltip(
   );
 }
 
+/**
+ * Calculate the duration of an assignment function
+ * @param {Start time of the order} startTime 
+ * @param {End time of the order} endTime 
+ */
 export function calculateDuration(startTime, endTime) {
   let startDate = createDataTime(startTime);
   let endDate = createDataTime(endTime);
@@ -61,16 +66,26 @@ export function calculateDuration(startTime, endTime) {
   return duration;
 }
 
-//create javascript data object
+/**
+ * Time variable is created
+ * @param {Time} time 
+ */
 export function createDataTime(time) {
-  //let index = time.indexOf(":");
-  //let hours = time.substr(0, index);
-  //let minutes = time.substr(index + 1);
   const arrayTime = time.split(":");
   return new Date(0, 0, 0, arrayTime[0], arrayTime[1], 0);
 }
 
-// create single data input for timeline
+/**
+ * Create single data input for timeline
+ * @param {Id of the truck} truckID 
+ * @param {Id of the order} orderID 
+ * @param {Start time of the order} startTime 
+ * @param {End time of the order} endTime 
+ * @param {Destination of an order} destination 
+ * @param {Order type} orderType 
+ * @param {Name of the client} client 
+ * @param {Container type} container 
+ */
 export function createSingleDataInput(
   truckID,
   orderID,
@@ -91,7 +106,9 @@ export function createSingleDataInput(
   ];
 }
 
-//colour for a row available
+/**
+ * Genrate colors the current row.
+ */
 export function coloursAvailable() {
   let blue = ["DodgerBlue", "DeepSkyBlue"];
   let red = ["FireBrick", "DarkRed"];
@@ -99,7 +116,17 @@ export function coloursAvailable() {
   return colours;
 }
 
-// create a list with all data points for the timeline
+/**
+ * Create a list with all data points for the timeline.
+ * @param {Id of the trucks} truckIDs 
+ * @param {Ids of the orders} orderIDs 
+ * @param {Start time of the orders} startTimes 
+ * @param {End time of the orders} endTimes 
+ * @param {List of destinations} destinations 
+ * @param {Order types} orderTypes 
+ * @param {List of clients} clients 
+ * @param {Container types} containers 
+ */
 export function createAllDataInput(
   truckIDs,
   orderIDs,
@@ -136,6 +163,9 @@ export function createAllDataInput(
   return listDataInputs;
 }
 
+/**
+ * Export the timeline class.
+ */
 export default class Timeline extends Component {
   constructor(props) {
     super(props);
@@ -150,7 +180,10 @@ export default class Timeline extends Component {
     this.getTimeline(this.props.timeline);
   }
 
-
+/**
+ * Get the generated timeline.
+ * @param {Id of the timeline} value 
+ */
   getTimeline = async (value) => {
     return await axios
       .get(`/api/orders/timeline/${value}`)
@@ -173,6 +206,9 @@ export default class Timeline extends Component {
       });
   };
 
+  /**
+   * Create the required lists.
+   */
   createArrays = () => {
     let address = [];
     let bookingID = [];
@@ -237,6 +273,9 @@ export default class Timeline extends Component {
     return createAllDataInput(truckID, bookingID, departureTime, endTime, address, orderType, client, containerID);
   }
 
+  /**
+   * Initialize timeline.
+   */
   setTimelineEmpty = () => {
     const property = this.state.timelineDetails;
     console.log(property);
@@ -248,6 +287,9 @@ export default class Timeline extends Component {
     }
   };
 
+  /**
+   * Renders the timeline page.
+   */
   render() {
     return (
       this.state.status === "loading" ? <Layout
@@ -285,8 +327,7 @@ export default class Timeline extends Component {
               height={"100%"}
               chartType="Timeline"
               loader={<Spin size="large" />}
-              data={this.createArrays()
-              }
+              data={this.createArrays()}
               options={{
                 timeline: {
                   colorByRowLabel: false,
