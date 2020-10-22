@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Chart from "react-google-charts";
 import "../Css/DataVisualization.css";
-import {Layout, Button, message } from "antd";
+import {Layout} from "antd";
 import "antd/dist/antd.css";
 import axios from "axios";
 

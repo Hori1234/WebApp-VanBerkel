@@ -3,7 +3,6 @@ import Timeline from "./Timeline"
 import FirstRideButton from "./FirstRideButton"
 import "../Css/DataVisualization.css";
 import { Row, Col, Layout, Button, message} from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import axios from "axios";
 
