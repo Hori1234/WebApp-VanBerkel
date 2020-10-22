@@ -11,7 +11,7 @@ import axios from "axios";
 export default class FirstRideButton extends Component {
   
   /**
-   * Download planning.
+   * Download first ride reports of selected planning.
    * @param {Id} value 
    */
   downloadFile = (value) => {

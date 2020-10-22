@@ -107,16 +107,6 @@ export function createSingleDataInput(
 }
 
 /**
- * Genrate colors the current row.
- */
-export function coloursAvailable() {
-  let blue = ["DodgerBlue", "DeepSkyBlue"];
-  let red = ["FireBrick", "DarkRed"];
-  let colours = [blue, red];
-  return colours;
-}
-
-/**
  * Create a list with all data points for the timeline.
  * @param {Id of the trucks} truckIDs 
  * @param {Ids of the orders} orderIDs 
@@ -181,7 +171,7 @@ export default class Timeline extends Component {
   }
 
 /**
- * Get the generated timeline.
+ * Get the data points in an JSON object from backend with get request.
  * @param {Id of the timeline} value 
  */
   getTimeline = async (value) => {
@@ -207,7 +197,7 @@ export default class Timeline extends Component {
   };
 
   /**
-   * Create the required lists.
+   * Create arrays from the data points that were in the JSON objects.
    */
   createArrays = () => {
     let address = [];
@@ -274,12 +264,10 @@ export default class Timeline extends Component {
   }
 
   /**
-   * Initialize timeline.
+   * checks if timeline data points are empty or not and set the state to show that.
    */
   setTimelineEmpty = () => {
     const property = this.state.timelineDetails;
-    console.log(property);
-    console.log(property.length);
     if (property.length === 0) {
       this.setState({ timelineEmpty: true });
     } else {
