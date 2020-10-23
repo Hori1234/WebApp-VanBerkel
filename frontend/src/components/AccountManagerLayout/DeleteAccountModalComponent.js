@@ -6,19 +6,11 @@ import {
 
 import "antd/dist/antd.css";
 const { Text } = Typography;
+
 /**
  * Export Delete account class.
  */
 export default class DeleteAccountConfirmationComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      role: false,
-      nUssername: "",
-      nPassword: "",
-      nRole: "",
-    };
-  }
 
   /**
    * Renders the Delete account confirmation pop up.
@@ -37,7 +29,8 @@ export default class DeleteAccountConfirmationComponent extends Component {
               fontSize:"12"
           }}
           >
-          Are you sure you want to delete this account?
+              Are you sure you want to delete this account
+              (<Text strong>{this.props.user.username}</Text>)?
           </Text>
       </Layout>
 

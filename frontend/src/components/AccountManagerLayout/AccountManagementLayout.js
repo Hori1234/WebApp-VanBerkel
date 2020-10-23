@@ -4,15 +4,15 @@ import {
   Button,
   Layout,
   Typography,
-  Modal,
+  message,
 } from "antd";
 import { UserAddOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import axios from "axios";
 
-import CreateAccountsComponent from "./CreateAccountsComponent";
-import EditAccountComponent from "./EditAccountComponent";
-import EditAccountModalComponent from "./EditAccountModalComponent";
+import CreateAccountModal from "./CreateAccountModal";
+import AccountTable from "./AccountTable";
+import EditAccountModal from "./EditAccountModal";
 
 const { Text } = Typography;
 
@@ -22,12 +22,15 @@ const { Text } = Typography;
 export default class AccountManagementLayout extends Component {
   constructor(props) {
     super(props);
+    this.pageSize = 10
     this.state = {
       CAVisible: false,
       EAVisible: false,
       data: [],
+      loading: true,
+      hasMore: true,
+      lastPage: 1,
       Metadata: {
-        id: "",
         username: "",
         role: "",
       },
@@ -35,7 +38,7 @@ export default class AccountManagementLayout extends Component {
   }
 
   componentDidMount = () => {
-    this.getUsers();
+    this.getUsers(this.state.lastPage, this.pageSize);
   };
 
   /**
@@ -50,7 +53,7 @@ export default class AccountManagementLayout extends Component {
 
    /**
     * Sending a request to the database
-    * to retrive the list of all users.
+    * to retrieve the list of all users.
     * @param {Current page} vPage 
     * @param {Current account list size} vPage_size 
     */
@@ -63,40 +66,145 @@ export default class AccountManagementLayout extends Component {
         },
       })
       .then((res) => {
+        const newData = this.state.data.concat(res.data)
         this.setState((state) => ({
-          ...state,
-          data: res.data,
-          status: "success",
+          data: newData,
+          loading: false,
         }));
-        return true;
+      })
+      .catch(() => {
+        this.setState({
+          hasMore: false,
+          loading: false
+        })
+      });
+  };
+
+
+  /**
+   * Gets a list of users on multiple pages from the backend.
+   */
+  handleInfiniteOnLoad = () => {
+    let { data } = this.state;
+    this.setState({
+      loading: true,
+    });
+
+    if (data.length === this.state.lastPage * this.pageSize) {
+      this.setState({
+        lastPage: this.state.lastPage+1
+      })
+      this.getUsers(this.state.lastPage, this.pageSize);
+    } else {
+      this.setState({
+        hasMore: false,
+        loading: false
+      })
+    }
+  };
+
+ /**
+  * Handles successful and unsuccessful account deletions.
+  * @param {Path to user to be deleted} id
+  */
+  deleteAccount = (id) => {
+    return axios
+      .delete(`/api/auth/user/${id}`)
+      .then(() => {
+        const filteredData = this.state.data.filter((item) => item.id !== id);
+        this.setState({
+          data: filteredData,
+        });
+        message.success("Account successfully deleted");
       })
       .catch((error) => {
-        this.setState((state) => ({
-          ...state,
-          status: "error",
-          error: error,
-        }));
-        return false;
+        if (error.response.data) {
+          message.error(error.response.data.message);
+        }
+      });
+  };
+
+  /**
+    * When the Submit button is pressed the account is updated in the database.
+    * @param {Id of a user to be edited} user_id
+    * @param {New Username} vUsername
+    * @param {New password} vPassword
+    * @param {New role} vRole
+    */
+  editAccount = async (user_id, vUsername, vPassword, vRole) => {
+    return axios
+      .patch(`/api/auth/user/${user_id}`, {
+        username: vUsername,
+        password: vPassword,
+        role: vRole,
+      })
+      .then((res) => {
+        const newData = this.state.data.map(item => {
+          if (item.id === user_id) {
+            item.username = vUsername;
+            item.role = vRole;
+          }
+          return item;
+        })
+        this.setState({
+          data: newData,
+          EAVisible: false
+        })
+        message.success("Account edited successfully!");
+      })
+      .catch((error) => {
+        if (error.response.data) {
+          message.error(error.response.data.message);
+        }
+      });
+  };
+
+   /**
+    * Adding an account to the database.
+    * @param {New username} vUsername
+    * @param {New password} vPassword
+    * @param {New role} vRole
+    */
+  addAccount = async (vUsername, vPassword, vRole) => {
+    return axios
+      .post("/api/auth/user", {
+        username: vUsername,
+        password: vPassword,
+        role: vRole,
+      })
+      .then((res) => {
+        const newData = this.state.data.concat({
+          id: res.data.id,
+          username: res.data.username,
+          role: res.data.role,
+        })
+        this.setState({
+          data: newData,
+          CAVisible: false
+        })
+        message.success("Account added successfully!");
+      })
+      .catch((error) => {
+        if (error.response.data) {
+          message.error(error.response.data.message);
+        }
       });
   };
 
    /**
     * case ca: Display the account creation modal(page).
     * case ea: Display the edit account modal(page).
-    * @param {ea or ca (create account or eddit account)} value 
+    * @param {ea or ca (create account or edit account)} value
     * @param {Id of a user} vId 
     * @param {New username of a user} vUsername 
     * @param {New role of a user} vRole 
     */
   showModal = (value, vId, vUsername, vRole) => {
-    console.log(this.state.Metadata);
     switch (value) {
       case "ca":
         this.setState({
           CAVisible: true,
         });
-        console.log("ca modal shown");
-
         break;
       case "ea":
         this.setState({
@@ -104,24 +212,22 @@ export default class AccountManagementLayout extends Component {
         });
         this.setState((prevState) => {
           let Metadata = Object.assign({}, prevState.Metadata); // creating copy of state variable Metadata
-          Metadata.id = vId; // update the name property, assign a new value
+          Metadata.id = vId;
           Metadata.username = vUsername;
           Metadata.role = vRole;
           return { Metadata }; // return new object Metadata object
         });
-        console.log("ea modal shown");
         break;
       default:
       // no default
     }
-    console.log(this.state.Metadata);
   };
   
    /**
     * Hide modals after Submit or Cancel button have been pressed.
     * @param {Returned value of the triggered event} e 
     */
-  handleOk = (e) => {
+  handleCancel = (e) => {
     this.setState({
       EAVisible: false,
       CAVisible: false,
@@ -178,48 +284,26 @@ export default class AccountManagementLayout extends Component {
             width: "100%",
           }}
         >
-          <EditAccountComponent showModal={this.showModal} />
+          <AccountTable
+              data={this.state.data}
+              loading={this.state.loading}
+              hasMore={this.state.hasMore}
+              loadMore={this.handleInfiniteOnLoad}
+              showModal={this.showModal}
+              deleteAccount={this.deleteAccount}
+          />
         </Layout>
-
-        <Modal
-          title="Create Account"
-          style={{
-            display: "flex",
-            marginLeft: "33%",
-          }}
-          centered={false}
-          maskClosable={false}
-          visible={this.state.CAVisible}
-          onCancel={this.handleOk}
-        >
-          {this.state.CAVisible && (
-            <CreateAccountsComponent modalHandleOk={this.handleOk} />
-          )}
-        </Modal>
-        <Modal
-          title="Edit Account"
-          style={{
-            position: "absolute",
-            top: "25%",
-            bottom: "25%",
-            left: "15%",
-            right: "25%",
-            display: "flex",
-            alignItems: "center",
-            marginLeft: 280,
-          }}
+        <CreateAccountModal
+            handleCancel={this.handleCancel}
+            visible={this.state.CAVisible}
+            addAccount={this.addAccount}
+        />
+        <EditAccountModal
           visible={this.state.EAVisible}
-          maskClosable={false}
-          onCancel={this.handleOk}
-        >
-          {this.state.EAVisible && (
-            <EditAccountModalComponent
-              info={this.state.Metadata}
-              modalHandleOk={this.handleOk}
-            />
-          )}
-        </Modal>
-        
+          handleCancel={this.handleCancel}
+          editAccount={this.editAccount}
+          info={this.state.Metadata}
+        />
       </Layout>
     );
   }

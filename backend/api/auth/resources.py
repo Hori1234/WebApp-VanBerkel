@@ -86,7 +86,6 @@ class Users(MethodView):
     @bp.response(AccountInfo, code=201)
     @bp.alt_response('BAD_REQUEST', code=400)
     @bp.alt_response('UNAUTHORIZED', code=401)
-    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
     def post(self, req):
         """
         Creates a new user. Returns the account of the newly created user.
@@ -117,7 +116,6 @@ class UserByID(MethodView):
     @bp.alt_response('BAD_REQUEST', code=400)
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
-    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
     def patch(self, req, user_id):
         """
         Change the information of a user.
@@ -155,7 +153,6 @@ class UserByID(MethodView):
     @bp.response(code=204)
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
-    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
     def delete(self, user_id):
         """
         Delete a user from the system.
