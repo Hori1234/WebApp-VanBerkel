@@ -70,7 +70,7 @@ export default function NavigationLayout() {
   return (
     !auth.state ?  <pre>Loading...</pre> :
     
-      <Layout style={{ height: "100vh" }}>
+      <Layout style={{ height: "100vh", fontFamily: "Trebuchet MS"}}>
         <Layout style={{ margin: 10}}>
           <Sider
             collapsible
