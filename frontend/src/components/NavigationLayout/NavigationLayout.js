@@ -168,9 +168,6 @@ export default function NavigationLayout() {
                     <Menu.Item key="4">
                       <Link to="/view">View Planning</Link>
                     </Menu.Item>
-                    <Menu.Item key="5">
-                      <Link to="/data">Data Visualisation</Link>
-                    </Menu.Item>
                     <Menu.Item key="6">
                       <Link to="/monthly">Monthly Data Analytics</Link>
                     </Menu.Item>
