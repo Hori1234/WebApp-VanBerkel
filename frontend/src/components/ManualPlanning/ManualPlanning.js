@@ -226,6 +226,8 @@ export default class ManualPlanning extends Component {
     }
     else if(this.state.selectedTrucksRowKeys.length > 1){
       message.error("You have selected more than 1 truck. Please select only 1 truck.");
+    } else if(this.state.selectedOrdersRowKeys.length > 1){
+      message.error("You have selected more than 1 order. Please select only 1 order.");
     } else if(this.state.selectedOrdersRowKeys.length === 0){
       message.error("Please select one or more orders.");
     }
