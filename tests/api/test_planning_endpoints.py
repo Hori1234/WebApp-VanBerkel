@@ -490,14 +490,14 @@ def test_patch_order_set_truck_id(client, db):
     time.
     """
     request = dict(
-        truck_id=14,
+        truck_s_number=14,
         departure_time='12:30'
     )
     rv = patch_order(client, 1, **request)
 
     # truck has been added
     assert rv.status_code == 200
-    assert rv.get_json()['truck_id'] == 14
+    assert rv.get_json()['truck_id'] == 'V22'
     assert rv.get_json()['departure_time'] == '12:30:00'
 
     order = Order.query.get(1)
@@ -507,7 +507,7 @@ def test_patch_order_set_truck_id(client, db):
     assert order.truck == truck
 
     request2 = dict(
-        truck_id=None
+        truck_s_number=None
     )
     rv2 = patch_order(client, 1, **request2)
 
@@ -527,7 +527,7 @@ def test_patch_order_departure_time_invalid(client, departure_time):
     starting time of the assigned truck.
     """
     request = dict(
-        truck_id=14,
+        truck_s_number=14,
         departure_time=departure_time,
     )
 
@@ -549,7 +549,7 @@ def test_patch_order_invalid_truck(client):
     it cannot carry out.
     """
     request = dict(
-        truck_id=1,
+        truck_s_number=1,
         departure_time='8:00'
     )
 
@@ -597,7 +597,7 @@ def test_patch_order_with_truck_id_without_departure_time(client):
     Tests patch order with a truck ID and departure time.
     """
     request = dict(
-        truck_id=14
+        truck_s_number=14
     )
     rv = patch_order(client, 1, **request)
 
@@ -629,7 +629,7 @@ def test_patch_order_with_departure_time_truck_set(client, db):
     Tests if the departure time can be set if the truck is already set
     """
     request1 = dict(
-        truck_id=14,
+        truck_s_number=14,
         departure_time='12:00'
     )
 
@@ -648,7 +648,7 @@ def test_patch_order_with_departure_time_truck_set(client, db):
     assert data['departure_time'] == '10:00:00'
 
     order = Order.query.get(1)
-    assert order.truck_id == 14
+    assert order.truck_s_number == 14
     assert order.departure_time.strftime('%H:%M') == '10:00'
 
 
@@ -685,7 +685,7 @@ def test_patch_order_published(client, db):
     assert rv.status_code == 200
 
     request = dict(
-        truck_id=14,
+        truck_s_number=14,
         departure_time='12:00'
     )
 
@@ -951,17 +951,17 @@ def test_post_order_with_truck_id(client, db):
         inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2,
-        truck_id=14, departure_time='14:00'
+        truck_s_number=14, departure_time='14:00'
     )
     rv = post_order(client, 1, **request)
 
     assert rv.status_code == 200
     data = rv.get_json()
-    assert data['truck_id'] == 14
+    assert data['truck_id'] == 'V22'
     assert data['departure_time'] == '14:00:00'
 
     order = Order.query.get(data['order_number'])
-    assert order.truck_id == 14
+    assert order.truck_s_number == 14
     assert order.departure_time.strftime('%H:%M') == '14:00'
 
 
@@ -974,7 +974,7 @@ def test_post_order_with_truck_id_without_departure_time(client, db):
         inl_terminal='ITV', latest_dep_time=1000,
         truck_type='port', hierarchy=3, delivery_deadline='20:00',
         driving_time=10, process_time=1, service_time=2,
-        truck_id=14
+        truck_s_number=14
     )
     rv = post_order(client, 1, **request)
 
@@ -1385,21 +1385,21 @@ def test_get_timeline(client, db, sheet_id):
     """
     # Assign truck to order
     request1 = dict(
-        truck_id=15,
+        truck_s_number=15,
         departure_time='08:00:00',
         Address='testStreet'
     )
 
-    rv3 = patch_order(client, 13, **request1)
+    rv3 = patch_order(client, 139, **request1)
     assert rv3.status_code == 200
 
     request2 = dict(
-        truck_id=14,
+        truck_s_number=14,
         departure_time='08:00:00',
         Address='testStreet'
     )
 
-    rv2 = patch_order(client, 14, **request2)
+    rv2 = patch_order(client, 140, **request2)
     assert rv2.status_code == 200
 
     rv = get_timeline(client, sheet_id)
@@ -1412,9 +1412,9 @@ def test_get_timeline(client, db, sheet_id):
         client=None,
         container_id='TCNU 948989 7',
         departure_time=request2['departure_time'],
-        truck_id=request2['truck_id'],
+        end_time="13:00:00",
         order_type='port',
-        end_time="13:00:00"
+        truck_id='V22'
     )
     assert len(data) == 2
     assert expected in data
@@ -1437,21 +1437,21 @@ def test_get_timeline_view_only(client, db, sheet_id):
     """
     # Assign truck to order
     request1 = dict(
-        truck_id=15,
+        truck_s_number=15,
         departure_time='08:00:00',
         Address='testStreet'
     )
 
-    rv3 = patch_order(client, 13, **request1)
+    rv3 = patch_order(client, 139, **request1)
     assert rv3.status_code == 200
 
     request2 = dict(
-        truck_id=14,
+        truck_s_number=14,
         departure_time='08:00:00',
         Address='testStreet'
     )
 
-    rv2 = patch_order(client, 14, **request2)
+    rv2 = patch_order(client, 140, **request2)
     assert rv2.status_code == 200
 
     rv = get_timeline(client, sheet_id)
@@ -1476,15 +1476,16 @@ def test_get_timeline_view_only(client, db, sheet_id):
             client=None,
             container_id='TCNU 948989 7',
             departure_time=request2['departure_time'],
-            truck_id=request2['truck_id'],
+            end_time="13:00:00",
             order_type='port',
-            end_time="13:00:00"
+            truck_id='V22'
         )
 
         assert len(data) == 2
         assert expected in data
 
 # TEST POST PLANNING
+
 
 # TODO: UTP
 @pytest.mark.parametrize('truck_sheet_id', (2, 'latest'))

@@ -39,8 +39,8 @@ class Order(ValidationMixin, db.Model):
     are stored in the others relation with
     :class:`backend.models.OrderProperties`.
 
-    `truck_id` and `departure_time` can only be set after the creation of a
-    row.
+    `truck_s_number` and `departure_time` can only be set after the creation
+    of a row.
     """
     query_class = OrderQuery
 
@@ -49,8 +49,8 @@ class Order(ValidationMixin, db.Model):
                          db.ForeignKey('order_sheet.id', ondelete='CASCADE'))
     inl_terminal = db.Column(db.String, nullable=False)
     truck_type = db.Column(db.String, nullable=False)
-    truck_id = db.Column(db.Integer,
-                         db.ForeignKey('truck.s_number'))
+    truck_s_number = db.Column(db.Integer,
+                               db.ForeignKey('truck.s_number'))
     departure_time = db.Column(db.Time)
     hierarchy = db.Column(db.Float, nullable=False)
     delivery_deadline = db.Column(db.Time, nullable=False)
@@ -64,7 +64,7 @@ class Order(ValidationMixin, db.Model):
     def __init__(self, inl_terminal: str, truck_type: str, hierarchy: float,
                  delivery_deadline: dt.time, driving_time: int,
                  process_time: int, sheet_id: int = None,
-                 truck_id: int = None, departure_time: dt.time = None,
+                 truck_s_number: int = None, departure_time: dt.time = None,
                  **kwargs):
         self.id = sheet_id
         self.inl_terminal = inl_terminal
@@ -73,7 +73,7 @@ class Order(ValidationMixin, db.Model):
         self.delivery_deadline = delivery_deadline
         self.driving_time = driving_time
         self.process_time = process_time
-        self.truck_id = truck_id
+        self.truck_s_number = truck_s_number
         self.departure_time = departure_time
         self.others = kwargs
 
@@ -101,7 +101,7 @@ class Order(ValidationMixin, db.Model):
         # If this object has not been flushed yet, the relation truck cannot
         # be found. We should get the truck using the truck id
         if self.truck is None:
-            truck = Truck.query.get_or_404(self.truck_id)
+            truck = Truck.query.get_or_404(self.truck_s_number)
         else:
             truck = self.truck
 
@@ -114,7 +114,7 @@ class Order(ValidationMixin, db.Model):
             )
         return value
 
-    @db.validates('truck', 'truck_id')
+    @db.validates('truck', 'truck_s_number')
     def validate_truck(self, key, truck):
         """
         Validates if the truck assigned to this order can carry out this order.
@@ -123,7 +123,7 @@ class Order(ValidationMixin, db.Model):
             return None
 
         # If `truck` is a key, get the truck associated
-        if key == 'truck_id':
+        if key == 'truck_s_number':
             truck = Truck.query.get_or_404(truck)
 
         truck_types = current_app.config['TRUCK_TYPES']
@@ -138,7 +138,7 @@ class Order(ValidationMixin, db.Model):
             )
 
         # Return either the truck or the key
-        if key == 'truck_id':
+        if key == 'truck_s_number':
             return truck.s_number
         return truck
 
@@ -169,10 +169,11 @@ class Order(ValidationMixin, db.Model):
                 dt.timedelta(minutes=self.service_time)).time()
 
 
-@listens_for(Order.truck_id, 'set')
+@listens_for(Order.truck_s_number, 'set')
 def update_departure_time(target, truck, oldvalue, initiator):
     """
-    Sets `Order.departure_time` to null if `Order.truck_id` was set to null.
+    Sets `Order.departure_time` to null if `Order.truck_s_number`
+    was set to null.
     """
     if truck is None and oldvalue is not None:
         target.departure_time = None

@@ -58,8 +58,8 @@ class Orders(MethodView):
                          message='Order sheet has already been used in a '
                                  'planning, cannot add a new order to it.')
 
-        # Check that when truck_id is set, departure_time also is set
-        if ('truck_id' in order) ^ ('departure_time' in order):
+        # Check that when truck_s_number is set, departure_time also is set
+        if ('truck_s_number' in order) ^ ('departure_time' in order):
             return abort(
                 400,
                 message='When assigning a truck, both the truck S number and '
@@ -181,12 +181,12 @@ class OrderByID(MethodView):
                     status="Bad Request"
                 )
 
-            # Check that when truck_id is set, departure_time also is set
+            # Check that when truck_s_number is set, departure_time also is set
             # Also, only departure time can be changed when truck has been
             # set
-            if ('truck_id' in req and 'departure_time' not in req and
-                req['truck_id'] is not None) or \
-                    ('truck_id' not in req and
+            if ('truck_s_number' in req and 'departure_time' not in req and
+                req['truck_s_number'] is not None) or \
+                    ('truck_s_number' not in req and
                      'departure_time' in req and
                      order.truck is None):
                 return abort(
@@ -259,7 +259,7 @@ class DataVisualisation(MethodView):
         # Get all orders from the order sheet that have trucks assigned
         orders = Order.query \
             .filter(Order.sheet_id == order_sheet.id) \
-            .filter(Order.truck_id.isnot(None)) \
+            .filter(Order.truck_s_number.isnot(None)) \
             .filter(Order.departure_time.isnot(None)) \
             .all()
 

@@ -22,6 +22,13 @@ class OthersSchemaMixin(object):
         return obj
 
 
+class TruckIDSchema(ma.Schema):
+    """
+    Serializes the truck_id field from a :class:`Backend.models.Truck`.
+    """
+    truck_id = ma.String()
+
+
 class OrderSchema(OthersSchemaMixin, ma.SQLAlchemyAutoSchema):
     """
     Serializes the :class:`backend.models.Order` database table to JSON.
@@ -29,7 +36,11 @@ class OrderSchema(OthersSchemaMixin, ma.SQLAlchemyAutoSchema):
 
     latest_dep_time = ma.Time()
     service_time = ma.Integer()
-    truck_id = ma.Integer(allow_none=True)
+    truck_id = ma.Pluck(TruckIDSchema,
+                        'truck_id',
+                        attribute='truck',
+                        dump_only=True)
+    truck_s_number = ma.Integer(allow_none=True, load_only=True)
     others = ma.Dict(dump_only=True)
 
     class Meta:
@@ -77,7 +88,7 @@ class TimeLineSchema(OthersSchemaMixin, ma.SQLAlchemySchema):
     """
     Serializes the parameters needed for the planning timeline.
     """
-    truck_id = ma.Integer()
+    truck_id = ma.Pluck(TruckIDSchema, 'truck_id', attribute='truck')
     departure_time = ma.Time()
     end_time = ma.Time()
     others = ma.Nested(TimeLineSchemaOthers)

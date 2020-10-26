@@ -39,16 +39,16 @@ class FirstRides(MethodView):
 
         # Get a list of truck ids and their earliest departure time
         subq = db.session.query(
-            Order.truck_id,
+            Order.truck_s_number,
             func.min(Order.departure_time).label('mintime')
-        ).group_by(Order.truck_id).filter(Order.sheet_id == sheet_id) \
+        ).group_by(Order.truck_s_number).filter(Order.sheet_id == sheet_id) \
             .subquery()
 
         # Get the first orders for each truck
         first_orders = db.session.query(Order).join(
             subq,
             and_(
-                Order.truck_id == subq.c.truck_id,
+                Order.truck_s_number == subq.c.truck_s_number,
                 Order.departure_time == subq.c.mintime
             )
         ).all()

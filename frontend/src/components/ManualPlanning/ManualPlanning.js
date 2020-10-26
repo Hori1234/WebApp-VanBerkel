@@ -201,7 +201,6 @@ export default class ManualPlanning extends Component {
   };
   onSelectedOrdersRowKeysChange = (selectedOrdersRowKeys) => {
     this.setState({ selectedOrdersRowKeys });
-    console.log("orders", selectedOrdersRowKeys);
   };
   selectTrucksRow = (record) => {
     const selectedTrucksRowKeys = [...this.state.selectedTrucksRowKeys];
@@ -217,7 +216,6 @@ export default class ManualPlanning extends Component {
   };
   onSelectedTrucksRowKeysChange = (selectedTrucksRowKeys) => {
     this.setState({ selectedTrucksRowKeys });
-    console.log("trucks", selectedTrucksRowKeys);
   };
 
   showAssignModal = () => {
@@ -499,7 +497,6 @@ export default class ManualPlanning extends Component {
           };
           outarray.push(temp);
         }
-        console.log(outarray);
         this.setState((state) => ({
           ...state,
           data: outarray,
@@ -542,7 +539,6 @@ export default class ManualPlanning extends Component {
           outarray.push(temp);
         }
 
-        console.log(outarray);
         this.setState((state) => ({
           ...state,
           data2: outarray,
@@ -563,7 +559,6 @@ export default class ManualPlanning extends Component {
 
   //setting the new orders and the new truck
   setNewOrder = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
-    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
     this.setState((prevState) => {
       let newOrder = Object.assign({}, prevState.newOrder); // creating copy of state variable newOrder
       newOrder.order_number = vON;
@@ -577,10 +572,8 @@ export default class ManualPlanning extends Component {
       newOrder.service_time = vST;
       return { newOrder }; // return new object newOrder object
     });
-    console.log(this.state.newOrder);
   };
   setNewTruck = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
-    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
     this.setState((prevState) => {
       let newTruck = Object.assign({}, prevState.newTruck); // creating copy of state variable newOrder
       newTruck.truck_id = vON;
@@ -594,14 +587,12 @@ export default class ManualPlanning extends Component {
       newTruck.date = vST;
       return { newTruck }; // return new object newOrder object
     });
-    console.log(this.state.newTruck);
   };
 
   //Getting the new order's and new truck's information from their modals
   getOrderInfo = () => {
     var temp = [];
     temp = this.refs.addOrders.getFormOrderData();
-    console.log(temp);
     this.setNewOrder(
       temp[0],
       temp[1],
@@ -617,7 +608,6 @@ export default class ManualPlanning extends Component {
   getTruckInfo = () => {
     var temp = [];
     temp = this.refs.addTrucks.getFormTruckData();
-    console.log(temp);
     this.setNewTruck(
       temp[0],
       temp[1],
@@ -635,7 +625,7 @@ export default class ManualPlanning extends Component {
   assign_unassignOrder = (orderId, truckId, dpt, assigning) => {
     return axios
       .patch(`/api/orders/${orderId}`, {
-        truck_id: truckId,
+        truck_s_number: truckId,
         departure_time: dpt,
       })
       .then((res) => {
@@ -644,7 +634,6 @@ export default class ManualPlanning extends Component {
             message.success("Truck succesfully unassigned");
           }
         } else {
-          console.log(res.status);
           if (res.status === 200) {
             message.success("Order succesfully assigned");
           }

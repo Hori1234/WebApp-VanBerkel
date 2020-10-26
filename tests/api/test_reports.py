@@ -42,28 +42,28 @@ def setup_db(setup_users, login_admin, create_db_without_users, client):
     TruckSheet.query.get(1).upload_date += datetime.timedelta(hours=1)
 
     order1 = dict(
-        truck_id=2, departure_time='10:00'
+        truck_s_number=2, departure_time='10:00'
     )
     client.patch(f'/api/orders/{1}',
                  data=json.dumps(order1),
                  content_type='application/json')
 
     order2 = dict(
-        truck_id=5, departure_time='5:00'
+        truck_s_number=5, departure_time='5:00'
     )
     client.patch(f'/api/orders/{2}',
                  data=json.dumps(order2),
                  content_type='application/json')
 
     order3 = dict(
-        truck_id=2, departure_time='5:00'
+        truck_s_number=2, departure_time='5:00'
     )
     client.patch(f'api/orders/{3}',
                  data=json.dumps(order3),
                  content_type='application/json')
 
     order4 = dict(
-        truck_id=1, departure_time='6:00'
+        truck_s_number=1, departure_time='6:00'
     )
     client.patch(f'api/orders/{4}',
                  data=json.dumps(order4),
