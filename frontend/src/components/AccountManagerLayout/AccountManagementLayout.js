@@ -31,8 +31,9 @@ export default class AccountManagementLayout extends Component {
       hasMore: true,
       lastPage: 1,
       Metadata: {
-        username: "",
-        role: "",
+        id: null,
+        username: null,
+        role: null,
       },
     };
   }
