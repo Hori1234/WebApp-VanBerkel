@@ -2,8 +2,7 @@ import pytest
 import datetime
 from pathlib import Path
 
-from backend.models import trucks
-from backend.models import orders
+from backend.models import TruckSheet, Truck, OrderSheet, Order
 
 
 @pytest.fixture(autouse=True)
@@ -73,9 +72,9 @@ def test_upload_ta_success(client, db):
     rv = upload_one_sheet(client,
                           get_file_path('truck_availability_test.xlsx'))
     assert rv.status_code == 200
-    assert trucks.TruckSheet.query.get(1)
+    assert TruckSheet.query.get(1)
 
-    truck = trucks.Truck.query.get(5)
+    truck = Truck.query.get(5)
     assert truck.truck_type == 'regional'
     assert truck.terminal == 'ITV'
 
@@ -88,9 +87,9 @@ def test_upload_orders_success(client):
                           get_file_path('order_sheet_test.xlsx'))
 
     assert rv.status_code == 200
-    assert orders.OrderSheet.query.get(1)
+    assert OrderSheet.query.get(1)
 
-    order = orders.Order.query.get(7)
+    order = Order.query.get(7)
     assert order.latest_dep_time.strftime('%H:%M') == '08:00'
     assert order.truck_type == 'port'
 
@@ -260,7 +259,7 @@ def test_get_order_sheets(client, db):
         upload_one_sheet(client,
                          get_file_path('order_sheet_test.xlsx'))
 
-    orders.OrderSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
+    OrderSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
 
     rv = get_order_sheet(client, page=2, page_size=1)
 
@@ -280,7 +279,7 @@ def test_get_truck_sheets(client, db):
         upload_one_sheet(client,
                          get_file_path('truck_availability_test.xlsx'))
 
-    trucks.TruckSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
+    TruckSheet.query.get(2).upload_date += datetime.timedelta(hours=1)
 
     rv = get_truck_sheet(client, page=2, page_size=1)
 

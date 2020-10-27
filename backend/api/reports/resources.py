@@ -1,68 +1,65 @@
-from flask import safe_join, send_file, send_from_directory
-from flask_smorest import abort
-from flask.views import MethodView
-from sqlalchemy import func, and_
-from . import bp
-from openpyxl import Workbook
-from openpyxl.styles import PatternFill, Font
 import time
-from backend.app import db
-from backend.models.orders import Order, OrderSheet
-from backend.extensions import roles_required
-from backend.api.reports.schemas import ReportSchema
 import io
+from flask import send_file
+from flask.views import MethodView
+from flask_login import current_user
+from sqlalchemy import func, and_
+from openpyxl import Workbook
+from openpyxl.styles import PatternFill, Font, Border, Side
+from backend.plugins import db
+from backend.models import Order, OrderSheet
+from backend.extensions import Blueprint, roles_required
+
+bp = Blueprint('reports',
+               'reports',
+               description='Get report like first rides assignment')
 
 
 @bp.route('/firstrides/<sheet_id_or_latest>')
 class FirstRides(MethodView):
 
-    @bp.response(ReportSchema, code=200)
-    @bp.alt_response("BAD_REQUEST", code=400)
-    @roles_required('planner', 'administrator')
+    @bp.response(code=200)
+    @bp.alt_response("NOT_FOUND", code=404)
+    @roles_required('view-only', 'planner', 'administrator')
     def get(self, sheet_id_or_latest):
         """
         Get a workbook containing a first rides report from an order sheet.
 
         In case 'sheet_id_or_latest is 'latest', the most recently uploaded
         order sheet will be used.
+
+        Required roles: view-only, planner, administrator
         """
-        try:
-            # Try to parse the sheet_id to an int and get the order sheet
-            order_sheet = OrderSheet.query \
-                .get_or_404(int(sheet_id_or_latest),
-                            description="Order sheet not found")
-        except ValueError:
-            # The sheet_id is not an integer, so check if it is `latest`
-            if sheet_id_or_latest == 'latest':
-                # Get the most recently uploaded sheet
-                order_sheet = OrderSheet.query\
-                    .order_by(OrderSheet.upload_date.desc())\
-                    .first_or_404()
-            else:
-                # Can't understand which sheet is requested
-                return abort(404, message='Order sheet not found')
+        # Request the order sheet for this planning
+        is_view_only = current_user.role == 'view-only'
+        order_sheet = OrderSheet.query.get_sheet_or_404(sheet_id_or_latest,
+                                                        is_view_only)
 
         sheet_id = order_sheet.id
 
+        # Get a list of truck ids and their earliest departure time
         subq = db.session.query(
-            Order.truck_id,
+            Order.truck_s_number,
             func.min(Order.departure_time).label('mintime')
-        ).group_by(Order.truck_id).filter(Order.sheet_id == sheet_id) \
+        ).group_by(Order.truck_s_number).filter(Order.sheet_id == sheet_id) \
             .subquery()
 
+        # Get the first orders for each truck
         first_orders = db.session.query(Order).join(
             subq,
             and_(
-                Order.truck_id == subq.c.truck_id,
+                Order.truck_s_number == subq.c.truck_s_number,
                 Order.departure_time == subq.c.mintime
             )
         ).all()
 
+        # Create a new sheet file
         book = Workbook()
         sheet = book.active
         now = time.strftime("%d %b %Y %X")
         now_save = time.strftime("%Y-%m-%d-%H-%M-%S")
 
+        # Set the column names
         sheet['A1'] = now
         sheet['C4'] = 'Sno'
         sheet['D4'] = 'Driver Name'
@@ -78,46 +75,30 @@ class FirstRides(MethodView):
         sheet['N4'] = 'Shipping company'
         sheet['O4'] = 'Remarks'
 
-        yellowFill = PatternFill(start_color='FCE205',
-                                 end_color='FFD300',
-                                 fill_type='solid')
-        sheet['C4'].fill = yellowFill
-        sheet['D4'].fill = yellowFill
-        sheet['E4'].fill = yellowFill
-        sheet['F4'].fill = yellowFill
-        sheet['G4'].fill = yellowFill
-        sheet['H4'].fill = yellowFill
-        sheet['I4'].fill = yellowFill
-        sheet['J4'].fill = yellowFill
-        sheet['K4'].fill = yellowFill
-        sheet['L4'].fill = yellowFill
-        sheet['M4'].fill = yellowFill
-        sheet['N4'].fill = yellowFill
-        sheet['O4'].fill = yellowFill
+        # Styling
+        yellow_fill = PatternFill(start_color='FFFF00',
+                                  fill_type='solid')
 
-        sheet['C4'].font = Font(bold=True)
-        sheet['D4'].font = Font(bold=True)
-        sheet['E4'].font = Font(bold=True)
-        sheet['F4'].font = Font(bold=True)
-        sheet['G4'].font = Font(bold=True)
-        sheet['H4'].font = Font(bold=True)
-        sheet['I4'].font = Font(bold=True)
-        sheet['J4'].font = Font(bold=True)
-        sheet['K4'].font = Font(bold=True)
-        sheet['L4'].font = Font(bold=True)
-        sheet['M4'].font = Font(bold=True)
-        sheet['N4'].font = Font(bold=True)
-        sheet['O4'].font = Font(bold=True)
+        border = Border(left=Side(border_style='thin', color='000000'),
+                        right=Side(border_style='thin', color='000000'),
+                        top=Side(border_style='thin', color='000000'),
+                        bottom=Side(border_style='thin', color='000000'))
 
+        # Set the styling to each of the column header cells
+        for cell in sheet.iter_cols(3, 15, 4, 4):
+            cell[0].fill = yellow_fill
+            cell[0].font = Font(bold=True)
+            cell[0].border = border
+
+        # Set the width of cells that contain long values
         sheet.column_dimensions['D'].width = 20
         sheet.column_dimensions['H'].width = 15
         sheet.column_dimensions['I'].width = 15
         sheet.column_dimensions['N'].width = 20
         sheet.column_dimensions['O'].width = 40
 
-        count = 4
-        for order in first_orders:
-            count = count + 1
+        # Create a row for each truck that has assigned an order
+        for count, order in zip(range(5, len(first_orders)+5), first_orders):
 
             sheet.cell(row=count, column=3).value = \
                 order.truck.s_number  # s number
@@ -146,18 +127,18 @@ class FirstRides(MethodView):
             sheet.cell(row=count, column=15).value = \
                 order.truck.others.get('Remarks', '')  # remarks
 
+            # Set the borders of each cell of the row
+            for i in range(3, 16):
+                sheet.cell(row=count, column=i).border = border
+
+        # Save the file to an io stream
         filename = 'first-rides-' + now_save + '.xlsx'
         file = io.BytesIO()
         book.save(file)
         file.seek(0)
 
-        try:
-            return send_file(
-                file,
-                attachment_filename=filename,
-                as_attachment=True
-                ), 200
-        except FileNotFoundError:
-            abort(404)
-
-        return '', 200
+        return send_file(
+            file,
+            attachment_filename=filename,
+            as_attachment=True
+            ), 200

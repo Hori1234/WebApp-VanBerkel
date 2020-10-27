@@ -1,6 +1,6 @@
 import pytest
 import json
-from backend.models.users import User
+from backend.models import User
 
 
 @pytest.fixture(autouse=True)

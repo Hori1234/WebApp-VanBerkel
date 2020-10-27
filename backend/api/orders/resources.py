@@ -1,14 +1,15 @@
 from flask.views import MethodView
 from flask_login import current_user
-from . import bp
-from backend.models.orders import Order, OrderSheet
-from backend.models.planning import Planning
-from backend.extensions import roles_required, unnest
+from backend.models import Order
+from backend.models import OrderSheet
+from backend.extensions import Blueprint, roles_required, unnest
 from .schemas import OrderSchema, OrderTableSchema, TimeLineSchema
-from backend.app import db
+from backend.plugins import db
 from flask_smorest import abort
 
-# TODO: Write a method to do sheet ID or latest in a query class
+bp = Blueprint('orders',
+               'orders',
+               description='Request and change orders')
 
 
 @bp.route('/sheet/<sheet_id_or_latest>')
@@ -23,34 +24,13 @@ class Orders(MethodView):
         Get a list of orders from an order sheet.
 
         In case `sheet_id_or_latest` is `latest`, the most recently uploaded
-        order sheet will be used.
+        order sheet will be requested.
 
         Required roles: view-only, planner, administrator
         """
-        try:
-            # Try to parse the sheet_id to an int and get the order sheet
-            order_sheet = OrderSheet.query\
-                .get_or_404(int(sheet_id_or_latest),
-                            description="Order sheet not found")
-
-            if current_user.role == 'view-only' and \
-                    order_sheet.planning is None:
-                return abort(404,
-                             message='Order sheet not found')
-        except ValueError:
-            # The sheet_id is not an integer, so check if it is `latest`
-            if sheet_id_or_latest == 'latest':
-                # Get the most recently uploaded sheet
-                order_sheet_query = OrderSheet.query \
-                    .order_by(OrderSheet.upload_date.desc())
-
-                if current_user.role == 'view-only':
-                    order_sheet_query = order_sheet_query.join(Planning)
-
-                order_sheet = order_sheet_query.first_or_404()
-            else:
-                # Can't understand which sheet is requested
-                return abort(404, message='Order sheet not found')
+        is_view_only = current_user.role == 'view-only'
+        order_sheet = OrderSheet.query.get_sheet_or_404(sheet_id_or_latest,
+                                                        is_view_only)
         return order_sheet
 
     @roles_required('planner', 'administrator')
@@ -70,22 +50,7 @@ class Orders(MethodView):
 
         Required roles: planner, administrator
         """
-        try:
-            # Try to parse the sheet_id to an int and get the order sheet
-            order_sheet = OrderSheet.query \
-                .get_or_404(int(sheet_id_or_latest),
-                            description="Order sheet not found")
-        except ValueError:
-            # The sheet_id is not an integer, so check if it is `latest`
-            if sheet_id_or_latest == 'latest':
-                # Get the most recently uploaded sheet
-                order_sheet = OrderSheet.query\
-                    .order_by(OrderSheet.upload_date.desc())\
-                    .first_or_404()
-            else:
-                # Can't understand which sheet is requested
-                return abort(404,
-                             message='Order sheet not found')
+        order_sheet = OrderSheet.query.get_sheet_or_404(sheet_id_or_latest)
 
         # Published plannings cannot be changed
         if order_sheet.planning is not None:
@@ -93,8 +58,8 @@ class Orders(MethodView):
                          message='Order sheet has already been used in a '
                                  'planning, cannot add a new order to it.')
 
-        # Check that when truck_id is set, departure_time also is set
-        if ('truck_id' in order) ^ ('departure_time' in order):
+        # Check that when truck_s_number is set, departure_time also is set
+        if ('truck_s_number' in order) ^ ('departure_time' in order):
             return abort(
                 400,
                 message='When assigning a truck, both the truck S number and '
@@ -167,9 +132,7 @@ class OrderByID(MethodView):
         """
 
         # try to get the order from the orders table
-        order = Order.query.get_or_404(
-            order_id,
-            description='Order not found')
+        order = Order.query.get_or_404(order_id, description='Order not found')
 
         # Published plannings cannot be changed
         if order.order_sheet.planning is not None:
@@ -200,9 +163,8 @@ class OrderByID(MethodView):
         """
         try:
             # Try to parse the sheet_id to an int and get the order
-            order = Order.query.get_or_404(
-                order_id,
-                description='Order not found')
+            order = Order.query.get_or_404(order_id,
+                                           description='Order not found')
 
             # Published plannings cannot be changed
             if order.order_sheet.planning is not None:
@@ -219,12 +181,12 @@ class OrderByID(MethodView):
                     status="Bad Request"
                 )
 
-            # Check that when truck_id is set, departure_time also is set
+            # Check that when truck_s_number is set, departure_time also is set
             # Also, only departure time can be changed when truck has been
             # set
-            if ('truck_id' in req and 'departure_time' not in req and
-                req['truck_id'] is not None) or \
-                    ('truck_id' not in req and
+            if ('truck_s_number' in req and 'departure_time' not in req and
+                req['truck_s_number'] is not None) or \
+                    ('truck_s_number' not in req and
                      'departure_time' in req and
                      order.truck is None):
                 return abort(
@@ -281,34 +243,23 @@ class DataVisualisation(MethodView):
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
     def get(self, sheet_id_or_latest):
-        try:
-            # Try to parse the sheet_id to an int and get the order sheet
-            order_sheet = OrderSheet.query \
-                .get_or_404(int(sheet_id_or_latest),
-                            description="Order sheet not found")
+        """
+        Gets a the parameters needed for making a timeline.
 
-            if current_user.role == 'view-only' and \
-                    order_sheet.planning is None:
-                return abort(404,
-                             message='Order sheet not found')
-        except ValueError:
-            # The sheet_id is not an integer, so check if it is `latest`
-            if sheet_id_or_latest == 'latest':
-                # Get the most recently uploaded sheet
-                order_sheet_query = OrderSheet.query \
-                    .order_by(OrderSheet.upload_date.desc())
+        In case `sheet_id_or_latest` is `latest`, the most recently uploaded
+        order sheet will be used to create the timeline.
 
-                if current_user.role == 'view-only':
-                    order_sheet_query = order_sheet_query.join(Planning)
+        Required roles: view-only, planner, administrator
+        """
+        # Get the requested order sheet
+        is_view_only = current_user.role == 'view-only'
+        order_sheet = OrderSheet.query.get_sheet_or_404(sheet_id_or_latest,
+                                                        is_view_only)
 
-                order_sheet = order_sheet_query.first_or_404()
-            else:
-                # Can't understand which sheet is requested
-                return abort(404, message='Order sheet not found')
-
+        # Get all orders from the order sheet that have trucks assigned
         orders = Order.query \
             .filter(Order.sheet_id == order_sheet.id) \
-            .filter(Order.truck_id.isnot(None)) \
+            .filter(Order.truck_s_number.isnot(None)) \
             .filter(Order.departure_time.isnot(None)) \
             .all()
 

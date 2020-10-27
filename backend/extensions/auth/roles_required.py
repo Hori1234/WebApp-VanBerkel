@@ -4,7 +4,7 @@ from flask_login.config import EXEMPT_METHODS
 from functools import wraps
 
 
-def roles_required(*roles):
+def roles_required(*args):
     """
     Decorator to deny access to a view function if the user is not logged in
     or does not have the roles specified in `roles`.
@@ -17,9 +17,11 @@ def roles_required(*roles):
 
     Adapted from login_required from Flask-Login.
 
-    :param roles: the roles that are allowed to access the view function
-    :type roles: list of strings
+    :param args: the roles that are allowed to access the view function
+    :type args: List[str]
     """
+
+    roles = args
 
     def wrapper(func):
 

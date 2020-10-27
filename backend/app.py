@@ -1,24 +1,7 @@
 from flask import Flask
-from flask_smorest import Api
-from apispec.ext.marshmallow import MarshmallowPlugin
-from flask_marshmallow import Marshmallow
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from flask_migrate import Migrate
 from backend.config import Config
-from backend.api import register_api, custom_name_resolver as name_resolver
-
-db = SQLAlchemy()
-api = Api(
-    spec_kwargs={
-        'marshmallow_plugin': MarshmallowPlugin(
-            schema_name_resolver=name_resolver
-        )
-    }
-)
-ma = Marshmallow()
-login = LoginManager()
-migrate = Migrate()
+from backend.api import register_api
+from .plugins import db, api, ma, login, migrate
 
 
 def create_app(config=Config):
@@ -41,13 +24,5 @@ def create_app(config=Config):
     login.init_app(app)
     migrate.init_app(app, db)
     register_api(api)
-
-    # Set the user loader of flask-login, so it can load users
-    # when they are logged in
-    from backend.models.users import User
-
-    @login.user_loader
-    def user_loader(user_id):
-        return User.query.get(user_id)
 
     return app

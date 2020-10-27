@@ -22,7 +22,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test src/components",
+    "test:e2e": "react-scripts test src/test",
     "eject": "react-scripts eject",
     "format": "prettier --write \"**/*.+(js)",
     "lint": "eslint src",
