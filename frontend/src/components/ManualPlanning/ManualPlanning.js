@@ -206,6 +206,14 @@ export default class ManualPlanning extends Component {
   onSelectedOrdersRowKeysChange = (selectedOrdersRowKeys, selectedOrderType) => {
     this.setState({ selectedOrdersRowKeys, selectedOrderType });
   };
+  updateSelectedOrderKeys = () => {
+    const selectKeys = this.state.selectedOrdersRowKeys;
+    for(let i = 0; i < this.state.data.length; i++){
+      selectKeys.splice(selectKeys.indexOf(i), 1);
+    }
+    this.setState({ selectedOrdersRowKeys:selectKeys });
+    console.log("selected orders:", this.state.selectedOrdersRowKeys);
+  };
   selectTrucksRow = (record) => {
     const selectedTrucksRowKeys = [...this.state.selectedTrucksRowKeys];
     if (selectedTrucksRowKeys.indexOf(record.key) >= 0) {
@@ -221,6 +229,14 @@ export default class ManualPlanning extends Component {
   };
   onSelectedTrucksRowKeysChange = (selectedTrucksRowKeys, selectedTruckType) => {
     this.setState({ selectedTrucksRowKeys, selectedTruckType });
+  };
+  updateSelectedTruckKeys = () => {
+    const selectKeys = this.state.selectedTrucksRowKeys;
+    for(let i = 0; i < this.state.data.length; i++){
+      selectKeys.splice(selectKeys.indexOf(i), 1);
+    }
+    this.setState({ selectedTrucksRowKeys:selectKeys });
+    console.log("selected orders:", this.state.selectedTrucksRowKeys);
   };
 
   showAssignModal = () => {
@@ -647,6 +663,8 @@ export default class ManualPlanning extends Component {
         }
         this.getOrderList("latest");
         this.getTruckList("latest");
+        this.updateSelectedOrderKeys();
+        this.updateSelectedTruckKeys();
         return true;
       })
       .catch((error) => {
