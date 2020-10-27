@@ -116,7 +116,7 @@ const EditableTableOrder = (props) => {
   };
 
   /**
-   * Handles account editing proccess.
+   * Handles account editing process.
    * @param {Id of the order to be edited} order_id 
    * @param {New data for the order} Data 
    */
@@ -124,31 +124,21 @@ const EditableTableOrder = (props) => {
     return axios
       .patch(`/api/orders/${order_id}`, Data)
       .then((res) => {
-        if (res.status === 200) {
-          message.success("Order updated succesfully");
-        } else {
-          if (res.status === 401) {
-            message.error("Bad request: " + res.message);
-          } else {
-            if (res.status === 404) {
-              message.error("Not Found: " + res.message);
-            } else {
-              if (res.status === 422) {
-                message.error("Unprocessable Entity: " + res.message);
-              } else {
-                if (res.satatus === 503) {
-                  message.warning("Server not Found: " + res.message);
-                } else {
-                  message.error(res.message);
-                }
-              }
-            }
-          }
-        }
-        return true;
+          message.success("Order updated successfully");
+          return true;
       })
       .catch((error) => {
-        message.error("An error has occured");
+        if (error.status === 401) {
+          message.error("Bad request: " + error.data.message);
+        } else if (error.status === 404) {
+          message.error("Not Found: " + error.data.message);
+        } else if (error.status === 422) {
+          message.error("Unprocessable Entity: " + error.data.message);
+        } else if (error.status === 503) {
+          message.warning("Server not Found: " + error.data.message);
+        } else {
+          message.error(error.data.message);
+        }
         return false;
       });
   };
