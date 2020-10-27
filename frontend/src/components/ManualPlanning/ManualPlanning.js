@@ -151,6 +151,9 @@ export default class ManualPlanning extends Component {
       this.getKatTruck(this.state.originalTrucks);
     }
   };
+
+
+  
   getItvTruck = (e) => {
     let itvDataTruck = [];
     e.forEach((element) => {
@@ -197,11 +200,11 @@ export default class ManualPlanning extends Component {
     } else {
       selectedOrdersRowKeys.push(record.key);
     }
-    this.setState({ selectedOrdersRowKeys });
+    const selectedOrderType = record.truck_type;
+    this.setState({ selectedOrdersRowKeys, selectedOrderType });
   };
-  onSelectedOrdersRowKeysChange = (selectedOrdersRowKeys) => {
-    this.setState({ selectedOrdersRowKeys });
-    console.log("orders", selectedOrdersRowKeys);
+  onSelectedOrdersRowKeysChange = (selectedOrdersRowKeys, selectedOrderType) => {
+    this.setState({ selectedOrdersRowKeys, selectedOrderType });
   };
   selectTrucksRow = (record) => {
     const selectedTrucksRowKeys = [...this.state.selectedTrucksRowKeys];
@@ -213,11 +216,11 @@ export default class ManualPlanning extends Component {
     } else {
       selectedTrucksRowKeys.push(record.key);
     }
-    this.setState({ selectedTrucksRowKeys });
+    const selectedTruckType = record.truck_type;
+    this.setState({ selectedTrucksRowKeys, selectedTruckType });
   };
-  onSelectedTrucksRowKeysChange = (selectedTrucksRowKeys) => {
-    this.setState({ selectedTrucksRowKeys });
-    console.log("trucks", selectedTrucksRowKeys);
+  onSelectedTrucksRowKeysChange = (selectedTrucksRowKeys, selectedTruckType) => {
+    this.setState({ selectedTrucksRowKeys, selectedTruckType });
   };
 
   showAssignModal = () => {
@@ -228,6 +231,8 @@ export default class ManualPlanning extends Component {
       message.error("You have selected more than 1 truck. Please select only 1 truck.");
     } else if(this.state.selectedOrdersRowKeys.length === 0){
       message.error("Please select one or more orders.");
+    } else if(this.state.selectedOrderType[0].truck_type !== this.state.selectedTruckType[0].truck_type){
+      message.error("Truck type different from order type.");
     }
     else{
       this.setState({
@@ -497,7 +502,6 @@ export default class ManualPlanning extends Component {
           };
           outarray.push(temp);
         }
-        console.log(outarray);
         this.setState((state) => ({
           ...state,
           data: outarray,
@@ -540,7 +544,6 @@ export default class ManualPlanning extends Component {
           outarray.push(temp);
         }
 
-        console.log(outarray);
         this.setState((state) => ({
           ...state,
           data2: outarray,
@@ -561,7 +564,6 @@ export default class ManualPlanning extends Component {
 
   //setting the new orders and the new truck
   setNewOrder = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
-    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
     this.setState((prevState) => {
       let newOrder = Object.assign({}, prevState.newOrder); // creating copy of state variable newOrder
       newOrder.order_number = vON;
@@ -575,10 +577,8 @@ export default class ManualPlanning extends Component {
       newOrder.service_time = vST;
       return { newOrder }; // return new object newOrder object
     });
-    console.log(this.state.newOrder);
   };
   setNewTruck = (vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST) => {
-    console.log(vON, vInl, vLDT, vTT, vH, vDD, vDT, vPT, vST);
     this.setState((prevState) => {
       let newTruck = Object.assign({}, prevState.newTruck); // creating copy of state variable newOrder
       newTruck.truck_id = vON;
@@ -592,14 +592,12 @@ export default class ManualPlanning extends Component {
       newTruck.date = vST;
       return { newTruck }; // return new object newOrder object
     });
-    console.log(this.state.newTruck);
   };
 
   //Getting the new order's and new truck's information from their modals
   getOrderInfo = () => {
     var temp = [];
     temp = this.refs.addOrders.getFormOrderData();
-    console.log(temp);
     this.setNewOrder(
       temp[0],
       temp[1],
@@ -615,7 +613,6 @@ export default class ManualPlanning extends Component {
   getTruckInfo = () => {
     var temp = [];
     temp = this.refs.addTrucks.getFormTruckData();
-    console.log(temp);
     this.setNewTruck(
       temp[0],
       temp[1],
@@ -642,7 +639,6 @@ export default class ManualPlanning extends Component {
             message.success("Truck succesfully unassigned");
           }
         } else {
-          console.log(res.status);
           if (res.status === 200) {
             message.success("Order succesfully assigned");
           }
@@ -1162,14 +1158,16 @@ export default class ManualPlanning extends Component {
         </Menu.ItemGroup>
       </Menu>
     );
-    const { selectedOrdersRowKeys } = this.state;
-    const { selectedTrucksRowKeys } = this.state;
+    const { selectedOrdersRowKeys, selectedOrderType } = this.state;
+    const { selectedTrucksRowKeys, selectedTruckType } = this.state;
     const ordersRowSelection = {
       selectedOrdersRowKeys,
+      selectedOrderType,
       onChange: this.onSelectedOrdersRowKeysChange,
     };
     const trucksRowSelection = {
       selectedTrucksRowKeys,
+      selectedTruckType,
       onChange: this.onSelectedTrucksRowKeysChange,
     };
     return (

@@ -157,10 +157,10 @@ describe('React App', () => {
     await page.click('.ant-menu-item.ant-menu-item-only-child:nth-child(7)');
     await page.waitFor(300);
     const currentPage = page.url();
-    expect(currentPage).toEqual('http://localhost:3000/montly');
+    expect(currentPage).toEqual('http://localhost:3000/monthly');
     await page.waitFor(3000);
     await browser.close();
-  }, 20000);
+  }, 120000);
 
   it('shall successfully logout after login in', async () => {
 
@@ -184,7 +184,7 @@ describe('React App', () => {
     await page.waitFor(500);
     await page.waitForSelector('#basic_username');
     await browser.close();
-  }, 20000);
+  }, 120000);
 
   it('when logging out on a other page than homepage, login in will start at homepage', async () => {
 
@@ -218,5 +218,5 @@ describe('React App', () => {
     await page.waitFor(500);
 
     await browser.close();
-  }, 20000);
+  }, 120000);
 });
