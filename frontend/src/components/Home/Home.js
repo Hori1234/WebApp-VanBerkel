@@ -1,116 +1,93 @@
 import React, { Component } from 'react'
 import { AuthContext } from "../contextConfig.js"
-import { Layout, Image, Typography, Button, Divider } from 'antd';
+import { Layout, Divider } from 'antd';
+import LogoLink from "./LogoLink";
 import 'antd/dist/antd.css';
-import {
-    Link
-} from "react-router-dom";
-const { Text } = Typography;
 
-
+/**
+ * Displays the main menu component.
+ *
+ * The main menu displays a set of links with logo,
+ * which redirect to other places in the application.
+ *
+ * Which links are displayed depends on the currently logged in user.
+ */
 export default class Home extends Component {
     render() {
         return (
             <AuthContext.Consumer>
                 {(context) => (
-                    <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", width: "100%", justifyConten: "space-around", backgroundColor: "white" }}>
-                        <Layout style={{ alignItems: "flex-start", display: "flex", justifyContent: "space-around", marginBottom: 50, marginRight: 100, backgroundColor: "white", marginLeft: 30 }}>
-
-                            <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
-                                <Image style={{ marginRight: 20 }}
-                                    preview={false}
-                                    width={100}
-                                    src={require("../Images/view-planning.svg")}
-                                />
-                                <Layout style={{ flexDirection: "column", backgroundColor: "white" }}>
-                                    <Text style={{ fontWeight: "bold", fontSize: "18" }}>View Planning</Text>
-                                    <Text style={{ fontSize: " 14" }}>View the planning that was created for today</Text>
-                                </Layout>
-                                <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                    <Button id="viewButton" type="primary"><Link to="/view">Go</Link></Button>
-                                </Layout>
-                            </Layout>
-                            <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
-                                <Image style={{ marginRight: 20 }}
-                                    preview={false}
-                                    width={100}
-                                    src={require("../Images/Data Visualisation.webp")}
-                                />
-                                <Layout style={{ flexDirection: "column", backgroundColor: "white" }}>
-                                    <Text style={{ fontWeight: "bold", fontSize: "18" }}>Data Visualisation</Text>
-                                    <Text style={{ fontSize: " 14" }}>View charts of the supplied data</Text>
-                                </Layout>
-                                <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                    <Button id="dataButton" type="primary"><Link to="/data">Go</Link></Button>
-                                </Layout>
-                            </Layout>
-                            <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
-                                <Image style={{ marginRight: 20 }}
-                                    preview={false}
-                                    width={100}
-                                    src={require("../Images/Data Analytics.webp")}
-                                />
-                                <Layout style={{ flexDirection: "column", backgroundColor: "white" }}>
-                                    <Text style={{ fontWeight: "bold", fontSize: "18" }}>Montly Data Analytics</Text>
-                                    <Text style={{ fontSize: " 14" }}>View statistical data about this and past plannings</Text>
-                                </Layout>
-                                <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                    <Button id="monthlyButton" type="primary"><Link to="/montly">Go</Link></Button>
-                                </Layout>
-                            </Layout>
-
+                    <Layout style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        display: "flex",
+                        justifyContent: "space-around",
+                        backgroundColor: "white" }}>
+                        <Layout style={{
+                            alignItems: "flex-start",
+                            display: "flex",
+                            justifyContent: "space-around",
+                            marginBottom: 50,
+                            marginRight: 100,
+                            backgroundColor: "white",
+                            marginLeft: 30 }}>
+                            <LogoLink
+                                image={require("../Images/view-planning.svg")}
+                                title={"View Planning"}
+                                description={"View the planning that was created for today"}
+                                to={"/view"}
+                            />
+                            <LogoLink
+                                image={require("../Images/Data Analytics.webp")}
+                                title={"Monthly Data Analytics"}
+                                description={"View statistical data about this and past plannings"}
+                                to={"/monthly"}
+                            />
+                            {(context.state.user.role === 'planner' || context.state.user.role === 'administrator') && (
+                                <>
+                                    <LogoLink
+                                        image={require("../Images/Data Visualisation.webp")}
+                                        title={"Data Visualisation"}
+                                        description={"View charts of the supplied data"}
+                                        to={"/data"}
+                                    />
+                                </>
+                            )}
                         </Layout>
                         <Layout style={{ height: "50vh", alignItems: "flex-end", backgroundColor: "white" }}>
-                            <Divider type="vertical" style={{ height: "50vh", marginRight: 20 }}></Divider>
+                            <Divider type="vertical" style={{ height: "50vh", marginRight: 20 }}/>
                         </Layout>
-                        <Layout style={{ justifyContent: "space-around", marginBottom: 50, display: "flex", alignItems: "flex-start", backgroundColor: "white", marginRight: 30 }}>
+                        <Layout style={{
+                            justifyContent: "space-around",
+                            marginBottom: 50,
+                            display: "flex",
+                            alignItems: "flex-start",
+                            backgroundColor: "white",
+                            marginRight: 30 }}>
+
                             {(context.state.user.role === 'planner' || context.state.user.role === 'administrator') && (
-                                <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
-                                    <Image style={{ marginRight: 20 }}
-                                        preview={false}
-                                        width={100}
-                                        src={require("../Images/upload-file.svg")}
+                                <>
+                                    <LogoLink
+                                        image={require("../Images/upload-file.svg")}
+                                        title={"Upload Documents"}
+                                        description={"Upload the documents for the creation of the plannings"}
+                                        to={"/upload"}
                                     />
-                                    <Layout style={{ flexDirection: "column", backgroundColor: "white" }}>
-                                        <Text style={{ fontWeight: "bold", fontSize: "18" }}>Upload Documents</Text>
-                                        <Text style={{ fontSize: " 14" }}>Upload the documents for the creation of the plannings</Text>
-                                    </Layout>
-                                    <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                        <Button id="uploadButton" type="primary"><Link to="/upload">Go</Link></Button>
-                                    </Layout>
-                                </Layout>
-                            )}
-                            {(context.state.user.role === 'planner' || context.state.user.role === 'administrator') && (
-                                <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
-                                    <Image style={{ marginRight: 20 }}
-                                        preview={false}
-                                        width={100}
-                                        src={require("../Images/23_generate_value_for_investors_rapid_growth_planning-512.svg")}
+                                    <LogoLink
+                                        image={require("../Images/23_generate_value_for_investors_rapid_growth_planning-512.svg")}
+                                        title={"Create Planning"}
+                                        description={"Manual and automatic creation of a planning"}
+                                        to={"/planning"}
                                     />
-                                    <Layout style={{ flexDirection: "column", backgroundColor: "white" }}>
-                                        <Text style={{ fontWeight: "bold", fontSize: "18" }}>Create Planning</Text>
-                                        <Text style={{ fontSize: " 14" }}>Manual and automatic creation of a planning</Text>
-                                    </Layout>
-                                    <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                        <Button id="planningButton" type="primary"><Link to="/planning">Go</Link></Button>
-                                    </Layout>
-                                </Layout>
+                                </>
                             )}
                             {context.state.user.role === "administrator" && (
-                                <Layout style={{ flexDirection: "row", alignItems: "center", display: "flex", marginBottom: 50, width: "100%", backgroundColor: "white" }}>
-                                    <Image style={{ marginRight: 20 }}
-                                        preview={false}
-                                        width={100}
-                                        src={require("../Images/1635626-200.png")}
-                                    />
-                                    <Layout style={{ flexDirection: "column", backgroundColor: "white" }}>
-                                        <Text style={{ fontWeight: "bold", fontSize: "18" }}>Account Management</Text>
-                                        <Text style={{ fontSize: " 14" }}>Manage roles, usernames, and passwords for all users</Text>
-                                    </Layout>
-                                    <Layout style={{ alignItems: "flex-end", backgroundColor: "white" }}>
-                                        <Button id="accountButton" type="primary"><Link to="/account">Go</Link></Button>
-                                    </Layout>
-                                </Layout>
+                                <LogoLink
+                                    image={require("../Images/1635626-200.png")}
+                                    title={"Account Management"}
+                                    description={"Manage roles, usernames, and passwords for all users"}
+                                    to={"/account"}
+                                />
                             )}
                         </Layout>
                     </Layout>

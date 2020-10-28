@@ -3,7 +3,7 @@ import os
 import json
 from backend.app import db as _db
 from backend.app import create_app
-from backend.models.users import User
+from backend.models import User
 from backend.config import Config
 
 

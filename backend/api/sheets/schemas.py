@@ -1,5 +1,5 @@
-from backend.app import ma
-from backend.models.orders import OrderSheet
+from backend.plugins import ma
+from backend.models import OrderSheet
 from flask_smorest.fields import Upload
 
 
@@ -11,6 +11,12 @@ class FileSchema(ma.Schema):
 
 
 class SheetSchema(ma.SQLAlchemyAutoSchema):
+    """
+    Serializes :class:`backend.models.OrderSheet` to JSON.
+    """
 
     class Meta:
+        """
+        Determines which fields are in the schema.
+        """
         model = OrderSheet

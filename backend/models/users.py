@@ -1,4 +1,4 @@
-from backend.app import db
+from backend.plugins import db, login
 from flask import current_app
 from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -6,6 +6,13 @@ from flask_login import UserMixin
 from hashlib import sha256
 from base64 import b64encode
 import bcrypt
+
+
+# Set the user loader of flask-login, so it can load users
+# when they are logged in
+@login.user_loader
+def user_loader(user_id):
+    return User.query.get(user_id)
 
 
 class User(UserMixin, db.Model):

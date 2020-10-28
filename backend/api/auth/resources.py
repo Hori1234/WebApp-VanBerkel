@@ -2,12 +2,15 @@ from flask.views import MethodView
 from flask_login import login_user, logout_user, current_user
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
-from backend.app import db
-from backend.extensions import roles_required
+from backend.plugins import db
+from backend.extensions import Blueprint, roles_required
 from flask_smorest import abort
-from . import bp
 from .schemas import LoginArguments, AccountInfo
-from backend.models.users import User
+from backend.models import User
+
+bp = Blueprint('authentication',
+               'authentication',
+               description='Authenticate and manage users')
 
 
 @bp.route('/login')
@@ -83,7 +86,6 @@ class Users(MethodView):
     @bp.response(AccountInfo, code=201)
     @bp.alt_response('BAD_REQUEST', code=400)
     @bp.alt_response('UNAUTHORIZED', code=401)
-    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
     def post(self, req):
         """
         Creates a new user. Returns the account of the newly created user.
@@ -97,15 +99,11 @@ class Users(MethodView):
             db.session.commit()
             return user, 201
         except ValueError as e:
-            # Some values of the arguments are not allowed
-            abort(400,
-                  message=str(e),
-                  status="Bad Request"
-                  )
+            # The role given to the user was not recognized
+            abort(400, message=str(e), status="Bad Request")
         except IntegrityError:
-            # Username has already been taken. This is detected by the database
-            abort(400,
-                  message='Username has already been taken.',
+            # The database detected that the username was already taken
+            abort(400, message='Username has already been taken.',
                   status='Bad Request')
 
 
@@ -118,24 +116,23 @@ class UserByID(MethodView):
     @bp.alt_response('BAD_REQUEST', code=400)
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
-    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
     def patch(self, req, user_id):
         """
         Change the information of a user.
 
         Required roles: Administrator
         """
+        # Find the user with user_id or respond with a 404
+        user = User.query.get_or_404(user_id,
+                                     description='User not found.')
+
+        # The user is not able to change their own role
+        if user == current_user and 'role' in req:
+            abort(400,
+                  message='You cannot change your own role',
+                  status='Bad Request')
+
         try:
-            # Find the user with user_id or respond with a 404
-            user = User.query.get_or_404(user_id,
-                                         description='User not found.')
-
-            # The user is not able to change their own role
-            if user == current_user and 'role' in req:
-                abort(400,
-                      message='You cannot change your own role',
-                      status='Bad Request')
-
             # For each argument in the request,
             # change the attribute of the user to the new value
             for k, v in req.items():
@@ -144,22 +141,18 @@ class UserByID(MethodView):
             db.session.commit()
             return user, 200
         except ValueError as e:
-            # Some values of the arguments are not allowed
-            abort(400,
-                  message=str(e),
-                  status="Bad Request"
-                  )
+            # The new role of the user was not recognized
+            abort(400, message=str(e), status="Bad Request")
         except IntegrityError:
-            # Username has already been taken. This is detected by the database
-            abort(400,
-                  message='Username has already been taken.',
+            # The database detected that the new username
+            # has already been taken
+            abort(400, message='Username has already been taken.',
                   status='Bad Request')
 
     @roles_required("administrator")
     @bp.response(code=204)
     @bp.alt_response('UNAUTHORIZED', code=401)
     @bp.alt_response('NOT_FOUND', code=404)
-    @bp.alt_response('SERVICE_UNAVAILABLE', code=503)
     def delete(self, user_id):
         """
         Delete a user from the system.

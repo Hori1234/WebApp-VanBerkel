@@ -9,8 +9,12 @@
     "antd": "^4.6.2",
     "axios": "^0.20.0",
     "gantt": "^3.1.0",
+    "jest-puppeteer": "^4.4.0",
+    "puppeteer": "^5.3.1",
+    "puppeteer-core": "^5.3.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-google-charts": "^3.0.15",
     "react-infinite-scroller": "^1.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3"
@@ -18,7 +22,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test src/components",
+    "test:e2e": "react-scripts test src/test",
     "eject": "react-scripts eject",
     "format": "prettier --write \"**/*.+(js)",
     "lint": "eslint src",

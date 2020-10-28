@@ -2,15 +2,17 @@ import abc
 import re
 from typing import Type
 import datetime
-from flask import current_app
-from marshmallow import validates, Schema, INCLUDE
-from marshmallow.exceptions import ValidationError
+from marshmallow import Schema, INCLUDE
 from marshmallow.fields import String, Integer, Boolean, Float
 from pandas import read_excel, notnull
-from backend.extensions import TimeValidation as Time, DateValidation as Date
-from backend.models.orders import Order, OrderSheet
-from backend.models.trucks import Truck, TruckSheet
-from backend.app import db
+from backend.extensions import (
+    TimeValidation as Time,
+    DateValidation as Date,
+    validate_terminal,
+    validate_truck_type
+)
+from backend.models import Order, Truck, OrderSheet, TruckSheet
+from backend.plugins import db
 
 
 class TruckAvailabilitySchema(Schema):
@@ -22,61 +24,26 @@ class TruckAvailabilitySchema(Schema):
     that the terminal string is one of 'ITV', 'KAT' or 'OSS'.
 
     Any additional columns in the data will also be parsed,
-    but will not be tested against type.
+    but will not be tested against a type.
     """
 
     truck_id = String(data_key='Truck ID', required=True)
     availability = Boolean(data_key='Availability of truck', required=True)
-    truck_type = String(data_key='Truck type', required=True)
+    truck_type = String(data_key='Truck type', required=True,
+                        validate=validate_truck_type)
     business_type = String(data_key='business Type')
-    terminal = String(data_key='Terminal Base', required=True)
+    terminal = String(data_key='Terminal Base', required=True,
+                      validate=validate_terminal)
     hierarchy = Float(data_key='Truck Hierarchy', required=True)
     use_cost = Float(data_key='Truck Use Cost', required=True)
     date = Date(data_key='Date', required=True)
     starting_time = Time(data_key='Starting time', required=True)
 
     class Meta:
+        """
+        Defines that columns which are not defined are included.
+        """
         unknown = INCLUDE
-
-    @validates('truck_type')
-    def validate_truck_type(self, val):
-        """
-        Validates the truck type input.
-
-        Raises a `ValidationError` if val is not one of 'terminal', 'regional'
-        or 'port'. This check is case insensitive.
-
-        :param val: the value of the column.
-        :type val: str
-        :raises :class:`marshmallow.exceptions.ValidationError`: if
-                `val.lower()` is not `terminal`, `regional` or `port`.
-        """
-        trucks = current_app.config['TRUCK_TYPES']
-        if val.lower() not in trucks:
-            raise ValidationError(
-                f"Truck type must be one of {', '.join(trucks[:-1])} "
-                f"or {trucks[-1]}"
-            )
-
-    @validates('terminal')
-    def validate_terminal(self, val):
-        """
-        Validates the terminal input.
-
-        Raises a `ValidationError` if val is not one of 'KAT', 'ITV'
-        or 'OSS'. This check is case insensitive.
-
-        :param val: the value of the column.
-        :type val: str
-        :raises :class:`marshmallow.exceptions.ValidationError`: if
-        `val.lower()` is not `itv`, `kat` or `oss`.
-        """
-        terminals = current_app.config['TERMINALS']
-        if val.upper() not in terminals:
-            raise ValidationError(
-                f"Terminal base must be one of {', '.join(terminals[:-1])} "
-                f"or {terminals[-1]}"
-            )
 
 
 class OrderListSchema(Schema):
@@ -88,54 +55,22 @@ class OrderListSchema(Schema):
     that the inl_terminal string is one of 'ITV', 'KAT' or 'OSS'.
 
     Any additional columns in the data will also be parsed,
-    but will not be tested against type.
+    but will not be tested against a type.
     """
-    inl_terminal = String(data_key='Inl* ter*', required=True)
-    truck_type = String(data_key='truck type', required=True)
+    inl_terminal = String(data_key='Inl* ter*', required=True,
+                          validate=validate_terminal)
+    truck_type = String(data_key='truck type', required=True,
+                        validate=validate_truck_type)
     hierarchy = Float(data_key='Hierarchy', required=True)
     delivery_deadline = Time(data_key='Delivery Deadline', required=True)
     driving_time = Integer(data_key='driving time', required=True)
     process_time = Integer(data_key='proces time', required=True)
 
     class Meta:
+        """
+        Defines that columns which are not defined are included.
+        """
         unknown = INCLUDE
-
-    @validates('inl_terminal')
-    def validate_terminal(self, val):
-        """
-        Validates the terminal input.
-
-        Raises a `ValidationError` if val is not one of 'KAT', 'ITV'
-        or 'OSS'. This check is case insensitive.
-
-        :param val: the value of the column
-        :type val: str
-        :raises :class:`marshmallow.exceptions.ValidationError`: if
-        `val.lower()` is not `itv`, `kat` or `oss`.
-        """
-        terminals = current_app.config['TERMINALS']
-        if val.upper() not in terminals:
-            raise ValidationError(
-                f"Terminal must be one of {', '.join(terminals[:-1])} "
-                f"or {terminals[-1]}"
-            )
-
-    @validates('truck_type')
-    def validate_truck_type(self, val):
-        """
-        Validates the truck type input.
-
-        :param val: the value of the column
-        :type val: str
-        :raises :class:`marshmallow.exceptions.ValidationError`: if
-        `val.lower()` is not `terminal`, `regional` or `port`.
-        """
-        trucks = current_app.config['TRUCK_TYPES']
-        if val.lower() not in trucks:
-            raise ValidationError(
-                f"Truck type must be one of {', '.join(trucks[:-1])} "
-                f"or {trucks[-1]}"
-            )
 
 
 class SheetParser(abc.ABC):
@@ -227,6 +162,7 @@ class SheetParser(abc.ABC):
         :return: A :class:`pandas.DataFrame` containing the data from `file`.
         :rtype: :class:`pandas.DataFrame`
         """
+        # Parse the sheet file as a dataframe
         raw_df = read_excel(file,
                             *args, **kwargs)
 
@@ -234,14 +170,19 @@ class SheetParser(abc.ABC):
         if not raw_df.columns.str.contains('Unnamed').all():
             df = raw_df
         else:
+            # Find the first non-empty row, and use it as the header row
             for i, row in raw_df.iterrows():
                 if row.notnull().all():
+                    # Non-emtpy row was found
                     df = raw_df.iloc[(i + 1):].reset_index(drop=True)
                     df.columns = list(raw_df.iloc[i])
                     break
             else:
+                # No header row was found, just return the raw dataframe
+                # All columns will be 'marked' as missing
                 return cls.post_dataframe(raw_df)
 
+        # Remove the columns that should be ignored
         df.drop(cls.ignored_columns, errors='ignore', axis=1, inplace=True)
 
         # Rename duplicate rows
@@ -256,6 +197,7 @@ class SheetParser(abc.ABC):
                 seen[c] = 0
                 new_columns.append(c)
         df.columns = new_columns
+
         return cls.post_dataframe(df)
 
     @staticmethod
