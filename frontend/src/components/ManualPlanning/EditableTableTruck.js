@@ -82,7 +82,7 @@ const EditableTableTruck = (props) => {
 
 
   /**
-   * Handles account editing proccess.
+   * Handles account editing process.
    * @param {Id of the truck to be edited} truck_id 
    * @param {New data for the order} Data 
    */
@@ -90,31 +90,21 @@ const EditableTableTruck = (props) => {
     return axios
       .patch(`/api/trucks/${truck_id}`, Data)
       .then((res) => {
-        if (res.status === 200) {
-          message.success("Order updated succesfully");
-        } else {
-          if (res.status === 401) {
-            message.error("Bad request: " + res.data.message);
-          } else {
-            if (res.status === 404) {
-              message.error("Not Found: " + res.data.message);
-            } else {
-              if (res.status === 422) {
-                message.error("Unprocessable Entity: " + res.data.message);
-              } else {
-                if (res.satatus === 503) {
-                  message.warning("Server not Found: " + res.data.message);
-                } else {
-                  message.error(res.data.message);
-                }
-              }
-            }
-          }
-        }
-        return true;
+          message.success("Truck updated successfully");
+          return true;
       })
       .catch((error) => {
-        message.error("An error hsa occured");
+        if (error.status === 401) {
+          message.error("Bad request: " + error.data.message);
+        } else if (error.status === 404) {
+          message.error("Not Found: " + error.data.message);
+        } else if (error.status === 422) {
+          message.error("Unprocessable Entity: " + error.data.message);
+        } else if (error.status === 503) {
+          message.warning("Server not Found: " + error.data.message);
+        } else {
+          message.error(error.data.message);
+        }
         return false;
       });
   };

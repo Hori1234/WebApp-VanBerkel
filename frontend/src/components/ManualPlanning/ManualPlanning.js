@@ -86,24 +86,30 @@ export default class ManualPlanning extends Component {
       departure_time: event.target.value,
     });
   };
+
   componentDidMount() {
     this.setState({ startingColumns: this.state.columns });
     this.setState({ startingTruckColumns: this.state.columns2 });
     this.getOrderList("latest");
     this.getTruckList("latest");
   }
+
   setData = (e) => {
     this.setState({ data: e });
   };
+
   setData2 = (e) => {
     this.setState({ data2: e });
   };
+
   changeVisibility = (isTrue) => {
     this.setState({ isVisible: isTrue });
   };
+
   changeTruckVisibility = (isTrue) => {
     this.setState({ isTruckVisible: isTrue });
   };
+
   filterColumns = (e) => {
     var columnFilter = this.state.columnFilter;
     if (e.target.checked) {
@@ -120,6 +126,7 @@ export default class ManualPlanning extends Component {
       });
     this.setState({ columns: final, columnFilter: columnFilter });
   };
+
   filterTruckColumns = (e) => {
     var columnTruckFilter = this.state.columnTruckFilter;
     if (e.target.checked) {
@@ -151,8 +158,6 @@ export default class ManualPlanning extends Component {
       this.getKatTruck(this.state.originalTrucks);
     }
   };
-
-
   
   getItvTruck = (e) => {
     let itvDataTruck = [];
@@ -163,6 +168,7 @@ export default class ManualPlanning extends Component {
     });
     this.setState({ data2: itvDataTruck });
   };
+
   getKatTruck = (e) => {
     let katDataTruck = [];
     e.forEach((element) => {
@@ -172,6 +178,7 @@ export default class ManualPlanning extends Component {
     });
     this.setState({ data2: katDataTruck });
   };
+
   getItvOrder = (e) => {
     let itvData = [];
     e.forEach((element) => {
@@ -181,6 +188,7 @@ export default class ManualPlanning extends Component {
     });
     this.setState({ data: itvData });
   };
+
   getKatOrder = (e) => {
     let katData = [];
     e.forEach((element) => {
@@ -190,6 +198,7 @@ export default class ManualPlanning extends Component {
     });
     this.setState({ data: katData });
   };
+
   selectOrdersRow = (record) => {
     const selectedOrdersRowKeys = [...this.state.selectedOrdersRowKeys];
     if (selectedOrdersRowKeys.indexOf(record.key) >= 0) {
@@ -203,9 +212,11 @@ export default class ManualPlanning extends Component {
     const selectedOrderType = record.truck_type;
     this.setState({ selectedOrdersRowKeys, selectedOrderType });
   };
+
   onSelectedOrdersRowKeysChange = (selectedOrdersRowKeys, selectedOrderType) => {
     this.setState({ selectedOrdersRowKeys, selectedOrderType });
   };
+
   selectTrucksRow = (record) => {
     const selectedTrucksRowKeys = [...this.state.selectedTrucksRowKeys];
     if (selectedTrucksRowKeys.indexOf(record.key) >= 0) {
@@ -219,6 +230,7 @@ export default class ManualPlanning extends Component {
     const selectedTruckType = record.truck_type;
     this.setState({ selectedTrucksRowKeys, selectedTruckType });
   };
+
   onSelectedTrucksRowKeysChange = (selectedTrucksRowKeys, selectedTruckType) => {
     this.setState({ selectedTrucksRowKeys, selectedTruckType });
   };
@@ -640,15 +652,19 @@ export default class ManualPlanning extends Component {
       .then((res) => {
         if (assigning === false) {
           if (res.status === 200) {
-            message.success("Truck succesfully unassigned");
+            message.success("Truck successfully unassigned");
           }
         } else {
           if (res.status === 200) {
-            message.success("Order succesfully assigned");
+            message.success("Order successfully assigned");
           }
         }
         this.getOrderList("latest");
         this.getTruckList("latest");
+        this.setState({
+          selectedOrdersRowKeys: [],
+          selectedTrucksRowKeys: []
+        })
         return true;
       })
       .catch((error) => {
@@ -1165,12 +1181,12 @@ export default class ManualPlanning extends Component {
     const { selectedOrdersRowKeys, selectedOrderType } = this.state;
     const { selectedTrucksRowKeys, selectedTruckType } = this.state;
     const ordersRowSelection = {
-      selectedOrdersRowKeys,
+      selectedRowKeys: selectedOrdersRowKeys,
       selectedOrderType,
       onChange: this.onSelectedOrdersRowKeysChange,
     };
     const trucksRowSelection = {
-      selectedTrucksRowKeys,
+      selectedRowKeys: selectedTrucksRowKeys,
       selectedTruckType,
       onChange: this.onSelectedTrucksRowKeysChange,
     };
@@ -1226,7 +1242,7 @@ export default class ManualPlanning extends Component {
                   this.selectOrdersRow(record);
                 },
               })}
-            ></EditableTableOrder>
+            />
             <br />
             <Button onClick={() => this.showOrdersModal()}>Add order</Button>
             <Popconfirm
@@ -1286,7 +1302,7 @@ export default class ManualPlanning extends Component {
                   this.selectOrdersRow(record);
                 },
               })}
-            ></EditableTableTruck>
+            />
             <br />
             <Button onClick={this.ShowTruckModal}>Add truck</Button>
             <Popconfirm
@@ -1384,7 +1400,7 @@ export default class ManualPlanning extends Component {
                     this.selectOrdersRow(record);
                   },
                 })}
-              ></EditableTableOrder>
+              />
             </Layout>
           )}
         </Modal>
@@ -1408,7 +1424,7 @@ export default class ManualPlanning extends Component {
                     this.selectOrdersRow(record);
                   },
                 })}
-              ></EditableTableTruck>
+              />
             </Layout>
           )}
         </Modal>
