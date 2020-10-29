@@ -245,8 +245,10 @@ export default class ManualPlanning extends Component {
       message.error("You have selected more than 1 order. Please select only 1 order.");
     } else if(this.state.selectedOrdersRowKeys.length === 0){
       message.error("Please select one or more orders.");
-    } else if(this.state.selectedOrderType[0].truck_type !== this.state.selectedTruckType[0].truck_type){
-      message.error("Truck type different from order type.");
+    } else if((this.state.selectedOrderType[0].truck_type === "port" && this.state.selectedTruckType[0].truck_type === "terminal") ||
+              (this.state.selectedOrderType[0].truck_type === "regional" && this.state.selectedTruckType[0].truck_type === "terminal") ||
+              (this.state.selectedOrderType[0].truck_type === "port" && this.state.selectedTruckType[0].truck_type === "regional")){
+      message.error("Truck type cannot execute the selected order type.");
     }
     else{
       this.setState({
