@@ -1,6 +1,6 @@
 from flask import Flask
-from backend.config import Config
-from backend.api import register_api
+from .config import Config
+from .api import register_api
 from .plugins import db, api, ma, login, migrate
 
 
