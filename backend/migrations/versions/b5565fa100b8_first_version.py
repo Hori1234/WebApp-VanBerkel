@@ -40,8 +40,7 @@ def upgrade():
     admin = User('admin', 'admin', 'administrator')
 
     op.bulk_insert(user_table, [
-        {'id': 1,
-         'username': admin.username,
+        {'username': admin.username,
          'password': admin.password,
          'role': admin.role}
     ])
