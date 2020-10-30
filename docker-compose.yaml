@@ -9,9 +9,9 @@ services:
             - "80:80/tcp"
             - "443:443/tcp"
         environment:
-            CERTBOT_EMAIL: rick-luiken@live.nl
+            CERTBOT_EMAIL: ${CERTBOT_EMAIL}
             ENVSUBST_VARS: FQDN
-            FQDN: server.company.com
+            FQDN: ${DOMAIN}
         volumes:
             - ./nginx:/etc/nginx/user.conf.d:ro
             - letsencrypt:/etc/letsencrypt
@@ -29,8 +29,8 @@ services:
             - db
         restart: always
         environment:
-            SECRET_KEY: add_key_here
-            DATABASE_URI: postgresql+psycopg2://postgres:postgres@db:5432/vbl
+            SECRET_KEY: ${SECRET_KEY}
+            DATABASE_URI: postgresql+psycopg2://postgres:${DB_PASSWORD}@db:5432/vbl
 
     db:
         image: postgres:latest
@@ -38,7 +38,7 @@ services:
             - db_data:/var/lib/postgresql/data
         environment:
             POSTGRES_DB: vbl
-            POSTGRES_PASSWORD: postgres
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
         restart: always
 volumes:
     db_data:
