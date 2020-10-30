@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: ./docker/nginx/Dockerfile
+        restart: always
+        ports:
+            - "80:80/tcp"
+            - "443:443/tcp"
+        environment:
+            CERTBOT_EMAIL: rick-luiken@live.nl
+            ENVSUBST_VARS: FQDN
+            FQDN: server.company.com
+        volumes:
+            - ./nginx:/etc/nginx/user.conf.d:ro
+            - letsencrypt:/etc/letsencrypt
+        depends_on:
+            - backend
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./docker/backend/Dockerfile
+        entrypoint: /backend-entrypoint.sh
+        ports:
+            - "5000:5000"
+        depends_on:
+            - db
+        restart: always
+        environment:
+            SECRET_KEY: add_key_here
+            DATABASE_URI: postgresql+psycopg2://postgres:postgres@db:5432/vbl
+
+    db:
+        image: postgres:latest
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: vbl
+            POSTGRES_PASSWORD: postgres
+        restart: always
+volumes:
+    db_data:
+    letsencrypt:
