@@ -1,7 +1,7 @@
 """Added unique index to username
 
 Revision ID: b6954ffedcc5
-Revises: 2fc5b6dfbfb5
+Revises: b5565fa100b8
 Create Date: 2020-09-15 17:39:28.790926
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = 'b6954ffedcc5'
-down_revision = '2fc5b6dfbfb5'
+down_revision = 'b5565fa100b8'
 branch_labels = None
 depends_on = None
 
