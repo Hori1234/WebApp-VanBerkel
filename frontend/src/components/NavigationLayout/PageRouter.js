@@ -1,14 +1,15 @@
+import React, {Suspense, lazy} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import PrivateRoute from "../PrivateRoute";
-import UploadButton from "../UploadButton/UploadButton";
-import AccountManagementLayout from "../AccountManagerLayout/AccountManagementLayout";
-import Logout from "../Logout/Logout";
-import ManualPlanning from "../ManualPlanning/ManualPlanning";
-import ViewPlanning from "../ViewPlanningPageLayout/ViewPlanning";
-import DataVisualization from "../DataVisualization/DataVisualization";
-import MonthlyDataAnalytics from "../MonthlyDataAnalytics/MonthlyDataAnalytics";
-import Home from "../Home/Home";
-import React from "react";
+import {Spin} from "antd";
+const UploadButton = lazy(() => import("../UploadButton/UploadButton"));
+const AccountManagementLayout = lazy(() => import("../AccountManagerLayout/AccountManagementLayout"));
+const Logout = lazy(() => import("../Logout/Logout"));
+const ManualPlanning = lazy(() => import("../ManualPlanning/ManualPlanning"));
+const ViewPlanning = lazy(() => import("../ViewPlanningPageLayout/ViewPlanning"));
+const DataVisualization = lazy(() => import("../DataVisualization/DataVisualization"));
+const MonthlyDataAnalytics = lazy(() => import("../MonthlyDataAnalytics/MonthlyDataAnalytics"));
+const Home = lazy(() => import("../Home/Home"));
 
 /**
  * Defines the routing for the pages in the NavigationLayout component.
@@ -19,49 +20,62 @@ import React from "react";
  */
 export default function PageRouter() {
     return (
-        <Switch>
-          <PrivateRoute
-              path="/upload"
-              requiredRoles={['planner', 'administrator']}>
-            <UploadButton />
-          </PrivateRoute>
-          <PrivateRoute
-              path="/account"
-              requiredRoles={['administrator']}>
-            <AccountManagementLayout />
-          </PrivateRoute>
-          <Route path="/logout">
-            <Logout />
-          </Route>
-          <PrivateRoute
-              path="/planning"
-              requiredRoles={['planner', 'administrator']}>
-            <ManualPlanning />
-          </PrivateRoute>
-          <PrivateRoute
-              path="/view"
-              requiredRoles={['view-only', 'planner', 'administrator']}>
-            <ViewPlanning />
-          </PrivateRoute>
-          <PrivateRoute
-              path="/data"
-              requiredRoles={['planner', 'administrator']}>
-            <DataVisualization />
-          </PrivateRoute>
-          <PrivateRoute
-              path="/monthly"
-              requiredRoles={['view-only', 'planner', 'administrator']}
-          >
-            <MonthlyDataAnalytics/>
-          </PrivateRoute>
-          <PrivateRoute
-              path="/" exact
-              requiredRoles={['view-only', 'planner', 'administrator']}>
-            <Home />
-          </PrivateRoute>
-          <Route>
-            <Redirect to='/'/>
-          </Route>
-        </Switch>
+        <Suspense fallback={<div
+                  style={{
+                    display: "flex",
+                    height: "100%",
+                    width: "100%",
+                    background: "white",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                    <Spin size="large" />
+                </div>}>
+            <Switch>
+              <PrivateRoute
+                  path="/upload"
+                  requiredRoles={['planner', 'administrator']}>
+                <UploadButton />
+              </PrivateRoute>
+              <PrivateRoute
+                  path="/account"
+                  requiredRoles={['administrator']}>
+                <AccountManagementLayout />
+              </PrivateRoute>
+              <Route path="/logout">
+                <Logout />
+              </Route>
+              <PrivateRoute
+                  path="/planning"
+                  requiredRoles={['planner', 'administrator']}>
+                <ManualPlanning />
+              </PrivateRoute>
+              <PrivateRoute
+                  path="/view"
+                  requiredRoles={['view-only', 'planner', 'administrator']}>
+                <ViewPlanning />
+              </PrivateRoute>
+              <PrivateRoute
+                  path="/data"
+                  requiredRoles={['planner', 'administrator']}>
+                <DataVisualization />
+              </PrivateRoute>
+              <PrivateRoute
+                  path="/monthly"
+                  requiredRoles={['view-only', 'planner', 'administrator']}
+              >
+                <MonthlyDataAnalytics/>
+              </PrivateRoute>
+              <PrivateRoute
+                  path="/" exact
+                  requiredRoles={['view-only', 'planner', 'administrator']}>
+                <Home />
+              </PrivateRoute>
+              <Route>
+                <Redirect to='/'/>
+              </Route>
+            </Switch>
+        </Suspense>
     )
 }
