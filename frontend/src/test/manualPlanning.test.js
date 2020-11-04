@@ -38,7 +38,7 @@ describe('React App', () => {
 
       }, 120000);
 
-      /*
+      
       it('shall succesfully edit an order', async () => {
 
         const browser = await puppeteer.launch({ 
@@ -504,6 +504,6 @@ describe('React App', () => {
 
         await browser.close();
 
-      }, 120000);*/
+      }, 120000);
 
     });
